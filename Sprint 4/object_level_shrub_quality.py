@@ -2,12 +2,28 @@ import numpy as np
 from typing import Iterable
 
 class ShrubObject:
+    pass
+
+def shape_compatibility(func):
+    """
+    Decorator to verify label and prediction inputs have the same shape.
+    """
+    def check_compatibility(label_shrub, pred_shrub, *args):
+        label_mask, pred_mask = label_shrub.get_mask().shape, pred_shrub.get_mask().shape
+        compatible = label_mask == pred_mask
+        if not compatible:
+            raise Exception(f"Shape error: label_shrub has shape {label_mask}, but pred_shrub has shape {pred_mask}")
+        else:
+            return func(label_shrub, pred_shrub, *args)
+    return check_compatibility
+
+class ShrubObject:
     def __init__(self, mask):
         self.mask = mask
 
     def get_mask(self):
         return self.mask
-
+    
     def find_center(self, shrub_value: int|np.ndarray):
         """
         Finds the center of shrub along each direction.
@@ -24,7 +40,7 @@ class ShrubObject:
         ])
         
         s2 = ShrubObject(np.expand_dims(pred_mask_2d, axis=-1)) # need to expand last dim for grayscale. last dim is assumed to be a color scale.
-        s2.find_center()
+        s2.find_center(1)
 
         Output: 
         array([1.        , 1.33333333])
@@ -57,7 +73,7 @@ class ShrubObject:
         ])
 
         s3 = ShrubObject(np.expand_dims(pred_mask_3d, axis=-1))
-        s3.find_center()
+        s3.find_center(1)
 
         Output: 
         array([1.  , 1.  , 1.25])
@@ -79,6 +95,7 @@ class ShrubObject:
         other_count = (self.mask != shrub_value).sum()
         return Xel_count, other_count
 
+    @shape_compatibility
     def get_count_difference(label_shrub, pred_shrub: ShrubObject, shrub_value: int|np.ndarray): 
         """
         Finds shrub and non-shrub count differences. Assumes classical sets are provided, not fuzzy sets, for the pixel/voxel matching.
@@ -112,6 +129,7 @@ class ShrubObject:
         n_diff = [lc - pc for lc, pc in zip(label_counts, pred_counts)]
         return n_diff
     
+    @shape_compatibility
     def get_count_correctness(label_shrub, pred_shrub: ShrubObject, shrub_value: int|np.ndarray):
         """
         Returns the number of correct and incorrect predictions for shrub and non-shrub classifications.
@@ -152,6 +170,7 @@ class ShrubObject:
 
         return tp, fn, tn, fp
     
+    @shape_compatibility
     def get_accuracy_summary(label_shrub, pred_shrub: ShrubObject, shrub_value: int|np.ndarray, beta: float|Iterable = None):
         """
         Calculates balanced error summary statistics.
