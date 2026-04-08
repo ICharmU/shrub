@@ -20,7 +20,7 @@ def scale_resolution_2d(img: np.ndarray, scale_factor: float, height: int, width
     rescaled = resize(rescaled, (height,width))
     return rescaled
 
-def full_image_accuracy_2d(high_res_img: np.ndarray, low_res_img: np.ndarray, gamma: float = 1/255):
+def full_image_accuracy(high_res_img: np.ndarray, low_res_img: np.ndarray, gamma: float = 1/255):
     """
     Expects a high resolution image (larger dimensions) and low resolution image (smaller dimensions) of the same size. 
     Compares all pixels within the image and checks if their average color scale difference is within gamma.
@@ -31,7 +31,7 @@ def full_image_accuracy_2d(high_res_img: np.ndarray, low_res_img: np.ndarray, ga
 
     Returns:
         combined_accuracy - accuracy of all pixels, regardless of class
-        scale_match_masked - a 2d array displaying predictions sufficiently close to the label. 
+        scale_match_masked -  array displaying predictions sufficiently close to the label. 
                              a filler of 1 is used for incorrect predictions.
                              values are renormalized which causes increased contrast compared to the input images.
     """
@@ -45,31 +45,46 @@ def full_image_accuracy_2d(high_res_img: np.ndarray, low_res_img: np.ndarray, ga
 
     return combined_accuracy, scale_match_masked
 
-def shrub_only_accuracy_2d(label_img: np.ndarray, preds: list):
+def shrub_only_accuracy(label_img: np.ndarray, preds: list):
     """
     Finds the accuracy of individual shrub predictions. For full image predictions use full_image_accuracy_2d() instead for vectorized operations.
 
     Args:
         label_img - np array representing 2d binary image.
-        preds - list containing elements of the form (bool pred, int x, int y) where x,y are relative to the label image dimensions
+        preds - list containing elements of the form (bool pred, *coords) where coords is typically (x,y) or (x,y,z)
 
-    Ex.
+    Ex. (2d)
     samp_img = np.array([
         [1,0],
         [0,0]
     ])
     samp_preds = [(1,0,0), (0,0,1), (1,1,1)]
+
     shrub_only_accuracy_2d(samp_img, samp_preds)
 
     Output:
-    np.float64(0.6666666666666666)
+    0.6666666666666666
+
+    Ex. (3d)
+    samp_img = np.array([
+        [[1,0,0],
+        [0,0,1]],
+        [[1,1,0],
+        [0,1,1]],
+    ])
+    samp_preds = [(1,0,0,0), (0,0,1,0), (1,1,1,0), (0,1,0,1), (0,0,1,1)]
+
+    shrub_only_accuracy_2d(samp_img, samp_preds)
+
+    Output:
+    0.6
     """
     if len(preds) == 0:
         return None
     
     n_correct = 0
-    for pred, x, y in preds:
-        n_correct += pred == label_img[x,y]
+    for pred, *coords in preds:
+        n_correct += pred == label_img[*coords]
     
     accuracy = n_correct / len(preds)
     return accuracy
