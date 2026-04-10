@@ -5,7 +5,7 @@ generation from TLS) and Sprint 4 (TLS->ALS->NAIP label transfer and mask
 rasterization) into a reusable Python scaffold.
 """
 
-from Final.config import default_config, PipelineConfig
+from Final.config import default_config#, PipelineConfig
 from Final.models import ShrubObjectColumns, LabelArtifactColumns
 
 __all__ = [
