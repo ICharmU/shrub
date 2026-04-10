@@ -1,0 +1,158 @@
+{
+  "labeling.base_sprint3_revised": {
+    "name": "labeling.base_sprint3_revised",
+    "domain": "label_engineering",
+    "representation_target": "object",
+    "spatial_scope": "object-level",
+    "resolution_scope": "native_only",
+    "availability_tier": "universal",
+    "runtime_tier": "moderate",
+    "description": "Base Sprint 3 revised shrub-object extraction from TLS.",
+    "inputs_required": [
+      "PTX",
+      "R scripts"
+    ],
+    "outputs_produced": [
+      "shrub object table",
+      "metrics",
+      "fuels raster"
+    ],
+    "strengths": [
+      "Produces shrub-object supervision",
+      "Site-agnostic execution"
+    ],
+    "weaknesses": [
+      "Heuristic",
+      "May vary across sites"
+    ],
+    "notes": [],
+    "status": "experimental",
+    "gate_coverage": "pass",
+    "gate_alignment": "conditional_pass",
+    "gate_information": "pass",
+    "gate_resource": "conditional_pass",
+    "gate_robustness": "conditional_pass",
+    "coverage_score": 1.0,
+    "alignment_score": 0.7,
+    "information_score": 0.8,
+    "resource_score": 0.7,
+    "robustness_score": 0.7,
+    "evidence": {}
+  },
+  "labeling.base_sprint4_transfer": {
+    "name": "labeling.base_sprint4_transfer",
+    "domain": "label_engineering",
+    "representation_target": "both",
+    "spatial_scope": "object-level",
+    "resolution_scope": "multi_resolution",
+    "availability_tier": "most_sites",
+    "runtime_tier": "moderate",
+    "description": "Base Sprint 4 transfer from TLS shrub objects into NAIP-aligned masks.",
+    "inputs_required": [
+      "Sprint 3 objects",
+      "ALS metadata",
+      "transform files",
+      "NAIP"
+    ],
+    "outputs_produced": [
+      "mask rasters",
+      "confidence rasters",
+      "object tables",
+      "QA overlays"
+    ],
+    "strengths": [
+      "Creates scalable raster labels",
+      "Supports multires export"
+    ],
+    "weaknesses": [
+      "Transform-sensitive",
+      "Current footprint geometry is crude"
+    ],
+    "notes": [],
+    "status": "experimental",
+    "gate_coverage": "conditional_pass",
+    "gate_alignment": "pass",
+    "gate_information": "conditional_pass",
+    "gate_resource": "conditional_pass",
+    "gate_robustness": "conditional_pass",
+    "coverage_score": 0.75,
+    "alignment_score": 0.8,
+    "information_score": 0.75,
+    "resource_score": 0.7,
+    "robustness_score": 0.7,
+    "evidence": {}
+  },
+  "features.naip_raw": {
+    "name": "features.naip_raw",
+    "domain": "feature_engineering",
+    "representation_target": "raster",
+    "spatial_scope": "pixel-level",
+    "resolution_scope": "native_only",
+    "availability_tier": "universal",
+    "runtime_tier": "cheap",
+    "description": "Raw NAIP bands as appearance features.",
+    "inputs_required": [
+      "NAIP"
+    ],
+    "outputs_produced": [
+      "raster stack"
+    ],
+    "strengths": [
+      "Universal",
+      "Direct image signal"
+    ],
+    "weaknesses": [
+      "No explicit structure"
+    ],
+    "notes": [],
+    "status": "promoted",
+    "gate_coverage": "pass",
+    "gate_alignment": "pass",
+    "gate_information": "pass",
+    "gate_resource": "pass",
+    "gate_robustness": "conditional_pass",
+    "coverage_score": 1.0,
+    "alignment_score": 0.8,
+    "information_score": 0.8,
+    "resource_score": 1.0,
+    "robustness_score": 0.7,
+    "evidence": {}
+  },
+  "features.als_structure": {
+    "name": "features.als_structure",
+    "domain": "feature_engineering",
+    "representation_target": "raster",
+    "spatial_scope": "pixel-level",
+    "resolution_scope": "multi_resolution",
+    "availability_tier": "most_sites",
+    "runtime_tier": "moderate",
+    "description": "ALS-derived structure/height features.",
+    "inputs_required": [
+      "ALS"
+    ],
+    "outputs_produced": [
+      "height/roughness rasters"
+    ],
+    "strengths": [
+      "Adds structure",
+      "Helpful for shrub-vs-tree distinction"
+    ],
+    "weaknesses": [
+      "Extra processing",
+      "Site coverage may vary"
+    ],
+    "notes": [],
+    "status": "experimental",
+    "gate_coverage": "conditional_pass",
+    "gate_alignment": "pass",
+    "gate_information": "conditional_pass",
+    "gate_resource": "conditional_pass",
+    "gate_robustness": "conditional_pass",
+    "coverage_score": 0.75,
+    "alignment_score": 0.8,
+    "information_score": 0.75,
+    "resource_score": 0.7,
+    "robustness_score": 0.7,
+    "evidence": {}
+  }
+}

@@ -1,0 +1,5 @@
+name,domain,representation_target,availability_tier,runtime_tier,gate_coverage,gate_alignment,gate_information,gate_resource,gate_robustness,coverage_score,alignment_score,information_score,resource_score,robustness_score,status
+features.als_structure,feature_engineering,raster,most_sites,moderate,conditional_pass,pass,conditional_pass,conditional_pass,conditional_pass,0.75,0.8,0.75,0.7,0.7,experimental
+features.naip_raw,feature_engineering,raster,universal,cheap,pass,pass,pass,pass,conditional_pass,1.0,0.8,0.8,1.0,0.7,promoted
+labeling.base_sprint3_revised,label_engineering,object,universal,moderate,pass,conditional_pass,pass,conditional_pass,conditional_pass,1.0,0.7,0.8,0.7,0.7,experimental
+labeling.base_sprint4_transfer,label_engineering,both,most_sites,moderate,conditional_pass,pass,conditional_pass,conditional_pass,conditional_pass,0.75,0.8,0.75,0.7,0.7,experimental

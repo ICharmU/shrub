@@ -1,0 +1,24 @@
+{
+  "experiment_name": "main_scaffold_v1",
+  "active_modules": [
+    "labeling.base_sprint3_revised",
+    "labeling.base_sprint4_transfer",
+    "features.naip_raw",
+    "features.als_structure"
+  ],
+  "notes": "Generic scalability framework scaffold before full multi-section integration.",
+  "raster_outputs": {
+    "labels": null,
+    "features": null,
+    "predictions": null,
+    "qa_overlays": null
+  },
+  "object_outputs": {
+    "objects": null,
+    "predicted_objects": null,
+    "source_provenance": null,
+    "quality_flags": null
+  },
+  "qa_outputs": {},
+  "section_status": {}
+}
