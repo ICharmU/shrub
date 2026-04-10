@@ -1,0 +1,1049 @@
+2026-04-09 05:39:28 | INFO     | shrub | Initialized labeling pipeline notebook.
+2026-04-09 05:39:28 | INFO     | shrub | PROJECT_ROOT = /home/jovyan/work/Dry-shRub/shrub
+2026-04-09 05:39:28 | INFO     | shrub | SPRINT3_BASE_DIR = /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base
+2026-04-09 05:39:28 | INFO     | shrub | LABELING_ROOT = /home/jovyan/work/Dry-shRub/shrub/Final/labeling
+2026-04-09 05:39:34 | INFO     | shrub | Initialized labeling pipeline notebook.
+2026-04-09 05:39:34 | INFO     | shrub | PROJECT_ROOT = /home/jovyan/work/Dry-shRub/shrub
+2026-04-09 05:39:34 | INFO     | shrub | SPRINT3_BASE_DIR = /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base
+2026-04-09 05:39:34 | INFO     | shrub | LABELING_ROOT = /home/jovyan/work/Dry-shRub/shrub/Final/labeling
+2026-04-09 05:40:13 | INFO     | shrub | Starting Sprint 3 run for site=calaveras-big-trees
+2026-04-09 05:40:13 | ERROR    | shrub | Sprint 3 failed for site=calaveras-big-trees
+Traceback (most recent call last):
+  File "/tmp/ipykernel_945/578732232.py", line 6, in <module>
+    result = run_sprint3_for_ptx(
+TypeError: run_sprint3_for_ptx() got an unexpected keyword argument 'raise_on_error'
+2026-04-09 05:40:22 | INFO     | shrub | Initialized labeling pipeline notebook.
+2026-04-09 05:40:22 | INFO     | shrub | PROJECT_ROOT = /home/jovyan/work/Dry-shRub/shrub
+2026-04-09 05:40:22 | INFO     | shrub | SPRINT3_BASE_DIR = /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base
+2026-04-09 05:40:22 | INFO     | shrub | LABELING_ROOT = /home/jovyan/work/Dry-shRub/shrub/Final/labeling
+2026-04-09 05:40:22 | INFO     | shrub | Starting Sprint 3 run for site=calaveras-big-trees
+2026-04-09 05:40:22 | INFO     | shrub.labeling.sprint3_runner | Running Sprint 3 for site=calaveras-big-trees variant=revised
+2026-04-09 05:40:22 | INFO     | shrub.labeling.sprint3_runner | PTX: /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/CAAEU_0001_20250722_1.ptx
+2026-04-09 05:40:22 | INFO     | shrub.labeling.sprint3_runner | Script: /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1_revised.R
+2026-04-09 05:40:22 | INFO     | shrub.labeling.sprint3_runner | Output dir: /home/jovyan/work/Dry-shRub/shrub/Final/labeling/outputs/calaveras-big-trees/sprint3/revised/CAAEU_0001_20250722_1
+2026-04-09 05:40:22 | INFO     | shrub.labeling.sprint3_runner | Command: /usr/local/bin/Rscript /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1_revised.R /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/CAAEU_0001_20250722_1.ptx /home/jovyan/work/Dry-shRub/shrub/Final/labeling/outputs/calaveras-big-trees/sprint3/revised/CAAEU_0001_20250722_1
+2026-04-09 05:40:31 | INFO     | shrub.labeling.sprint3_runner | Sprint 3 finished with returncode=1 | shrub_csv=None | metrics_csv=None | tree_inventory_csv=None
+2026-04-09 05:40:31 | ERROR    | shrub.labeling.sprint3_runner | Sprint 3 failed for site=calaveras-big-trees variant=revised
+2026-04-09 05:40:31 | ERROR    | shrub.labeling.sprint3_runner | stderr tail:
+Attaching package: ‘terra’
+
+The following object is masked from ‘package:data.table’:
+
+    shift
+
+
+Attaching package: ‘lidR’
+
+The following objects are masked from ‘package:terra’:
+
+    area, crs, crs<-, is.empty
+
+
+Attaching package: ‘e1071’
+
+The following object is masked from ‘package:terra’:
+
+    interpolate
+
+Linking to GEOS 3.7.2, GDAL 3.0.4, PROJ 6.3.2; sf_use_s2() is TRUE
+
+Attaching package: ‘sf’
+
+The following object is masked from ‘package:lidR’:
+
+    st_concave_hull
+
+
+Attaching package: ‘Morpho’
+
+The following object is masked from ‘package:terra’:
+
+    classify
+
+Loading required package: magrittr
+
+Attaching package: ‘magrittr’
+
+The following objects are masked from ‘package:terra’:
+
+    extract, inset
+
+Warning messages:
+1: In dir.create(file.path(outDir, "metrics"), recursive = TRUE) :
+  '/home/jovyan/work/Dry-shRub/shrub/Final/labeling/outputs/calaveras-big-trees/sprint3/revised/CAAEU_0001_20250722_1/metrics' already exists
+2: In dir.create(file.path(outDir, "dtm"), recursive = TRUE) :
+  '/home/jovyan/work/Dry-shRub/shrub/Final/labeling/outputs/calaveras-big-trees/sprint3/revised/CAAEU_0001_20250722_1/dtm' already exists
+3: In dir.create(file.path(outDir, "chm"), recursive = TRUE) :
+  '/home/jovyan/work/Dry-shRub/shrub/Final/labeling/outputs/calaveras-big-trees/sprint3/revised/CAAEU_0001_20250722_1/chm' already exists
+4: In dir.create(file.path(outDir, "Fuels"), recursive = TRUE) :
+  '/home/jovyan/work/Dry-shRub/shrub/Final/labeling/outputs/calaveras-big-trees/sprint3/revised/CAAEU_0001_20250722_1/Fuels' already exists
+5: In dir.create(file.path(outDir, "Shrubs"), recursive = TRUE) :
+  '/home/jovyan/work/Dry-shRub/shrub/Final/labeling/outputs/calaveras-big-trees/sprint3/revised/CAAEU_0001_20250722_1/Shrubs' already exists
+6: In dir.create(file.path(outDir, "Inventory"), recursive = TRUE) :
+  '/home/jovyan/work/Dry-shRub/shrub/Final/labeling/outputs/calaveras-big-trees/sprint3/revised/CAAEU_0001_20250722_1/Inventory' already exists
+Error in fread(ptx, skip = 10, header = FALSE) : 
+  skip=10 but the input only has 3 lines
+Calls: ptxToLas -> fread
+Execution halted
+2026-04-09 05:40:31 | ERROR    | shrub | Sprint 3 failed for site=calaveras-big-trees
+Traceback (most recent call last):
+  File "/tmp/ipykernel_1196/578732232.py", line 6, in <module>
+    result = run_sprint3_for_ptx(
+  File "/home/jovyan/work/Dry-shRub/shrub/Final/labeling/sprint3_runner.py", line 156, in run_sprint3_for_ptx
+    raise RuntimeError(
+RuntimeError: Sprint 3 failed for site=calaveras-big-trees, variant=revised, returncode=1.
+stderr tail:
+Attaching package: ‘terra’
+
+The following object is masked from ‘package:data.table’:
+
+    shift
+
+
+Attaching package: ‘lidR’
+
+The following objects are masked from ‘package:terra’:
+
+    area, crs, crs<-, is.empty
+
+
+Attaching package: ‘e1071’
+
+The following object is masked from ‘package:terra’:
+
+    interpolate
+
+Linking to GEOS 3.7.2, GDAL 3.0.4, PROJ 6.3.2; sf_use_s2() is TRUE
+
+Attaching package: ‘sf’
+
+The following object is masked from ‘package:lidR’:
+
+    st_concave_hull
+
+
+Attaching package: ‘Morpho’
+
+The following object is masked from ‘package:terra’:
+
+    classify
+
+Loading required package: magrittr
+
+Attaching package: ‘magrittr’
+
+The following objects are masked from ‘package:terra’:
+
+    extract, inset
+
+Warning messages:
+1: In dir.create(file.path(outDir, "metrics"), recursive = TRUE) :
+  '/home/jovyan/work/Dry-shRub/shrub/Final/labeling/outputs/calaveras-big-trees/sprint3/revised/CAAEU_0001_20250722_1/metrics' already exists
+2: In dir.create(file.path(outDir, "dtm"), recursive = TRUE) :
+  '/home/jovyan/work/Dry-shRub/shrub/Final/labeling/outputs/calaveras-big-trees/sprint3/revised/CAAEU_0001_20250722_1/dtm' already exists
+3: In dir.create(file.path(outDir, "chm"), recursive = TRUE) :
+  '/home/jovyan/work/Dry-shRub/shrub/Final/labeling/outputs/calaveras-big-trees/sprint3/revised/CAAEU_0001_20250722_1/chm' already exists
+4: In dir.create(file.path(outDir, "Fuels"), recursive = TRUE) :
+  '/home/jovyan/work/Dry-shRub/shrub/Final/labeling/outputs/calaveras-big-trees/sprint3/revised/CAAEU_0001_20250722_1/Fuels' already exists
+5: In dir.create(file.path(outDir, "Shrubs"), recursive = TRUE) :
+  '/home/jovyan/work/Dry-shRub/shrub/Final/labeling/outputs/calaveras-big-trees/sprint3/revised/CAAEU_0001_20250722_1/Shrubs' already exists
+6: In dir.create(file.path(outDir, "Inventory"), recursive = TRUE) :
+  '/home/jovyan/work/Dry-shRub/shrub/Final/labeling/outputs/calaveras-big-trees/sprint3/revised/CAAEU_0001_20250722_1/Inventory' already exists
+Error in fread(ptx, skip = 10, header = FALSE) : 
+  skip=10 but the input only has 3 lines
+Calls: ptxToLas -> fread
+Execution halted
+2026-04-09 05:55:45 | INFO     | shrub | Starting Sprint 3 run for site=calaveras-big-trees
+2026-04-09 05:55:45 | INFO     | shrub.labeling.sprint3_runner | Running Sprint 3 for site=calaveras-big-trees variant=revised
+2026-04-09 05:55:45 | INFO     | shrub.labeling.sprint3_runner | PTX: /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/CAAEU_0001_20250722_1.ptx
+2026-04-09 05:55:45 | INFO     | shrub.labeling.sprint3_runner | Script: /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1_revised.R
+2026-04-09 05:55:45 | INFO     | shrub.labeling.sprint3_runner | Output dir: /home/jovyan/work/Dry-shRub/shrub/Final/labeling/outputs/calaveras-big-trees/sprint3/revised/CAAEU_0001_20250722_1
+2026-04-09 05:55:45 | INFO     | shrub.labeling.sprint3_runner | Command: /usr/local/bin/Rscript /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1_revised.R /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/CAAEU_0001_20250722_1.ptx /home/jovyan/work/Dry-shRub/shrub/Final/labeling/outputs/calaveras-big-trees/sprint3/revised/CAAEU_0001_20250722_1
+2026-04-09 06:00:43 | INFO     | shrub.labeling.sprint3_runner | Sprint 3 finished with returncode=0 | shrub_csv=/home/jovyan/work/Dry-shRub/shrub/Final/labeling/outputs/calaveras-big-trees/sprint3/revised/CAAEU_0001_20250722_1/Shrubs/CAAEU_0001_20250722_1.csv | metrics_csv=/home/jovyan/work/Dry-shRub/shrub/Final/labeling/outputs/calaveras-big-trees/sprint3/revised/CAAEU_0001_20250722_1/metrics/CAAEU_0001_20250722_1_metrics.csv | tree_inventory_csv=/home/jovyan/work/Dry-shRub/shrub/Final/labeling/outputs/calaveras-big-trees/sprint3/revised/CAAEU_0001_20250722_1/Inventory/CAAEU_0001_20250722_1_inv.csv
+2026-04-09 06:00:43 | INFO     | shrub | Sprint 3 succeeded for site=calaveras-big-trees
+2026-04-09 06:30:05 | INFO     | shrub | PROJECT_ROOT = /home/jovyan/work/Dry-shRub/shrub
+2026-04-09 06:30:05 | INFO     | shrub | SPRINT3_BASE_DIR = /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base
+2026-04-09 06:30:05 | INFO     | shrub | LABELING_ROOT = /home/jovyan/work/Dry-shRub/shrub/Final/labeling
+2026-04-09 06:30:05 | INFO     | shrub | Sprint 3 output root: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling
+2026-04-09 06:30:05 | INFO     | shrub | Sprint 3 PTX cache root: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache
+2026-04-09 06:30:05 | INFO     | shrub | Sprint 3 manifest CSV: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/manifests/sprint3_runs.csv
+2026-04-09 06:30:05 | INFO     | shrub | Sprint 3 variants: ('revised',)
+2026-04-09 06:30:56 | INFO     | shrub | ================================================================================
+2026-04-09 06:30:56 | INFO     | shrub | Discovering PTX files for site=calaveras-big-trees
+2026-04-09 06:30:56 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=calaveras-big-trees at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-calaveras-big-trees/original_TLS
+2026-04-09 06:30:58 | INFO     | shrub | Found 109 PTX file(s) for site=calaveras-big-trees
+2026-04-09 06:30:58 | INFO     | shrub.labeling.sprint3_runner | Downloading PTX for site=calaveras-big-trees from https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-calaveras-big-trees/original_TLS/CATCU_0001_20240923_1.ptx
+2026-04-09 06:31:08 | INFO     | shrub.labeling.sprint3_runner | Downloaded PTX to /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/calaveras-big-trees/CATCU_0001_20240923_1.ptx
+2026-04-09 06:31:08 | INFO     | shrub | Starting Sprint 3 | site=calaveras-big-trees | variant=revised | ptx=CATCU_0001_20240923_1.ptx
+2026-04-09 06:31:08 | INFO     | shrub.labeling.sprint3_runner | Running Sprint 3 for site=calaveras-big-trees variant=revised
+2026-04-09 06:31:08 | INFO     | shrub.labeling.sprint3_runner | PTX: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/calaveras-big-trees/CATCU_0001_20240923_1.ptx
+2026-04-09 06:31:08 | INFO     | shrub.labeling.sprint3_runner | Script: /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1_revised.R
+2026-04-09 06:31:08 | INFO     | shrub.labeling.sprint3_runner | Output dir: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/revised/CATCU_0001_20240923_1
+2026-04-09 06:31:08 | INFO     | shrub.labeling.sprint3_runner | Command: /usr/local/bin/Rscript /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1_revised.R /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/calaveras-big-trees/CATCU_0001_20240923_1.ptx /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/revised/CATCU_0001_20240923_1
+2026-04-09 06:36:35 | INFO     | shrub.labeling.sprint3_runner | Sprint 3 finished with returncode=0 | shrub_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/revised/CATCU_0001_20240923_1/Shrubs/CATCU_0001_20240923_1.csv | metrics_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/revised/CATCU_0001_20240923_1/metrics/CATCU_0001_20240923_1_metrics.csv | tree_inventory_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/revised/CATCU_0001_20240923_1/Inventory/CATCU_0001_20240923_1_inv.csv | cache=False
+2026-04-09 06:36:35 | INFO     | shrub | Completed Sprint 3 | site=calaveras-big-trees | variant=revised | ptx=CATCU_0001_20240923_1.ptx | cache=False
+2026-04-09 06:36:35 | INFO     | shrub.labeling.sprint3_runner | Downloading PTX for site=calaveras-big-trees from https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-calaveras-big-trees/original_TLS/CATCU_0001_20250531_1.ptx
+2026-04-09 06:36:46 | INFO     | shrub.labeling.sprint3_runner | Downloaded PTX to /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/calaveras-big-trees/CATCU_0001_20250531_1.ptx
+2026-04-09 06:36:46 | INFO     | shrub | Starting Sprint 3 | site=calaveras-big-trees | variant=revised | ptx=CATCU_0001_20250531_1.ptx
+2026-04-09 06:36:46 | INFO     | shrub.labeling.sprint3_runner | Running Sprint 3 for site=calaveras-big-trees variant=revised
+2026-04-09 06:36:46 | INFO     | shrub.labeling.sprint3_runner | PTX: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/calaveras-big-trees/CATCU_0001_20250531_1.ptx
+2026-04-09 06:36:46 | INFO     | shrub.labeling.sprint3_runner | Script: /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1_revised.R
+2026-04-09 06:36:46 | INFO     | shrub.labeling.sprint3_runner | Output dir: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/revised/CATCU_0001_20250531_1
+2026-04-09 06:36:46 | INFO     | shrub.labeling.sprint3_runner | Command: /usr/local/bin/Rscript /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1_revised.R /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/calaveras-big-trees/CATCU_0001_20250531_1.ptx /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/revised/CATCU_0001_20250531_1
+2026-04-09 06:40:29 | INFO     | shrub.labeling.sprint3_runner | Sprint 3 finished with returncode=-6 | shrub_csv=None | metrics_csv=None | tree_inventory_csv=None | cache=False
+2026-04-09 06:40:29 | ERROR    | shrub.labeling.sprint3_runner | Sprint 3 failed for site=calaveras-big-trees variant=revised
+2026-04-09 06:40:29 | ERROR    | shrub.labeling.sprint3_runner | stderr tail:
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Attaching package: ‘data.table’
+
+The following objects are masked from ‘package:dplyr’:
+
+    between, first, last
+
+terra 1.7.78
+
+Attaching package: ‘terra’
+
+The following object is masked from ‘package:data.table’:
+
+    shift
+
+
+Attaching package: ‘lidR’
+
+The following objects are masked from ‘package:terra’:
+
+    area, crs, crs<-, is.empty
+
+
+Attaching package: ‘e1071’
+
+The following object is masked from ‘package:terra’:
+
+    interpolate
+
+Linking to GEOS 3.7.2, GDAL 3.0.4, PROJ 6.3.2; sf_use_s2() is TRUE
+
+Attaching package: ‘sf’
+
+The following object is masked from ‘package:lidR’:
+
+    st_concave_hull
+
+
+Attaching package: ‘Morpho’
+
+The following object is masked from ‘package:terra’:
+
+    classify
+
+Loading required package: magrittr
+
+Attaching package: ‘magrittr’
+
+The following objects are masked from ‘package:terra’:
+
+    extract, inset
+
+point cloud apparently not normalized
+performing point classification on multiple stems
+malloc(): invalid next size (unsorted)
+2026-04-09 06:40:29 | ERROR    | shrub | Sprint 3 failed | site=calaveras-big-trees | variant=revised | ptx=CATCU_0001_20250531_1.ptx
+Traceback (most recent call last):
+  File "/tmp/ipykernel_2163/700647733.py", line 38, in <module>
+    result = run_sprint3_for_ptx(
+  File "/home/jovyan/work/Dry-shRub/shrub/Final/labeling/sprint3_runner.py", line 272, in run_sprint3_for_ptx
+    raise RuntimeError(
+RuntimeError: Sprint 3 failed for site=calaveras-big-trees, variant=revised, returncode=-6.
+stderr tail:
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Attaching package: ‘data.table’
+
+The following objects are masked from ‘package:dplyr’:
+
+    between, first, last
+
+terra 1.7.78
+
+Attaching package: ‘terra’
+
+The following object is masked from ‘package:data.table’:
+
+    shift
+
+
+Attaching package: ‘lidR’
+
+The following objects are masked from ‘package:terra’:
+
+    area, crs, crs<-, is.empty
+
+
+Attaching package: ‘e1071’
+
+The following object is masked from ‘package:terra’:
+
+    interpolate
+
+Linking to GEOS 3.7.2, GDAL 3.0.4, PROJ 6.3.2; sf_use_s2() is TRUE
+
+Attaching package: ‘sf’
+
+The following object is masked from ‘package:lidR’:
+
+    st_concave_hull
+
+
+Attaching package: ‘Morpho’
+
+The following object is masked from ‘package:terra’:
+
+    classify
+
+Loading required package: magrittr
+
+Attaching package: ‘magrittr’
+
+The following objects are masked from ‘package:terra’:
+
+    extract, inset
+
+point cloud apparently not normalized
+performing point classification on multiple stems
+malloc(): invalid next size (unsorted)
+2026-04-09 06:40:29 | INFO     | shrub.labeling.sprint3_runner | Downloading PTX for site=calaveras-big-trees from https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-calaveras-big-trees/original_TLS/CATCU_0002_20240924_1.ptx
+2026-04-09 06:40:39 | INFO     | shrub.labeling.sprint3_runner | Downloaded PTX to /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/calaveras-big-trees/CATCU_0002_20240924_1.ptx
+2026-04-09 06:40:39 | INFO     | shrub | Starting Sprint 3 | site=calaveras-big-trees | variant=revised | ptx=CATCU_0002_20240924_1.ptx
+2026-04-09 06:40:39 | INFO     | shrub.labeling.sprint3_runner | Running Sprint 3 for site=calaveras-big-trees variant=revised
+2026-04-09 06:40:39 | INFO     | shrub.labeling.sprint3_runner | PTX: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/calaveras-big-trees/CATCU_0002_20240924_1.ptx
+2026-04-09 06:40:39 | INFO     | shrub.labeling.sprint3_runner | Script: /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1_revised.R
+2026-04-09 06:40:39 | INFO     | shrub.labeling.sprint3_runner | Output dir: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/revised/CATCU_0002_20240924_1
+2026-04-09 06:40:39 | INFO     | shrub.labeling.sprint3_runner | Command: /usr/local/bin/Rscript /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1_revised.R /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/calaveras-big-trees/CATCU_0002_20240924_1.ptx /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/revised/CATCU_0002_20240924_1
+2026-04-09 06:43:03 | INFO     | shrub | PROJECT_ROOT = /home/jovyan/work/Dry-shRub/shrub
+2026-04-09 06:43:03 | INFO     | shrub | SPRINT3_BASE_DIR = /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base
+2026-04-09 06:43:03 | INFO     | shrub | LABELING_ROOT = /home/jovyan/work/Dry-shRub/shrub/Final/labeling
+2026-04-09 06:43:03 | INFO     | shrub | Sprint 3 output root: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling
+2026-04-09 06:43:03 | INFO     | shrub | Sprint 3 PTX cache root: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache
+2026-04-09 06:43:03 | INFO     | shrub | Sprint 3 manifest CSV: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/manifests/sprint3_runs.csv
+2026-04-09 06:43:03 | INFO     | shrub | Sprint 3 variants: ('revised',)
+2026-04-09 06:43:03 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=calaveras-big-trees at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-calaveras-big-trees/original_TLS
+2026-04-09 06:43:04 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=dl-bliss at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-dl-bliss/original_TLS
+2026-04-09 06:43:04 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=independence-lake at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-independence-lake/original_TLS
+2026-04-09 06:43:05 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=pacific-union-college at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-pacific-union-college/original_TLS
+2026-04-09 06:43:05 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=sedgwick at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-sedgwick/original_TLS
+2026-04-09 06:43:06 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=shaver-lake at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-shaver-lake/original_TLS
+2026-04-09 06:45:59 | INFO     | shrub | Sprint 3 output root: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling
+2026-04-09 06:45:59 | INFO     | shrub | Sprint 3 PTX cache root: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache
+2026-04-09 06:45:59 | INFO     | shrub | Sprint 3 manifest CSV: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/manifests/sprint3_runs.csv
+2026-04-09 06:45:59 | INFO     | shrub | Sprint 3 variants: ('revised',)
+2026-04-09 06:45:59 | INFO     | shrub | MAX_PTX_PER_SITE: 1
+2026-04-09 06:47:09 | INFO     | shrub | PROJECT_ROOT = /home/jovyan/work/Dry-shRub/shrub
+2026-04-09 06:47:09 | INFO     | shrub | SPRINT3_BASE_DIR = /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base
+2026-04-09 06:47:09 | INFO     | shrub | LABELING_ROOT = /home/jovyan/work/Dry-shRub/shrub/Final/labeling
+2026-04-09 06:47:09 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=calaveras-big-trees at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-calaveras-big-trees/original_TLS
+2026-04-09 06:47:10 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=dl-bliss at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-dl-bliss/original_TLS
+2026-04-09 06:47:11 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=independence-lake at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-independence-lake/original_TLS
+2026-04-09 06:47:11 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=pacific-union-college at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-pacific-union-college/original_TLS
+2026-04-09 06:47:11 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=sedgwick at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-sedgwick/original_TLS
+2026-04-09 06:47:12 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=shaver-lake at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-shaver-lake/original_TLS
+2026-04-09 06:47:21 | INFO     | shrub | Sprint 3 output root: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling
+2026-04-09 06:47:21 | INFO     | shrub | Sprint 3 PTX cache root: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache
+2026-04-09 06:47:21 | INFO     | shrub | Sprint 3 manifest CSV: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/manifests/sprint3_runs.csv
+2026-04-09 06:47:21 | INFO     | shrub | Sprint 3 variants: ('original', 'revised')
+2026-04-09 06:47:21 | INFO     | shrub | MAX_PTX_PER_SITE: 1
+2026-04-09 06:47:34 | INFO     | shrub.labeling.sprint3_runner | Downloading PTX for site=calaveras-big-trees from https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-calaveras-big-trees/original_TLS/CATCU_0008_20250615_1.ptx
+2026-04-09 06:47:44 | INFO     | shrub.labeling.sprint3_runner | Downloaded PTX to /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/calaveras-big-trees/CATCU_0008_20250615_1.ptx
+2026-04-09 06:47:44 | INFO     | shrub | Starting Sprint 3 | site=calaveras-big-trees | variant=original | ptx=CATCU_0008_20250615_1.ptx
+2026-04-09 06:47:45 | INFO     | shrub.labeling.sprint3_runner | Running Sprint 3 for site=calaveras-big-trees variant=original
+2026-04-09 06:47:45 | INFO     | shrub.labeling.sprint3_runner | PTX: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/calaveras-big-trees/CATCU_0008_20250615_1.ptx
+2026-04-09 06:47:45 | INFO     | shrub.labeling.sprint3_runner | Script: /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1.R
+2026-04-09 06:47:45 | INFO     | shrub.labeling.sprint3_runner | Output dir: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/original/CATCU_0008_20250615_1
+2026-04-09 06:47:45 | INFO     | shrub.labeling.sprint3_runner | Command: /usr/local/bin/Rscript /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1.R /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/calaveras-big-trees/CATCU_0008_20250615_1.ptx /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/original/CATCU_0008_20250615_1
+2026-04-09 06:52:48 | INFO     | shrub.labeling.sprint3_runner | Sprint 3 finished with returncode=0 | shrub_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/original/CATCU_0008_20250615_1/Shrubs/CATCU_0008_20250615_1.csv | metrics_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/original/CATCU_0008_20250615_1/metrics/CATCU_0008_20250615_1_metrics.csv | tree_inventory_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/original/CATCU_0008_20250615_1/Inventory/CATCU_0008_20250615_1_inv.csv | cache=False
+2026-04-09 06:52:48 | INFO     | shrub | Completed Sprint 3 | site=calaveras-big-trees | variant=original | ptx=CATCU_0008_20250615_1.ptx | cache=False
+2026-04-09 06:52:48 | INFO     | shrub | Starting Sprint 3 | site=calaveras-big-trees | variant=revised | ptx=CATCU_0008_20250615_1.ptx
+2026-04-09 06:52:48 | INFO     | shrub.labeling.sprint3_runner | Running Sprint 3 for site=calaveras-big-trees variant=revised
+2026-04-09 06:52:48 | INFO     | shrub.labeling.sprint3_runner | PTX: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/calaveras-big-trees/CATCU_0008_20250615_1.ptx
+2026-04-09 06:52:48 | INFO     | shrub.labeling.sprint3_runner | Script: /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1_revised.R
+2026-04-09 06:52:48 | INFO     | shrub.labeling.sprint3_runner | Output dir: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/revised/CATCU_0008_20250615_1
+2026-04-09 06:52:48 | INFO     | shrub.labeling.sprint3_runner | Command: /usr/local/bin/Rscript /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1_revised.R /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/calaveras-big-trees/CATCU_0008_20250615_1.ptx /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/revised/CATCU_0008_20250615_1
+2026-04-09 06:57:50 | INFO     | shrub.labeling.sprint3_runner | Sprint 3 finished with returncode=0 | shrub_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/revised/CATCU_0008_20250615_1/Shrubs/CATCU_0008_20250615_1.csv | metrics_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/revised/CATCU_0008_20250615_1/metrics/CATCU_0008_20250615_1_metrics.csv | tree_inventory_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/revised/CATCU_0008_20250615_1/Inventory/CATCU_0008_20250615_1_inv.csv | cache=False
+2026-04-09 06:57:51 | INFO     | shrub | Completed Sprint 3 | site=calaveras-big-trees | variant=revised | ptx=CATCU_0008_20250615_1.ptx | cache=False
+2026-04-09 06:57:51 | INFO     | shrub.labeling.sprint3_runner | Downloading PTX for site=dl-bliss from https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-dl-bliss/original_TLS/CAAEU_0027_20250728_1.ptx
+2026-04-09 06:58:01 | INFO     | shrub.labeling.sprint3_runner | Downloaded PTX to /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/dl-bliss/CAAEU_0027_20250728_1.ptx
+2026-04-09 06:58:01 | INFO     | shrub | Starting Sprint 3 | site=dl-bliss | variant=original | ptx=CAAEU_0027_20250728_1.ptx
+2026-04-09 06:58:01 | INFO     | shrub.labeling.sprint3_runner | Running Sprint 3 for site=dl-bliss variant=original
+2026-04-09 06:58:01 | INFO     | shrub.labeling.sprint3_runner | PTX: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/dl-bliss/CAAEU_0027_20250728_1.ptx
+2026-04-09 06:58:01 | INFO     | shrub.labeling.sprint3_runner | Script: /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1.R
+2026-04-09 06:58:01 | INFO     | shrub.labeling.sprint3_runner | Output dir: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/dl-bliss/sprint3/original/CAAEU_0027_20250728_1
+2026-04-09 06:58:01 | INFO     | shrub.labeling.sprint3_runner | Command: /usr/local/bin/Rscript /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1.R /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/dl-bliss/CAAEU_0027_20250728_1.ptx /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/dl-bliss/sprint3/original/CAAEU_0027_20250728_1
+2026-04-09 07:02:23 | INFO     | shrub.labeling.sprint3_runner | Sprint 3 finished with returncode=0 | shrub_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/dl-bliss/sprint3/original/CAAEU_0027_20250728_1/Shrubs/CAAEU_0027_20250728_1.csv | metrics_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/dl-bliss/sprint3/original/CAAEU_0027_20250728_1/metrics/CAAEU_0027_20250728_1_metrics.csv | tree_inventory_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/dl-bliss/sprint3/original/CAAEU_0027_20250728_1/Inventory/CAAEU_0027_20250728_1_inv.csv | cache=False
+2026-04-09 07:02:23 | INFO     | shrub | Completed Sprint 3 | site=dl-bliss | variant=original | ptx=CAAEU_0027_20250728_1.ptx | cache=False
+2026-04-09 07:02:23 | INFO     | shrub | Starting Sprint 3 | site=dl-bliss | variant=revised | ptx=CAAEU_0027_20250728_1.ptx
+2026-04-09 07:02:23 | INFO     | shrub.labeling.sprint3_runner | Running Sprint 3 for site=dl-bliss variant=revised
+2026-04-09 07:02:23 | INFO     | shrub.labeling.sprint3_runner | PTX: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/dl-bliss/CAAEU_0027_20250728_1.ptx
+2026-04-09 07:02:23 | INFO     | shrub.labeling.sprint3_runner | Script: /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1_revised.R
+2026-04-09 07:02:23 | INFO     | shrub.labeling.sprint3_runner | Output dir: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/dl-bliss/sprint3/revised/CAAEU_0027_20250728_1
+2026-04-09 07:02:23 | INFO     | shrub.labeling.sprint3_runner | Command: /usr/local/bin/Rscript /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1_revised.R /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/dl-bliss/CAAEU_0027_20250728_1.ptx /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/dl-bliss/sprint3/revised/CAAEU_0027_20250728_1
+2026-04-09 07:06:48 | INFO     | shrub.labeling.sprint3_runner | Sprint 3 finished with returncode=0 | shrub_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/dl-bliss/sprint3/revised/CAAEU_0027_20250728_1/Shrubs/CAAEU_0027_20250728_1.csv | metrics_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/dl-bliss/sprint3/revised/CAAEU_0027_20250728_1/metrics/CAAEU_0027_20250728_1_metrics.csv | tree_inventory_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/dl-bliss/sprint3/revised/CAAEU_0027_20250728_1/Inventory/CAAEU_0027_20250728_1_inv.csv | cache=False
+2026-04-09 07:06:48 | INFO     | shrub | Completed Sprint 3 | site=dl-bliss | variant=revised | ptx=CAAEU_0027_20250728_1.ptx | cache=False
+2026-04-09 07:06:48 | INFO     | shrub.labeling.sprint3_runner | Downloading PTX for site=independence-lake from https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-independence-lake/original_TLS/CATNF_6040_20250820_1.ptx
+2026-04-09 07:06:58 | INFO     | shrub.labeling.sprint3_runner | Downloaded PTX to /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/independence-lake/CATNF_6040_20250820_1.ptx
+2026-04-09 07:06:58 | INFO     | shrub | Starting Sprint 3 | site=independence-lake | variant=original | ptx=CATNF_6040_20250820_1.ptx
+2026-04-09 07:06:58 | INFO     | shrub.labeling.sprint3_runner | Running Sprint 3 for site=independence-lake variant=original
+2026-04-09 07:06:58 | INFO     | shrub.labeling.sprint3_runner | PTX: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/independence-lake/CATNF_6040_20250820_1.ptx
+2026-04-09 07:06:58 | INFO     | shrub.labeling.sprint3_runner | Script: /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1.R
+2026-04-09 07:06:58 | INFO     | shrub.labeling.sprint3_runner | Output dir: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/independence-lake/sprint3/original/CATNF_6040_20250820_1
+2026-04-09 07:06:58 | INFO     | shrub.labeling.sprint3_runner | Command: /usr/local/bin/Rscript /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1.R /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/independence-lake/CATNF_6040_20250820_1.ptx /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/independence-lake/sprint3/original/CATNF_6040_20250820_1
+2026-04-09 07:11:22 | INFO     | shrub.labeling.sprint3_runner | Sprint 3 finished with returncode=0 | shrub_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/independence-lake/sprint3/original/CATNF_6040_20250820_1/Shrubs/CATNF_6040_20250820_1.csv | metrics_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/independence-lake/sprint3/original/CATNF_6040_20250820_1/metrics/CATNF_6040_20250820_1_metrics.csv | tree_inventory_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/independence-lake/sprint3/original/CATNF_6040_20250820_1/Inventory/CATNF_6040_20250820_1_inv.csv | cache=False
+2026-04-09 07:11:22 | INFO     | shrub | Completed Sprint 3 | site=independence-lake | variant=original | ptx=CATNF_6040_20250820_1.ptx | cache=False
+2026-04-09 07:11:22 | INFO     | shrub | Starting Sprint 3 | site=independence-lake | variant=revised | ptx=CATNF_6040_20250820_1.ptx
+2026-04-09 07:11:22 | INFO     | shrub.labeling.sprint3_runner | Running Sprint 3 for site=independence-lake variant=revised
+2026-04-09 07:11:22 | INFO     | shrub.labeling.sprint3_runner | PTX: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/independence-lake/CATNF_6040_20250820_1.ptx
+2026-04-09 07:11:22 | INFO     | shrub.labeling.sprint3_runner | Script: /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1_revised.R
+2026-04-09 07:11:22 | INFO     | shrub.labeling.sprint3_runner | Output dir: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/independence-lake/sprint3/revised/CATNF_6040_20250820_1
+2026-04-09 07:11:22 | INFO     | shrub.labeling.sprint3_runner | Command: /usr/local/bin/Rscript /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1_revised.R /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/independence-lake/CATNF_6040_20250820_1.ptx /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/independence-lake/sprint3/revised/CATNF_6040_20250820_1
+2026-04-09 07:15:42 | INFO     | shrub.labeling.sprint3_runner | Sprint 3 finished with returncode=0 | shrub_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/independence-lake/sprint3/revised/CATNF_6040_20250820_1/Shrubs/CATNF_6040_20250820_1.csv | metrics_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/independence-lake/sprint3/revised/CATNF_6040_20250820_1/metrics/CATNF_6040_20250820_1_metrics.csv | tree_inventory_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/independence-lake/sprint3/revised/CATNF_6040_20250820_1/Inventory/CATNF_6040_20250820_1_inv.csv | cache=False
+2026-04-09 07:15:42 | INFO     | shrub | Completed Sprint 3 | site=independence-lake | variant=revised | ptx=CATNF_6040_20250820_1.ptx | cache=False
+2026-04-09 07:15:42 | INFO     | shrub.labeling.sprint3_runner | Downloading PTX for site=pacific-union-college from https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-pacific-union-college/original_TLS/CALNU_0034_20250810_1.ptx
+2026-04-09 07:15:50 | ERROR    | shrub | Failed to download PTX for site=pacific-union-college entry={'name': 'CALNU_0034_20250810_1.ptx', 'url': 'https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-pacific-union-college/original_TLS/CALNU_0034_20250810_1.ptx'}
+Traceback (most recent call last):
+  File "/home/jovyan/work/Dry-shRub/shrub/Final/labeling/sprint3_runner.py", line 169, in download_ptx_with_cache
+    f.write(chunk)
+OSError: [Errno 122] Disk quota exceeded
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/tmp/ipykernel_2903/445523128.py", line 11, in <module>
+    local_ptx = download_ptx_with_cache(
+  File "/home/jovyan/work/Dry-shRub/shrub/Final/labeling/sprint3_runner.py", line 169, in download_ptx_with_cache
+    f.write(chunk)
+OSError: [Errno 122] Disk quota exceeded
+2026-04-09 07:15:50 | INFO     | shrub.labeling.sprint3_runner | Downloading PTX for site=sedgwick from https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-sedgwick/original_TLS/CASBC_0070_20250712_1.ptx
+2026-04-09 07:15:52 | ERROR    | shrub | Failed to download PTX for site=sedgwick entry={'name': 'CASBC_0070_20250712_1.ptx', 'url': 'https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-sedgwick/original_TLS/CASBC_0070_20250712_1.ptx'}
+Traceback (most recent call last):
+  File "/home/jovyan/work/Dry-shRub/shrub/Final/labeling/sprint3_runner.py", line 169, in download_ptx_with_cache
+    f.write(chunk)
+OSError: [Errno 122] Disk quota exceeded
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/tmp/ipykernel_2903/445523128.py", line 11, in <module>
+    local_ptx = download_ptx_with_cache(
+  File "/home/jovyan/work/Dry-shRub/shrub/Final/labeling/sprint3_runner.py", line 169, in download_ptx_with_cache
+    f.write(chunk)
+OSError: [Errno 122] Disk quota exceeded
+2026-04-09 07:15:52 | INFO     | shrub.labeling.sprint3_runner | Downloading PTX for site=shaver-lake from https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-shaver-lake/original_TLS/CAFKU_0092_20240804_1.ptx
+2026-04-09 07:15:53 | ERROR    | shrub | Failed to download PTX for site=shaver-lake entry={'name': 'CAFKU_0092_20240804_1.ptx', 'url': 'https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-shaver-lake/original_TLS/CAFKU_0092_20240804_1.ptx'}
+Traceback (most recent call last):
+  File "/home/jovyan/work/Dry-shRub/shrub/Final/labeling/sprint3_runner.py", line 169, in download_ptx_with_cache
+    f.write(chunk)
+OSError: [Errno 122] Disk quota exceeded
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/tmp/ipykernel_2903/445523128.py", line 11, in <module>
+    local_ptx = download_ptx_with_cache(
+  File "/home/jovyan/work/Dry-shRub/shrub/Final/labeling/sprint3_runner.py", line 169, in download_ptx_with_cache
+    f.write(chunk)
+OSError: [Errno 122] Disk quota exceeded
+2026-04-09 07:41:52 | INFO     | shrub | PROJECT_ROOT = /home/jovyan/work/Dry-shRub/shrub
+2026-04-09 07:41:52 | INFO     | shrub | SPRINT3_BASE_DIR = /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base
+2026-04-09 07:41:52 | INFO     | shrub | LABELING_ROOT = /home/jovyan/work/Dry-shRub/shrub/Final/labeling
+2026-04-09 07:42:49 | INFO     | shrub | PROJECT_ROOT = /home/jovyan/work/Dry-shRub/shrub
+2026-04-09 07:42:49 | INFO     | shrub | SPRINT3_BASE_DIR = /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base
+2026-04-09 07:42:49 | INFO     | shrub | LABELING_ROOT = /home/jovyan/work/Dry-shRub/shrub/Final/labeling
+2026-04-09 07:42:49 | INFO     | shrub | Sprint 3 output root: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling
+2026-04-09 07:42:49 | INFO     | shrub | Sprint 3 PTX cache root: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache
+2026-04-09 07:42:49 | INFO     | shrub | Sprint 3 manifest CSV: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/manifests/sprint3_runs.csv
+2026-04-09 07:42:49 | INFO     | shrub | Sprint 3 variants: ('original', 'revised')
+2026-04-09 07:42:49 | INFO     | shrub | MAX_PTX_PER_SITE: 1
+2026-04-09 07:43:15 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=calaveras-big-trees at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-calaveras-big-trees/original_TLS
+2026-04-09 07:43:16 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=dl-bliss at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-dl-bliss/original_TLS
+2026-04-09 07:43:16 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=independence-lake at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-independence-lake/original_TLS
+2026-04-09 07:43:17 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=pacific-union-college at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-pacific-union-college/original_TLS
+2026-04-09 07:43:17 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=sedgwick at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-sedgwick/original_TLS
+2026-04-09 07:43:18 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=shaver-lake at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-shaver-lake/original_TLS
+2026-04-09 07:46:10 | INFO     | shrub | PROJECT_ROOT = /home/jovyan/work/Dry-shRub/shrub
+2026-04-09 07:46:10 | INFO     | shrub | SPRINT3_BASE_DIR = /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base
+2026-04-09 07:46:10 | INFO     | shrub | LABELING_ROOT = /home/jovyan/work/Dry-shRub/shrub/Final/labeling
+2026-04-09 07:46:10 | INFO     | shrub | Sprint 3 output root: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling
+2026-04-09 07:46:10 | INFO     | shrub | Sprint 3 PTX cache root: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache
+2026-04-09 07:46:10 | INFO     | shrub | Sprint 3 manifest CSV: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/manifests/sprint3_runs.csv
+2026-04-09 07:46:10 | INFO     | shrub | Sprint 3 variants: ('original', 'revised')
+2026-04-09 07:46:10 | INFO     | shrub | MAX_PTX_PER_SITE: 1
+2026-04-09 07:46:10 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=calaveras-big-trees at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-calaveras-big-trees/original_TLS
+2026-04-09 07:46:11 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=dl-bliss at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-dl-bliss/original_TLS
+2026-04-09 07:46:12 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=independence-lake at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-independence-lake/original_TLS
+2026-04-09 07:46:12 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=pacific-union-college at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-pacific-union-college/original_TLS
+2026-04-09 07:46:13 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=sedgwick at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-sedgwick/original_TLS
+2026-04-09 07:46:13 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=shaver-lake at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-shaver-lake/original_TLS
+2026-04-09 07:46:14 | INFO     | shrub.labeling.sprint3_runner | Downloading PTX for site=calaveras-big-trees from https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-calaveras-big-trees/original_TLS/CATCU_0009_20250615_1.ptx
+2026-04-09 07:46:24 | INFO     | shrub.labeling.sprint3_runner | Downloaded PTX to /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/calaveras-big-trees/CATCU_0009_20250615_1.ptx
+2026-04-09 07:46:24 | INFO     | shrub | Starting Sprint 3 | site=calaveras-big-trees | variant=original | ptx=CATCU_0009_20250615_1.ptx
+2026-04-09 07:46:24 | INFO     | shrub.labeling.sprint3_runner | Running Sprint 3 for site=calaveras-big-trees variant=original
+2026-04-09 07:46:24 | INFO     | shrub.labeling.sprint3_runner | PTX: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/calaveras-big-trees/CATCU_0009_20250615_1.ptx
+2026-04-09 07:46:24 | INFO     | shrub.labeling.sprint3_runner | Script: /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1.R
+2026-04-09 07:46:24 | INFO     | shrub.labeling.sprint3_runner | Output dir: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/original/CATCU_0009_20250615_1
+2026-04-09 07:46:24 | INFO     | shrub.labeling.sprint3_runner | Command: /usr/local/bin/Rscript /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1.R /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/calaveras-big-trees/CATCU_0009_20250615_1.ptx /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/original/CATCU_0009_20250615_1
+2026-04-09 07:50:37 | INFO     | shrub.labeling.sprint3_runner | Sprint 3 finished with returncode=0 | shrub_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/original/CATCU_0009_20250615_1/Shrubs/CATCU_0009_20250615_1.csv | metrics_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/original/CATCU_0009_20250615_1/metrics/CATCU_0009_20250615_1_metrics.csv | tree_inventory_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/original/CATCU_0009_20250615_1/Inventory/CATCU_0009_20250615_1_inv.csv | cache=False
+2026-04-09 07:50:37 | INFO     | shrub | Completed Sprint 3 | site=calaveras-big-trees | variant=original | ptx=CATCU_0009_20250615_1.ptx | cache=False
+2026-04-09 07:50:37 | INFO     | shrub | Starting Sprint 3 | site=calaveras-big-trees | variant=revised | ptx=CATCU_0009_20250615_1.ptx
+2026-04-09 07:50:37 | INFO     | shrub.labeling.sprint3_runner | Running Sprint 3 for site=calaveras-big-trees variant=revised
+2026-04-09 07:50:37 | INFO     | shrub.labeling.sprint3_runner | PTX: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/calaveras-big-trees/CATCU_0009_20250615_1.ptx
+2026-04-09 07:50:37 | INFO     | shrub.labeling.sprint3_runner | Script: /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1_revised.R
+2026-04-09 07:50:37 | INFO     | shrub.labeling.sprint3_runner | Output dir: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/revised/CATCU_0009_20250615_1
+2026-04-09 07:50:37 | INFO     | shrub.labeling.sprint3_runner | Command: /usr/local/bin/Rscript /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1_revised.R /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/calaveras-big-trees/CATCU_0009_20250615_1.ptx /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/revised/CATCU_0009_20250615_1
+2026-04-09 07:54:58 | INFO     | shrub.labeling.sprint3_runner | Sprint 3 finished with returncode=0 | shrub_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/revised/CATCU_0009_20250615_1/Shrubs/CATCU_0009_20250615_1.csv | metrics_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/revised/CATCU_0009_20250615_1/metrics/CATCU_0009_20250615_1_metrics.csv | tree_inventory_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/revised/CATCU_0009_20250615_1/Inventory/CATCU_0009_20250615_1_inv.csv | cache=False
+2026-04-09 07:54:58 | INFO     | shrub | Completed Sprint 3 | site=calaveras-big-trees | variant=revised | ptx=CATCU_0009_20250615_1.ptx | cache=False
+2026-04-09 17:28:52 | INFO     | shrub | PROJECT_ROOT = /home/jovyan/work/Dry-shRub/shrub
+2026-04-09 17:28:52 | INFO     | shrub | SPRINT3_BASE_DIR = /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base
+2026-04-09 17:28:52 | INFO     | shrub | LABELING_ROOT = /home/jovyan/work/Dry-shRub/shrub/Final/labeling
+2026-04-09 17:28:52 | INFO     | shrub | Sprint 3 output root: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling
+2026-04-09 17:28:52 | INFO     | shrub | Sprint 3 PTX cache root: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache
+2026-04-09 17:28:52 | INFO     | shrub | Sprint 3 manifest CSV: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/manifests/sprint3_runs.csv
+2026-04-09 17:28:52 | INFO     | shrub | Sprint 3 variants: ('original', 'revised')
+2026-04-09 17:28:52 | INFO     | shrub | MAX_PTX_PER_SITE: 1
+2026-04-09 17:28:52 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=calaveras-big-trees at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-calaveras-big-trees/original_TLS
+2026-04-09 17:28:53 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=dl-bliss at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-dl-bliss/original_TLS
+2026-04-09 17:28:53 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=independence-lake at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-independence-lake/original_TLS
+2026-04-09 17:28:53 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=pacific-union-college at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-pacific-union-college/original_TLS
+2026-04-09 17:28:54 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=sedgwick at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-sedgwick/original_TLS
+2026-04-09 17:28:54 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=shaver-lake at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-shaver-lake/original_TLS
+2026-04-09 17:28:54 | INFO     | shrub.labeling.sprint3_runner | Using cached PTX for site=calaveras-big-trees: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/calaveras-big-trees/CATCU_0009_20250615_1.ptx
+2026-04-09 17:28:54 | INFO     | shrub | Starting Sprint 3 | site=calaveras-big-trees | variant=original | ptx=CATCU_0009_20250615_1.ptx
+2026-04-09 17:28:55 | INFO     | shrub.labeling.sprint3_runner | Using cached Sprint 3 outputs for site=calaveras-big-trees variant=original ptx=CATCU_0009_20250615_1.ptx
+2026-04-09 17:28:55 | INFO     | shrub | Completed Sprint 3 | site=calaveras-big-trees | variant=original | ptx=CATCU_0009_20250615_1.ptx | cache=True
+2026-04-09 17:28:55 | INFO     | shrub | Starting Sprint 3 | site=calaveras-big-trees | variant=revised | ptx=CATCU_0009_20250615_1.ptx
+2026-04-09 17:28:55 | INFO     | shrub.labeling.sprint3_runner | Using cached Sprint 3 outputs for site=calaveras-big-trees variant=revised ptx=CATCU_0009_20250615_1.ptx
+2026-04-09 17:28:55 | INFO     | shrub | Completed Sprint 3 | site=calaveras-big-trees | variant=revised | ptx=CATCU_0009_20250615_1.ptx | cache=True
+2026-04-09 17:29:30 | INFO     | shrub | PROJECT_ROOT = /home/jovyan/work/Dry-shRub/shrub
+2026-04-09 17:29:30 | INFO     | shrub | SPRINT3_BASE_DIR = /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base
+2026-04-09 17:29:30 | INFO     | shrub | LABELING_ROOT = /home/jovyan/work/Dry-shRub/shrub/Final/labeling
+2026-04-09 17:29:32 | INFO     | shrub | Sprint 3 output root: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling
+2026-04-09 17:29:32 | INFO     | shrub | Sprint 3 PTX cache root: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache
+2026-04-09 17:29:32 | INFO     | shrub | Sprint 3 manifest CSV: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/manifests/sprint3_runs.csv
+2026-04-09 17:29:32 | INFO     | shrub | Sprint 3 variants: ('original', 'revised')
+2026-04-09 17:29:32 | INFO     | shrub | MAX_PTX_PER_SITE: 1
+2026-04-09 17:29:37 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=calaveras-big-trees at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-calaveras-big-trees/original_TLS
+2026-04-09 17:29:40 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=dl-bliss at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-dl-bliss/original_TLS
+2026-04-09 17:29:40 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=independence-lake at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-independence-lake/original_TLS
+2026-04-09 17:29:40 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=pacific-union-college at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-pacific-union-college/original_TLS
+2026-04-09 17:29:41 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=sedgwick at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-sedgwick/original_TLS
+2026-04-09 17:29:41 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=shaver-lake at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-shaver-lake/original_TLS
+2026-04-09 17:29:45 | INFO     | shrub.labeling.sprint3_runner | Using cached PTX for site=calaveras-big-trees: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/calaveras-big-trees/CATCU_0009_20250615_1.ptx
+2026-04-09 17:29:45 | INFO     | shrub | Starting Sprint 3 | site=calaveras-big-trees | variant=original | ptx=CATCU_0009_20250615_1.ptx
+2026-04-09 17:29:45 | INFO     | shrub.labeling.sprint3_runner | Using cached Sprint 3 outputs for site=calaveras-big-trees variant=original ptx=CATCU_0009_20250615_1.ptx
+2026-04-09 17:29:45 | INFO     | shrub | Completed Sprint 3 | site=calaveras-big-trees | variant=original | ptx=CATCU_0009_20250615_1.ptx | cache=True
+2026-04-09 17:29:45 | INFO     | shrub | Starting Sprint 3 | site=calaveras-big-trees | variant=revised | ptx=CATCU_0009_20250615_1.ptx
+2026-04-09 17:29:45 | INFO     | shrub.labeling.sprint3_runner | Using cached Sprint 3 outputs for site=calaveras-big-trees variant=revised ptx=CATCU_0009_20250615_1.ptx
+2026-04-09 17:29:45 | INFO     | shrub | Completed Sprint 3 | site=calaveras-big-trees | variant=revised | ptx=CATCU_0009_20250615_1.ptx | cache=True
+2026-04-09 17:29:45 | INFO     | shrub.labeling.sprint3_runner | Deleted PTX after processing: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/calaveras-big-trees/CATCU_0009_20250615_1.ptx (529864075 bytes)
+2026-04-09 17:29:46 | INFO     | shrub.labeling.sprint3_runner | Downloading PTX for site=dl-bliss from https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-dl-bliss/original_TLS/CAAEU_0027_20250728_1.ptx
+2026-04-09 17:30:21 | INFO     | shrub.labeling.sprint3_runner | Downloaded PTX to /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/dl-bliss/CAAEU_0027_20250728_1.ptx
+2026-04-09 17:30:21 | INFO     | shrub | Starting Sprint 3 | site=dl-bliss | variant=original | ptx=CAAEU_0027_20250728_1.ptx
+2026-04-09 17:30:21 | INFO     | shrub.labeling.sprint3_runner | Using cached Sprint 3 outputs for site=dl-bliss variant=original ptx=CAAEU_0027_20250728_1.ptx
+2026-04-09 17:30:21 | INFO     | shrub | Completed Sprint 3 | site=dl-bliss | variant=original | ptx=CAAEU_0027_20250728_1.ptx | cache=True
+2026-04-09 17:30:21 | INFO     | shrub | Starting Sprint 3 | site=dl-bliss | variant=revised | ptx=CAAEU_0027_20250728_1.ptx
+2026-04-09 17:30:21 | INFO     | shrub.labeling.sprint3_runner | Using cached Sprint 3 outputs for site=dl-bliss variant=revised ptx=CAAEU_0027_20250728_1.ptx
+2026-04-09 17:30:22 | INFO     | shrub | Completed Sprint 3 | site=dl-bliss | variant=revised | ptx=CAAEU_0027_20250728_1.ptx | cache=True
+2026-04-09 17:30:22 | INFO     | shrub.labeling.sprint3_runner | Deleted PTX after processing: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/dl-bliss/CAAEU_0027_20250728_1.ptx (505609992 bytes)
+2026-04-09 17:30:22 | INFO     | shrub.labeling.sprint3_runner | Downloading PTX for site=independence-lake from https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-independence-lake/original_TLS/CATNF_6118_20250820_1.ptx
+2026-04-09 17:30:30 | INFO     | shrub.labeling.sprint3_runner | Downloaded PTX to /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/independence-lake/CATNF_6118_20250820_1.ptx
+2026-04-09 17:30:30 | INFO     | shrub | Starting Sprint 3 | site=independence-lake | variant=original | ptx=CATNF_6118_20250820_1.ptx
+2026-04-09 17:30:30 | INFO     | shrub.labeling.sprint3_runner | Running Sprint 3 for site=independence-lake variant=original
+2026-04-09 17:30:30 | INFO     | shrub.labeling.sprint3_runner | PTX: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/independence-lake/CATNF_6118_20250820_1.ptx
+2026-04-09 17:30:30 | INFO     | shrub.labeling.sprint3_runner | Script: /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1.R
+2026-04-09 17:30:30 | INFO     | shrub.labeling.sprint3_runner | Output dir: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/independence-lake/sprint3/original/CATNF_6118_20250820_1
+2026-04-09 17:30:30 | INFO     | shrub.labeling.sprint3_runner | Command: /usr/local/bin/Rscript /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1.R /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/independence-lake/CATNF_6118_20250820_1.ptx /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/independence-lake/sprint3/original/CATNF_6118_20250820_1
+2026-04-09 17:35:25 | INFO     | shrub.labeling.sprint3_runner | Sprint 3 finished with returncode=0 | shrub_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/independence-lake/sprint3/original/CATNF_6118_20250820_1/Shrubs/CATNF_6118_20250820_1.csv | metrics_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/independence-lake/sprint3/original/CATNF_6118_20250820_1/metrics/CATNF_6118_20250820_1_metrics.csv | tree_inventory_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/independence-lake/sprint3/original/CATNF_6118_20250820_1/Inventory/CATNF_6118_20250820_1_inv.csv | cache=False
+2026-04-09 17:35:25 | INFO     | shrub | Completed Sprint 3 | site=independence-lake | variant=original | ptx=CATNF_6118_20250820_1.ptx | cache=False
+2026-04-09 17:35:25 | INFO     | shrub | Starting Sprint 3 | site=independence-lake | variant=revised | ptx=CATNF_6118_20250820_1.ptx
+2026-04-09 17:35:25 | INFO     | shrub.labeling.sprint3_runner | Running Sprint 3 for site=independence-lake variant=revised
+2026-04-09 17:35:25 | INFO     | shrub.labeling.sprint3_runner | PTX: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/independence-lake/CATNF_6118_20250820_1.ptx
+2026-04-09 17:35:25 | INFO     | shrub.labeling.sprint3_runner | Script: /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1_revised.R
+2026-04-09 17:35:25 | INFO     | shrub.labeling.sprint3_runner | Output dir: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/independence-lake/sprint3/revised/CATNF_6118_20250820_1
+2026-04-09 17:35:25 | INFO     | shrub.labeling.sprint3_runner | Command: /usr/local/bin/Rscript /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1_revised.R /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/independence-lake/CATNF_6118_20250820_1.ptx /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/independence-lake/sprint3/revised/CATNF_6118_20250820_1
+2026-04-09 17:40:05 | INFO     | shrub.labeling.sprint3_runner | Sprint 3 finished with returncode=0 | shrub_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/independence-lake/sprint3/revised/CATNF_6118_20250820_1/Shrubs/CATNF_6118_20250820_1.csv | metrics_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/independence-lake/sprint3/revised/CATNF_6118_20250820_1/metrics/CATNF_6118_20250820_1_metrics.csv | tree_inventory_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/independence-lake/sprint3/revised/CATNF_6118_20250820_1/Inventory/CATNF_6118_20250820_1_inv.csv | cache=False
+2026-04-09 17:40:06 | INFO     | shrub | Completed Sprint 3 | site=independence-lake | variant=revised | ptx=CATNF_6118_20250820_1.ptx | cache=False
+2026-04-09 17:40:06 | INFO     | shrub.labeling.sprint3_runner | Deleted PTX after processing: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/independence-lake/CATNF_6118_20250820_1.ptx (451162395 bytes)
+2026-04-09 17:40:06 | INFO     | shrub.labeling.sprint3_runner | Downloading PTX for site=pacific-union-college from https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-pacific-union-college/original_TLS/CALNU_0039_20250810_1.ptx
+2026-04-09 17:40:16 | INFO     | shrub.labeling.sprint3_runner | Downloaded PTX to /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/pacific-union-college/CALNU_0039_20250810_1.ptx
+2026-04-09 17:40:16 | INFO     | shrub | Starting Sprint 3 | site=pacific-union-college | variant=original | ptx=CALNU_0039_20250810_1.ptx
+2026-04-09 17:40:16 | INFO     | shrub.labeling.sprint3_runner | Running Sprint 3 for site=pacific-union-college variant=original
+2026-04-09 17:40:16 | INFO     | shrub.labeling.sprint3_runner | PTX: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/pacific-union-college/CALNU_0039_20250810_1.ptx
+2026-04-09 17:40:16 | INFO     | shrub.labeling.sprint3_runner | Script: /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1.R
+2026-04-09 17:40:16 | INFO     | shrub.labeling.sprint3_runner | Output dir: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/pacific-union-college/sprint3/original/CALNU_0039_20250810_1
+2026-04-09 17:40:16 | INFO     | shrub.labeling.sprint3_runner | Command: /usr/local/bin/Rscript /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1.R /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/pacific-union-college/CALNU_0039_20250810_1.ptx /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/pacific-union-college/sprint3/original/CALNU_0039_20250810_1
+2026-04-09 17:45:26 | INFO     | shrub.labeling.sprint3_runner | Sprint 3 finished with returncode=0 | shrub_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/pacific-union-college/sprint3/original/CALNU_0039_20250810_1/Shrubs/CALNU_0039_20250810_1.csv | metrics_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/pacific-union-college/sprint3/original/CALNU_0039_20250810_1/metrics/CALNU_0039_20250810_1_metrics.csv | tree_inventory_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/pacific-union-college/sprint3/original/CALNU_0039_20250810_1/Inventory/CALNU_0039_20250810_1_inv.csv | cache=False
+2026-04-09 17:45:26 | INFO     | shrub | Completed Sprint 3 | site=pacific-union-college | variant=original | ptx=CALNU_0039_20250810_1.ptx | cache=False
+2026-04-09 17:45:26 | INFO     | shrub | Starting Sprint 3 | site=pacific-union-college | variant=revised | ptx=CALNU_0039_20250810_1.ptx
+2026-04-09 17:45:26 | INFO     | shrub.labeling.sprint3_runner | Running Sprint 3 for site=pacific-union-college variant=revised
+2026-04-09 17:45:26 | INFO     | shrub.labeling.sprint3_runner | PTX: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/pacific-union-college/CALNU_0039_20250810_1.ptx
+2026-04-09 17:45:26 | INFO     | shrub.labeling.sprint3_runner | Script: /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1_revised.R
+2026-04-09 17:45:26 | INFO     | shrub.labeling.sprint3_runner | Output dir: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/pacific-union-college/sprint3/revised/CALNU_0039_20250810_1
+2026-04-09 17:45:26 | INFO     | shrub.labeling.sprint3_runner | Command: /usr/local/bin/Rscript /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1_revised.R /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/pacific-union-college/CALNU_0039_20250810_1.ptx /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/pacific-union-college/sprint3/revised/CALNU_0039_20250810_1
+2026-04-09 17:50:37 | INFO     | shrub.labeling.sprint3_runner | Sprint 3 finished with returncode=0 | shrub_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/pacific-union-college/sprint3/revised/CALNU_0039_20250810_1/Shrubs/CALNU_0039_20250810_1.csv | metrics_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/pacific-union-college/sprint3/revised/CALNU_0039_20250810_1/metrics/CALNU_0039_20250810_1_metrics.csv | tree_inventory_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/pacific-union-college/sprint3/revised/CALNU_0039_20250810_1/Inventory/CALNU_0039_20250810_1_inv.csv | cache=False
+2026-04-09 17:50:37 | INFO     | shrub | Completed Sprint 3 | site=pacific-union-college | variant=revised | ptx=CALNU_0039_20250810_1.ptx | cache=False
+2026-04-09 17:50:37 | INFO     | shrub.labeling.sprint3_runner | Deleted PTX after processing: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/pacific-union-college/CALNU_0039_20250810_1.ptx (556223905 bytes)
+2026-04-09 17:50:37 | INFO     | shrub.labeling.sprint3_runner | Downloading PTX for site=sedgwick from https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-sedgwick/original_TLS/CASBC_0087_20250712_1.ptx
+2026-04-09 17:50:47 | INFO     | shrub.labeling.sprint3_runner | Downloaded PTX to /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/sedgwick/CASBC_0087_20250712_1.ptx
+2026-04-09 17:50:47 | INFO     | shrub | Starting Sprint 3 | site=sedgwick | variant=original | ptx=CASBC_0087_20250712_1.ptx
+2026-04-09 17:50:47 | INFO     | shrub.labeling.sprint3_runner | Running Sprint 3 for site=sedgwick variant=original
+2026-04-09 17:50:47 | INFO     | shrub.labeling.sprint3_runner | PTX: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/sedgwick/CASBC_0087_20250712_1.ptx
+2026-04-09 17:50:47 | INFO     | shrub.labeling.sprint3_runner | Script: /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1.R
+2026-04-09 17:50:47 | INFO     | shrub.labeling.sprint3_runner | Output dir: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/sedgwick/sprint3/original/CASBC_0087_20250712_1
+2026-04-09 17:50:47 | INFO     | shrub.labeling.sprint3_runner | Command: /usr/local/bin/Rscript /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1.R /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/sedgwick/CASBC_0087_20250712_1.ptx /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/sedgwick/sprint3/original/CASBC_0087_20250712_1
+2026-04-09 17:56:42 | INFO     | shrub.labeling.sprint3_runner | Sprint 3 finished with returncode=0 | shrub_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/sedgwick/sprint3/original/CASBC_0087_20250712_1/Shrubs/CASBC_0087_20250712_1.csv | metrics_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/sedgwick/sprint3/original/CASBC_0087_20250712_1/metrics/CASBC_0087_20250712_1_metrics.csv | tree_inventory_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/sedgwick/sprint3/original/CASBC_0087_20250712_1/Inventory/CASBC_0087_20250712_1_inv.csv | cache=False
+2026-04-09 17:56:42 | INFO     | shrub | Completed Sprint 3 | site=sedgwick | variant=original | ptx=CASBC_0087_20250712_1.ptx | cache=False
+2026-04-09 17:56:42 | INFO     | shrub | Starting Sprint 3 | site=sedgwick | variant=revised | ptx=CASBC_0087_20250712_1.ptx
+2026-04-09 17:56:42 | INFO     | shrub.labeling.sprint3_runner | Running Sprint 3 for site=sedgwick variant=revised
+2026-04-09 17:56:42 | INFO     | shrub.labeling.sprint3_runner | PTX: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/sedgwick/CASBC_0087_20250712_1.ptx
+2026-04-09 17:56:42 | INFO     | shrub.labeling.sprint3_runner | Script: /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1_revised.R
+2026-04-09 17:56:42 | INFO     | shrub.labeling.sprint3_runner | Output dir: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/sedgwick/sprint3/revised/CASBC_0087_20250712_1
+2026-04-09 17:56:42 | INFO     | shrub.labeling.sprint3_runner | Command: /usr/local/bin/Rscript /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1_revised.R /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/sedgwick/CASBC_0087_20250712_1.ptx /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/sedgwick/sprint3/revised/CASBC_0087_20250712_1
+2026-04-09 18:02:40 | INFO     | shrub.labeling.sprint3_runner | Sprint 3 finished with returncode=0 | shrub_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/sedgwick/sprint3/revised/CASBC_0087_20250712_1/Shrubs/CASBC_0087_20250712_1.csv | metrics_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/sedgwick/sprint3/revised/CASBC_0087_20250712_1/metrics/CASBC_0087_20250712_1_metrics.csv | tree_inventory_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/sedgwick/sprint3/revised/CASBC_0087_20250712_1/Inventory/CASBC_0087_20250712_1_inv.csv | cache=False
+2026-04-09 18:02:40 | INFO     | shrub | Completed Sprint 3 | site=sedgwick | variant=revised | ptx=CASBC_0087_20250712_1.ptx | cache=False
+2026-04-09 18:02:40 | INFO     | shrub.labeling.sprint3_runner | Deleted PTX after processing: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/sedgwick/CASBC_0087_20250712_1.ptx (565277605 bytes)
+2026-04-09 18:02:40 | INFO     | shrub.labeling.sprint3_runner | Downloading PTX for site=shaver-lake from https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-shaver-lake/original_TLS/CAFKU_0096_20240804_1.ptx
+2026-04-09 18:02:48 | INFO     | shrub.labeling.sprint3_runner | Downloaded PTX to /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/shaver-lake/CAFKU_0096_20240804_1.ptx
+2026-04-09 18:02:48 | INFO     | shrub | Starting Sprint 3 | site=shaver-lake | variant=original | ptx=CAFKU_0096_20240804_1.ptx
+2026-04-09 18:02:48 | INFO     | shrub.labeling.sprint3_runner | Running Sprint 3 for site=shaver-lake variant=original
+2026-04-09 18:02:48 | INFO     | shrub.labeling.sprint3_runner | PTX: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/shaver-lake/CAFKU_0096_20240804_1.ptx
+2026-04-09 18:02:48 | INFO     | shrub.labeling.sprint3_runner | Script: /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1.R
+2026-04-09 18:02:48 | INFO     | shrub.labeling.sprint3_runner | Output dir: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/shaver-lake/sprint3/original/CAFKU_0096_20240804_1
+2026-04-09 18:02:48 | INFO     | shrub.labeling.sprint3_runner | Command: /usr/local/bin/Rscript /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1.R /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/shaver-lake/CAFKU_0096_20240804_1.ptx /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/shaver-lake/sprint3/original/CAFKU_0096_20240804_1
+2026-04-09 18:11:52 | INFO     | shrub | PROJECT_ROOT = /home/jovyan/work/Dry-shRub/shrub
+2026-04-09 18:11:52 | INFO     | shrub | SPRINT3_BASE_DIR = /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base
+2026-04-09 18:11:52 | INFO     | shrub | LABELING_ROOT = /home/jovyan/work/Dry-shRub/shrub/Final/labeling
+2026-04-09 18:11:52 | INFO     | shrub | Sprint 3 output root: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling
+2026-04-09 18:11:52 | INFO     | shrub | Sprint 3 PTX cache root: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache
+2026-04-09 18:11:52 | INFO     | shrub | Sprint 3 manifest CSV: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/manifests/sprint3_runs.csv
+2026-04-09 18:11:52 | INFO     | shrub | Sprint 3 variants: ('original', 'revised')
+2026-04-09 18:11:52 | INFO     | shrub | MAX_PTX_PER_SITE: 1
+2026-04-09 18:11:52 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=calaveras-big-trees at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-calaveras-big-trees/original_TLS
+2026-04-09 18:11:53 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=dl-bliss at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-dl-bliss/original_TLS
+2026-04-09 18:11:53 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=independence-lake at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-independence-lake/original_TLS
+2026-04-09 18:11:54 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=pacific-union-college at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-pacific-union-college/original_TLS
+2026-04-09 18:11:54 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=sedgwick at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-sedgwick/original_TLS
+2026-04-09 18:11:55 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=shaver-lake at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-shaver-lake/original_TLS
+2026-04-09 18:11:55 | INFO     | shrub.labeling.sprint3_runner | Downloading PTX for site=calaveras-big-trees from https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-calaveras-big-trees/original_TLS/CATCU_0009_20250615_1.ptx
+2026-04-09 18:12:07 | INFO     | shrub.labeling.sprint3_runner | Downloaded PTX to /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/calaveras-big-trees/CATCU_0009_20250615_1.ptx
+2026-04-09 18:12:07 | INFO     | shrub | Starting Sprint 3 | site=calaveras-big-trees | variant=original | ptx=CATCU_0009_20250615_1.ptx
+2026-04-09 18:12:07 | INFO     | shrub.labeling.sprint3_runner | Using cached Sprint 3 outputs for site=calaveras-big-trees variant=original ptx=CATCU_0009_20250615_1.ptx
+2026-04-09 18:12:07 | INFO     | shrub | Completed Sprint 3 | site=calaveras-big-trees | variant=original | ptx=CATCU_0009_20250615_1.ptx | cache=True
+2026-04-09 18:12:07 | INFO     | shrub | Starting Sprint 3 | site=calaveras-big-trees | variant=revised | ptx=CATCU_0009_20250615_1.ptx
+2026-04-09 18:12:07 | INFO     | shrub.labeling.sprint3_runner | Using cached Sprint 3 outputs for site=calaveras-big-trees variant=revised ptx=CATCU_0009_20250615_1.ptx
+2026-04-09 18:12:08 | INFO     | shrub | Completed Sprint 3 | site=calaveras-big-trees | variant=revised | ptx=CATCU_0009_20250615_1.ptx | cache=True
+2026-04-09 18:12:08 | INFO     | shrub.labeling.sprint3_runner | Deleted PTX after processing: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/calaveras-big-trees/CATCU_0009_20250615_1.ptx (529864075 bytes)
+2026-04-09 18:12:08 | INFO     | shrub.labeling.sprint3_runner | Downloading PTX for site=dl-bliss from https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-dl-bliss/original_TLS/CAAEU_0027_20250728_1.ptx
+2026-04-09 18:12:18 | INFO     | shrub.labeling.sprint3_runner | Downloaded PTX to /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/dl-bliss/CAAEU_0027_20250728_1.ptx
+2026-04-09 18:12:19 | INFO     | shrub | Starting Sprint 3 | site=dl-bliss | variant=original | ptx=CAAEU_0027_20250728_1.ptx
+2026-04-09 18:12:19 | INFO     | shrub.labeling.sprint3_runner | Using cached Sprint 3 outputs for site=dl-bliss variant=original ptx=CAAEU_0027_20250728_1.ptx
+2026-04-09 18:12:19 | INFO     | shrub | Completed Sprint 3 | site=dl-bliss | variant=original | ptx=CAAEU_0027_20250728_1.ptx | cache=True
+2026-04-09 18:12:19 | INFO     | shrub | Starting Sprint 3 | site=dl-bliss | variant=revised | ptx=CAAEU_0027_20250728_1.ptx
+2026-04-09 18:12:19 | INFO     | shrub.labeling.sprint3_runner | Using cached Sprint 3 outputs for site=dl-bliss variant=revised ptx=CAAEU_0027_20250728_1.ptx
+2026-04-09 18:12:19 | INFO     | shrub | Completed Sprint 3 | site=dl-bliss | variant=revised | ptx=CAAEU_0027_20250728_1.ptx | cache=True
+2026-04-09 18:12:19 | INFO     | shrub.labeling.sprint3_runner | Deleted PTX after processing: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/dl-bliss/CAAEU_0027_20250728_1.ptx (505609992 bytes)
+2026-04-09 18:12:19 | INFO     | shrub.labeling.sprint3_runner | Downloading PTX for site=independence-lake from https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-independence-lake/original_TLS/CATNF_6118_20250820_1.ptx
+2026-04-09 18:12:29 | INFO     | shrub.labeling.sprint3_runner | Downloaded PTX to /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/independence-lake/CATNF_6118_20250820_1.ptx
+2026-04-09 18:12:29 | INFO     | shrub | Starting Sprint 3 | site=independence-lake | variant=original | ptx=CATNF_6118_20250820_1.ptx
+2026-04-09 18:12:29 | INFO     | shrub.labeling.sprint3_runner | Using cached Sprint 3 outputs for site=independence-lake variant=original ptx=CATNF_6118_20250820_1.ptx
+2026-04-09 18:12:29 | INFO     | shrub | Completed Sprint 3 | site=independence-lake | variant=original | ptx=CATNF_6118_20250820_1.ptx | cache=True
+2026-04-09 18:12:29 | INFO     | shrub | Starting Sprint 3 | site=independence-lake | variant=revised | ptx=CATNF_6118_20250820_1.ptx
+2026-04-09 18:12:29 | INFO     | shrub.labeling.sprint3_runner | Using cached Sprint 3 outputs for site=independence-lake variant=revised ptx=CATNF_6118_20250820_1.ptx
+2026-04-09 18:12:30 | INFO     | shrub | Completed Sprint 3 | site=independence-lake | variant=revised | ptx=CATNF_6118_20250820_1.ptx | cache=True
+2026-04-09 18:12:30 | INFO     | shrub.labeling.sprint3_runner | Deleted PTX after processing: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/independence-lake/CATNF_6118_20250820_1.ptx (451162395 bytes)
+2026-04-09 18:12:30 | INFO     | shrub.labeling.sprint3_runner | Downloading PTX for site=pacific-union-college from https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-pacific-union-college/original_TLS/CALNU_0039_20250810_1.ptx
+2026-04-09 18:12:43 | INFO     | shrub.labeling.sprint3_runner | Downloaded PTX to /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/pacific-union-college/CALNU_0039_20250810_1.ptx
+2026-04-09 18:12:43 | INFO     | shrub | Starting Sprint 3 | site=pacific-union-college | variant=original | ptx=CALNU_0039_20250810_1.ptx
+2026-04-09 18:12:43 | INFO     | shrub.labeling.sprint3_runner | Using cached Sprint 3 outputs for site=pacific-union-college variant=original ptx=CALNU_0039_20250810_1.ptx
+2026-04-09 18:12:43 | INFO     | shrub | Completed Sprint 3 | site=pacific-union-college | variant=original | ptx=CALNU_0039_20250810_1.ptx | cache=True
+2026-04-09 18:12:43 | INFO     | shrub | Starting Sprint 3 | site=pacific-union-college | variant=revised | ptx=CALNU_0039_20250810_1.ptx
+2026-04-09 18:12:43 | INFO     | shrub.labeling.sprint3_runner | Using cached Sprint 3 outputs for site=pacific-union-college variant=revised ptx=CALNU_0039_20250810_1.ptx
+2026-04-09 18:12:44 | INFO     | shrub | Completed Sprint 3 | site=pacific-union-college | variant=revised | ptx=CALNU_0039_20250810_1.ptx | cache=True
+2026-04-09 18:12:44 | INFO     | shrub.labeling.sprint3_runner | Deleted PTX after processing: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/pacific-union-college/CALNU_0039_20250810_1.ptx (556223905 bytes)
+2026-04-09 18:12:44 | INFO     | shrub.labeling.sprint3_runner | Downloading PTX for site=sedgwick from https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-sedgwick/original_TLS/CASBC_0087_20250712_1.ptx
+2026-04-09 18:12:56 | INFO     | shrub.labeling.sprint3_runner | Downloaded PTX to /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/sedgwick/CASBC_0087_20250712_1.ptx
+2026-04-09 18:12:56 | INFO     | shrub | Starting Sprint 3 | site=sedgwick | variant=original | ptx=CASBC_0087_20250712_1.ptx
+2026-04-09 18:12:56 | INFO     | shrub.labeling.sprint3_runner | Using cached Sprint 3 outputs for site=sedgwick variant=original ptx=CASBC_0087_20250712_1.ptx
+2026-04-09 18:12:57 | INFO     | shrub | Completed Sprint 3 | site=sedgwick | variant=original | ptx=CASBC_0087_20250712_1.ptx | cache=True
+2026-04-09 18:12:57 | INFO     | shrub | Starting Sprint 3 | site=sedgwick | variant=revised | ptx=CASBC_0087_20250712_1.ptx
+2026-04-09 18:12:57 | INFO     | shrub.labeling.sprint3_runner | Using cached Sprint 3 outputs for site=sedgwick variant=revised ptx=CASBC_0087_20250712_1.ptx
+2026-04-09 18:12:57 | INFO     | shrub | Completed Sprint 3 | site=sedgwick | variant=revised | ptx=CASBC_0087_20250712_1.ptx | cache=True
+2026-04-09 18:12:57 | INFO     | shrub.labeling.sprint3_runner | Deleted PTX after processing: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/sedgwick/CASBC_0087_20250712_1.ptx (565277605 bytes)
+2026-04-09 18:12:57 | INFO     | shrub.labeling.sprint3_runner | Using cached PTX for site=shaver-lake: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/shaver-lake/CAFKU_0096_20240804_1.ptx
+2026-04-09 18:12:57 | INFO     | shrub | Starting Sprint 3 | site=shaver-lake | variant=original | ptx=CAFKU_0096_20240804_1.ptx
+2026-04-09 18:12:57 | INFO     | shrub.labeling.sprint3_runner | Running Sprint 3 for site=shaver-lake variant=original
+2026-04-09 18:12:57 | INFO     | shrub.labeling.sprint3_runner | PTX: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/shaver-lake/CAFKU_0096_20240804_1.ptx
+2026-04-09 18:12:57 | INFO     | shrub.labeling.sprint3_runner | Script: /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1.R
+2026-04-09 18:12:57 | INFO     | shrub.labeling.sprint3_runner | Output dir: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/shaver-lake/sprint3/original/CAFKU_0096_20240804_1
+2026-04-09 18:12:57 | INFO     | shrub.labeling.sprint3_runner | Command: /usr/local/bin/Rscript /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1.R /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/shaver-lake/CAFKU_0096_20240804_1.ptx /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/shaver-lake/sprint3/original/CAFKU_0096_20240804_1
+2026-04-09 18:17:55 | INFO     | shrub.labeling.sprint3_runner | Sprint 3 finished with returncode=0 | shrub_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/shaver-lake/sprint3/original/CAFKU_0096_20240804_1/Shrubs/CAFKU_0096_20240804_1.csv | metrics_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/shaver-lake/sprint3/original/CAFKU_0096_20240804_1/metrics/CAFKU_0096_20240804_1_metrics.csv | tree_inventory_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/shaver-lake/sprint3/original/CAFKU_0096_20240804_1/Inventory/CAFKU_0096_20240804_1_inv.csv | cache=False
+2026-04-09 18:17:55 | INFO     | shrub | Completed Sprint 3 | site=shaver-lake | variant=original | ptx=CAFKU_0096_20240804_1.ptx | cache=False
+2026-04-09 18:17:55 | INFO     | shrub | Starting Sprint 3 | site=shaver-lake | variant=revised | ptx=CAFKU_0096_20240804_1.ptx
+2026-04-09 18:17:55 | INFO     | shrub.labeling.sprint3_runner | Running Sprint 3 for site=shaver-lake variant=revised
+2026-04-09 18:17:55 | INFO     | shrub.labeling.sprint3_runner | PTX: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/shaver-lake/CAFKU_0096_20240804_1.ptx
+2026-04-09 18:17:55 | INFO     | shrub.labeling.sprint3_runner | Script: /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1_revised.R
+2026-04-09 18:17:55 | INFO     | shrub.labeling.sprint3_runner | Output dir: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/shaver-lake/sprint3/revised/CAFKU_0096_20240804_1
+2026-04-09 18:17:55 | INFO     | shrub.labeling.sprint3_runner | Command: /usr/local/bin/Rscript /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base/IntELiMon_1_1_1_revised.R /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/shaver-lake/CAFKU_0096_20240804_1.ptx /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/shaver-lake/sprint3/revised/CAFKU_0096_20240804_1
+2026-04-09 18:22:23 | INFO     | shrub.labeling.sprint3_runner | Sprint 3 finished with returncode=0 | shrub_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/shaver-lake/sprint3/revised/CAFKU_0096_20240804_1/Shrubs/CAFKU_0096_20240804_1.csv | metrics_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/shaver-lake/sprint3/revised/CAFKU_0096_20240804_1/metrics/CAFKU_0096_20240804_1_metrics.csv | tree_inventory_csv=/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/shaver-lake/sprint3/revised/CAFKU_0096_20240804_1/Inventory/CAFKU_0096_20240804_1_inv.csv | cache=False
+2026-04-09 18:22:23 | INFO     | shrub | Completed Sprint 3 | site=shaver-lake | variant=revised | ptx=CAFKU_0096_20240804_1.ptx | cache=False
+2026-04-09 18:22:23 | INFO     | shrub.labeling.sprint3_runner | Deleted PTX after processing: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache/shaver-lake/CAFKU_0096_20240804_1.ptx (475304103 bytes)
+2026-04-09 18:29:02 | INFO     | shrub | PROJECT_ROOT = /home/jovyan/work/Dry-shRub/shrub
+2026-04-09 18:29:02 | INFO     | shrub | SPRINT3_BASE_DIR = /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base
+2026-04-09 18:29:02 | INFO     | shrub | LABELING_ROOT = /home/jovyan/work/Dry-shRub/shrub/Final/labeling
+2026-04-09 18:32:24 | INFO     | shrub | PROJECT_ROOT = /home/jovyan/work/Dry-shRub/shrub
+2026-04-09 18:32:24 | INFO     | shrub | SPRINT3_BASE_DIR = /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base
+2026-04-09 18:32:24 | INFO     | shrub | LABELING_ROOT = /home/jovyan/work/Dry-shRub/shrub/Final/labeling
+2026-04-09 18:32:25 | INFO     | shrub | Sprint 3 output root: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling
+2026-04-09 18:32:25 | INFO     | shrub | Sprint 3 PTX cache root: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache
+2026-04-09 18:32:25 | INFO     | shrub | Sprint 3 manifest CSV: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/manifests/sprint3_runs.csv
+2026-04-09 18:32:25 | INFO     | shrub | Sprint 3 variants: ('original', 'revised')
+2026-04-09 18:32:25 | INFO     | shrub | MAX_PTX_PER_SITE: 1
+2026-04-09 18:37:46 | INFO     | shrub.labeling.sprint3_standardize | Built Sprint 3 manifest with 5 run(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/revised
+2026-04-09 18:37:46 | INFO     | shrub.labeling.sprint3_standardize | Loaded 10 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/revised/CATCU_0008_20250615_1/Shrubs/CATCU_0008_20250615_1.csv
+2026-04-09 18:37:46 | INFO     | shrub.labeling.sprint3_standardize | Loaded 24 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/revised/CATCU_0009_20250615_1/Shrubs/CATCU_0009_20250615_1.csv
+2026-04-09 18:37:46 | INFO     | shrub.labeling.sprint3_standardize | Loaded 1 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/revised/CATCU_0001_20240923_1/Shrubs/CATCU_0001_20240923_1.csv
+2026-04-09 18:38:28 | INFO     | shrub | PROJECT_ROOT = /home/jovyan/work/Dry-shRub/shrub
+2026-04-09 18:38:28 | INFO     | shrub | SPRINT3_BASE_DIR = /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base
+2026-04-09 18:38:28 | INFO     | shrub | LABELING_ROOT = /home/jovyan/work/Dry-shRub/shrub/Final/labeling
+2026-04-09 18:38:28 | INFO     | shrub | Sprint 3 output root: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling
+2026-04-09 18:38:28 | INFO     | shrub | Sprint 3 PTX cache root: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache
+2026-04-09 18:38:28 | INFO     | shrub | Sprint 3 manifest CSV: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/manifests/sprint3_runs.csv
+2026-04-09 18:38:28 | INFO     | shrub | Sprint 3 variants: ('original', 'revised')
+2026-04-09 18:38:28 | INFO     | shrub | MAX_PTX_PER_SITE: 1
+2026-04-09 18:38:35 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=calaveras-big-trees at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-calaveras-big-trees/original_TLS
+2026-04-09 18:38:36 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=dl-bliss at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-dl-bliss/original_TLS
+2026-04-09 18:38:37 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=independence-lake at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-independence-lake/original_TLS
+2026-04-09 18:38:37 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=pacific-union-college at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-pacific-union-college/original_TLS
+2026-04-09 18:38:38 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=sedgwick at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-sedgwick/original_TLS
+2026-04-09 18:38:38 | INFO     | shrub.labeling.sprint3_runner | Discovering remote PTX files for site=shaver-lake at https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-shaver-lake/original_TLS
+2026-04-09 18:38:47 | INFO     | shrub.labeling.sprint3_standardize | Built Sprint 3 manifest with 5 run(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/revised
+2026-04-09 18:38:47 | INFO     | shrub.labeling.sprint3_standardize | Loaded 10 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/revised/CATCU_0008_20250615_1/Shrubs/CATCU_0008_20250615_1.csv
+2026-04-09 18:38:47 | INFO     | shrub.labeling.sprint3_standardize | Loaded 24 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/revised/CATCU_0009_20250615_1/Shrubs/CATCU_0009_20250615_1.csv
+2026-04-09 18:38:47 | INFO     | shrub.labeling.sprint3_standardize | Loaded 1 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/revised/CATCU_0001_20240923_1/Shrubs/CATCU_0001_20240923_1.csv
+2026-04-09 18:38:47 | INFO     | shrub.labeling.sprint3_standardize | Standardized 35 Sprint 3 object rows from 3 manifest rows
+2026-04-09 18:38:48 | INFO     | shrub.labeling.sprint3_standardize | Loaded 1 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/revised/CATCU_0001_20240923_1/Shrubs/CATCU_0001_20240923_1.csv
+2026-04-09 18:38:48 | INFO     | shrub.labeling.sprint3_standardize | Loaded 40 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/original/CATCU_0008_20250615_1/Shrubs/CATCU_0008_20250615_1.csv
+2026-04-09 18:38:48 | INFO     | shrub.labeling.sprint3_standardize | Loaded 10 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/revised/CATCU_0008_20250615_1/Shrubs/CATCU_0008_20250615_1.csv
+2026-04-09 18:38:48 | INFO     | shrub.labeling.sprint3_standardize | Loaded 15 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/independence-lake/sprint3/original/CATNF_6040_20250820_1/Shrubs/CATNF_6040_20250820_1.csv
+2026-04-09 18:38:48 | INFO     | shrub.labeling.sprint3_standardize | Loaded 5 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/independence-lake/sprint3/revised/CATNF_6040_20250820_1/Shrubs/CATNF_6040_20250820_1.csv
+2026-04-09 18:38:49 | INFO     | shrub.labeling.sprint3_standardize | Loaded 12 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/original/CATCU_0009_20250615_1/Shrubs/CATCU_0009_20250615_1.csv
+2026-04-09 18:38:49 | INFO     | shrub.labeling.sprint3_standardize | Loaded 24 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/revised/CATCU_0009_20250615_1/Shrubs/CATCU_0009_20250615_1.csv
+2026-04-09 18:38:49 | INFO     | shrub.labeling.sprint3_standardize | Loaded 15 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/dl-bliss/sprint3/original/CAAEU_0027_20250728_1/Shrubs/CAAEU_0027_20250728_1.csv
+2026-04-09 18:38:49 | INFO     | shrub.labeling.sprint3_standardize | Loaded 15 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/dl-bliss/sprint3/revised/CAAEU_0027_20250728_1/Shrubs/CAAEU_0027_20250728_1.csv
+2026-04-09 18:38:49 | INFO     | shrub.labeling.sprint3_standardize | Loaded 12 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/independence-lake/sprint3/original/CATNF_6118_20250820_1/Shrubs/CATNF_6118_20250820_1.csv
+2026-04-09 18:38:50 | INFO     | shrub.labeling.sprint3_standardize | Loaded 11 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/independence-lake/sprint3/revised/CATNF_6118_20250820_1/Shrubs/CATNF_6118_20250820_1.csv
+2026-04-09 18:38:50 | INFO     | shrub.labeling.sprint3_standardize | Loaded 27 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/pacific-union-college/sprint3/original/CALNU_0039_20250810_1/Shrubs/CALNU_0039_20250810_1.csv
+2026-04-09 18:38:50 | INFO     | shrub.labeling.sprint3_standardize | Loaded 17 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/pacific-union-college/sprint3/revised/CALNU_0039_20250810_1/Shrubs/CALNU_0039_20250810_1.csv
+2026-04-09 18:38:50 | INFO     | shrub.labeling.sprint3_standardize | Loaded 25 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/sedgwick/sprint3/original/CASBC_0087_20250712_1/Shrubs/CASBC_0087_20250712_1.csv
+2026-04-09 18:38:50 | INFO     | shrub.labeling.sprint3_standardize | Loaded 8 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/sedgwick/sprint3/revised/CASBC_0087_20250712_1/Shrubs/CASBC_0087_20250712_1.csv
+2026-04-09 18:38:50 | INFO     | shrub.labeling.sprint3_standardize | Loaded 18 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/shaver-lake/sprint3/original/CAFKU_0096_20240804_1/Shrubs/CAFKU_0096_20240804_1.csv
+2026-04-09 18:38:51 | INFO     | shrub.labeling.sprint3_standardize | Loaded 19 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/shaver-lake/sprint3/revised/CAFKU_0096_20240804_1/Shrubs/CAFKU_0096_20240804_1.csv
+2026-04-09 18:38:51 | INFO     | shrub.labeling.sprint3_standardize | Standardized 274 Sprint 3 object rows from 17 manifest rows
+2026-04-09 19:58:14 | INFO     | shrub | PROJECT_ROOT = /home/jovyan/work/Dry-shRub/shrub
+2026-04-09 19:58:14 | INFO     | shrub | SPRINT3_BASE_DIR = /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base
+2026-04-09 19:58:14 | INFO     | shrub | LABELING_ROOT = /home/jovyan/work/Dry-shRub/shrub/Final/labeling
+2026-04-09 19:58:24 | INFO     | shrub | Sprint 3 output root: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling
+2026-04-09 19:58:24 | INFO     | shrub | Sprint 3 PTX cache root: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/ptx_cache
+2026-04-09 19:58:24 | INFO     | shrub | Sprint 3 manifest CSV: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/manifests/sprint3_runs.csv
+2026-04-09 19:58:24 | INFO     | shrub | Sprint 3 variants: ('original', 'revised')
+2026-04-09 19:58:24 | INFO     | shrub | MAX_PTX_PER_SITE: 1
+2026-04-09 19:59:40 | INFO     | shrub.labeling.sprint3_standardize | Loaded 1 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/revised/CATCU_0001_20240923_1/Shrubs/CATCU_0001_20240923_1.csv
+2026-04-09 19:59:40 | INFO     | shrub.labeling.sprint3_standardize | Loaded 40 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/original/CATCU_0008_20250615_1/Shrubs/CATCU_0008_20250615_1.csv
+2026-04-09 19:59:40 | INFO     | shrub.labeling.sprint3_standardize | Loaded 10 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/revised/CATCU_0008_20250615_1/Shrubs/CATCU_0008_20250615_1.csv
+2026-04-09 19:59:41 | INFO     | shrub.labeling.sprint3_standardize | Loaded 15 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/independence-lake/sprint3/original/CATNF_6040_20250820_1/Shrubs/CATNF_6040_20250820_1.csv
+2026-04-09 19:59:41 | INFO     | shrub.labeling.sprint3_standardize | Loaded 5 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/independence-lake/sprint3/revised/CATNF_6040_20250820_1/Shrubs/CATNF_6040_20250820_1.csv
+2026-04-09 19:59:41 | INFO     | shrub.labeling.sprint3_standardize | Loaded 12 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/original/CATCU_0009_20250615_1/Shrubs/CATCU_0009_20250615_1.csv
+2026-04-09 19:59:41 | INFO     | shrub.labeling.sprint3_standardize | Loaded 24 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/calaveras-big-trees/sprint3/revised/CATCU_0009_20250615_1/Shrubs/CATCU_0009_20250615_1.csv
+2026-04-09 19:59:41 | INFO     | shrub.labeling.sprint3_standardize | Loaded 15 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/dl-bliss/sprint3/original/CAAEU_0027_20250728_1/Shrubs/CAAEU_0027_20250728_1.csv
+2026-04-09 19:59:42 | INFO     | shrub.labeling.sprint3_standardize | Loaded 15 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/dl-bliss/sprint3/revised/CAAEU_0027_20250728_1/Shrubs/CAAEU_0027_20250728_1.csv
+2026-04-09 19:59:42 | INFO     | shrub.labeling.sprint3_standardize | Loaded 12 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/independence-lake/sprint3/original/CATNF_6118_20250820_1/Shrubs/CATNF_6118_20250820_1.csv
+2026-04-09 19:59:42 | INFO     | shrub.labeling.sprint3_standardize | Loaded 11 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/independence-lake/sprint3/revised/CATNF_6118_20250820_1/Shrubs/CATNF_6118_20250820_1.csv
+2026-04-09 19:59:42 | INFO     | shrub.labeling.sprint3_standardize | Loaded 27 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/pacific-union-college/sprint3/original/CALNU_0039_20250810_1/Shrubs/CALNU_0039_20250810_1.csv
+2026-04-09 19:59:43 | INFO     | shrub.labeling.sprint3_standardize | Loaded 17 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/pacific-union-college/sprint3/revised/CALNU_0039_20250810_1/Shrubs/CALNU_0039_20250810_1.csv
+2026-04-09 19:59:43 | INFO     | shrub.labeling.sprint3_standardize | Loaded 25 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/sedgwick/sprint3/original/CASBC_0087_20250712_1/Shrubs/CASBC_0087_20250712_1.csv
+2026-04-09 19:59:43 | INFO     | shrub.labeling.sprint3_standardize | Loaded 8 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/sedgwick/sprint3/revised/CASBC_0087_20250712_1/Shrubs/CASBC_0087_20250712_1.csv
+2026-04-09 19:59:43 | INFO     | shrub.labeling.sprint3_standardize | Loaded 18 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/shaver-lake/sprint3/original/CAFKU_0096_20240804_1/Shrubs/CAFKU_0096_20240804_1.csv
+2026-04-09 19:59:43 | INFO     | shrub.labeling.sprint3_standardize | Loaded 19 shrub object(s) from /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/shaver-lake/sprint3/revised/CAFKU_0096_20240804_1/Shrubs/CAFKU_0096_20240804_1.csv
+2026-04-09 19:59:43 | INFO     | shrub.labeling.sprint3_standardize | Standardized 274 Sprint 3 object rows from 17 manifest rows
+2026-04-09 20:02:29 | INFO     | shrub | Downloaded NAIP for site=calaveras-big-trees to /tmp/label_pipeline_calaveras-big-trees_ozg4h63i/naip/calaveras_big_trees.tif
+2026-04-09 20:02:30 | INFO     | shrub | Downloading 10 ALS file(s) for site=calaveras-big-trees
+2026-04-09 20:07:30 | INFO     | shrub | Built ALS metadata records for site=calaveras-big-trees
+2026-04-09 20:07:30 | INFO     | shrub | Processing Sprint 4 transfer | site=calaveras-big-trees | plot_id=CATCU_0001_20240923_1 | n_objects=1
+2026-04-09 20:07:38 | INFO     | shrub | Finished Sprint 4 transfer | site=calaveras-big-trees | plot_id=CATCU_0001_20240923_1
+2026-04-09 20:07:38 | INFO     | shrub | Processing Sprint 4 transfer | site=calaveras-big-trees | plot_id=CATCU_0008_20250615_1 | n_objects=40
+2026-04-09 20:07:42 | INFO     | shrub | Finished Sprint 4 transfer | site=calaveras-big-trees | plot_id=CATCU_0008_20250615_1
+2026-04-09 20:07:42 | INFO     | shrub | Processing Sprint 4 transfer | site=calaveras-big-trees | plot_id=CATCU_0008_20250615_1 | n_objects=10
+2026-04-09 20:07:47 | INFO     | shrub | Finished Sprint 4 transfer | site=calaveras-big-trees | plot_id=CATCU_0008_20250615_1
+2026-04-09 20:07:47 | INFO     | shrub | Processing Sprint 4 transfer | site=calaveras-big-trees | plot_id=CATCU_0009_20250615_1 | n_objects=12
+2026-04-09 20:07:51 | INFO     | shrub | Finished Sprint 4 transfer | site=calaveras-big-trees | plot_id=CATCU_0009_20250615_1
+2026-04-09 20:07:51 | INFO     | shrub | Processing Sprint 4 transfer | site=calaveras-big-trees | plot_id=CATCU_0009_20250615_1 | n_objects=24
+2026-04-09 20:07:56 | INFO     | shrub | Finished Sprint 4 transfer | site=calaveras-big-trees | plot_id=CATCU_0009_20250615_1
+2026-04-09 20:07:57 | INFO     | shrub | Processing full Sprint 4 site loop for site=calaveras-big-trees
+2026-04-09 20:07:58 | INFO     | shrub | Downloaded NAIP for site=calaveras-big-trees to /tmp/label_pipeline_calaveras-big-trees_r1c1r3py/naip/calaveras_big_trees.tif
+2026-04-09 20:07:59 | INFO     | shrub | Downloading 10 ALS file(s) for site=calaveras-big-trees
+2026-04-09 20:18:12 | INFO     | shrub | Downloading NAIP for site=calaveras-big-trees to /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/site_cache/calaveras-big-trees/naip/calaveras_big_trees.tif
+2026-04-09 20:18:15 | INFO     | shrub | Downloading 10 ALS file(s) for site=calaveras-big-trees to extract metadata
+2026-04-09 20:30:52 | INFO     | shrub | PROJECT_ROOT = /home/jovyan/work/Dry-shRub/shrub
+2026-04-09 20:30:53 | INFO     | shrub | SPRINT3_BASE_DIR = /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base
+2026-04-09 20:30:53 | INFO     | shrub | LABELING_ROOT = /home/jovyan/work/Dry-shRub/shrub/Final/labeling
+2026-04-09 20:31:08 | INFO     | shrub | Using cached NAIP for site=calaveras-big-trees: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/site_cache/calaveras-big-trees/naip/calaveras_big_trees.tif
+2026-04-09 20:31:08 | INFO     | shrub | Downloading 10 ALS file(s) for site=calaveras-big-trees to extract metadata
+2026-04-09 20:36:04 | INFO     | shrub | Cached ALS metadata for site=calaveras-big-trees at /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/site_cache/calaveras-big-trees/als_metadata/als_metadata.json
+2026-04-09 20:36:04 | INFO     | shrub | Processing Sprint 4 transfer | site=calaveras-big-trees | plot_id=CATCU_0001_20240923_1 | source_version=sprint3_revised | n_objects=1
+2026-04-09 20:36:05 | INFO     | shrub | Downloading transform for site=calaveras-big-trees plot_id=CATCU_0001_20240923_1 from https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-calaveras-big-trees/transformations/CATCU_0001_20240923_1toALS.txt
+2026-04-09 20:36:08 | INFO     | shrub | Finished Sprint 4 transfer | site=calaveras-big-trees | plot_id=CATCU_0001_20240923_1 | source_version=sprint3_revised
+2026-04-09 20:36:08 | INFO     | shrub | Processing Sprint 4 transfer | site=calaveras-big-trees | plot_id=CATCU_0008_20250615_1 | source_version=sprint3_original | n_objects=40
+2026-04-09 20:36:08 | INFO     | shrub | Downloading transform for site=calaveras-big-trees plot_id=CATCU_0008_20250615_1 from https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-calaveras-big-trees/transformations/CATCU_0008_20250615_1toALS.txt
+2026-04-09 20:36:12 | INFO     | shrub | Finished Sprint 4 transfer | site=calaveras-big-trees | plot_id=CATCU_0008_20250615_1 | source_version=sprint3_original
+2026-04-09 20:36:12 | INFO     | shrub | Processing Sprint 4 transfer | site=calaveras-big-trees | plot_id=CATCU_0008_20250615_1 | source_version=sprint3_revised | n_objects=10
+2026-04-09 20:36:12 | INFO     | shrub | Using cached transform for site=calaveras-big-trees plot_id=CATCU_0008_20250615_1
+2026-04-09 20:36:14 | INFO     | shrub | Finished Sprint 4 transfer | site=calaveras-big-trees | plot_id=CATCU_0008_20250615_1 | source_version=sprint3_revised
+2026-04-09 20:36:14 | INFO     | shrub | Processing Sprint 4 transfer | site=calaveras-big-trees | plot_id=CATCU_0009_20250615_1 | source_version=sprint3_original | n_objects=12
+2026-04-09 20:36:14 | INFO     | shrub | Downloading transform for site=calaveras-big-trees plot_id=CATCU_0009_20250615_1 from https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-calaveras-big-trees/transformations/CATCU_0009_20250615_1toALS.txt
+2026-04-09 20:36:17 | INFO     | shrub | Finished Sprint 4 transfer | site=calaveras-big-trees | plot_id=CATCU_0009_20250615_1 | source_version=sprint3_original
+2026-04-09 20:36:17 | INFO     | shrub | Processing Sprint 4 transfer | site=calaveras-big-trees | plot_id=CATCU_0009_20250615_1 | source_version=sprint3_revised | n_objects=24
+2026-04-09 20:36:17 | INFO     | shrub | Using cached transform for site=calaveras-big-trees plot_id=CATCU_0009_20250615_1
+2026-04-09 20:36:20 | INFO     | shrub | Finished Sprint 4 transfer | site=calaveras-big-trees | plot_id=CATCU_0009_20250615_1 | source_version=sprint3_revised
+2026-04-09 20:36:21 | INFO     | shrub | ====================================================================================================
+2026-04-09 20:36:21 | INFO     | shrub | Processing full Sprint 4 site loop for site=calaveras-big-trees
+2026-04-09 20:36:21 | INFO     | shrub | Using cached NAIP for site=calaveras-big-trees: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/site_cache/calaveras-big-trees/naip/calaveras_big_trees.tif
+2026-04-09 20:36:21 | INFO     | shrub | Using cached ALS metadata for site=calaveras-big-trees: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/site_cache/calaveras-big-trees/als_metadata/als_metadata.json
+2026-04-09 20:36:21 | INFO     | shrub | Processing Sprint 4 transfer | site=calaveras-big-trees | plot_id=CATCU_0001_20240923_1 | source_version=sprint3_revised | n_objects=1
+2026-04-09 20:36:21 | INFO     | shrub | Using cached Sprint 4 outputs | site=calaveras-big-trees | plot_id=CATCU_0001_20240923_1 | source_version=sprint3_revised
+2026-04-09 20:36:21 | INFO     | shrub | Processing Sprint 4 transfer | site=calaveras-big-trees | plot_id=CATCU_0008_20250615_1 | source_version=sprint3_original | n_objects=40
+2026-04-09 20:36:21 | INFO     | shrub | Using cached Sprint 4 outputs | site=calaveras-big-trees | plot_id=CATCU_0008_20250615_1 | source_version=sprint3_original
+2026-04-09 20:36:21 | INFO     | shrub | Processing Sprint 4 transfer | site=calaveras-big-trees | plot_id=CATCU_0008_20250615_1 | source_version=sprint3_revised | n_objects=10
+2026-04-09 20:36:21 | INFO     | shrub | Using cached Sprint 4 outputs | site=calaveras-big-trees | plot_id=CATCU_0008_20250615_1 | source_version=sprint3_revised
+2026-04-09 20:36:22 | INFO     | shrub | Processing Sprint 4 transfer | site=calaveras-big-trees | plot_id=CATCU_0009_20250615_1 | source_version=sprint3_original | n_objects=12
+2026-04-09 20:36:22 | INFO     | shrub | Using cached Sprint 4 outputs | site=calaveras-big-trees | plot_id=CATCU_0009_20250615_1 | source_version=sprint3_original
+2026-04-09 20:36:22 | INFO     | shrub | Processing Sprint 4 transfer | site=calaveras-big-trees | plot_id=CATCU_0009_20250615_1 | source_version=sprint3_revised | n_objects=24
+2026-04-09 20:36:22 | INFO     | shrub | Using cached Sprint 4 outputs | site=calaveras-big-trees | plot_id=CATCU_0009_20250615_1 | source_version=sprint3_revised
+2026-04-09 20:36:22 | INFO     | shrub | ====================================================================================================
+2026-04-09 20:36:22 | INFO     | shrub | Processing full Sprint 4 site loop for site=dl-bliss
+2026-04-09 20:36:22 | INFO     | shrub | Downloading NAIP for site=dl-bliss to /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/site_cache/dl-bliss/naip/dl_bliss.tif
+2026-04-09 20:36:23 | INFO     | shrub | Downloading 4 ALS file(s) for site=dl-bliss to extract metadata
+2026-04-09 20:37:30 | INFO     | shrub | Cached ALS metadata for site=dl-bliss at /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/site_cache/dl-bliss/als_metadata/als_metadata.json
+2026-04-09 20:37:31 | INFO     | shrub | Processing Sprint 4 transfer | site=dl-bliss | plot_id=CAAEU_0027_20250728_1 | source_version=sprint3_original | n_objects=15
+2026-04-09 20:37:31 | INFO     | shrub | Downloading transform for site=dl-bliss plot_id=CAAEU_0027_20250728_1 from https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-dl-bliss/transformations/CAAEU_0027_20250728_1toALS.txt
+2026-04-09 20:37:33 | ERROR    | shrub | Sprint 4 failed | site=dl-bliss | plot_id=CAAEU_0027_20250728_1 | source_version=sprint3_original
+rasterio._err.CPLE_AppDefinedError: TIFFFillStrip:Read error at scanline 4294967295; got 0 bytes, expected 5380
+
+The above exception was the direct cause of the following exception:
+
+rasterio._err.CPLE_AppDefinedError: TIFFReadEncodedStrip() failed.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "rasterio/_io.pyx", line 896, in rasterio._io.DatasetReaderBase._read
+  File "rasterio/_io.pyx", line 173, in rasterio._io.io_multi_band
+  File "rasterio/_io.pyx", line 179, in rasterio._io.io_multi_band
+  File "rasterio/_err.pyx", line 325, in rasterio._err.StackChecker.exc_wrap_int
+rasterio._err.CPLE_AppDefinedError: dl_bliss.tif, band 1: IReadBlock failed at X offset 0, Y offset 1493: TIFFReadEncodedStrip() failed.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/ipykernel_103/11547723.py", line 15, in <module>
+    objects_df, artifacts_df = process_one_object_group_to_labels(
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ipykernel_103/1541467331.py", line 267, in process_one_object_group_to_labels
+    create_overlay_figure(naip_path, paths["binary_path"], paths["qa_path"])
+  File "/home/jovyan/work/Dry-shRub/shrub/Final/labeling/qa.py", line 44, in create_overlay_figure
+    rgb = nsrc.read([1, 2, 3], window=win).astype(float)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "rasterio/_io.pyx", line 571, in rasterio._io.DatasetReaderBase.read
+  File "rasterio/_io.pyx", line 899, in rasterio._io.DatasetReaderBase._read
+rasterio.errors.RasterioIOError: Read failed. See previous exception for details.
+2026-04-09 20:37:33 | INFO     | shrub | Processing Sprint 4 transfer | site=dl-bliss | plot_id=CAAEU_0027_20250728_1 | source_version=sprint3_revised | n_objects=15
+2026-04-09 20:37:34 | INFO     | shrub | Using cached transform for site=dl-bliss plot_id=CAAEU_0027_20250728_1
+2026-04-09 20:37:34 | ERROR    | shrub | Sprint 4 failed | site=dl-bliss | plot_id=CAAEU_0027_20250728_1 | source_version=sprint3_revised
+rasterio._err.CPLE_AppDefinedError: TIFFFillStrip:Read error at scanline 4294967295; got 0 bytes, expected 5383
+
+The above exception was the direct cause of the following exception:
+
+rasterio._err.CPLE_AppDefinedError: TIFFReadEncodedStrip() failed.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "rasterio/_io.pyx", line 896, in rasterio._io.DatasetReaderBase._read
+  File "rasterio/_io.pyx", line 173, in rasterio._io.io_multi_band
+  File "rasterio/_io.pyx", line 179, in rasterio._io.io_multi_band
+  File "rasterio/_err.pyx", line 325, in rasterio._err.StackChecker.exc_wrap_int
+rasterio._err.CPLE_AppDefinedError: dl_bliss.tif, band 1: IReadBlock failed at X offset 0, Y offset 1500: TIFFReadEncodedStrip() failed.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/ipykernel_103/11547723.py", line 15, in <module>
+    objects_df, artifacts_df = process_one_object_group_to_labels(
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ipykernel_103/1541467331.py", line 267, in process_one_object_group_to_labels
+    create_overlay_figure(naip_path, paths["binary_path"], paths["qa_path"])
+  File "/home/jovyan/work/Dry-shRub/shrub/Final/labeling/qa.py", line 44, in create_overlay_figure
+    rgb = nsrc.read([1, 2, 3], window=win).astype(float)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "rasterio/_io.pyx", line 571, in rasterio._io.DatasetReaderBase.read
+  File "rasterio/_io.pyx", line 899, in rasterio._io.DatasetReaderBase._read
+rasterio.errors.RasterioIOError: Read failed. See previous exception for details.
+2026-04-09 20:37:34 | INFO     | shrub | ====================================================================================================
+2026-04-09 20:37:34 | INFO     | shrub | Processing full Sprint 4 site loop for site=independence-lake
+2026-04-09 20:37:34 | INFO     | shrub | Downloading NAIP for site=independence-lake to /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/site_cache/independence-lake/naip/independence_lake.tif
+2026-04-09 20:37:42 | INFO     | shrub | Downloading 7 ALS file(s) for site=independence-lake to extract metadata
+2026-04-09 20:40:20 | INFO     | shrub | Cached ALS metadata for site=independence-lake at /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/site_cache/independence-lake/als_metadata/als_metadata.json
+2026-04-09 20:40:20 | INFO     | shrub | Processing Sprint 4 transfer | site=independence-lake | plot_id=CATNF_6040_20250820_1 | source_version=sprint3_original | n_objects=15
+2026-04-09 20:40:21 | INFO     | shrub | Downloading transform for site=independence-lake plot_id=CATNF_6040_20250820_1 from https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-independence-lake/transformations/CATNF_6040_20250820_1toALS.txt
+2026-04-09 20:40:25 | INFO     | shrub | Finished Sprint 4 transfer | site=independence-lake | plot_id=CATNF_6040_20250820_1 | source_version=sprint3_original
+2026-04-09 20:40:25 | INFO     | shrub | Processing Sprint 4 transfer | site=independence-lake | plot_id=CATNF_6040_20250820_1 | source_version=sprint3_revised | n_objects=5
+2026-04-09 20:40:25 | INFO     | shrub | Using cached transform for site=independence-lake plot_id=CATNF_6040_20250820_1
+2026-04-09 20:40:28 | INFO     | shrub | Finished Sprint 4 transfer | site=independence-lake | plot_id=CATNF_6040_20250820_1 | source_version=sprint3_revised
+2026-04-09 20:40:28 | INFO     | shrub | Processing Sprint 4 transfer | site=independence-lake | plot_id=CATNF_6118_20250820_1 | source_version=sprint3_original | n_objects=12
+2026-04-09 20:40:28 | INFO     | shrub | Downloading transform for site=independence-lake plot_id=CATNF_6118_20250820_1 from https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-independence-lake/transformations/CATNF_6118_20250820_1toALS.txt
+2026-04-09 20:40:31 | INFO     | shrub | Finished Sprint 4 transfer | site=independence-lake | plot_id=CATNF_6118_20250820_1 | source_version=sprint3_original
+2026-04-09 20:40:32 | INFO     | shrub | Processing Sprint 4 transfer | site=independence-lake | plot_id=CATNF_6118_20250820_1 | source_version=sprint3_revised | n_objects=11
+2026-04-09 20:40:32 | INFO     | shrub | Using cached transform for site=independence-lake plot_id=CATNF_6118_20250820_1
+2026-04-09 20:40:34 | INFO     | shrub | Finished Sprint 4 transfer | site=independence-lake | plot_id=CATNF_6118_20250820_1 | source_version=sprint3_revised
+2026-04-09 20:40:34 | INFO     | shrub | ====================================================================================================
+2026-04-09 20:40:34 | INFO     | shrub | Processing full Sprint 4 site loop for site=pacific-union-college
+2026-04-09 20:40:34 | INFO     | shrub | Downloading NAIP for site=pacific-union-college to /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/site_cache/pacific-union-college/naip/pacific_union_college.tif
+2026-04-09 20:40:36 | INFO     | shrub | Downloading 2 ALS file(s) for site=pacific-union-college to extract metadata
+2026-04-09 20:41:27 | INFO     | shrub | Cached ALS metadata for site=pacific-union-college at /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/site_cache/pacific-union-college/als_metadata/als_metadata.json
+2026-04-09 20:41:27 | INFO     | shrub | Processing Sprint 4 transfer | site=pacific-union-college | plot_id=CALNU_0039_20250810_1 | source_version=sprint3_original | n_objects=27
+2026-04-09 20:41:27 | INFO     | shrub | Downloading transform for site=pacific-union-college plot_id=CALNU_0039_20250810_1 from https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-pacific-union-college/transformations/CALNU_0039_20250810_1toALS.txt
+2026-04-09 20:41:37 | INFO     | shrub | Finished Sprint 4 transfer | site=pacific-union-college | plot_id=CALNU_0039_20250810_1 | source_version=sprint3_original
+2026-04-09 20:41:37 | INFO     | shrub | Processing Sprint 4 transfer | site=pacific-union-college | plot_id=CALNU_0039_20250810_1 | source_version=sprint3_revised | n_objects=17
+2026-04-09 20:41:37 | INFO     | shrub | Using cached transform for site=pacific-union-college plot_id=CALNU_0039_20250810_1
+2026-04-09 20:41:40 | INFO     | shrub | Finished Sprint 4 transfer | site=pacific-union-college | plot_id=CALNU_0039_20250810_1 | source_version=sprint3_revised
+2026-04-09 20:41:40 | INFO     | shrub | ====================================================================================================
+2026-04-09 20:41:40 | INFO     | shrub | Processing full Sprint 4 site loop for site=sedgwick
+2026-04-09 20:41:40 | INFO     | shrub | Downloading NAIP for site=sedgwick to /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/site_cache/sedgwick/naip/sedgwick.tif
+2026-04-09 20:41:41 | INFO     | shrub | Downloading 3 ALS file(s) for site=sedgwick to extract metadata
+2026-04-09 20:43:07 | INFO     | shrub | Cached ALS metadata for site=sedgwick at /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/site_cache/sedgwick/als_metadata/als_metadata.json
+2026-04-09 20:43:07 | INFO     | shrub | Processing Sprint 4 transfer | site=sedgwick | plot_id=CASBC_0087_20250712_1 | source_version=sprint3_original | n_objects=25
+2026-04-09 20:43:08 | INFO     | shrub | Downloading transform for site=sedgwick plot_id=CASBC_0087_20250712_1 from https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-sedgwick/transformations/CASBC_0087_20250712_1toALS.txt
+2026-04-09 20:43:14 | INFO     | shrub | Finished Sprint 4 transfer | site=sedgwick | plot_id=CASBC_0087_20250712_1 | source_version=sprint3_original
+2026-04-09 20:43:14 | INFO     | shrub | Processing Sprint 4 transfer | site=sedgwick | plot_id=CASBC_0087_20250712_1 | source_version=sprint3_revised | n_objects=8
+2026-04-09 20:43:14 | INFO     | shrub | Using cached transform for site=sedgwick plot_id=CASBC_0087_20250712_1
+2026-04-09 20:43:17 | INFO     | shrub | Finished Sprint 4 transfer | site=sedgwick | plot_id=CASBC_0087_20250712_1 | source_version=sprint3_revised
+2026-04-09 20:43:17 | INFO     | shrub | ====================================================================================================
+2026-04-09 20:43:17 | INFO     | shrub | Processing full Sprint 4 site loop for site=shaver-lake
+2026-04-09 20:43:17 | INFO     | shrub | Downloading NAIP for site=shaver-lake to /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/site_cache/shaver-lake/naip/shaver_lake.tif
+2026-04-09 20:43:18 | INFO     | shrub | Downloading 4 ALS file(s) for site=shaver-lake to extract metadata
+2026-04-09 20:46:18 | INFO     | shrub | Cached ALS metadata for site=shaver-lake at /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/site_cache/shaver-lake/als_metadata/als_metadata.json
+2026-04-09 20:46:18 | INFO     | shrub | Processing Sprint 4 transfer | site=shaver-lake | plot_id=CAFKU_0096_20240804_1 | source_version=sprint3_original | n_objects=18
+2026-04-09 20:46:18 | INFO     | shrub | Downloading transform for site=shaver-lake plot_id=CAFKU_0096_20240804_1 from https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-shaver-lake/transformations/CAFKU_0096_20240804_1toALS.txt
+2026-04-09 20:46:19 | ERROR    | shrub | Sprint 4 failed | site=shaver-lake | plot_id=CAFKU_0096_20240804_1 | source_version=sprint3_original
+Traceback (most recent call last):
+  File "/tmp/ipykernel_103/11547723.py", line 15, in <module>
+    objects_df, artifacts_df = process_one_object_group_to_labels(
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ipykernel_103/1541467331.py", line 246, in process_one_object_group_to_labels
+    transform_local = get_transform_local_cached(site, plot_id, force_refresh=force_rerun)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ipykernel_103/1541467331.py", line 210, in get_transform_local_cached
+    download_file(transform_url, transform_local)
+  File "/home/jovyan/work/Dry-shRub/shrub/Final/labeling/io.py", line 19, in download_file
+    r.raise_for_status()
+  File "/opt/conda/lib/python3.12/site-packages/requests/models.py", line 1026, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 404 Client Error: Not Found for url: https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-shaver-lake/transformations/CAFKU_0096_20240804_1toALS.txt
+2026-04-09 20:46:19 | INFO     | shrub | Processing Sprint 4 transfer | site=shaver-lake | plot_id=CAFKU_0096_20240804_1 | source_version=sprint3_revised | n_objects=19
+2026-04-09 20:46:19 | INFO     | shrub | Downloading transform for site=shaver-lake plot_id=CAFKU_0096_20240804_1 from https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-shaver-lake/transformations/CAFKU_0096_20240804_1toALS.txt
+2026-04-09 20:46:20 | ERROR    | shrub | Sprint 4 failed | site=shaver-lake | plot_id=CAFKU_0096_20240804_1 | source_version=sprint3_revised
+Traceback (most recent call last):
+  File "/tmp/ipykernel_103/11547723.py", line 15, in <module>
+    objects_df, artifacts_df = process_one_object_group_to_labels(
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ipykernel_103/1541467331.py", line 246, in process_one_object_group_to_labels
+    transform_local = get_transform_local_cached(site, plot_id, force_refresh=force_rerun)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ipykernel_103/1541467331.py", line 210, in get_transform_local_cached
+    download_file(transform_url, transform_local)
+  File "/home/jovyan/work/Dry-shRub/shrub/Final/labeling/io.py", line 19, in download_file
+    r.raise_for_status()
+  File "/opt/conda/lib/python3.12/site-packages/requests/models.py", line 1026, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 404 Client Error: Not Found for url: https://wifire-data.sdsc.edu/nc/public.php/dav/files/ucca-shaver-lake/transformations/CAFKU_0096_20240804_1toALS.txt
+2026-04-09 22:45:57 | INFO     | shrub | PROJECT_ROOT = /home/jovyan/work/Dry-shRub/shrub
+2026-04-09 22:45:57 | INFO     | shrub | SPRINT3_BASE_DIR = /home/jovyan/work/Dry-shRub/shrub/Sprint 3/Base
+2026-04-09 22:45:57 | INFO     | shrub | LABELING_ROOT = /home/jovyan/work/Dry-shRub/shrub/Final/labeling
+2026-04-09 22:46:32 | INFO     | shrub | ====================================================================================================
+2026-04-09 22:46:32 | INFO     | shrub | Processing full Sprint 4 site loop for site=calaveras-big-trees
+2026-04-09 22:46:53 | INFO     | shrub | ====================================================================================================
+2026-04-09 22:46:53 | INFO     | shrub | Processing full Sprint 4 site loop for site=calaveras-big-trees
+2026-04-09 22:46:55 | INFO     | shrub | All Sprint 4 outputs already cached for site=calaveras-big-trees; skipping site asset prep.
+2026-04-09 22:46:55 | INFO     | shrub | Processing Sprint 4 transfer | site=calaveras-big-trees | plot_id=CATCU_0001_20240923_1 | source_version=sprint3_revised | n_objects=1
+2026-04-09 22:46:55 | INFO     | shrub | Using cached Sprint 4 outputs | site=calaveras-big-trees | plot_id=CATCU_0001_20240923_1 | source_version=sprint3_revised
+2026-04-09 22:46:56 | INFO     | shrub | Processing Sprint 4 transfer | site=calaveras-big-trees | plot_id=CATCU_0008_20250615_1 | source_version=sprint3_original | n_objects=40
+2026-04-09 22:46:56 | INFO     | shrub | Using cached Sprint 4 outputs | site=calaveras-big-trees | plot_id=CATCU_0008_20250615_1 | source_version=sprint3_original
+2026-04-09 22:46:56 | INFO     | shrub | Processing Sprint 4 transfer | site=calaveras-big-trees | plot_id=CATCU_0008_20250615_1 | source_version=sprint3_revised | n_objects=10
+2026-04-09 22:46:56 | INFO     | shrub | Using cached Sprint 4 outputs | site=calaveras-big-trees | plot_id=CATCU_0008_20250615_1 | source_version=sprint3_revised
+2026-04-09 22:46:57 | INFO     | shrub | Processing Sprint 4 transfer | site=calaveras-big-trees | plot_id=CATCU_0009_20250615_1 | source_version=sprint3_original | n_objects=12
+2026-04-09 22:46:57 | INFO     | shrub | Using cached Sprint 4 outputs | site=calaveras-big-trees | plot_id=CATCU_0009_20250615_1 | source_version=sprint3_original
+2026-04-09 22:46:57 | INFO     | shrub | Processing Sprint 4 transfer | site=calaveras-big-trees | plot_id=CATCU_0009_20250615_1 | source_version=sprint3_revised | n_objects=24
+2026-04-09 22:46:57 | INFO     | shrub | Using cached Sprint 4 outputs | site=calaveras-big-trees | plot_id=CATCU_0009_20250615_1 | source_version=sprint3_revised
+2026-04-09 22:46:57 | INFO     | shrub | ====================================================================================================
+2026-04-09 22:46:57 | INFO     | shrub | Processing full Sprint 4 site loop for site=dl-bliss
+2026-04-09 22:46:58 | INFO     | shrub | Using cached NAIP for site=dl-bliss: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/site_cache/dl-bliss/naip/dl_bliss.tif
+2026-04-09 22:46:58 | INFO     | shrub | Using cached ALS metadata for site=dl-bliss: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/site_cache/dl-bliss/als_metadata/als_metadata.json
+2026-04-09 22:46:59 | INFO     | shrub | Processing Sprint 4 transfer | site=dl-bliss | plot_id=CAAEU_0027_20250728_1 | source_version=sprint3_original | n_objects=15
+2026-04-09 22:46:59 | INFO     | shrub | Using cached transform for site=dl-bliss plot_id=CAAEU_0027_20250728_1
+2026-04-09 22:47:00 | WARNING  | shrub | QA overlay failed for site=dl-bliss plot_id=CAAEU_0027_20250728_1 source_version=sprint3_original: Read failed. See previous exception for details.
+2026-04-09 22:47:01 | INFO     | shrub | Finished Sprint 4 transfer | site=dl-bliss | plot_id=CAAEU_0027_20250728_1 | source_version=sprint3_original
+2026-04-09 22:47:02 | INFO     | shrub | Processing Sprint 4 transfer | site=dl-bliss | plot_id=CAAEU_0027_20250728_1 | source_version=sprint3_revised | n_objects=15
+2026-04-09 22:47:02 | INFO     | shrub | Using cached transform for site=dl-bliss plot_id=CAAEU_0027_20250728_1
+2026-04-09 22:47:03 | WARNING  | shrub | QA overlay failed for site=dl-bliss plot_id=CAAEU_0027_20250728_1 source_version=sprint3_revised: Read failed. See previous exception for details.
+2026-04-09 22:47:04 | INFO     | shrub | Finished Sprint 4 transfer | site=dl-bliss | plot_id=CAAEU_0027_20250728_1 | source_version=sprint3_revised
+2026-04-09 22:47:04 | INFO     | shrub | ====================================================================================================
+2026-04-09 22:47:04 | INFO     | shrub | Processing full Sprint 4 site loop for site=independence-lake
+2026-04-09 22:47:04 | INFO     | shrub | All Sprint 4 outputs already cached for site=independence-lake; skipping site asset prep.
+2026-04-09 22:47:04 | INFO     | shrub | Processing Sprint 4 transfer | site=independence-lake | plot_id=CATNF_6040_20250820_1 | source_version=sprint3_original | n_objects=15
+2026-04-09 22:47:04 | INFO     | shrub | Using cached Sprint 4 outputs | site=independence-lake | plot_id=CATNF_6040_20250820_1 | source_version=sprint3_original
+2026-04-09 22:47:05 | INFO     | shrub | Processing Sprint 4 transfer | site=independence-lake | plot_id=CATNF_6040_20250820_1 | source_version=sprint3_revised | n_objects=5
+2026-04-09 22:47:05 | INFO     | shrub | Using cached Sprint 4 outputs | site=independence-lake | plot_id=CATNF_6040_20250820_1 | source_version=sprint3_revised
+2026-04-09 22:47:05 | INFO     | shrub | Processing Sprint 4 transfer | site=independence-lake | plot_id=CATNF_6118_20250820_1 | source_version=sprint3_original | n_objects=12
+2026-04-09 22:47:05 | INFO     | shrub | Using cached Sprint 4 outputs | site=independence-lake | plot_id=CATNF_6118_20250820_1 | source_version=sprint3_original
+2026-04-09 22:47:05 | INFO     | shrub | Processing Sprint 4 transfer | site=independence-lake | plot_id=CATNF_6118_20250820_1 | source_version=sprint3_revised | n_objects=11
+2026-04-09 22:47:05 | INFO     | shrub | Using cached Sprint 4 outputs | site=independence-lake | plot_id=CATNF_6118_20250820_1 | source_version=sprint3_revised
+2026-04-09 22:47:06 | INFO     | shrub | ====================================================================================================
+2026-04-09 22:47:06 | INFO     | shrub | Processing full Sprint 4 site loop for site=pacific-union-college
+2026-04-09 22:47:06 | INFO     | shrub | All Sprint 4 outputs already cached for site=pacific-union-college; skipping site asset prep.
+2026-04-09 22:47:06 | INFO     | shrub | Processing Sprint 4 transfer | site=pacific-union-college | plot_id=CALNU_0039_20250810_1 | source_version=sprint3_original | n_objects=27
+2026-04-09 22:47:06 | INFO     | shrub | Using cached Sprint 4 outputs | site=pacific-union-college | plot_id=CALNU_0039_20250810_1 | source_version=sprint3_original
+2026-04-09 22:47:06 | INFO     | shrub | Processing Sprint 4 transfer | site=pacific-union-college | plot_id=CALNU_0039_20250810_1 | source_version=sprint3_revised | n_objects=17
+2026-04-09 22:47:06 | INFO     | shrub | Using cached Sprint 4 outputs | site=pacific-union-college | plot_id=CALNU_0039_20250810_1 | source_version=sprint3_revised
+2026-04-09 22:47:06 | INFO     | shrub | ====================================================================================================
+2026-04-09 22:47:06 | INFO     | shrub | Processing full Sprint 4 site loop for site=sedgwick
+2026-04-09 22:47:07 | INFO     | shrub | All Sprint 4 outputs already cached for site=sedgwick; skipping site asset prep.
+2026-04-09 22:47:07 | INFO     | shrub | Processing Sprint 4 transfer | site=sedgwick | plot_id=CASBC_0087_20250712_1 | source_version=sprint3_original | n_objects=25
+2026-04-09 22:47:07 | INFO     | shrub | Using cached Sprint 4 outputs | site=sedgwick | plot_id=CASBC_0087_20250712_1 | source_version=sprint3_original
+2026-04-09 22:47:07 | INFO     | shrub | Processing Sprint 4 transfer | site=sedgwick | plot_id=CASBC_0087_20250712_1 | source_version=sprint3_revised | n_objects=8
+2026-04-09 22:47:07 | INFO     | shrub | Using cached Sprint 4 outputs | site=sedgwick | plot_id=CASBC_0087_20250712_1 | source_version=sprint3_revised
+2026-04-09 22:47:07 | INFO     | shrub | ====================================================================================================
+2026-04-09 22:47:07 | INFO     | shrub | Processing full Sprint 4 site loop for site=shaver-lake
+2026-04-09 22:47:08 | INFO     | shrub | Using cached NAIP for site=shaver-lake: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/site_cache/shaver-lake/naip/shaver_lake.tif
+2026-04-09 22:47:08 | INFO     | shrub | Using cached ALS metadata for site=shaver-lake: /home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/site_cache/shaver-lake/als_metadata/als_metadata.json
+2026-04-09 22:47:08 | INFO     | shrub | Processing Sprint 4 transfer | site=shaver-lake | plot_id=CAFKU_0096_20240804_1 | source_version=sprint3_original | n_objects=18
+2026-04-09 22:47:10 | INFO     | shrub | Cached transform index for site=shaver-lake with 25 entries
+2026-04-09 22:47:10 | WARNING  | shrub | Exact transform missing for site=shaver-lake plot_id=CAFKU_0096_20240804_1; using fallback transform CAFKU_0096_20240804_1 toALS.txt
+2026-04-09 22:47:12 | INFO     | shrub | Finished Sprint 4 transfer | site=shaver-lake | plot_id=CAFKU_0096_20240804_1 | source_version=sprint3_original
+2026-04-09 22:47:13 | INFO     | shrub | Processing Sprint 4 transfer | site=shaver-lake | plot_id=CAFKU_0096_20240804_1 | source_version=sprint3_revised | n_objects=19
+2026-04-09 22:47:13 | INFO     | shrub | Using cached transform for site=shaver-lake plot_id=CAFKU_0096_20240804_1
+2026-04-09 22:47:15 | INFO     | shrub | Finished Sprint 4 transfer | site=shaver-lake | plot_id=CAFKU_0096_20240804_1 | source_version=sprint3_revised

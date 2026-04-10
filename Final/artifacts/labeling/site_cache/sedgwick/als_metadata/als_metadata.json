@@ -1,0 +1,1160 @@
+[
+  {
+    "count": 38163860,
+    "compressed": true,
+    "major_version": 1,
+    "minor_version": 4,
+    "dataformat_id": 6,
+    "srs": {
+      "compoundwkt": "COMPD_CS[\"NAD83(2011) / Conus Albers + NAVD88 height - Geoid12B (metre)\",PROJCS[\"NAD83(2011) / Conus Albers\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83_National_Spatial_Reference_System_2011\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Albers_Conic_Equal_Area\"],PARAMETER[\"standard_parallel_1\",29.5],PARAMETER[\"standard_parallel_2\",45.5],PARAMETER[\"latitude_of_center\",23],PARAMETER[\"longitude_of_center\",-96],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6350\"]],VERT_CS[\"NAVD88 height - Geoid12B (metre)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Gravity-related height\",UP],AUTHORITY[\"EPSG\",\"5703\"]]]",
+      "horizontal": "PROJCS[\"NAD83(2011) / Conus Albers\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83_National_Spatial_Reference_System_2011\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Albers_Conic_Equal_Area\"],PARAMETER[\"standard_parallel_1\",29.5],PARAMETER[\"standard_parallel_2\",45.5],PARAMETER[\"latitude_of_center\",23],PARAMETER[\"longitude_of_center\",-96],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6350\"]]",
+      "isgeocentric": false,
+      "isgeographic": false,
+      "json": {
+        "type": "CompoundCRS",
+        "name": "NAD83(2011) / Conus Albers + NAVD88 height - Geoid12B (metre)",
+        "components": [
+          {
+            "type": "ProjectedCRS",
+            "name": "NAD83(2011) / Conus Albers",
+            "base_crs": {
+              "type": "GeographicCRS",
+              "name": "NAD83(2011)",
+              "datum": {
+                "type": "GeodeticReferenceFrame",
+                "name": "NAD83 (National Spatial Reference System 2011)",
+                "ellipsoid": {
+                  "name": "GRS 1980",
+                  "semi_major_axis": 6378137,
+                  "inverse_flattening": 298.257222101
+                }
+              },
+              "coordinate_system": {
+                "subtype": "ellipsoidal",
+                "axis": [
+                  {
+                    "name": "Geodetic latitude",
+                    "abbreviation": "Lat",
+                    "direction": "north",
+                    "unit": "degree"
+                  },
+                  {
+                    "name": "Geodetic longitude",
+                    "abbreviation": "Lon",
+                    "direction": "east",
+                    "unit": "degree"
+                  }
+                ]
+              },
+              "id": {
+                "authority": "EPSG",
+                "code": 6318
+              }
+            },
+            "conversion": {
+              "name": "unnamed",
+              "method": {
+                "name": "Albers Equal Area",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 9822
+                }
+              },
+              "parameters": [
+                {
+                  "name": "Latitude of 1st standard parallel",
+                  "value": 29.5,
+                  "unit": "degree",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8823
+                  }
+                },
+                {
+                  "name": "Latitude of 2nd standard parallel",
+                  "value": 45.5,
+                  "unit": "degree",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8824
+                  }
+                },
+                {
+                  "name": "Latitude of false origin",
+                  "value": 23,
+                  "unit": "degree",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8821
+                  }
+                },
+                {
+                  "name": "Longitude of false origin",
+                  "value": -96,
+                  "unit": "degree",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8822
+                  }
+                },
+                {
+                  "name": "Easting at false origin",
+                  "value": 0,
+                  "unit": "metre",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8826
+                  }
+                },
+                {
+                  "name": "Northing at false origin",
+                  "value": 0,
+                  "unit": "metre",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8827
+                  }
+                }
+              ]
+            },
+            "coordinate_system": {
+              "subtype": "Cartesian",
+              "axis": [
+                {
+                  "name": "X",
+                  "abbreviation": "",
+                  "direction": "east",
+                  "unit": "metre"
+                },
+                {
+                  "name": "Y",
+                  "abbreviation": "",
+                  "direction": "north",
+                  "unit": "metre"
+                }
+              ]
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 6350
+            }
+          },
+          {
+            "type": "VerticalCRS",
+            "name": "NAVD88 height",
+            "datum": {
+              "type": "VerticalReferenceFrame",
+              "name": "North American Vertical Datum 1988"
+            },
+            "coordinate_system": {
+              "subtype": "vertical",
+              "axis": [
+                {
+                  "name": "Gravity-related height",
+                  "abbreviation": "",
+                  "direction": "up",
+                  "unit": "metre"
+                }
+              ]
+            },
+            "geoid_model": {
+              "name": "GEOID12B"
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 5703
+            }
+          }
+        ]
+      },
+      "prettycompoundwkt": "COMPD_CS[\"NAD83(2011) / Conus Albers + NAVD88 height - Geoid12B (metre)\",\n    PROJCS[\"NAD83(2011) / Conus Albers\",\n        GEOGCS[\"NAD83(2011)\",\n            DATUM[\"NAD83_National_Spatial_Reference_System_2011\",\n                SPHEROID[\"GRS 1980\",6378137,298.257222101,\n                    AUTHORITY[\"EPSG\",\"7019\"]],\n                AUTHORITY[\"EPSG\",\"1116\"]],\n            PRIMEM[\"Greenwich\",0,\n                AUTHORITY[\"EPSG\",\"8901\"]],\n            UNIT[\"degree\",0.0174532925199433,\n                AUTHORITY[\"EPSG\",\"9122\"]],\n            AUTHORITY[\"EPSG\",\"6318\"]],\n        PROJECTION[\"Albers_Conic_Equal_Area\"],\n        PARAMETER[\"standard_parallel_1\",29.5],\n        PARAMETER[\"standard_parallel_2\",45.5],\n        PARAMETER[\"latitude_of_center\",23],\n        PARAMETER[\"longitude_of_center\",-96],\n        PARAMETER[\"false_easting\",0],\n        PARAMETER[\"false_northing\",0],\n        UNIT[\"metre\",1,\n            AUTHORITY[\"EPSG\",\"9001\"]],\n        AXIS[\"X\",EAST],\n        AXIS[\"Y\",NORTH],\n        AUTHORITY[\"EPSG\",\"6350\"]],\n    VERT_CS[\"NAVD88 height\",\n        VERT_DATUM[\"North American Vertical Datum 1988\",2005,\n            AUTHORITY[\"EPSG\",\"5103\"]],\n        UNIT[\"metre\",1,\n            AUTHORITY[\"EPSG\",\"9001\"]],\n        AXIS[\"Gravity-related height\",UP],\n        AUTHORITY[\"EPSG\",\"5703\"]]]",
+      "prettywkt": "PROJCS[\"NAD83(2011) / Conus Albers\",\n    GEOGCS[\"NAD83(2011)\",\n        DATUM[\"NAD83_National_Spatial_Reference_System_2011\",\n            SPHEROID[\"GRS 1980\",6378137,298.257222101,\n                AUTHORITY[\"EPSG\",\"7019\"]],\n            AUTHORITY[\"EPSG\",\"1116\"]],\n        PRIMEM[\"Greenwich\",0,\n            AUTHORITY[\"EPSG\",\"8901\"]],\n        UNIT[\"degree\",0.0174532925199433,\n            AUTHORITY[\"EPSG\",\"9122\"]],\n        AUTHORITY[\"EPSG\",\"6318\"]],\n    PROJECTION[\"Albers_Conic_Equal_Area\"],\n    PARAMETER[\"standard_parallel_1\",29.5],\n    PARAMETER[\"standard_parallel_2\",45.5],\n    PARAMETER[\"latitude_of_center\",23],\n    PARAMETER[\"longitude_of_center\",-96],\n    PARAMETER[\"false_easting\",0],\n    PARAMETER[\"false_northing\",0],\n    UNIT[\"metre\",1,\n        AUTHORITY[\"EPSG\",\"9001\"]],\n    AXIS[\"X\",EAST],\n    AXIS[\"Y\",NORTH],\n    AUTHORITY[\"EPSG\",\"6350\"]]",
+      "proj4": "+proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +vunits=m +no_defs",
+      "units": {
+        "horizontal": "metre",
+        "vertical": "metre"
+      },
+      "vertical": "VERT_CS[\"NAVD88 height\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Gravity-related height\",UP],AUTHORITY[\"EPSG\",\"5703\"]]",
+      "wkt": "PROJCS[\"NAD83(2011) / Conus Albers\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83_National_Spatial_Reference_System_2011\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Albers_Conic_Equal_Area\"],PARAMETER[\"standard_parallel_1\",29.5],PARAMETER[\"standard_parallel_2\",45.5],PARAMETER[\"latitude_of_center\",23],PARAMETER[\"longitude_of_center\",-96],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6350\"]]"
+    },
+    "native_bounds": {
+      "minx": -2163000,
+      "maxx": -2162000.01,
+      "miny": 1566000,
+      "maxy": 1566999.99,
+      "minz": 299.59,
+      "maxz": 531.12
+    },
+    "srs_wkt": "COMPD_CS[\"NAD83(2011) / Conus Albers + NAVD88 height - Geoid12B (metre)\",PROJCS[\"NAD83(2011) / Conus Albers\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83_National_Spatial_Reference_System_2011\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Albers_Conic_Equal_Area\"],PARAMETER[\"standard_parallel_1\",29.5],PARAMETER[\"standard_parallel_2\",45.5],PARAMETER[\"latitude_of_center\",23],PARAMETER[\"longitude_of_center\",-96],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6350\"]],VERT_CS[\"NAVD88 height - Geoid12B (metre)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Gravity-related height\",UP],AUTHORITY[\"EPSG\",\"5703\"]]]",
+    "srs_json": {
+      "type": "CompoundCRS",
+      "name": "NAD83(2011) / Conus Albers + NAVD88 height - Geoid12B (metre)",
+      "components": [
+        {
+          "type": "ProjectedCRS",
+          "name": "NAD83(2011) / Conus Albers",
+          "base_crs": {
+            "type": "GeographicCRS",
+            "name": "NAD83(2011)",
+            "datum": {
+              "type": "GeodeticReferenceFrame",
+              "name": "NAD83 (National Spatial Reference System 2011)",
+              "ellipsoid": {
+                "name": "GRS 1980",
+                "semi_major_axis": 6378137,
+                "inverse_flattening": 298.257222101
+              }
+            },
+            "coordinate_system": {
+              "subtype": "ellipsoidal",
+              "axis": [
+                {
+                  "name": "Geodetic latitude",
+                  "abbreviation": "Lat",
+                  "direction": "north",
+                  "unit": "degree"
+                },
+                {
+                  "name": "Geodetic longitude",
+                  "abbreviation": "Lon",
+                  "direction": "east",
+                  "unit": "degree"
+                }
+              ]
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 6318
+            }
+          },
+          "conversion": {
+            "name": "unnamed",
+            "method": {
+              "name": "Albers Equal Area",
+              "id": {
+                "authority": "EPSG",
+                "code": 9822
+              }
+            },
+            "parameters": [
+              {
+                "name": "Latitude of 1st standard parallel",
+                "value": 29.5,
+                "unit": "degree",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8823
+                }
+              },
+              {
+                "name": "Latitude of 2nd standard parallel",
+                "value": 45.5,
+                "unit": "degree",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8824
+                }
+              },
+              {
+                "name": "Latitude of false origin",
+                "value": 23,
+                "unit": "degree",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8821
+                }
+              },
+              {
+                "name": "Longitude of false origin",
+                "value": -96,
+                "unit": "degree",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8822
+                }
+              },
+              {
+                "name": "Easting at false origin",
+                "value": 0,
+                "unit": "metre",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8826
+                }
+              },
+              {
+                "name": "Northing at false origin",
+                "value": 0,
+                "unit": "metre",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8827
+                }
+              }
+            ]
+          },
+          "coordinate_system": {
+            "subtype": "Cartesian",
+            "axis": [
+              {
+                "name": "X",
+                "abbreviation": "",
+                "direction": "east",
+                "unit": "metre"
+              },
+              {
+                "name": "Y",
+                "abbreviation": "",
+                "direction": "north",
+                "unit": "metre"
+              }
+            ]
+          },
+          "id": {
+            "authority": "EPSG",
+            "code": 6350
+          }
+        },
+        {
+          "type": "VerticalCRS",
+          "name": "NAVD88 height",
+          "datum": {
+            "type": "VerticalReferenceFrame",
+            "name": "North American Vertical Datum 1988"
+          },
+          "coordinate_system": {
+            "subtype": "vertical",
+            "axis": [
+              {
+                "name": "Gravity-related height",
+                "abbreviation": "",
+                "direction": "up",
+                "unit": "metre"
+              }
+            ]
+          },
+          "geoid_model": {
+            "name": "GEOID12B"
+          },
+          "id": {
+            "authority": "EPSG",
+            "code": 5703
+          }
+        }
+      ]
+    },
+    "stats_keys": [
+      "bbox",
+      "statistic"
+    ],
+    "metadata_keys": [
+      "comp_spatialreference",
+      "compressed",
+      "copc",
+      "count",
+      "creation_doy",
+      "creation_year",
+      "dataformat_id",
+      "dataoffset",
+      "filesource_id",
+      "global_encoding",
+      "global_encoding_base64",
+      "header_size",
+      "major_version",
+      "maxx",
+      "maxy",
+      "maxz",
+      "minor_version",
+      "minx",
+      "miny",
+      "minz",
+      "offset_x",
+      "offset_y",
+      "offset_z",
+      "point_length",
+      "project_id",
+      "scale_x",
+      "scale_y",
+      "scale_z",
+      "software_id",
+      "spatialreference",
+      "srs",
+      "system_id",
+      "vlr_0",
+      "vlr_1"
+    ],
+    "source_file": "USGS_LPC_CA_SoCAL_Wildfires_2018_D18_w2163n1566.laz"
+  },
+  {
+    "count": 39894809,
+    "compressed": true,
+    "major_version": 1,
+    "minor_version": 4,
+    "dataformat_id": 6,
+    "srs": {
+      "compoundwkt": "COMPD_CS[\"NAD83(2011) / Conus Albers + NAVD88 height - Geoid12B (metre)\",PROJCS[\"NAD83(2011) / Conus Albers\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83_National_Spatial_Reference_System_2011\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Albers_Conic_Equal_Area\"],PARAMETER[\"standard_parallel_1\",29.5],PARAMETER[\"standard_parallel_2\",45.5],PARAMETER[\"latitude_of_center\",23],PARAMETER[\"longitude_of_center\",-96],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6350\"]],VERT_CS[\"NAVD88 height - Geoid12B (metre)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Gravity-related height\",UP],AUTHORITY[\"EPSG\",\"5703\"]]]",
+      "horizontal": "PROJCS[\"NAD83(2011) / Conus Albers\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83_National_Spatial_Reference_System_2011\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Albers_Conic_Equal_Area\"],PARAMETER[\"standard_parallel_1\",29.5],PARAMETER[\"standard_parallel_2\",45.5],PARAMETER[\"latitude_of_center\",23],PARAMETER[\"longitude_of_center\",-96],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6350\"]]",
+      "isgeocentric": false,
+      "isgeographic": false,
+      "json": {
+        "type": "CompoundCRS",
+        "name": "NAD83(2011) / Conus Albers + NAVD88 height - Geoid12B (metre)",
+        "components": [
+          {
+            "type": "ProjectedCRS",
+            "name": "NAD83(2011) / Conus Albers",
+            "base_crs": {
+              "type": "GeographicCRS",
+              "name": "NAD83(2011)",
+              "datum": {
+                "type": "GeodeticReferenceFrame",
+                "name": "NAD83 (National Spatial Reference System 2011)",
+                "ellipsoid": {
+                  "name": "GRS 1980",
+                  "semi_major_axis": 6378137,
+                  "inverse_flattening": 298.257222101
+                }
+              },
+              "coordinate_system": {
+                "subtype": "ellipsoidal",
+                "axis": [
+                  {
+                    "name": "Geodetic latitude",
+                    "abbreviation": "Lat",
+                    "direction": "north",
+                    "unit": "degree"
+                  },
+                  {
+                    "name": "Geodetic longitude",
+                    "abbreviation": "Lon",
+                    "direction": "east",
+                    "unit": "degree"
+                  }
+                ]
+              },
+              "id": {
+                "authority": "EPSG",
+                "code": 6318
+              }
+            },
+            "conversion": {
+              "name": "unnamed",
+              "method": {
+                "name": "Albers Equal Area",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 9822
+                }
+              },
+              "parameters": [
+                {
+                  "name": "Latitude of 1st standard parallel",
+                  "value": 29.5,
+                  "unit": "degree",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8823
+                  }
+                },
+                {
+                  "name": "Latitude of 2nd standard parallel",
+                  "value": 45.5,
+                  "unit": "degree",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8824
+                  }
+                },
+                {
+                  "name": "Latitude of false origin",
+                  "value": 23,
+                  "unit": "degree",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8821
+                  }
+                },
+                {
+                  "name": "Longitude of false origin",
+                  "value": -96,
+                  "unit": "degree",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8822
+                  }
+                },
+                {
+                  "name": "Easting at false origin",
+                  "value": 0,
+                  "unit": "metre",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8826
+                  }
+                },
+                {
+                  "name": "Northing at false origin",
+                  "value": 0,
+                  "unit": "metre",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8827
+                  }
+                }
+              ]
+            },
+            "coordinate_system": {
+              "subtype": "Cartesian",
+              "axis": [
+                {
+                  "name": "X",
+                  "abbreviation": "",
+                  "direction": "east",
+                  "unit": "metre"
+                },
+                {
+                  "name": "Y",
+                  "abbreviation": "",
+                  "direction": "north",
+                  "unit": "metre"
+                }
+              ]
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 6350
+            }
+          },
+          {
+            "type": "VerticalCRS",
+            "name": "NAVD88 height",
+            "datum": {
+              "type": "VerticalReferenceFrame",
+              "name": "North American Vertical Datum 1988"
+            },
+            "coordinate_system": {
+              "subtype": "vertical",
+              "axis": [
+                {
+                  "name": "Gravity-related height",
+                  "abbreviation": "",
+                  "direction": "up",
+                  "unit": "metre"
+                }
+              ]
+            },
+            "geoid_model": {
+              "name": "GEOID12B"
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 5703
+            }
+          }
+        ]
+      },
+      "prettycompoundwkt": "COMPD_CS[\"NAD83(2011) / Conus Albers + NAVD88 height - Geoid12B (metre)\",\n    PROJCS[\"NAD83(2011) / Conus Albers\",\n        GEOGCS[\"NAD83(2011)\",\n            DATUM[\"NAD83_National_Spatial_Reference_System_2011\",\n                SPHEROID[\"GRS 1980\",6378137,298.257222101,\n                    AUTHORITY[\"EPSG\",\"7019\"]],\n                AUTHORITY[\"EPSG\",\"1116\"]],\n            PRIMEM[\"Greenwich\",0,\n                AUTHORITY[\"EPSG\",\"8901\"]],\n            UNIT[\"degree\",0.0174532925199433,\n                AUTHORITY[\"EPSG\",\"9122\"]],\n            AUTHORITY[\"EPSG\",\"6318\"]],\n        PROJECTION[\"Albers_Conic_Equal_Area\"],\n        PARAMETER[\"standard_parallel_1\",29.5],\n        PARAMETER[\"standard_parallel_2\",45.5],\n        PARAMETER[\"latitude_of_center\",23],\n        PARAMETER[\"longitude_of_center\",-96],\n        PARAMETER[\"false_easting\",0],\n        PARAMETER[\"false_northing\",0],\n        UNIT[\"metre\",1,\n            AUTHORITY[\"EPSG\",\"9001\"]],\n        AXIS[\"X\",EAST],\n        AXIS[\"Y\",NORTH],\n        AUTHORITY[\"EPSG\",\"6350\"]],\n    VERT_CS[\"NAVD88 height\",\n        VERT_DATUM[\"North American Vertical Datum 1988\",2005,\n            AUTHORITY[\"EPSG\",\"5103\"]],\n        UNIT[\"metre\",1,\n            AUTHORITY[\"EPSG\",\"9001\"]],\n        AXIS[\"Gravity-related height\",UP],\n        AUTHORITY[\"EPSG\",\"5703\"]]]",
+      "prettywkt": "PROJCS[\"NAD83(2011) / Conus Albers\",\n    GEOGCS[\"NAD83(2011)\",\n        DATUM[\"NAD83_National_Spatial_Reference_System_2011\",\n            SPHEROID[\"GRS 1980\",6378137,298.257222101,\n                AUTHORITY[\"EPSG\",\"7019\"]],\n            AUTHORITY[\"EPSG\",\"1116\"]],\n        PRIMEM[\"Greenwich\",0,\n            AUTHORITY[\"EPSG\",\"8901\"]],\n        UNIT[\"degree\",0.0174532925199433,\n            AUTHORITY[\"EPSG\",\"9122\"]],\n        AUTHORITY[\"EPSG\",\"6318\"]],\n    PROJECTION[\"Albers_Conic_Equal_Area\"],\n    PARAMETER[\"standard_parallel_1\",29.5],\n    PARAMETER[\"standard_parallel_2\",45.5],\n    PARAMETER[\"latitude_of_center\",23],\n    PARAMETER[\"longitude_of_center\",-96],\n    PARAMETER[\"false_easting\",0],\n    PARAMETER[\"false_northing\",0],\n    UNIT[\"metre\",1,\n        AUTHORITY[\"EPSG\",\"9001\"]],\n    AXIS[\"X\",EAST],\n    AXIS[\"Y\",NORTH],\n    AUTHORITY[\"EPSG\",\"6350\"]]",
+      "proj4": "+proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +vunits=m +no_defs",
+      "units": {
+        "horizontal": "metre",
+        "vertical": "metre"
+      },
+      "vertical": "VERT_CS[\"NAVD88 height\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Gravity-related height\",UP],AUTHORITY[\"EPSG\",\"5703\"]]",
+      "wkt": "PROJCS[\"NAD83(2011) / Conus Albers\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83_National_Spatial_Reference_System_2011\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Albers_Conic_Equal_Area\"],PARAMETER[\"standard_parallel_1\",29.5],PARAMETER[\"standard_parallel_2\",45.5],PARAMETER[\"latitude_of_center\",23],PARAMETER[\"longitude_of_center\",-96],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6350\"]]"
+    },
+    "native_bounds": {
+      "minx": -2163000,
+      "maxx": -2162000.01,
+      "miny": 1567000,
+      "maxy": 1567999.99,
+      "minz": 330.34,
+      "maxz": 523.12
+    },
+    "srs_wkt": "COMPD_CS[\"NAD83(2011) / Conus Albers + NAVD88 height - Geoid12B (metre)\",PROJCS[\"NAD83(2011) / Conus Albers\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83_National_Spatial_Reference_System_2011\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Albers_Conic_Equal_Area\"],PARAMETER[\"standard_parallel_1\",29.5],PARAMETER[\"standard_parallel_2\",45.5],PARAMETER[\"latitude_of_center\",23],PARAMETER[\"longitude_of_center\",-96],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6350\"]],VERT_CS[\"NAVD88 height - Geoid12B (metre)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Gravity-related height\",UP],AUTHORITY[\"EPSG\",\"5703\"]]]",
+    "srs_json": {
+      "type": "CompoundCRS",
+      "name": "NAD83(2011) / Conus Albers + NAVD88 height - Geoid12B (metre)",
+      "components": [
+        {
+          "type": "ProjectedCRS",
+          "name": "NAD83(2011) / Conus Albers",
+          "base_crs": {
+            "type": "GeographicCRS",
+            "name": "NAD83(2011)",
+            "datum": {
+              "type": "GeodeticReferenceFrame",
+              "name": "NAD83 (National Spatial Reference System 2011)",
+              "ellipsoid": {
+                "name": "GRS 1980",
+                "semi_major_axis": 6378137,
+                "inverse_flattening": 298.257222101
+              }
+            },
+            "coordinate_system": {
+              "subtype": "ellipsoidal",
+              "axis": [
+                {
+                  "name": "Geodetic latitude",
+                  "abbreviation": "Lat",
+                  "direction": "north",
+                  "unit": "degree"
+                },
+                {
+                  "name": "Geodetic longitude",
+                  "abbreviation": "Lon",
+                  "direction": "east",
+                  "unit": "degree"
+                }
+              ]
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 6318
+            }
+          },
+          "conversion": {
+            "name": "unnamed",
+            "method": {
+              "name": "Albers Equal Area",
+              "id": {
+                "authority": "EPSG",
+                "code": 9822
+              }
+            },
+            "parameters": [
+              {
+                "name": "Latitude of 1st standard parallel",
+                "value": 29.5,
+                "unit": "degree",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8823
+                }
+              },
+              {
+                "name": "Latitude of 2nd standard parallel",
+                "value": 45.5,
+                "unit": "degree",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8824
+                }
+              },
+              {
+                "name": "Latitude of false origin",
+                "value": 23,
+                "unit": "degree",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8821
+                }
+              },
+              {
+                "name": "Longitude of false origin",
+                "value": -96,
+                "unit": "degree",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8822
+                }
+              },
+              {
+                "name": "Easting at false origin",
+                "value": 0,
+                "unit": "metre",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8826
+                }
+              },
+              {
+                "name": "Northing at false origin",
+                "value": 0,
+                "unit": "metre",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8827
+                }
+              }
+            ]
+          },
+          "coordinate_system": {
+            "subtype": "Cartesian",
+            "axis": [
+              {
+                "name": "X",
+                "abbreviation": "",
+                "direction": "east",
+                "unit": "metre"
+              },
+              {
+                "name": "Y",
+                "abbreviation": "",
+                "direction": "north",
+                "unit": "metre"
+              }
+            ]
+          },
+          "id": {
+            "authority": "EPSG",
+            "code": 6350
+          }
+        },
+        {
+          "type": "VerticalCRS",
+          "name": "NAVD88 height",
+          "datum": {
+            "type": "VerticalReferenceFrame",
+            "name": "North American Vertical Datum 1988"
+          },
+          "coordinate_system": {
+            "subtype": "vertical",
+            "axis": [
+              {
+                "name": "Gravity-related height",
+                "abbreviation": "",
+                "direction": "up",
+                "unit": "metre"
+              }
+            ]
+          },
+          "geoid_model": {
+            "name": "GEOID12B"
+          },
+          "id": {
+            "authority": "EPSG",
+            "code": 5703
+          }
+        }
+      ]
+    },
+    "stats_keys": [
+      "bbox",
+      "statistic"
+    ],
+    "metadata_keys": [
+      "comp_spatialreference",
+      "compressed",
+      "copc",
+      "count",
+      "creation_doy",
+      "creation_year",
+      "dataformat_id",
+      "dataoffset",
+      "filesource_id",
+      "global_encoding",
+      "global_encoding_base64",
+      "header_size",
+      "major_version",
+      "maxx",
+      "maxy",
+      "maxz",
+      "minor_version",
+      "minx",
+      "miny",
+      "minz",
+      "offset_x",
+      "offset_y",
+      "offset_z",
+      "point_length",
+      "project_id",
+      "scale_x",
+      "scale_y",
+      "scale_z",
+      "software_id",
+      "spatialreference",
+      "srs",
+      "system_id",
+      "vlr_0",
+      "vlr_1"
+    ],
+    "source_file": "USGS_LPC_CA_SoCAL_Wildfires_2018_D18_w2163n1567.laz"
+  },
+  {
+    "count": 32241201,
+    "compressed": true,
+    "major_version": 1,
+    "minor_version": 4,
+    "dataformat_id": 6,
+    "srs": {
+      "compoundwkt": "COMPD_CS[\"NAD83(2011) / Conus Albers + NAVD88 height - Geoid12B (metre)\",PROJCS[\"NAD83(2011) / Conus Albers\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83_National_Spatial_Reference_System_2011\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Albers_Conic_Equal_Area\"],PARAMETER[\"standard_parallel_1\",29.5],PARAMETER[\"standard_parallel_2\",45.5],PARAMETER[\"latitude_of_center\",23],PARAMETER[\"longitude_of_center\",-96],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6350\"]],VERT_CS[\"NAVD88 height - Geoid12B (metre)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Gravity-related height\",UP],AUTHORITY[\"EPSG\",\"5703\"]]]",
+      "horizontal": "PROJCS[\"NAD83(2011) / Conus Albers\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83_National_Spatial_Reference_System_2011\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Albers_Conic_Equal_Area\"],PARAMETER[\"standard_parallel_1\",29.5],PARAMETER[\"standard_parallel_2\",45.5],PARAMETER[\"latitude_of_center\",23],PARAMETER[\"longitude_of_center\",-96],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6350\"]]",
+      "isgeocentric": false,
+      "isgeographic": false,
+      "json": {
+        "type": "CompoundCRS",
+        "name": "NAD83(2011) / Conus Albers + NAVD88 height - Geoid12B (metre)",
+        "components": [
+          {
+            "type": "ProjectedCRS",
+            "name": "NAD83(2011) / Conus Albers",
+            "base_crs": {
+              "type": "GeographicCRS",
+              "name": "NAD83(2011)",
+              "datum": {
+                "type": "GeodeticReferenceFrame",
+                "name": "NAD83 (National Spatial Reference System 2011)",
+                "ellipsoid": {
+                  "name": "GRS 1980",
+                  "semi_major_axis": 6378137,
+                  "inverse_flattening": 298.257222101
+                }
+              },
+              "coordinate_system": {
+                "subtype": "ellipsoidal",
+                "axis": [
+                  {
+                    "name": "Geodetic latitude",
+                    "abbreviation": "Lat",
+                    "direction": "north",
+                    "unit": "degree"
+                  },
+                  {
+                    "name": "Geodetic longitude",
+                    "abbreviation": "Lon",
+                    "direction": "east",
+                    "unit": "degree"
+                  }
+                ]
+              },
+              "id": {
+                "authority": "EPSG",
+                "code": 6318
+              }
+            },
+            "conversion": {
+              "name": "unnamed",
+              "method": {
+                "name": "Albers Equal Area",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 9822
+                }
+              },
+              "parameters": [
+                {
+                  "name": "Latitude of 1st standard parallel",
+                  "value": 29.5,
+                  "unit": "degree",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8823
+                  }
+                },
+                {
+                  "name": "Latitude of 2nd standard parallel",
+                  "value": 45.5,
+                  "unit": "degree",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8824
+                  }
+                },
+                {
+                  "name": "Latitude of false origin",
+                  "value": 23,
+                  "unit": "degree",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8821
+                  }
+                },
+                {
+                  "name": "Longitude of false origin",
+                  "value": -96,
+                  "unit": "degree",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8822
+                  }
+                },
+                {
+                  "name": "Easting at false origin",
+                  "value": 0,
+                  "unit": "metre",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8826
+                  }
+                },
+                {
+                  "name": "Northing at false origin",
+                  "value": 0,
+                  "unit": "metre",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8827
+                  }
+                }
+              ]
+            },
+            "coordinate_system": {
+              "subtype": "Cartesian",
+              "axis": [
+                {
+                  "name": "X",
+                  "abbreviation": "",
+                  "direction": "east",
+                  "unit": "metre"
+                },
+                {
+                  "name": "Y",
+                  "abbreviation": "",
+                  "direction": "north",
+                  "unit": "metre"
+                }
+              ]
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 6350
+            }
+          },
+          {
+            "type": "VerticalCRS",
+            "name": "NAVD88 height",
+            "datum": {
+              "type": "VerticalReferenceFrame",
+              "name": "North American Vertical Datum 1988"
+            },
+            "coordinate_system": {
+              "subtype": "vertical",
+              "axis": [
+                {
+                  "name": "Gravity-related height",
+                  "abbreviation": "",
+                  "direction": "up",
+                  "unit": "metre"
+                }
+              ]
+            },
+            "geoid_model": {
+              "name": "GEOID12B"
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 5703
+            }
+          }
+        ]
+      },
+      "prettycompoundwkt": "COMPD_CS[\"NAD83(2011) / Conus Albers + NAVD88 height - Geoid12B (metre)\",\n    PROJCS[\"NAD83(2011) / Conus Albers\",\n        GEOGCS[\"NAD83(2011)\",\n            DATUM[\"NAD83_National_Spatial_Reference_System_2011\",\n                SPHEROID[\"GRS 1980\",6378137,298.257222101,\n                    AUTHORITY[\"EPSG\",\"7019\"]],\n                AUTHORITY[\"EPSG\",\"1116\"]],\n            PRIMEM[\"Greenwich\",0,\n                AUTHORITY[\"EPSG\",\"8901\"]],\n            UNIT[\"degree\",0.0174532925199433,\n                AUTHORITY[\"EPSG\",\"9122\"]],\n            AUTHORITY[\"EPSG\",\"6318\"]],\n        PROJECTION[\"Albers_Conic_Equal_Area\"],\n        PARAMETER[\"standard_parallel_1\",29.5],\n        PARAMETER[\"standard_parallel_2\",45.5],\n        PARAMETER[\"latitude_of_center\",23],\n        PARAMETER[\"longitude_of_center\",-96],\n        PARAMETER[\"false_easting\",0],\n        PARAMETER[\"false_northing\",0],\n        UNIT[\"metre\",1,\n            AUTHORITY[\"EPSG\",\"9001\"]],\n        AXIS[\"X\",EAST],\n        AXIS[\"Y\",NORTH],\n        AUTHORITY[\"EPSG\",\"6350\"]],\n    VERT_CS[\"NAVD88 height\",\n        VERT_DATUM[\"North American Vertical Datum 1988\",2005,\n            AUTHORITY[\"EPSG\",\"5103\"]],\n        UNIT[\"metre\",1,\n            AUTHORITY[\"EPSG\",\"9001\"]],\n        AXIS[\"Gravity-related height\",UP],\n        AUTHORITY[\"EPSG\",\"5703\"]]]",
+      "prettywkt": "PROJCS[\"NAD83(2011) / Conus Albers\",\n    GEOGCS[\"NAD83(2011)\",\n        DATUM[\"NAD83_National_Spatial_Reference_System_2011\",\n            SPHEROID[\"GRS 1980\",6378137,298.257222101,\n                AUTHORITY[\"EPSG\",\"7019\"]],\n            AUTHORITY[\"EPSG\",\"1116\"]],\n        PRIMEM[\"Greenwich\",0,\n            AUTHORITY[\"EPSG\",\"8901\"]],\n        UNIT[\"degree\",0.0174532925199433,\n            AUTHORITY[\"EPSG\",\"9122\"]],\n        AUTHORITY[\"EPSG\",\"6318\"]],\n    PROJECTION[\"Albers_Conic_Equal_Area\"],\n    PARAMETER[\"standard_parallel_1\",29.5],\n    PARAMETER[\"standard_parallel_2\",45.5],\n    PARAMETER[\"latitude_of_center\",23],\n    PARAMETER[\"longitude_of_center\",-96],\n    PARAMETER[\"false_easting\",0],\n    PARAMETER[\"false_northing\",0],\n    UNIT[\"metre\",1,\n        AUTHORITY[\"EPSG\",\"9001\"]],\n    AXIS[\"X\",EAST],\n    AXIS[\"Y\",NORTH],\n    AUTHORITY[\"EPSG\",\"6350\"]]",
+      "proj4": "+proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +vunits=m +no_defs",
+      "units": {
+        "horizontal": "metre",
+        "vertical": "metre"
+      },
+      "vertical": "VERT_CS[\"NAVD88 height\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Gravity-related height\",UP],AUTHORITY[\"EPSG\",\"5703\"]]",
+      "wkt": "PROJCS[\"NAD83(2011) / Conus Albers\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83_National_Spatial_Reference_System_2011\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Albers_Conic_Equal_Area\"],PARAMETER[\"standard_parallel_1\",29.5],PARAMETER[\"standard_parallel_2\",45.5],PARAMETER[\"latitude_of_center\",23],PARAMETER[\"longitude_of_center\",-96],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6350\"]]"
+    },
+    "native_bounds": {
+      "minx": -2164000,
+      "maxx": -2163000.01,
+      "miny": 1566000,
+      "maxy": 1566999.99,
+      "minz": 302.07,
+      "maxz": 527.72
+    },
+    "srs_wkt": "COMPD_CS[\"NAD83(2011) / Conus Albers + NAVD88 height - Geoid12B (metre)\",PROJCS[\"NAD83(2011) / Conus Albers\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83_National_Spatial_Reference_System_2011\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Albers_Conic_Equal_Area\"],PARAMETER[\"standard_parallel_1\",29.5],PARAMETER[\"standard_parallel_2\",45.5],PARAMETER[\"latitude_of_center\",23],PARAMETER[\"longitude_of_center\",-96],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6350\"]],VERT_CS[\"NAVD88 height - Geoid12B (metre)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Gravity-related height\",UP],AUTHORITY[\"EPSG\",\"5703\"]]]",
+    "srs_json": {
+      "type": "CompoundCRS",
+      "name": "NAD83(2011) / Conus Albers + NAVD88 height - Geoid12B (metre)",
+      "components": [
+        {
+          "type": "ProjectedCRS",
+          "name": "NAD83(2011) / Conus Albers",
+          "base_crs": {
+            "type": "GeographicCRS",
+            "name": "NAD83(2011)",
+            "datum": {
+              "type": "GeodeticReferenceFrame",
+              "name": "NAD83 (National Spatial Reference System 2011)",
+              "ellipsoid": {
+                "name": "GRS 1980",
+                "semi_major_axis": 6378137,
+                "inverse_flattening": 298.257222101
+              }
+            },
+            "coordinate_system": {
+              "subtype": "ellipsoidal",
+              "axis": [
+                {
+                  "name": "Geodetic latitude",
+                  "abbreviation": "Lat",
+                  "direction": "north",
+                  "unit": "degree"
+                },
+                {
+                  "name": "Geodetic longitude",
+                  "abbreviation": "Lon",
+                  "direction": "east",
+                  "unit": "degree"
+                }
+              ]
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 6318
+            }
+          },
+          "conversion": {
+            "name": "unnamed",
+            "method": {
+              "name": "Albers Equal Area",
+              "id": {
+                "authority": "EPSG",
+                "code": 9822
+              }
+            },
+            "parameters": [
+              {
+                "name": "Latitude of 1st standard parallel",
+                "value": 29.5,
+                "unit": "degree",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8823
+                }
+              },
+              {
+                "name": "Latitude of 2nd standard parallel",
+                "value": 45.5,
+                "unit": "degree",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8824
+                }
+              },
+              {
+                "name": "Latitude of false origin",
+                "value": 23,
+                "unit": "degree",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8821
+                }
+              },
+              {
+                "name": "Longitude of false origin",
+                "value": -96,
+                "unit": "degree",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8822
+                }
+              },
+              {
+                "name": "Easting at false origin",
+                "value": 0,
+                "unit": "metre",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8826
+                }
+              },
+              {
+                "name": "Northing at false origin",
+                "value": 0,
+                "unit": "metre",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8827
+                }
+              }
+            ]
+          },
+          "coordinate_system": {
+            "subtype": "Cartesian",
+            "axis": [
+              {
+                "name": "X",
+                "abbreviation": "",
+                "direction": "east",
+                "unit": "metre"
+              },
+              {
+                "name": "Y",
+                "abbreviation": "",
+                "direction": "north",
+                "unit": "metre"
+              }
+            ]
+          },
+          "id": {
+            "authority": "EPSG",
+            "code": 6350
+          }
+        },
+        {
+          "type": "VerticalCRS",
+          "name": "NAVD88 height",
+          "datum": {
+            "type": "VerticalReferenceFrame",
+            "name": "North American Vertical Datum 1988"
+          },
+          "coordinate_system": {
+            "subtype": "vertical",
+            "axis": [
+              {
+                "name": "Gravity-related height",
+                "abbreviation": "",
+                "direction": "up",
+                "unit": "metre"
+              }
+            ]
+          },
+          "geoid_model": {
+            "name": "GEOID12B"
+          },
+          "id": {
+            "authority": "EPSG",
+            "code": 5703
+          }
+        }
+      ]
+    },
+    "stats_keys": [
+      "bbox",
+      "statistic"
+    ],
+    "metadata_keys": [
+      "comp_spatialreference",
+      "compressed",
+      "copc",
+      "count",
+      "creation_doy",
+      "creation_year",
+      "dataformat_id",
+      "dataoffset",
+      "filesource_id",
+      "global_encoding",
+      "global_encoding_base64",
+      "header_size",
+      "major_version",
+      "maxx",
+      "maxy",
+      "maxz",
+      "minor_version",
+      "minx",
+      "miny",
+      "minz",
+      "offset_x",
+      "offset_y",
+      "offset_z",
+      "point_length",
+      "project_id",
+      "scale_x",
+      "scale_y",
+      "scale_z",
+      "software_id",
+      "spatialreference",
+      "srs",
+      "system_id",
+      "vlr_0",
+      "vlr_1"
+    ],
+    "source_file": "USGS_LPC_CA_SoCAL_Wildfires_2018_D18_w2164n1566.laz"
+  }
+]

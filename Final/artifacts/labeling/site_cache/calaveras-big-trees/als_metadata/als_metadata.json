@@ -1,0 +1,4082 @@
+[
+  {
+    "count": 36906926,
+    "compressed": true,
+    "major_version": 1,
+    "minor_version": 4,
+    "dataformat_id": 6,
+    "srs": {
+      "compoundwkt": "COMPD_CS[\"NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)\",PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83 (National Spatial Reference System 2011)\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]],VERT_CS[\"NAVD88 height - Geoid18 (m)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Up\",UP],AUTHORITY[\"EPSG\",\"5703\"]]]",
+      "horizontal": "PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83_National_Spatial_Reference_System_2011\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]]",
+      "isgeocentric": false,
+      "isgeographic": false,
+      "json": {
+        "type": "CompoundCRS",
+        "name": "NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)",
+        "components": [
+          {
+            "type": "ProjectedCRS",
+            "name": "NAD83(2011) / UTM zone 10N",
+            "base_crs": {
+              "type": "GeographicCRS",
+              "name": "NAD83(2011)",
+              "datum": {
+                "type": "GeodeticReferenceFrame",
+                "name": "NAD83 (National Spatial Reference System 2011)",
+                "ellipsoid": {
+                  "name": "GRS 1980",
+                  "semi_major_axis": 6378137,
+                  "inverse_flattening": 298.257222101
+                }
+              },
+              "coordinate_system": {
+                "subtype": "ellipsoidal",
+                "axis": [
+                  {
+                    "name": "Geodetic latitude",
+                    "abbreviation": "Lat",
+                    "direction": "north",
+                    "unit": "degree"
+                  },
+                  {
+                    "name": "Geodetic longitude",
+                    "abbreviation": "Lon",
+                    "direction": "east",
+                    "unit": "degree"
+                  }
+                ]
+              },
+              "id": {
+                "authority": "EPSG",
+                "code": 6318
+              }
+            },
+            "conversion": {
+              "name": "UTM zone 10N",
+              "method": {
+                "name": "Transverse Mercator",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 9807
+                }
+              },
+              "parameters": [
+                {
+                  "name": "Latitude of natural origin",
+                  "value": 0,
+                  "unit": "degree",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8801
+                  }
+                },
+                {
+                  "name": "Longitude of natural origin",
+                  "value": -123,
+                  "unit": "degree",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8802
+                  }
+                },
+                {
+                  "name": "Scale factor at natural origin",
+                  "value": 0.9996,
+                  "unit": "unity",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8805
+                  }
+                },
+                {
+                  "name": "False easting",
+                  "value": 500000,
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  },
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8806
+                  }
+                },
+                {
+                  "name": "False northing",
+                  "value": 0,
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  },
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8807
+                  }
+                }
+              ]
+            },
+            "coordinate_system": {
+              "subtype": "Cartesian",
+              "axis": [
+                {
+                  "name": "X",
+                  "abbreviation": "",
+                  "direction": "east",
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  }
+                },
+                {
+                  "name": "Y",
+                  "abbreviation": "",
+                  "direction": "north",
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  }
+                }
+              ]
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 6339
+            }
+          },
+          {
+            "type": "VerticalCRS",
+            "name": "NAVD88 height - Geoid18 (m)",
+            "datum": {
+              "type": "VerticalReferenceFrame",
+              "name": "North American Vertical Datum 1988"
+            },
+            "coordinate_system": {
+              "subtype": "vertical",
+              "axis": [
+                {
+                  "name": "Up",
+                  "abbreviation": "",
+                  "direction": "up",
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  }
+                }
+              ]
+            },
+            "geoid_model": {
+              "name": "GEOID18"
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 5703
+            }
+          }
+        ]
+      },
+      "prettycompoundwkt": "COMPD_CS[\"NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)\",\n    PROJCS[\"NAD83(2011) / UTM zone 10N\",\n        GEOGCS[\"NAD83(2011)\",\n            DATUM[\"NAD83_National_Spatial_Reference_System_2011\",\n                SPHEROID[\"GRS 1980\",6378137,298.257222101,\n                    AUTHORITY[\"EPSG\",\"7019\"]],\n                AUTHORITY[\"EPSG\",\"1116\"]],\n            PRIMEM[\"Greenwich\",0,\n                AUTHORITY[\"EPSG\",\"8901\"]],\n            UNIT[\"degree\",0.0174532925199433,\n                AUTHORITY[\"EPSG\",\"9122\"]],\n            AUTHORITY[\"EPSG\",\"6318\"]],\n        PROJECTION[\"Transverse_Mercator\"],\n        PARAMETER[\"latitude_of_origin\",0],\n        PARAMETER[\"central_meridian\",-123],\n        PARAMETER[\"scale_factor\",0.9996],\n        PARAMETER[\"false_easting\",500000],\n        PARAMETER[\"false_northing\",0],\n        UNIT[\"meter\",1,\n            AUTHORITY[\"EPSG\",\"9001\"]],\n        AXIS[\"X\",EAST],\n        AXIS[\"Y\",NORTH],\n        AUTHORITY[\"EPSG\",\"6339\"]],\n    VERT_CS[\"NAVD88 height - Geoid18 (m)\",\n        VERT_DATUM[\"North American Vertical Datum 1988\",2005,\n            AUTHORITY[\"EPSG\",\"5103\"]],\n        UNIT[\"meter\",1,\n            AUTHORITY[\"EPSG\",\"9001\"]],\n        AXIS[\"Up\",UP],\n        AUTHORITY[\"EPSG\",\"5703\"]]]",
+      "prettywkt": "PROJCS[\"NAD83(2011) / UTM zone 10N\",\n    GEOGCS[\"NAD83(2011)\",\n        DATUM[\"NAD83_National_Spatial_Reference_System_2011\",\n            SPHEROID[\"GRS 1980\",6378137,298.257222101,\n                AUTHORITY[\"EPSG\",\"7019\"]],\n            AUTHORITY[\"EPSG\",\"1116\"]],\n        PRIMEM[\"Greenwich\",0,\n            AUTHORITY[\"EPSG\",\"8901\"]],\n        UNIT[\"degree\",0.0174532925199433,\n            AUTHORITY[\"EPSG\",\"9122\"]],\n        AUTHORITY[\"EPSG\",\"6318\"]],\n    PROJECTION[\"Transverse_Mercator\"],\n    PARAMETER[\"latitude_of_origin\",0],\n    PARAMETER[\"central_meridian\",-123],\n    PARAMETER[\"scale_factor\",0.9996],\n    PARAMETER[\"false_easting\",500000],\n    PARAMETER[\"false_northing\",0],\n    UNIT[\"meter\",1,\n        AUTHORITY[\"EPSG\",\"9001\"]],\n    AXIS[\"X\",EAST],\n    AXIS[\"Y\",NORTH],\n    AUTHORITY[\"EPSG\",\"6339\"]]",
+      "proj4": "+proj=utm +zone=10 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +vunits=m +no_defs",
+      "units": {
+        "horizontal": "meter",
+        "vertical": "meter"
+      },
+      "vertical": "VERT_CS[\"NAVD88 height - Geoid18 (m)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Up\",UP],AUTHORITY[\"EPSG\",\"5703\"]]",
+      "wkt": "PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83_National_Spatial_Reference_System_2011\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]]"
+    },
+    "native_bounds": {
+      "minx": 739000,
+      "maxx": 739999.99,
+      "miny": 4235000,
+      "maxy": 4235999.99,
+      "minz": 1349.9,
+      "maxz": 1574.01
+    },
+    "srs_wkt": "COMPD_CS[\"NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)\",PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83 (National Spatial Reference System 2011)\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]],VERT_CS[\"NAVD88 height - Geoid18 (m)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Up\",UP],AUTHORITY[\"EPSG\",\"5703\"]]]",
+    "srs_json": {
+      "type": "CompoundCRS",
+      "name": "NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)",
+      "components": [
+        {
+          "type": "ProjectedCRS",
+          "name": "NAD83(2011) / UTM zone 10N",
+          "base_crs": {
+            "type": "GeographicCRS",
+            "name": "NAD83(2011)",
+            "datum": {
+              "type": "GeodeticReferenceFrame",
+              "name": "NAD83 (National Spatial Reference System 2011)",
+              "ellipsoid": {
+                "name": "GRS 1980",
+                "semi_major_axis": 6378137,
+                "inverse_flattening": 298.257222101
+              }
+            },
+            "coordinate_system": {
+              "subtype": "ellipsoidal",
+              "axis": [
+                {
+                  "name": "Geodetic latitude",
+                  "abbreviation": "Lat",
+                  "direction": "north",
+                  "unit": "degree"
+                },
+                {
+                  "name": "Geodetic longitude",
+                  "abbreviation": "Lon",
+                  "direction": "east",
+                  "unit": "degree"
+                }
+              ]
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 6318
+            }
+          },
+          "conversion": {
+            "name": "UTM zone 10N",
+            "method": {
+              "name": "Transverse Mercator",
+              "id": {
+                "authority": "EPSG",
+                "code": 9807
+              }
+            },
+            "parameters": [
+              {
+                "name": "Latitude of natural origin",
+                "value": 0,
+                "unit": "degree",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8801
+                }
+              },
+              {
+                "name": "Longitude of natural origin",
+                "value": -123,
+                "unit": "degree",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8802
+                }
+              },
+              {
+                "name": "Scale factor at natural origin",
+                "value": 0.9996,
+                "unit": "unity",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8805
+                }
+              },
+              {
+                "name": "False easting",
+                "value": 500000,
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                },
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8806
+                }
+              },
+              {
+                "name": "False northing",
+                "value": 0,
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                },
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8807
+                }
+              }
+            ]
+          },
+          "coordinate_system": {
+            "subtype": "Cartesian",
+            "axis": [
+              {
+                "name": "X",
+                "abbreviation": "",
+                "direction": "east",
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                }
+              },
+              {
+                "name": "Y",
+                "abbreviation": "",
+                "direction": "north",
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                }
+              }
+            ]
+          },
+          "id": {
+            "authority": "EPSG",
+            "code": 6339
+          }
+        },
+        {
+          "type": "VerticalCRS",
+          "name": "NAVD88 height - Geoid18 (m)",
+          "datum": {
+            "type": "VerticalReferenceFrame",
+            "name": "North American Vertical Datum 1988"
+          },
+          "coordinate_system": {
+            "subtype": "vertical",
+            "axis": [
+              {
+                "name": "Up",
+                "abbreviation": "",
+                "direction": "up",
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                }
+              }
+            ]
+          },
+          "geoid_model": {
+            "name": "GEOID18"
+          },
+          "id": {
+            "authority": "EPSG",
+            "code": 5703
+          }
+        }
+      ]
+    },
+    "stats_keys": [
+      "bbox",
+      "statistic"
+    ],
+    "metadata_keys": [
+      "comp_spatialreference",
+      "compressed",
+      "copc",
+      "count",
+      "creation_doy",
+      "creation_year",
+      "dataformat_id",
+      "dataoffset",
+      "filesource_id",
+      "global_encoding",
+      "global_encoding_base64",
+      "header_size",
+      "major_version",
+      "maxx",
+      "maxy",
+      "maxz",
+      "minor_version",
+      "minx",
+      "miny",
+      "minz",
+      "offset_x",
+      "offset_y",
+      "offset_z",
+      "point_length",
+      "project_id",
+      "scale_x",
+      "scale_y",
+      "scale_z",
+      "software_id",
+      "spatialreference",
+      "srs",
+      "system_id",
+      "vlr_0",
+      "vlr_1"
+    ],
+    "source_file": "USGS_LPC_CA_SierraNevada_B22_10SGH3935.laz"
+  },
+  {
+    "count": 36370037,
+    "compressed": true,
+    "major_version": 1,
+    "minor_version": 4,
+    "dataformat_id": 6,
+    "srs": {
+      "compoundwkt": "COMPD_CS[\"NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)\",PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83 (National Spatial Reference System 2011)\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]],VERT_CS[\"NAVD88 height - Geoid18 (m)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Up\",UP],AUTHORITY[\"EPSG\",\"5703\"]]]",
+      "horizontal": "PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83_National_Spatial_Reference_System_2011\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]]",
+      "isgeocentric": false,
+      "isgeographic": false,
+      "json": {
+        "type": "CompoundCRS",
+        "name": "NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)",
+        "components": [
+          {
+            "type": "ProjectedCRS",
+            "name": "NAD83(2011) / UTM zone 10N",
+            "base_crs": {
+              "type": "GeographicCRS",
+              "name": "NAD83(2011)",
+              "datum": {
+                "type": "GeodeticReferenceFrame",
+                "name": "NAD83 (National Spatial Reference System 2011)",
+                "ellipsoid": {
+                  "name": "GRS 1980",
+                  "semi_major_axis": 6378137,
+                  "inverse_flattening": 298.257222101
+                }
+              },
+              "coordinate_system": {
+                "subtype": "ellipsoidal",
+                "axis": [
+                  {
+                    "name": "Geodetic latitude",
+                    "abbreviation": "Lat",
+                    "direction": "north",
+                    "unit": "degree"
+                  },
+                  {
+                    "name": "Geodetic longitude",
+                    "abbreviation": "Lon",
+                    "direction": "east",
+                    "unit": "degree"
+                  }
+                ]
+              },
+              "id": {
+                "authority": "EPSG",
+                "code": 6318
+              }
+            },
+            "conversion": {
+              "name": "UTM zone 10N",
+              "method": {
+                "name": "Transverse Mercator",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 9807
+                }
+              },
+              "parameters": [
+                {
+                  "name": "Latitude of natural origin",
+                  "value": 0,
+                  "unit": "degree",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8801
+                  }
+                },
+                {
+                  "name": "Longitude of natural origin",
+                  "value": -123,
+                  "unit": "degree",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8802
+                  }
+                },
+                {
+                  "name": "Scale factor at natural origin",
+                  "value": 0.9996,
+                  "unit": "unity",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8805
+                  }
+                },
+                {
+                  "name": "False easting",
+                  "value": 500000,
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  },
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8806
+                  }
+                },
+                {
+                  "name": "False northing",
+                  "value": 0,
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  },
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8807
+                  }
+                }
+              ]
+            },
+            "coordinate_system": {
+              "subtype": "Cartesian",
+              "axis": [
+                {
+                  "name": "X",
+                  "abbreviation": "",
+                  "direction": "east",
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  }
+                },
+                {
+                  "name": "Y",
+                  "abbreviation": "",
+                  "direction": "north",
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  }
+                }
+              ]
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 6339
+            }
+          },
+          {
+            "type": "VerticalCRS",
+            "name": "NAVD88 height - Geoid18 (m)",
+            "datum": {
+              "type": "VerticalReferenceFrame",
+              "name": "North American Vertical Datum 1988"
+            },
+            "coordinate_system": {
+              "subtype": "vertical",
+              "axis": [
+                {
+                  "name": "Up",
+                  "abbreviation": "",
+                  "direction": "up",
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  }
+                }
+              ]
+            },
+            "geoid_model": {
+              "name": "GEOID18"
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 5703
+            }
+          }
+        ]
+      },
+      "prettycompoundwkt": "COMPD_CS[\"NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)\",\n    PROJCS[\"NAD83(2011) / UTM zone 10N\",\n        GEOGCS[\"NAD83(2011)\",\n            DATUM[\"NAD83_National_Spatial_Reference_System_2011\",\n                SPHEROID[\"GRS 1980\",6378137,298.257222101,\n                    AUTHORITY[\"EPSG\",\"7019\"]],\n                AUTHORITY[\"EPSG\",\"1116\"]],\n            PRIMEM[\"Greenwich\",0,\n                AUTHORITY[\"EPSG\",\"8901\"]],\n            UNIT[\"degree\",0.0174532925199433,\n                AUTHORITY[\"EPSG\",\"9122\"]],\n            AUTHORITY[\"EPSG\",\"6318\"]],\n        PROJECTION[\"Transverse_Mercator\"],\n        PARAMETER[\"latitude_of_origin\",0],\n        PARAMETER[\"central_meridian\",-123],\n        PARAMETER[\"scale_factor\",0.9996],\n        PARAMETER[\"false_easting\",500000],\n        PARAMETER[\"false_northing\",0],\n        UNIT[\"meter\",1,\n            AUTHORITY[\"EPSG\",\"9001\"]],\n        AXIS[\"X\",EAST],\n        AXIS[\"Y\",NORTH],\n        AUTHORITY[\"EPSG\",\"6339\"]],\n    VERT_CS[\"NAVD88 height - Geoid18 (m)\",\n        VERT_DATUM[\"North American Vertical Datum 1988\",2005,\n            AUTHORITY[\"EPSG\",\"5103\"]],\n        UNIT[\"meter\",1,\n            AUTHORITY[\"EPSG\",\"9001\"]],\n        AXIS[\"Up\",UP],\n        AUTHORITY[\"EPSG\",\"5703\"]]]",
+      "prettywkt": "PROJCS[\"NAD83(2011) / UTM zone 10N\",\n    GEOGCS[\"NAD83(2011)\",\n        DATUM[\"NAD83_National_Spatial_Reference_System_2011\",\n            SPHEROID[\"GRS 1980\",6378137,298.257222101,\n                AUTHORITY[\"EPSG\",\"7019\"]],\n            AUTHORITY[\"EPSG\",\"1116\"]],\n        PRIMEM[\"Greenwich\",0,\n            AUTHORITY[\"EPSG\",\"8901\"]],\n        UNIT[\"degree\",0.0174532925199433,\n            AUTHORITY[\"EPSG\",\"9122\"]],\n        AUTHORITY[\"EPSG\",\"6318\"]],\n    PROJECTION[\"Transverse_Mercator\"],\n    PARAMETER[\"latitude_of_origin\",0],\n    PARAMETER[\"central_meridian\",-123],\n    PARAMETER[\"scale_factor\",0.9996],\n    PARAMETER[\"false_easting\",500000],\n    PARAMETER[\"false_northing\",0],\n    UNIT[\"meter\",1,\n        AUTHORITY[\"EPSG\",\"9001\"]],\n    AXIS[\"X\",EAST],\n    AXIS[\"Y\",NORTH],\n    AUTHORITY[\"EPSG\",\"6339\"]]",
+      "proj4": "+proj=utm +zone=10 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +vunits=m +no_defs",
+      "units": {
+        "horizontal": "meter",
+        "vertical": "meter"
+      },
+      "vertical": "VERT_CS[\"NAVD88 height - Geoid18 (m)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Up\",UP],AUTHORITY[\"EPSG\",\"5703\"]]",
+      "wkt": "PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83_National_Spatial_Reference_System_2011\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]]"
+    },
+    "native_bounds": {
+      "minx": 740000,
+      "maxx": 740999.99,
+      "miny": 4235000,
+      "maxy": 4235999.99,
+      "minz": 1426.48,
+      "maxz": 1627.75
+    },
+    "srs_wkt": "COMPD_CS[\"NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)\",PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83 (National Spatial Reference System 2011)\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]],VERT_CS[\"NAVD88 height - Geoid18 (m)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Up\",UP],AUTHORITY[\"EPSG\",\"5703\"]]]",
+    "srs_json": {
+      "type": "CompoundCRS",
+      "name": "NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)",
+      "components": [
+        {
+          "type": "ProjectedCRS",
+          "name": "NAD83(2011) / UTM zone 10N",
+          "base_crs": {
+            "type": "GeographicCRS",
+            "name": "NAD83(2011)",
+            "datum": {
+              "type": "GeodeticReferenceFrame",
+              "name": "NAD83 (National Spatial Reference System 2011)",
+              "ellipsoid": {
+                "name": "GRS 1980",
+                "semi_major_axis": 6378137,
+                "inverse_flattening": 298.257222101
+              }
+            },
+            "coordinate_system": {
+              "subtype": "ellipsoidal",
+              "axis": [
+                {
+                  "name": "Geodetic latitude",
+                  "abbreviation": "Lat",
+                  "direction": "north",
+                  "unit": "degree"
+                },
+                {
+                  "name": "Geodetic longitude",
+                  "abbreviation": "Lon",
+                  "direction": "east",
+                  "unit": "degree"
+                }
+              ]
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 6318
+            }
+          },
+          "conversion": {
+            "name": "UTM zone 10N",
+            "method": {
+              "name": "Transverse Mercator",
+              "id": {
+                "authority": "EPSG",
+                "code": 9807
+              }
+            },
+            "parameters": [
+              {
+                "name": "Latitude of natural origin",
+                "value": 0,
+                "unit": "degree",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8801
+                }
+              },
+              {
+                "name": "Longitude of natural origin",
+                "value": -123,
+                "unit": "degree",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8802
+                }
+              },
+              {
+                "name": "Scale factor at natural origin",
+                "value": 0.9996,
+                "unit": "unity",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8805
+                }
+              },
+              {
+                "name": "False easting",
+                "value": 500000,
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                },
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8806
+                }
+              },
+              {
+                "name": "False northing",
+                "value": 0,
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                },
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8807
+                }
+              }
+            ]
+          },
+          "coordinate_system": {
+            "subtype": "Cartesian",
+            "axis": [
+              {
+                "name": "X",
+                "abbreviation": "",
+                "direction": "east",
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                }
+              },
+              {
+                "name": "Y",
+                "abbreviation": "",
+                "direction": "north",
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                }
+              }
+            ]
+          },
+          "id": {
+            "authority": "EPSG",
+            "code": 6339
+          }
+        },
+        {
+          "type": "VerticalCRS",
+          "name": "NAVD88 height - Geoid18 (m)",
+          "datum": {
+            "type": "VerticalReferenceFrame",
+            "name": "North American Vertical Datum 1988"
+          },
+          "coordinate_system": {
+            "subtype": "vertical",
+            "axis": [
+              {
+                "name": "Up",
+                "abbreviation": "",
+                "direction": "up",
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                }
+              }
+            ]
+          },
+          "geoid_model": {
+            "name": "GEOID18"
+          },
+          "id": {
+            "authority": "EPSG",
+            "code": 5703
+          }
+        }
+      ]
+    },
+    "stats_keys": [
+      "bbox",
+      "statistic"
+    ],
+    "metadata_keys": [
+      "comp_spatialreference",
+      "compressed",
+      "copc",
+      "count",
+      "creation_doy",
+      "creation_year",
+      "dataformat_id",
+      "dataoffset",
+      "filesource_id",
+      "global_encoding",
+      "global_encoding_base64",
+      "header_size",
+      "major_version",
+      "maxx",
+      "maxy",
+      "maxz",
+      "minor_version",
+      "minx",
+      "miny",
+      "minz",
+      "offset_x",
+      "offset_y",
+      "offset_z",
+      "point_length",
+      "project_id",
+      "scale_x",
+      "scale_y",
+      "scale_z",
+      "software_id",
+      "spatialreference",
+      "srs",
+      "system_id",
+      "vlr_0",
+      "vlr_1"
+    ],
+    "source_file": "USGS_LPC_CA_SierraNevada_B22_10SGH4035.laz"
+  },
+  {
+    "count": 39198120,
+    "compressed": true,
+    "major_version": 1,
+    "minor_version": 4,
+    "dataformat_id": 6,
+    "srs": {
+      "compoundwkt": "COMPD_CS[\"NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)\",PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83 (National Spatial Reference System 2011)\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]],VERT_CS[\"NAVD88 height - Geoid18 (m)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Up\",UP],AUTHORITY[\"EPSG\",\"5703\"]]]",
+      "horizontal": "PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83_National_Spatial_Reference_System_2011\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]]",
+      "isgeocentric": false,
+      "isgeographic": false,
+      "json": {
+        "type": "CompoundCRS",
+        "name": "NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)",
+        "components": [
+          {
+            "type": "ProjectedCRS",
+            "name": "NAD83(2011) / UTM zone 10N",
+            "base_crs": {
+              "type": "GeographicCRS",
+              "name": "NAD83(2011)",
+              "datum": {
+                "type": "GeodeticReferenceFrame",
+                "name": "NAD83 (National Spatial Reference System 2011)",
+                "ellipsoid": {
+                  "name": "GRS 1980",
+                  "semi_major_axis": 6378137,
+                  "inverse_flattening": 298.257222101
+                }
+              },
+              "coordinate_system": {
+                "subtype": "ellipsoidal",
+                "axis": [
+                  {
+                    "name": "Geodetic latitude",
+                    "abbreviation": "Lat",
+                    "direction": "north",
+                    "unit": "degree"
+                  },
+                  {
+                    "name": "Geodetic longitude",
+                    "abbreviation": "Lon",
+                    "direction": "east",
+                    "unit": "degree"
+                  }
+                ]
+              },
+              "id": {
+                "authority": "EPSG",
+                "code": 6318
+              }
+            },
+            "conversion": {
+              "name": "UTM zone 10N",
+              "method": {
+                "name": "Transverse Mercator",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 9807
+                }
+              },
+              "parameters": [
+                {
+                  "name": "Latitude of natural origin",
+                  "value": 0,
+                  "unit": "degree",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8801
+                  }
+                },
+                {
+                  "name": "Longitude of natural origin",
+                  "value": -123,
+                  "unit": "degree",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8802
+                  }
+                },
+                {
+                  "name": "Scale factor at natural origin",
+                  "value": 0.9996,
+                  "unit": "unity",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8805
+                  }
+                },
+                {
+                  "name": "False easting",
+                  "value": 500000,
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  },
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8806
+                  }
+                },
+                {
+                  "name": "False northing",
+                  "value": 0,
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  },
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8807
+                  }
+                }
+              ]
+            },
+            "coordinate_system": {
+              "subtype": "Cartesian",
+              "axis": [
+                {
+                  "name": "X",
+                  "abbreviation": "",
+                  "direction": "east",
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  }
+                },
+                {
+                  "name": "Y",
+                  "abbreviation": "",
+                  "direction": "north",
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  }
+                }
+              ]
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 6339
+            }
+          },
+          {
+            "type": "VerticalCRS",
+            "name": "NAVD88 height - Geoid18 (m)",
+            "datum": {
+              "type": "VerticalReferenceFrame",
+              "name": "North American Vertical Datum 1988"
+            },
+            "coordinate_system": {
+              "subtype": "vertical",
+              "axis": [
+                {
+                  "name": "Up",
+                  "abbreviation": "",
+                  "direction": "up",
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  }
+                }
+              ]
+            },
+            "geoid_model": {
+              "name": "GEOID18"
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 5703
+            }
+          }
+        ]
+      },
+      "prettycompoundwkt": "COMPD_CS[\"NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)\",\n    PROJCS[\"NAD83(2011) / UTM zone 10N\",\n        GEOGCS[\"NAD83(2011)\",\n            DATUM[\"NAD83_National_Spatial_Reference_System_2011\",\n                SPHEROID[\"GRS 1980\",6378137,298.257222101,\n                    AUTHORITY[\"EPSG\",\"7019\"]],\n                AUTHORITY[\"EPSG\",\"1116\"]],\n            PRIMEM[\"Greenwich\",0,\n                AUTHORITY[\"EPSG\",\"8901\"]],\n            UNIT[\"degree\",0.0174532925199433,\n                AUTHORITY[\"EPSG\",\"9122\"]],\n            AUTHORITY[\"EPSG\",\"6318\"]],\n        PROJECTION[\"Transverse_Mercator\"],\n        PARAMETER[\"latitude_of_origin\",0],\n        PARAMETER[\"central_meridian\",-123],\n        PARAMETER[\"scale_factor\",0.9996],\n        PARAMETER[\"false_easting\",500000],\n        PARAMETER[\"false_northing\",0],\n        UNIT[\"meter\",1,\n            AUTHORITY[\"EPSG\",\"9001\"]],\n        AXIS[\"X\",EAST],\n        AXIS[\"Y\",NORTH],\n        AUTHORITY[\"EPSG\",\"6339\"]],\n    VERT_CS[\"NAVD88 height - Geoid18 (m)\",\n        VERT_DATUM[\"North American Vertical Datum 1988\",2005,\n            AUTHORITY[\"EPSG\",\"5103\"]],\n        UNIT[\"meter\",1,\n            AUTHORITY[\"EPSG\",\"9001\"]],\n        AXIS[\"Up\",UP],\n        AUTHORITY[\"EPSG\",\"5703\"]]]",
+      "prettywkt": "PROJCS[\"NAD83(2011) / UTM zone 10N\",\n    GEOGCS[\"NAD83(2011)\",\n        DATUM[\"NAD83_National_Spatial_Reference_System_2011\",\n            SPHEROID[\"GRS 1980\",6378137,298.257222101,\n                AUTHORITY[\"EPSG\",\"7019\"]],\n            AUTHORITY[\"EPSG\",\"1116\"]],\n        PRIMEM[\"Greenwich\",0,\n            AUTHORITY[\"EPSG\",\"8901\"]],\n        UNIT[\"degree\",0.0174532925199433,\n            AUTHORITY[\"EPSG\",\"9122\"]],\n        AUTHORITY[\"EPSG\",\"6318\"]],\n    PROJECTION[\"Transverse_Mercator\"],\n    PARAMETER[\"latitude_of_origin\",0],\n    PARAMETER[\"central_meridian\",-123],\n    PARAMETER[\"scale_factor\",0.9996],\n    PARAMETER[\"false_easting\",500000],\n    PARAMETER[\"false_northing\",0],\n    UNIT[\"meter\",1,\n        AUTHORITY[\"EPSG\",\"9001\"]],\n    AXIS[\"X\",EAST],\n    AXIS[\"Y\",NORTH],\n    AUTHORITY[\"EPSG\",\"6339\"]]",
+      "proj4": "+proj=utm +zone=10 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +vunits=m +no_defs",
+      "units": {
+        "horizontal": "meter",
+        "vertical": "meter"
+      },
+      "vertical": "VERT_CS[\"NAVD88 height - Geoid18 (m)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Up\",UP],AUTHORITY[\"EPSG\",\"5703\"]]",
+      "wkt": "PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83_National_Spatial_Reference_System_2011\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]]"
+    },
+    "native_bounds": {
+      "minx": 740000,
+      "maxx": 740999.99,
+      "miny": 4236000,
+      "maxy": 4236999.99,
+      "minz": 1376.37,
+      "maxz": 1606.5
+    },
+    "srs_wkt": "COMPD_CS[\"NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)\",PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83 (National Spatial Reference System 2011)\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]],VERT_CS[\"NAVD88 height - Geoid18 (m)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Up\",UP],AUTHORITY[\"EPSG\",\"5703\"]]]",
+    "srs_json": {
+      "type": "CompoundCRS",
+      "name": "NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)",
+      "components": [
+        {
+          "type": "ProjectedCRS",
+          "name": "NAD83(2011) / UTM zone 10N",
+          "base_crs": {
+            "type": "GeographicCRS",
+            "name": "NAD83(2011)",
+            "datum": {
+              "type": "GeodeticReferenceFrame",
+              "name": "NAD83 (National Spatial Reference System 2011)",
+              "ellipsoid": {
+                "name": "GRS 1980",
+                "semi_major_axis": 6378137,
+                "inverse_flattening": 298.257222101
+              }
+            },
+            "coordinate_system": {
+              "subtype": "ellipsoidal",
+              "axis": [
+                {
+                  "name": "Geodetic latitude",
+                  "abbreviation": "Lat",
+                  "direction": "north",
+                  "unit": "degree"
+                },
+                {
+                  "name": "Geodetic longitude",
+                  "abbreviation": "Lon",
+                  "direction": "east",
+                  "unit": "degree"
+                }
+              ]
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 6318
+            }
+          },
+          "conversion": {
+            "name": "UTM zone 10N",
+            "method": {
+              "name": "Transverse Mercator",
+              "id": {
+                "authority": "EPSG",
+                "code": 9807
+              }
+            },
+            "parameters": [
+              {
+                "name": "Latitude of natural origin",
+                "value": 0,
+                "unit": "degree",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8801
+                }
+              },
+              {
+                "name": "Longitude of natural origin",
+                "value": -123,
+                "unit": "degree",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8802
+                }
+              },
+              {
+                "name": "Scale factor at natural origin",
+                "value": 0.9996,
+                "unit": "unity",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8805
+                }
+              },
+              {
+                "name": "False easting",
+                "value": 500000,
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                },
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8806
+                }
+              },
+              {
+                "name": "False northing",
+                "value": 0,
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                },
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8807
+                }
+              }
+            ]
+          },
+          "coordinate_system": {
+            "subtype": "Cartesian",
+            "axis": [
+              {
+                "name": "X",
+                "abbreviation": "",
+                "direction": "east",
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                }
+              },
+              {
+                "name": "Y",
+                "abbreviation": "",
+                "direction": "north",
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                }
+              }
+            ]
+          },
+          "id": {
+            "authority": "EPSG",
+            "code": 6339
+          }
+        },
+        {
+          "type": "VerticalCRS",
+          "name": "NAVD88 height - Geoid18 (m)",
+          "datum": {
+            "type": "VerticalReferenceFrame",
+            "name": "North American Vertical Datum 1988"
+          },
+          "coordinate_system": {
+            "subtype": "vertical",
+            "axis": [
+              {
+                "name": "Up",
+                "abbreviation": "",
+                "direction": "up",
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                }
+              }
+            ]
+          },
+          "geoid_model": {
+            "name": "GEOID18"
+          },
+          "id": {
+            "authority": "EPSG",
+            "code": 5703
+          }
+        }
+      ]
+    },
+    "stats_keys": [
+      "bbox",
+      "statistic"
+    ],
+    "metadata_keys": [
+      "comp_spatialreference",
+      "compressed",
+      "copc",
+      "count",
+      "creation_doy",
+      "creation_year",
+      "dataformat_id",
+      "dataoffset",
+      "filesource_id",
+      "global_encoding",
+      "global_encoding_base64",
+      "header_size",
+      "major_version",
+      "maxx",
+      "maxy",
+      "maxz",
+      "minor_version",
+      "minx",
+      "miny",
+      "minz",
+      "offset_x",
+      "offset_y",
+      "offset_z",
+      "point_length",
+      "project_id",
+      "scale_x",
+      "scale_y",
+      "scale_z",
+      "software_id",
+      "spatialreference",
+      "srs",
+      "system_id",
+      "vlr_0",
+      "vlr_1"
+    ],
+    "source_file": "USGS_LPC_CA_SierraNevada_B22_10SGH4036.laz"
+  },
+  {
+    "count": 39876902,
+    "compressed": true,
+    "major_version": 1,
+    "minor_version": 4,
+    "dataformat_id": 6,
+    "srs": {
+      "compoundwkt": "COMPD_CS[\"NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)\",PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83 (National Spatial Reference System 2011)\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]],VERT_CS[\"NAVD88 height - Geoid18 (m)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Up\",UP],AUTHORITY[\"EPSG\",\"5703\"]]]",
+      "horizontal": "PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83_National_Spatial_Reference_System_2011\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]]",
+      "isgeocentric": false,
+      "isgeographic": false,
+      "json": {
+        "type": "CompoundCRS",
+        "name": "NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)",
+        "components": [
+          {
+            "type": "ProjectedCRS",
+            "name": "NAD83(2011) / UTM zone 10N",
+            "base_crs": {
+              "type": "GeographicCRS",
+              "name": "NAD83(2011)",
+              "datum": {
+                "type": "GeodeticReferenceFrame",
+                "name": "NAD83 (National Spatial Reference System 2011)",
+                "ellipsoid": {
+                  "name": "GRS 1980",
+                  "semi_major_axis": 6378137,
+                  "inverse_flattening": 298.257222101
+                }
+              },
+              "coordinate_system": {
+                "subtype": "ellipsoidal",
+                "axis": [
+                  {
+                    "name": "Geodetic latitude",
+                    "abbreviation": "Lat",
+                    "direction": "north",
+                    "unit": "degree"
+                  },
+                  {
+                    "name": "Geodetic longitude",
+                    "abbreviation": "Lon",
+                    "direction": "east",
+                    "unit": "degree"
+                  }
+                ]
+              },
+              "id": {
+                "authority": "EPSG",
+                "code": 6318
+              }
+            },
+            "conversion": {
+              "name": "UTM zone 10N",
+              "method": {
+                "name": "Transverse Mercator",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 9807
+                }
+              },
+              "parameters": [
+                {
+                  "name": "Latitude of natural origin",
+                  "value": 0,
+                  "unit": "degree",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8801
+                  }
+                },
+                {
+                  "name": "Longitude of natural origin",
+                  "value": -123,
+                  "unit": "degree",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8802
+                  }
+                },
+                {
+                  "name": "Scale factor at natural origin",
+                  "value": 0.9996,
+                  "unit": "unity",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8805
+                  }
+                },
+                {
+                  "name": "False easting",
+                  "value": 500000,
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  },
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8806
+                  }
+                },
+                {
+                  "name": "False northing",
+                  "value": 0,
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  },
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8807
+                  }
+                }
+              ]
+            },
+            "coordinate_system": {
+              "subtype": "Cartesian",
+              "axis": [
+                {
+                  "name": "X",
+                  "abbreviation": "",
+                  "direction": "east",
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  }
+                },
+                {
+                  "name": "Y",
+                  "abbreviation": "",
+                  "direction": "north",
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  }
+                }
+              ]
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 6339
+            }
+          },
+          {
+            "type": "VerticalCRS",
+            "name": "NAVD88 height - Geoid18 (m)",
+            "datum": {
+              "type": "VerticalReferenceFrame",
+              "name": "North American Vertical Datum 1988"
+            },
+            "coordinate_system": {
+              "subtype": "vertical",
+              "axis": [
+                {
+                  "name": "Up",
+                  "abbreviation": "",
+                  "direction": "up",
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  }
+                }
+              ]
+            },
+            "geoid_model": {
+              "name": "GEOID18"
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 5703
+            }
+          }
+        ]
+      },
+      "prettycompoundwkt": "COMPD_CS[\"NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)\",\n    PROJCS[\"NAD83(2011) / UTM zone 10N\",\n        GEOGCS[\"NAD83(2011)\",\n            DATUM[\"NAD83_National_Spatial_Reference_System_2011\",\n                SPHEROID[\"GRS 1980\",6378137,298.257222101,\n                    AUTHORITY[\"EPSG\",\"7019\"]],\n                AUTHORITY[\"EPSG\",\"1116\"]],\n            PRIMEM[\"Greenwich\",0,\n                AUTHORITY[\"EPSG\",\"8901\"]],\n            UNIT[\"degree\",0.0174532925199433,\n                AUTHORITY[\"EPSG\",\"9122\"]],\n            AUTHORITY[\"EPSG\",\"6318\"]],\n        PROJECTION[\"Transverse_Mercator\"],\n        PARAMETER[\"latitude_of_origin\",0],\n        PARAMETER[\"central_meridian\",-123],\n        PARAMETER[\"scale_factor\",0.9996],\n        PARAMETER[\"false_easting\",500000],\n        PARAMETER[\"false_northing\",0],\n        UNIT[\"meter\",1,\n            AUTHORITY[\"EPSG\",\"9001\"]],\n        AXIS[\"X\",EAST],\n        AXIS[\"Y\",NORTH],\n        AUTHORITY[\"EPSG\",\"6339\"]],\n    VERT_CS[\"NAVD88 height - Geoid18 (m)\",\n        VERT_DATUM[\"North American Vertical Datum 1988\",2005,\n            AUTHORITY[\"EPSG\",\"5103\"]],\n        UNIT[\"meter\",1,\n            AUTHORITY[\"EPSG\",\"9001\"]],\n        AXIS[\"Up\",UP],\n        AUTHORITY[\"EPSG\",\"5703\"]]]",
+      "prettywkt": "PROJCS[\"NAD83(2011) / UTM zone 10N\",\n    GEOGCS[\"NAD83(2011)\",\n        DATUM[\"NAD83_National_Spatial_Reference_System_2011\",\n            SPHEROID[\"GRS 1980\",6378137,298.257222101,\n                AUTHORITY[\"EPSG\",\"7019\"]],\n            AUTHORITY[\"EPSG\",\"1116\"]],\n        PRIMEM[\"Greenwich\",0,\n            AUTHORITY[\"EPSG\",\"8901\"]],\n        UNIT[\"degree\",0.0174532925199433,\n            AUTHORITY[\"EPSG\",\"9122\"]],\n        AUTHORITY[\"EPSG\",\"6318\"]],\n    PROJECTION[\"Transverse_Mercator\"],\n    PARAMETER[\"latitude_of_origin\",0],\n    PARAMETER[\"central_meridian\",-123],\n    PARAMETER[\"scale_factor\",0.9996],\n    PARAMETER[\"false_easting\",500000],\n    PARAMETER[\"false_northing\",0],\n    UNIT[\"meter\",1,\n        AUTHORITY[\"EPSG\",\"9001\"]],\n    AXIS[\"X\",EAST],\n    AXIS[\"Y\",NORTH],\n    AUTHORITY[\"EPSG\",\"6339\"]]",
+      "proj4": "+proj=utm +zone=10 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +vunits=m +no_defs",
+      "units": {
+        "horizontal": "meter",
+        "vertical": "meter"
+      },
+      "vertical": "VERT_CS[\"NAVD88 height - Geoid18 (m)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Up\",UP],AUTHORITY[\"EPSG\",\"5703\"]]",
+      "wkt": "PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83_National_Spatial_Reference_System_2011\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]]"
+    },
+    "native_bounds": {
+      "minx": 741000,
+      "maxx": 741999.99,
+      "miny": 4236000,
+      "maxy": 4236999.99,
+      "minz": 1443.61,
+      "maxz": 1663.01
+    },
+    "srs_wkt": "COMPD_CS[\"NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)\",PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83 (National Spatial Reference System 2011)\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]],VERT_CS[\"NAVD88 height - Geoid18 (m)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Up\",UP],AUTHORITY[\"EPSG\",\"5703\"]]]",
+    "srs_json": {
+      "type": "CompoundCRS",
+      "name": "NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)",
+      "components": [
+        {
+          "type": "ProjectedCRS",
+          "name": "NAD83(2011) / UTM zone 10N",
+          "base_crs": {
+            "type": "GeographicCRS",
+            "name": "NAD83(2011)",
+            "datum": {
+              "type": "GeodeticReferenceFrame",
+              "name": "NAD83 (National Spatial Reference System 2011)",
+              "ellipsoid": {
+                "name": "GRS 1980",
+                "semi_major_axis": 6378137,
+                "inverse_flattening": 298.257222101
+              }
+            },
+            "coordinate_system": {
+              "subtype": "ellipsoidal",
+              "axis": [
+                {
+                  "name": "Geodetic latitude",
+                  "abbreviation": "Lat",
+                  "direction": "north",
+                  "unit": "degree"
+                },
+                {
+                  "name": "Geodetic longitude",
+                  "abbreviation": "Lon",
+                  "direction": "east",
+                  "unit": "degree"
+                }
+              ]
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 6318
+            }
+          },
+          "conversion": {
+            "name": "UTM zone 10N",
+            "method": {
+              "name": "Transverse Mercator",
+              "id": {
+                "authority": "EPSG",
+                "code": 9807
+              }
+            },
+            "parameters": [
+              {
+                "name": "Latitude of natural origin",
+                "value": 0,
+                "unit": "degree",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8801
+                }
+              },
+              {
+                "name": "Longitude of natural origin",
+                "value": -123,
+                "unit": "degree",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8802
+                }
+              },
+              {
+                "name": "Scale factor at natural origin",
+                "value": 0.9996,
+                "unit": "unity",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8805
+                }
+              },
+              {
+                "name": "False easting",
+                "value": 500000,
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                },
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8806
+                }
+              },
+              {
+                "name": "False northing",
+                "value": 0,
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                },
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8807
+                }
+              }
+            ]
+          },
+          "coordinate_system": {
+            "subtype": "Cartesian",
+            "axis": [
+              {
+                "name": "X",
+                "abbreviation": "",
+                "direction": "east",
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                }
+              },
+              {
+                "name": "Y",
+                "abbreviation": "",
+                "direction": "north",
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                }
+              }
+            ]
+          },
+          "id": {
+            "authority": "EPSG",
+            "code": 6339
+          }
+        },
+        {
+          "type": "VerticalCRS",
+          "name": "NAVD88 height - Geoid18 (m)",
+          "datum": {
+            "type": "VerticalReferenceFrame",
+            "name": "North American Vertical Datum 1988"
+          },
+          "coordinate_system": {
+            "subtype": "vertical",
+            "axis": [
+              {
+                "name": "Up",
+                "abbreviation": "",
+                "direction": "up",
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                }
+              }
+            ]
+          },
+          "geoid_model": {
+            "name": "GEOID18"
+          },
+          "id": {
+            "authority": "EPSG",
+            "code": 5703
+          }
+        }
+      ]
+    },
+    "stats_keys": [
+      "bbox",
+      "statistic"
+    ],
+    "metadata_keys": [
+      "comp_spatialreference",
+      "compressed",
+      "copc",
+      "count",
+      "creation_doy",
+      "creation_year",
+      "dataformat_id",
+      "dataoffset",
+      "filesource_id",
+      "global_encoding",
+      "global_encoding_base64",
+      "header_size",
+      "major_version",
+      "maxx",
+      "maxy",
+      "maxz",
+      "minor_version",
+      "minx",
+      "miny",
+      "minz",
+      "offset_x",
+      "offset_y",
+      "offset_z",
+      "point_length",
+      "project_id",
+      "scale_x",
+      "scale_y",
+      "scale_z",
+      "software_id",
+      "spatialreference",
+      "srs",
+      "system_id",
+      "vlr_0",
+      "vlr_1"
+    ],
+    "source_file": "USGS_LPC_CA_SierraNevada_B22_10SGH4136.laz"
+  },
+  {
+    "count": 37664314,
+    "compressed": true,
+    "major_version": 1,
+    "minor_version": 4,
+    "dataformat_id": 6,
+    "srs": {
+      "compoundwkt": "COMPD_CS[\"NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)\",PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83 (National Spatial Reference System 2011)\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]],VERT_CS[\"NAVD88 height - Geoid18 (m)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Up\",UP],AUTHORITY[\"EPSG\",\"5703\"]]]",
+      "horizontal": "PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83_National_Spatial_Reference_System_2011\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]]",
+      "isgeocentric": false,
+      "isgeographic": false,
+      "json": {
+        "type": "CompoundCRS",
+        "name": "NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)",
+        "components": [
+          {
+            "type": "ProjectedCRS",
+            "name": "NAD83(2011) / UTM zone 10N",
+            "base_crs": {
+              "type": "GeographicCRS",
+              "name": "NAD83(2011)",
+              "datum": {
+                "type": "GeodeticReferenceFrame",
+                "name": "NAD83 (National Spatial Reference System 2011)",
+                "ellipsoid": {
+                  "name": "GRS 1980",
+                  "semi_major_axis": 6378137,
+                  "inverse_flattening": 298.257222101
+                }
+              },
+              "coordinate_system": {
+                "subtype": "ellipsoidal",
+                "axis": [
+                  {
+                    "name": "Geodetic latitude",
+                    "abbreviation": "Lat",
+                    "direction": "north",
+                    "unit": "degree"
+                  },
+                  {
+                    "name": "Geodetic longitude",
+                    "abbreviation": "Lon",
+                    "direction": "east",
+                    "unit": "degree"
+                  }
+                ]
+              },
+              "id": {
+                "authority": "EPSG",
+                "code": 6318
+              }
+            },
+            "conversion": {
+              "name": "UTM zone 10N",
+              "method": {
+                "name": "Transverse Mercator",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 9807
+                }
+              },
+              "parameters": [
+                {
+                  "name": "Latitude of natural origin",
+                  "value": 0,
+                  "unit": "degree",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8801
+                  }
+                },
+                {
+                  "name": "Longitude of natural origin",
+                  "value": -123,
+                  "unit": "degree",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8802
+                  }
+                },
+                {
+                  "name": "Scale factor at natural origin",
+                  "value": 0.9996,
+                  "unit": "unity",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8805
+                  }
+                },
+                {
+                  "name": "False easting",
+                  "value": 500000,
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  },
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8806
+                  }
+                },
+                {
+                  "name": "False northing",
+                  "value": 0,
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  },
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8807
+                  }
+                }
+              ]
+            },
+            "coordinate_system": {
+              "subtype": "Cartesian",
+              "axis": [
+                {
+                  "name": "X",
+                  "abbreviation": "",
+                  "direction": "east",
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  }
+                },
+                {
+                  "name": "Y",
+                  "abbreviation": "",
+                  "direction": "north",
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  }
+                }
+              ]
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 6339
+            }
+          },
+          {
+            "type": "VerticalCRS",
+            "name": "NAVD88 height - Geoid18 (m)",
+            "datum": {
+              "type": "VerticalReferenceFrame",
+              "name": "North American Vertical Datum 1988"
+            },
+            "coordinate_system": {
+              "subtype": "vertical",
+              "axis": [
+                {
+                  "name": "Up",
+                  "abbreviation": "",
+                  "direction": "up",
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  }
+                }
+              ]
+            },
+            "geoid_model": {
+              "name": "GEOID18"
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 5703
+            }
+          }
+        ]
+      },
+      "prettycompoundwkt": "COMPD_CS[\"NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)\",\n    PROJCS[\"NAD83(2011) / UTM zone 10N\",\n        GEOGCS[\"NAD83(2011)\",\n            DATUM[\"NAD83_National_Spatial_Reference_System_2011\",\n                SPHEROID[\"GRS 1980\",6378137,298.257222101,\n                    AUTHORITY[\"EPSG\",\"7019\"]],\n                AUTHORITY[\"EPSG\",\"1116\"]],\n            PRIMEM[\"Greenwich\",0,\n                AUTHORITY[\"EPSG\",\"8901\"]],\n            UNIT[\"degree\",0.0174532925199433,\n                AUTHORITY[\"EPSG\",\"9122\"]],\n            AUTHORITY[\"EPSG\",\"6318\"]],\n        PROJECTION[\"Transverse_Mercator\"],\n        PARAMETER[\"latitude_of_origin\",0],\n        PARAMETER[\"central_meridian\",-123],\n        PARAMETER[\"scale_factor\",0.9996],\n        PARAMETER[\"false_easting\",500000],\n        PARAMETER[\"false_northing\",0],\n        UNIT[\"meter\",1,\n            AUTHORITY[\"EPSG\",\"9001\"]],\n        AXIS[\"X\",EAST],\n        AXIS[\"Y\",NORTH],\n        AUTHORITY[\"EPSG\",\"6339\"]],\n    VERT_CS[\"NAVD88 height - Geoid18 (m)\",\n        VERT_DATUM[\"North American Vertical Datum 1988\",2005,\n            AUTHORITY[\"EPSG\",\"5103\"]],\n        UNIT[\"meter\",1,\n            AUTHORITY[\"EPSG\",\"9001\"]],\n        AXIS[\"Up\",UP],\n        AUTHORITY[\"EPSG\",\"5703\"]]]",
+      "prettywkt": "PROJCS[\"NAD83(2011) / UTM zone 10N\",\n    GEOGCS[\"NAD83(2011)\",\n        DATUM[\"NAD83_National_Spatial_Reference_System_2011\",\n            SPHEROID[\"GRS 1980\",6378137,298.257222101,\n                AUTHORITY[\"EPSG\",\"7019\"]],\n            AUTHORITY[\"EPSG\",\"1116\"]],\n        PRIMEM[\"Greenwich\",0,\n            AUTHORITY[\"EPSG\",\"8901\"]],\n        UNIT[\"degree\",0.0174532925199433,\n            AUTHORITY[\"EPSG\",\"9122\"]],\n        AUTHORITY[\"EPSG\",\"6318\"]],\n    PROJECTION[\"Transverse_Mercator\"],\n    PARAMETER[\"latitude_of_origin\",0],\n    PARAMETER[\"central_meridian\",-123],\n    PARAMETER[\"scale_factor\",0.9996],\n    PARAMETER[\"false_easting\",500000],\n    PARAMETER[\"false_northing\",0],\n    UNIT[\"meter\",1,\n        AUTHORITY[\"EPSG\",\"9001\"]],\n    AXIS[\"X\",EAST],\n    AXIS[\"Y\",NORTH],\n    AUTHORITY[\"EPSG\",\"6339\"]]",
+      "proj4": "+proj=utm +zone=10 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +vunits=m +no_defs",
+      "units": {
+        "horizontal": "meter",
+        "vertical": "meter"
+      },
+      "vertical": "VERT_CS[\"NAVD88 height - Geoid18 (m)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Up\",UP],AUTHORITY[\"EPSG\",\"5703\"]]",
+      "wkt": "PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83_National_Spatial_Reference_System_2011\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]]"
+    },
+    "native_bounds": {
+      "minx": 741000,
+      "maxx": 741999.99,
+      "miny": 4237000,
+      "maxy": 4237999.99,
+      "minz": 1463.3,
+      "maxz": 1653.98
+    },
+    "srs_wkt": "COMPD_CS[\"NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)\",PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83 (National Spatial Reference System 2011)\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]],VERT_CS[\"NAVD88 height - Geoid18 (m)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Up\",UP],AUTHORITY[\"EPSG\",\"5703\"]]]",
+    "srs_json": {
+      "type": "CompoundCRS",
+      "name": "NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)",
+      "components": [
+        {
+          "type": "ProjectedCRS",
+          "name": "NAD83(2011) / UTM zone 10N",
+          "base_crs": {
+            "type": "GeographicCRS",
+            "name": "NAD83(2011)",
+            "datum": {
+              "type": "GeodeticReferenceFrame",
+              "name": "NAD83 (National Spatial Reference System 2011)",
+              "ellipsoid": {
+                "name": "GRS 1980",
+                "semi_major_axis": 6378137,
+                "inverse_flattening": 298.257222101
+              }
+            },
+            "coordinate_system": {
+              "subtype": "ellipsoidal",
+              "axis": [
+                {
+                  "name": "Geodetic latitude",
+                  "abbreviation": "Lat",
+                  "direction": "north",
+                  "unit": "degree"
+                },
+                {
+                  "name": "Geodetic longitude",
+                  "abbreviation": "Lon",
+                  "direction": "east",
+                  "unit": "degree"
+                }
+              ]
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 6318
+            }
+          },
+          "conversion": {
+            "name": "UTM zone 10N",
+            "method": {
+              "name": "Transverse Mercator",
+              "id": {
+                "authority": "EPSG",
+                "code": 9807
+              }
+            },
+            "parameters": [
+              {
+                "name": "Latitude of natural origin",
+                "value": 0,
+                "unit": "degree",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8801
+                }
+              },
+              {
+                "name": "Longitude of natural origin",
+                "value": -123,
+                "unit": "degree",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8802
+                }
+              },
+              {
+                "name": "Scale factor at natural origin",
+                "value": 0.9996,
+                "unit": "unity",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8805
+                }
+              },
+              {
+                "name": "False easting",
+                "value": 500000,
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                },
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8806
+                }
+              },
+              {
+                "name": "False northing",
+                "value": 0,
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                },
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8807
+                }
+              }
+            ]
+          },
+          "coordinate_system": {
+            "subtype": "Cartesian",
+            "axis": [
+              {
+                "name": "X",
+                "abbreviation": "",
+                "direction": "east",
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                }
+              },
+              {
+                "name": "Y",
+                "abbreviation": "",
+                "direction": "north",
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                }
+              }
+            ]
+          },
+          "id": {
+            "authority": "EPSG",
+            "code": 6339
+          }
+        },
+        {
+          "type": "VerticalCRS",
+          "name": "NAVD88 height - Geoid18 (m)",
+          "datum": {
+            "type": "VerticalReferenceFrame",
+            "name": "North American Vertical Datum 1988"
+          },
+          "coordinate_system": {
+            "subtype": "vertical",
+            "axis": [
+              {
+                "name": "Up",
+                "abbreviation": "",
+                "direction": "up",
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                }
+              }
+            ]
+          },
+          "geoid_model": {
+            "name": "GEOID18"
+          },
+          "id": {
+            "authority": "EPSG",
+            "code": 5703
+          }
+        }
+      ]
+    },
+    "stats_keys": [
+      "bbox",
+      "statistic"
+    ],
+    "metadata_keys": [
+      "comp_spatialreference",
+      "compressed",
+      "copc",
+      "count",
+      "creation_doy",
+      "creation_year",
+      "dataformat_id",
+      "dataoffset",
+      "filesource_id",
+      "global_encoding",
+      "global_encoding_base64",
+      "header_size",
+      "major_version",
+      "maxx",
+      "maxy",
+      "maxz",
+      "minor_version",
+      "minx",
+      "miny",
+      "minz",
+      "offset_x",
+      "offset_y",
+      "offset_z",
+      "point_length",
+      "project_id",
+      "scale_x",
+      "scale_y",
+      "scale_z",
+      "software_id",
+      "spatialreference",
+      "srs",
+      "system_id",
+      "vlr_0",
+      "vlr_1"
+    ],
+    "source_file": "USGS_LPC_CA_SierraNevada_B22_10SGH4137.laz"
+  },
+  {
+    "count": 32272833,
+    "compressed": true,
+    "major_version": 1,
+    "minor_version": 4,
+    "dataformat_id": 6,
+    "srs": {
+      "compoundwkt": "COMPD_CS[\"NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)\",PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83 (National Spatial Reference System 2011)\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]],VERT_CS[\"NAVD88 height - Geoid18 (m)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Up\",UP],AUTHORITY[\"EPSG\",\"5703\"]]]",
+      "horizontal": "PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83_National_Spatial_Reference_System_2011\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]]",
+      "isgeocentric": false,
+      "isgeographic": false,
+      "json": {
+        "type": "CompoundCRS",
+        "name": "NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)",
+        "components": [
+          {
+            "type": "ProjectedCRS",
+            "name": "NAD83(2011) / UTM zone 10N",
+            "base_crs": {
+              "type": "GeographicCRS",
+              "name": "NAD83(2011)",
+              "datum": {
+                "type": "GeodeticReferenceFrame",
+                "name": "NAD83 (National Spatial Reference System 2011)",
+                "ellipsoid": {
+                  "name": "GRS 1980",
+                  "semi_major_axis": 6378137,
+                  "inverse_flattening": 298.257222101
+                }
+              },
+              "coordinate_system": {
+                "subtype": "ellipsoidal",
+                "axis": [
+                  {
+                    "name": "Geodetic latitude",
+                    "abbreviation": "Lat",
+                    "direction": "north",
+                    "unit": "degree"
+                  },
+                  {
+                    "name": "Geodetic longitude",
+                    "abbreviation": "Lon",
+                    "direction": "east",
+                    "unit": "degree"
+                  }
+                ]
+              },
+              "id": {
+                "authority": "EPSG",
+                "code": 6318
+              }
+            },
+            "conversion": {
+              "name": "UTM zone 10N",
+              "method": {
+                "name": "Transverse Mercator",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 9807
+                }
+              },
+              "parameters": [
+                {
+                  "name": "Latitude of natural origin",
+                  "value": 0,
+                  "unit": "degree",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8801
+                  }
+                },
+                {
+                  "name": "Longitude of natural origin",
+                  "value": -123,
+                  "unit": "degree",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8802
+                  }
+                },
+                {
+                  "name": "Scale factor at natural origin",
+                  "value": 0.9996,
+                  "unit": "unity",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8805
+                  }
+                },
+                {
+                  "name": "False easting",
+                  "value": 500000,
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  },
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8806
+                  }
+                },
+                {
+                  "name": "False northing",
+                  "value": 0,
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  },
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8807
+                  }
+                }
+              ]
+            },
+            "coordinate_system": {
+              "subtype": "Cartesian",
+              "axis": [
+                {
+                  "name": "X",
+                  "abbreviation": "",
+                  "direction": "east",
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  }
+                },
+                {
+                  "name": "Y",
+                  "abbreviation": "",
+                  "direction": "north",
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  }
+                }
+              ]
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 6339
+            }
+          },
+          {
+            "type": "VerticalCRS",
+            "name": "NAVD88 height - Geoid18 (m)",
+            "datum": {
+              "type": "VerticalReferenceFrame",
+              "name": "North American Vertical Datum 1988"
+            },
+            "coordinate_system": {
+              "subtype": "vertical",
+              "axis": [
+                {
+                  "name": "Up",
+                  "abbreviation": "",
+                  "direction": "up",
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  }
+                }
+              ]
+            },
+            "geoid_model": {
+              "name": "GEOID18"
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 5703
+            }
+          }
+        ]
+      },
+      "prettycompoundwkt": "COMPD_CS[\"NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)\",\n    PROJCS[\"NAD83(2011) / UTM zone 10N\",\n        GEOGCS[\"NAD83(2011)\",\n            DATUM[\"NAD83_National_Spatial_Reference_System_2011\",\n                SPHEROID[\"GRS 1980\",6378137,298.257222101,\n                    AUTHORITY[\"EPSG\",\"7019\"]],\n                AUTHORITY[\"EPSG\",\"1116\"]],\n            PRIMEM[\"Greenwich\",0,\n                AUTHORITY[\"EPSG\",\"8901\"]],\n            UNIT[\"degree\",0.0174532925199433,\n                AUTHORITY[\"EPSG\",\"9122\"]],\n            AUTHORITY[\"EPSG\",\"6318\"]],\n        PROJECTION[\"Transverse_Mercator\"],\n        PARAMETER[\"latitude_of_origin\",0],\n        PARAMETER[\"central_meridian\",-123],\n        PARAMETER[\"scale_factor\",0.9996],\n        PARAMETER[\"false_easting\",500000],\n        PARAMETER[\"false_northing\",0],\n        UNIT[\"meter\",1,\n            AUTHORITY[\"EPSG\",\"9001\"]],\n        AXIS[\"X\",EAST],\n        AXIS[\"Y\",NORTH],\n        AUTHORITY[\"EPSG\",\"6339\"]],\n    VERT_CS[\"NAVD88 height - Geoid18 (m)\",\n        VERT_DATUM[\"North American Vertical Datum 1988\",2005,\n            AUTHORITY[\"EPSG\",\"5103\"]],\n        UNIT[\"meter\",1,\n            AUTHORITY[\"EPSG\",\"9001\"]],\n        AXIS[\"Up\",UP],\n        AUTHORITY[\"EPSG\",\"5703\"]]]",
+      "prettywkt": "PROJCS[\"NAD83(2011) / UTM zone 10N\",\n    GEOGCS[\"NAD83(2011)\",\n        DATUM[\"NAD83_National_Spatial_Reference_System_2011\",\n            SPHEROID[\"GRS 1980\",6378137,298.257222101,\n                AUTHORITY[\"EPSG\",\"7019\"]],\n            AUTHORITY[\"EPSG\",\"1116\"]],\n        PRIMEM[\"Greenwich\",0,\n            AUTHORITY[\"EPSG\",\"8901\"]],\n        UNIT[\"degree\",0.0174532925199433,\n            AUTHORITY[\"EPSG\",\"9122\"]],\n        AUTHORITY[\"EPSG\",\"6318\"]],\n    PROJECTION[\"Transverse_Mercator\"],\n    PARAMETER[\"latitude_of_origin\",0],\n    PARAMETER[\"central_meridian\",-123],\n    PARAMETER[\"scale_factor\",0.9996],\n    PARAMETER[\"false_easting\",500000],\n    PARAMETER[\"false_northing\",0],\n    UNIT[\"meter\",1,\n        AUTHORITY[\"EPSG\",\"9001\"]],\n    AXIS[\"X\",EAST],\n    AXIS[\"Y\",NORTH],\n    AUTHORITY[\"EPSG\",\"6339\"]]",
+      "proj4": "+proj=utm +zone=10 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +vunits=m +no_defs",
+      "units": {
+        "horizontal": "meter",
+        "vertical": "meter"
+      },
+      "vertical": "VERT_CS[\"NAVD88 height - Geoid18 (m)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Up\",UP],AUTHORITY[\"EPSG\",\"5703\"]]",
+      "wkt": "PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83_National_Spatial_Reference_System_2011\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]]"
+    },
+    "native_bounds": {
+      "minx": 742000,
+      "maxx": 742999.99,
+      "miny": 4236000,
+      "maxy": 4236999.99,
+      "minz": 1443.24,
+      "maxz": 1662.3
+    },
+    "srs_wkt": "COMPD_CS[\"NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)\",PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83 (National Spatial Reference System 2011)\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]],VERT_CS[\"NAVD88 height - Geoid18 (m)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Up\",UP],AUTHORITY[\"EPSG\",\"5703\"]]]",
+    "srs_json": {
+      "type": "CompoundCRS",
+      "name": "NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)",
+      "components": [
+        {
+          "type": "ProjectedCRS",
+          "name": "NAD83(2011) / UTM zone 10N",
+          "base_crs": {
+            "type": "GeographicCRS",
+            "name": "NAD83(2011)",
+            "datum": {
+              "type": "GeodeticReferenceFrame",
+              "name": "NAD83 (National Spatial Reference System 2011)",
+              "ellipsoid": {
+                "name": "GRS 1980",
+                "semi_major_axis": 6378137,
+                "inverse_flattening": 298.257222101
+              }
+            },
+            "coordinate_system": {
+              "subtype": "ellipsoidal",
+              "axis": [
+                {
+                  "name": "Geodetic latitude",
+                  "abbreviation": "Lat",
+                  "direction": "north",
+                  "unit": "degree"
+                },
+                {
+                  "name": "Geodetic longitude",
+                  "abbreviation": "Lon",
+                  "direction": "east",
+                  "unit": "degree"
+                }
+              ]
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 6318
+            }
+          },
+          "conversion": {
+            "name": "UTM zone 10N",
+            "method": {
+              "name": "Transverse Mercator",
+              "id": {
+                "authority": "EPSG",
+                "code": 9807
+              }
+            },
+            "parameters": [
+              {
+                "name": "Latitude of natural origin",
+                "value": 0,
+                "unit": "degree",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8801
+                }
+              },
+              {
+                "name": "Longitude of natural origin",
+                "value": -123,
+                "unit": "degree",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8802
+                }
+              },
+              {
+                "name": "Scale factor at natural origin",
+                "value": 0.9996,
+                "unit": "unity",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8805
+                }
+              },
+              {
+                "name": "False easting",
+                "value": 500000,
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                },
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8806
+                }
+              },
+              {
+                "name": "False northing",
+                "value": 0,
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                },
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8807
+                }
+              }
+            ]
+          },
+          "coordinate_system": {
+            "subtype": "Cartesian",
+            "axis": [
+              {
+                "name": "X",
+                "abbreviation": "",
+                "direction": "east",
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                }
+              },
+              {
+                "name": "Y",
+                "abbreviation": "",
+                "direction": "north",
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                }
+              }
+            ]
+          },
+          "id": {
+            "authority": "EPSG",
+            "code": 6339
+          }
+        },
+        {
+          "type": "VerticalCRS",
+          "name": "NAVD88 height - Geoid18 (m)",
+          "datum": {
+            "type": "VerticalReferenceFrame",
+            "name": "North American Vertical Datum 1988"
+          },
+          "coordinate_system": {
+            "subtype": "vertical",
+            "axis": [
+              {
+                "name": "Up",
+                "abbreviation": "",
+                "direction": "up",
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                }
+              }
+            ]
+          },
+          "geoid_model": {
+            "name": "GEOID18"
+          },
+          "id": {
+            "authority": "EPSG",
+            "code": 5703
+          }
+        }
+      ]
+    },
+    "stats_keys": [
+      "bbox",
+      "statistic"
+    ],
+    "metadata_keys": [
+      "comp_spatialreference",
+      "compressed",
+      "copc",
+      "count",
+      "creation_doy",
+      "creation_year",
+      "dataformat_id",
+      "dataoffset",
+      "filesource_id",
+      "global_encoding",
+      "global_encoding_base64",
+      "header_size",
+      "major_version",
+      "maxx",
+      "maxy",
+      "maxz",
+      "minor_version",
+      "minx",
+      "miny",
+      "minz",
+      "offset_x",
+      "offset_y",
+      "offset_z",
+      "point_length",
+      "project_id",
+      "scale_x",
+      "scale_y",
+      "scale_z",
+      "software_id",
+      "spatialreference",
+      "srs",
+      "system_id",
+      "vlr_0",
+      "vlr_1"
+    ],
+    "source_file": "USGS_LPC_CA_SierraNevada_B22_10SGH4236.laz"
+  },
+  {
+    "count": 37644869,
+    "compressed": true,
+    "major_version": 1,
+    "minor_version": 4,
+    "dataformat_id": 6,
+    "srs": {
+      "compoundwkt": "COMPD_CS[\"NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)\",PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83 (National Spatial Reference System 2011)\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]],VERT_CS[\"NAVD88 height - Geoid18 (m)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Up\",UP],AUTHORITY[\"EPSG\",\"5703\"]]]",
+      "horizontal": "PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83_National_Spatial_Reference_System_2011\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]]",
+      "isgeocentric": false,
+      "isgeographic": false,
+      "json": {
+        "type": "CompoundCRS",
+        "name": "NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)",
+        "components": [
+          {
+            "type": "ProjectedCRS",
+            "name": "NAD83(2011) / UTM zone 10N",
+            "base_crs": {
+              "type": "GeographicCRS",
+              "name": "NAD83(2011)",
+              "datum": {
+                "type": "GeodeticReferenceFrame",
+                "name": "NAD83 (National Spatial Reference System 2011)",
+                "ellipsoid": {
+                  "name": "GRS 1980",
+                  "semi_major_axis": 6378137,
+                  "inverse_flattening": 298.257222101
+                }
+              },
+              "coordinate_system": {
+                "subtype": "ellipsoidal",
+                "axis": [
+                  {
+                    "name": "Geodetic latitude",
+                    "abbreviation": "Lat",
+                    "direction": "north",
+                    "unit": "degree"
+                  },
+                  {
+                    "name": "Geodetic longitude",
+                    "abbreviation": "Lon",
+                    "direction": "east",
+                    "unit": "degree"
+                  }
+                ]
+              },
+              "id": {
+                "authority": "EPSG",
+                "code": 6318
+              }
+            },
+            "conversion": {
+              "name": "UTM zone 10N",
+              "method": {
+                "name": "Transverse Mercator",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 9807
+                }
+              },
+              "parameters": [
+                {
+                  "name": "Latitude of natural origin",
+                  "value": 0,
+                  "unit": "degree",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8801
+                  }
+                },
+                {
+                  "name": "Longitude of natural origin",
+                  "value": -123,
+                  "unit": "degree",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8802
+                  }
+                },
+                {
+                  "name": "Scale factor at natural origin",
+                  "value": 0.9996,
+                  "unit": "unity",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8805
+                  }
+                },
+                {
+                  "name": "False easting",
+                  "value": 500000,
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  },
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8806
+                  }
+                },
+                {
+                  "name": "False northing",
+                  "value": 0,
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  },
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8807
+                  }
+                }
+              ]
+            },
+            "coordinate_system": {
+              "subtype": "Cartesian",
+              "axis": [
+                {
+                  "name": "X",
+                  "abbreviation": "",
+                  "direction": "east",
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  }
+                },
+                {
+                  "name": "Y",
+                  "abbreviation": "",
+                  "direction": "north",
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  }
+                }
+              ]
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 6339
+            }
+          },
+          {
+            "type": "VerticalCRS",
+            "name": "NAVD88 height - Geoid18 (m)",
+            "datum": {
+              "type": "VerticalReferenceFrame",
+              "name": "North American Vertical Datum 1988"
+            },
+            "coordinate_system": {
+              "subtype": "vertical",
+              "axis": [
+                {
+                  "name": "Up",
+                  "abbreviation": "",
+                  "direction": "up",
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  }
+                }
+              ]
+            },
+            "geoid_model": {
+              "name": "GEOID18"
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 5703
+            }
+          }
+        ]
+      },
+      "prettycompoundwkt": "COMPD_CS[\"NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)\",\n    PROJCS[\"NAD83(2011) / UTM zone 10N\",\n        GEOGCS[\"NAD83(2011)\",\n            DATUM[\"NAD83_National_Spatial_Reference_System_2011\",\n                SPHEROID[\"GRS 1980\",6378137,298.257222101,\n                    AUTHORITY[\"EPSG\",\"7019\"]],\n                AUTHORITY[\"EPSG\",\"1116\"]],\n            PRIMEM[\"Greenwich\",0,\n                AUTHORITY[\"EPSG\",\"8901\"]],\n            UNIT[\"degree\",0.0174532925199433,\n                AUTHORITY[\"EPSG\",\"9122\"]],\n            AUTHORITY[\"EPSG\",\"6318\"]],\n        PROJECTION[\"Transverse_Mercator\"],\n        PARAMETER[\"latitude_of_origin\",0],\n        PARAMETER[\"central_meridian\",-123],\n        PARAMETER[\"scale_factor\",0.9996],\n        PARAMETER[\"false_easting\",500000],\n        PARAMETER[\"false_northing\",0],\n        UNIT[\"meter\",1,\n            AUTHORITY[\"EPSG\",\"9001\"]],\n        AXIS[\"X\",EAST],\n        AXIS[\"Y\",NORTH],\n        AUTHORITY[\"EPSG\",\"6339\"]],\n    VERT_CS[\"NAVD88 height - Geoid18 (m)\",\n        VERT_DATUM[\"North American Vertical Datum 1988\",2005,\n            AUTHORITY[\"EPSG\",\"5103\"]],\n        UNIT[\"meter\",1,\n            AUTHORITY[\"EPSG\",\"9001\"]],\n        AXIS[\"Up\",UP],\n        AUTHORITY[\"EPSG\",\"5703\"]]]",
+      "prettywkt": "PROJCS[\"NAD83(2011) / UTM zone 10N\",\n    GEOGCS[\"NAD83(2011)\",\n        DATUM[\"NAD83_National_Spatial_Reference_System_2011\",\n            SPHEROID[\"GRS 1980\",6378137,298.257222101,\n                AUTHORITY[\"EPSG\",\"7019\"]],\n            AUTHORITY[\"EPSG\",\"1116\"]],\n        PRIMEM[\"Greenwich\",0,\n            AUTHORITY[\"EPSG\",\"8901\"]],\n        UNIT[\"degree\",0.0174532925199433,\n            AUTHORITY[\"EPSG\",\"9122\"]],\n        AUTHORITY[\"EPSG\",\"6318\"]],\n    PROJECTION[\"Transverse_Mercator\"],\n    PARAMETER[\"latitude_of_origin\",0],\n    PARAMETER[\"central_meridian\",-123],\n    PARAMETER[\"scale_factor\",0.9996],\n    PARAMETER[\"false_easting\",500000],\n    PARAMETER[\"false_northing\",0],\n    UNIT[\"meter\",1,\n        AUTHORITY[\"EPSG\",\"9001\"]],\n    AXIS[\"X\",EAST],\n    AXIS[\"Y\",NORTH],\n    AUTHORITY[\"EPSG\",\"6339\"]]",
+      "proj4": "+proj=utm +zone=10 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +vunits=m +no_defs",
+      "units": {
+        "horizontal": "meter",
+        "vertical": "meter"
+      },
+      "vertical": "VERT_CS[\"NAVD88 height - Geoid18 (m)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Up\",UP],AUTHORITY[\"EPSG\",\"5703\"]]",
+      "wkt": "PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83_National_Spatial_Reference_System_2011\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]]"
+    },
+    "native_bounds": {
+      "minx": 742000,
+      "maxx": 742999.99,
+      "miny": 4237000,
+      "maxy": 4237999.99,
+      "minz": 1498.23,
+      "maxz": 1694.64
+    },
+    "srs_wkt": "COMPD_CS[\"NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)\",PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83 (National Spatial Reference System 2011)\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]],VERT_CS[\"NAVD88 height - Geoid18 (m)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Up\",UP],AUTHORITY[\"EPSG\",\"5703\"]]]",
+    "srs_json": {
+      "type": "CompoundCRS",
+      "name": "NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)",
+      "components": [
+        {
+          "type": "ProjectedCRS",
+          "name": "NAD83(2011) / UTM zone 10N",
+          "base_crs": {
+            "type": "GeographicCRS",
+            "name": "NAD83(2011)",
+            "datum": {
+              "type": "GeodeticReferenceFrame",
+              "name": "NAD83 (National Spatial Reference System 2011)",
+              "ellipsoid": {
+                "name": "GRS 1980",
+                "semi_major_axis": 6378137,
+                "inverse_flattening": 298.257222101
+              }
+            },
+            "coordinate_system": {
+              "subtype": "ellipsoidal",
+              "axis": [
+                {
+                  "name": "Geodetic latitude",
+                  "abbreviation": "Lat",
+                  "direction": "north",
+                  "unit": "degree"
+                },
+                {
+                  "name": "Geodetic longitude",
+                  "abbreviation": "Lon",
+                  "direction": "east",
+                  "unit": "degree"
+                }
+              ]
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 6318
+            }
+          },
+          "conversion": {
+            "name": "UTM zone 10N",
+            "method": {
+              "name": "Transverse Mercator",
+              "id": {
+                "authority": "EPSG",
+                "code": 9807
+              }
+            },
+            "parameters": [
+              {
+                "name": "Latitude of natural origin",
+                "value": 0,
+                "unit": "degree",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8801
+                }
+              },
+              {
+                "name": "Longitude of natural origin",
+                "value": -123,
+                "unit": "degree",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8802
+                }
+              },
+              {
+                "name": "Scale factor at natural origin",
+                "value": 0.9996,
+                "unit": "unity",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8805
+                }
+              },
+              {
+                "name": "False easting",
+                "value": 500000,
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                },
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8806
+                }
+              },
+              {
+                "name": "False northing",
+                "value": 0,
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                },
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8807
+                }
+              }
+            ]
+          },
+          "coordinate_system": {
+            "subtype": "Cartesian",
+            "axis": [
+              {
+                "name": "X",
+                "abbreviation": "",
+                "direction": "east",
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                }
+              },
+              {
+                "name": "Y",
+                "abbreviation": "",
+                "direction": "north",
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                }
+              }
+            ]
+          },
+          "id": {
+            "authority": "EPSG",
+            "code": 6339
+          }
+        },
+        {
+          "type": "VerticalCRS",
+          "name": "NAVD88 height - Geoid18 (m)",
+          "datum": {
+            "type": "VerticalReferenceFrame",
+            "name": "North American Vertical Datum 1988"
+          },
+          "coordinate_system": {
+            "subtype": "vertical",
+            "axis": [
+              {
+                "name": "Up",
+                "abbreviation": "",
+                "direction": "up",
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                }
+              }
+            ]
+          },
+          "geoid_model": {
+            "name": "GEOID18"
+          },
+          "id": {
+            "authority": "EPSG",
+            "code": 5703
+          }
+        }
+      ]
+    },
+    "stats_keys": [
+      "bbox",
+      "statistic"
+    ],
+    "metadata_keys": [
+      "comp_spatialreference",
+      "compressed",
+      "copc",
+      "count",
+      "creation_doy",
+      "creation_year",
+      "dataformat_id",
+      "dataoffset",
+      "filesource_id",
+      "global_encoding",
+      "global_encoding_base64",
+      "header_size",
+      "major_version",
+      "maxx",
+      "maxy",
+      "maxz",
+      "minor_version",
+      "minx",
+      "miny",
+      "minz",
+      "offset_x",
+      "offset_y",
+      "offset_z",
+      "point_length",
+      "project_id",
+      "scale_x",
+      "scale_y",
+      "scale_z",
+      "software_id",
+      "spatialreference",
+      "srs",
+      "system_id",
+      "vlr_0",
+      "vlr_1"
+    ],
+    "source_file": "USGS_LPC_CA_SierraNevada_B22_10SGH4237.laz"
+  },
+  {
+    "count": 39200800,
+    "compressed": true,
+    "major_version": 1,
+    "minor_version": 4,
+    "dataformat_id": 6,
+    "srs": {
+      "compoundwkt": "COMPD_CS[\"NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)\",PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83 (National Spatial Reference System 2011)\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]],VERT_CS[\"NAVD88 height - Geoid18 (m)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Up\",UP],AUTHORITY[\"EPSG\",\"5703\"]]]",
+      "horizontal": "PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83_National_Spatial_Reference_System_2011\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]]",
+      "isgeocentric": false,
+      "isgeographic": false,
+      "json": {
+        "type": "CompoundCRS",
+        "name": "NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)",
+        "components": [
+          {
+            "type": "ProjectedCRS",
+            "name": "NAD83(2011) / UTM zone 10N",
+            "base_crs": {
+              "type": "GeographicCRS",
+              "name": "NAD83(2011)",
+              "datum": {
+                "type": "GeodeticReferenceFrame",
+                "name": "NAD83 (National Spatial Reference System 2011)",
+                "ellipsoid": {
+                  "name": "GRS 1980",
+                  "semi_major_axis": 6378137,
+                  "inverse_flattening": 298.257222101
+                }
+              },
+              "coordinate_system": {
+                "subtype": "ellipsoidal",
+                "axis": [
+                  {
+                    "name": "Geodetic latitude",
+                    "abbreviation": "Lat",
+                    "direction": "north",
+                    "unit": "degree"
+                  },
+                  {
+                    "name": "Geodetic longitude",
+                    "abbreviation": "Lon",
+                    "direction": "east",
+                    "unit": "degree"
+                  }
+                ]
+              },
+              "id": {
+                "authority": "EPSG",
+                "code": 6318
+              }
+            },
+            "conversion": {
+              "name": "UTM zone 10N",
+              "method": {
+                "name": "Transverse Mercator",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 9807
+                }
+              },
+              "parameters": [
+                {
+                  "name": "Latitude of natural origin",
+                  "value": 0,
+                  "unit": "degree",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8801
+                  }
+                },
+                {
+                  "name": "Longitude of natural origin",
+                  "value": -123,
+                  "unit": "degree",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8802
+                  }
+                },
+                {
+                  "name": "Scale factor at natural origin",
+                  "value": 0.9996,
+                  "unit": "unity",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8805
+                  }
+                },
+                {
+                  "name": "False easting",
+                  "value": 500000,
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  },
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8806
+                  }
+                },
+                {
+                  "name": "False northing",
+                  "value": 0,
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  },
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8807
+                  }
+                }
+              ]
+            },
+            "coordinate_system": {
+              "subtype": "Cartesian",
+              "axis": [
+                {
+                  "name": "X",
+                  "abbreviation": "",
+                  "direction": "east",
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  }
+                },
+                {
+                  "name": "Y",
+                  "abbreviation": "",
+                  "direction": "north",
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  }
+                }
+              ]
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 6339
+            }
+          },
+          {
+            "type": "VerticalCRS",
+            "name": "NAVD88 height - Geoid18 (m)",
+            "datum": {
+              "type": "VerticalReferenceFrame",
+              "name": "North American Vertical Datum 1988"
+            },
+            "coordinate_system": {
+              "subtype": "vertical",
+              "axis": [
+                {
+                  "name": "Up",
+                  "abbreviation": "",
+                  "direction": "up",
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  }
+                }
+              ]
+            },
+            "geoid_model": {
+              "name": "GEOID18"
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 5703
+            }
+          }
+        ]
+      },
+      "prettycompoundwkt": "COMPD_CS[\"NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)\",\n    PROJCS[\"NAD83(2011) / UTM zone 10N\",\n        GEOGCS[\"NAD83(2011)\",\n            DATUM[\"NAD83_National_Spatial_Reference_System_2011\",\n                SPHEROID[\"GRS 1980\",6378137,298.257222101,\n                    AUTHORITY[\"EPSG\",\"7019\"]],\n                AUTHORITY[\"EPSG\",\"1116\"]],\n            PRIMEM[\"Greenwich\",0,\n                AUTHORITY[\"EPSG\",\"8901\"]],\n            UNIT[\"degree\",0.0174532925199433,\n                AUTHORITY[\"EPSG\",\"9122\"]],\n            AUTHORITY[\"EPSG\",\"6318\"]],\n        PROJECTION[\"Transverse_Mercator\"],\n        PARAMETER[\"latitude_of_origin\",0],\n        PARAMETER[\"central_meridian\",-123],\n        PARAMETER[\"scale_factor\",0.9996],\n        PARAMETER[\"false_easting\",500000],\n        PARAMETER[\"false_northing\",0],\n        UNIT[\"meter\",1,\n            AUTHORITY[\"EPSG\",\"9001\"]],\n        AXIS[\"X\",EAST],\n        AXIS[\"Y\",NORTH],\n        AUTHORITY[\"EPSG\",\"6339\"]],\n    VERT_CS[\"NAVD88 height - Geoid18 (m)\",\n        VERT_DATUM[\"North American Vertical Datum 1988\",2005,\n            AUTHORITY[\"EPSG\",\"5103\"]],\n        UNIT[\"meter\",1,\n            AUTHORITY[\"EPSG\",\"9001\"]],\n        AXIS[\"Up\",UP],\n        AUTHORITY[\"EPSG\",\"5703\"]]]",
+      "prettywkt": "PROJCS[\"NAD83(2011) / UTM zone 10N\",\n    GEOGCS[\"NAD83(2011)\",\n        DATUM[\"NAD83_National_Spatial_Reference_System_2011\",\n            SPHEROID[\"GRS 1980\",6378137,298.257222101,\n                AUTHORITY[\"EPSG\",\"7019\"]],\n            AUTHORITY[\"EPSG\",\"1116\"]],\n        PRIMEM[\"Greenwich\",0,\n            AUTHORITY[\"EPSG\",\"8901\"]],\n        UNIT[\"degree\",0.0174532925199433,\n            AUTHORITY[\"EPSG\",\"9122\"]],\n        AUTHORITY[\"EPSG\",\"6318\"]],\n    PROJECTION[\"Transverse_Mercator\"],\n    PARAMETER[\"latitude_of_origin\",0],\n    PARAMETER[\"central_meridian\",-123],\n    PARAMETER[\"scale_factor\",0.9996],\n    PARAMETER[\"false_easting\",500000],\n    PARAMETER[\"false_northing\",0],\n    UNIT[\"meter\",1,\n        AUTHORITY[\"EPSG\",\"9001\"]],\n    AXIS[\"X\",EAST],\n    AXIS[\"Y\",NORTH],\n    AUTHORITY[\"EPSG\",\"6339\"]]",
+      "proj4": "+proj=utm +zone=10 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +vunits=m +no_defs",
+      "units": {
+        "horizontal": "meter",
+        "vertical": "meter"
+      },
+      "vertical": "VERT_CS[\"NAVD88 height - Geoid18 (m)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Up\",UP],AUTHORITY[\"EPSG\",\"5703\"]]",
+      "wkt": "PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83_National_Spatial_Reference_System_2011\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]]"
+    },
+    "native_bounds": {
+      "minx": 742000,
+      "maxx": 742999.99,
+      "miny": 4238000,
+      "maxy": 4238999.99,
+      "minz": 1457.96,
+      "maxz": 1724.02
+    },
+    "srs_wkt": "COMPD_CS[\"NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)\",PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83 (National Spatial Reference System 2011)\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]],VERT_CS[\"NAVD88 height - Geoid18 (m)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Up\",UP],AUTHORITY[\"EPSG\",\"5703\"]]]",
+    "srs_json": {
+      "type": "CompoundCRS",
+      "name": "NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)",
+      "components": [
+        {
+          "type": "ProjectedCRS",
+          "name": "NAD83(2011) / UTM zone 10N",
+          "base_crs": {
+            "type": "GeographicCRS",
+            "name": "NAD83(2011)",
+            "datum": {
+              "type": "GeodeticReferenceFrame",
+              "name": "NAD83 (National Spatial Reference System 2011)",
+              "ellipsoid": {
+                "name": "GRS 1980",
+                "semi_major_axis": 6378137,
+                "inverse_flattening": 298.257222101
+              }
+            },
+            "coordinate_system": {
+              "subtype": "ellipsoidal",
+              "axis": [
+                {
+                  "name": "Geodetic latitude",
+                  "abbreviation": "Lat",
+                  "direction": "north",
+                  "unit": "degree"
+                },
+                {
+                  "name": "Geodetic longitude",
+                  "abbreviation": "Lon",
+                  "direction": "east",
+                  "unit": "degree"
+                }
+              ]
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 6318
+            }
+          },
+          "conversion": {
+            "name": "UTM zone 10N",
+            "method": {
+              "name": "Transverse Mercator",
+              "id": {
+                "authority": "EPSG",
+                "code": 9807
+              }
+            },
+            "parameters": [
+              {
+                "name": "Latitude of natural origin",
+                "value": 0,
+                "unit": "degree",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8801
+                }
+              },
+              {
+                "name": "Longitude of natural origin",
+                "value": -123,
+                "unit": "degree",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8802
+                }
+              },
+              {
+                "name": "Scale factor at natural origin",
+                "value": 0.9996,
+                "unit": "unity",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8805
+                }
+              },
+              {
+                "name": "False easting",
+                "value": 500000,
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                },
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8806
+                }
+              },
+              {
+                "name": "False northing",
+                "value": 0,
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                },
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8807
+                }
+              }
+            ]
+          },
+          "coordinate_system": {
+            "subtype": "Cartesian",
+            "axis": [
+              {
+                "name": "X",
+                "abbreviation": "",
+                "direction": "east",
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                }
+              },
+              {
+                "name": "Y",
+                "abbreviation": "",
+                "direction": "north",
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                }
+              }
+            ]
+          },
+          "id": {
+            "authority": "EPSG",
+            "code": 6339
+          }
+        },
+        {
+          "type": "VerticalCRS",
+          "name": "NAVD88 height - Geoid18 (m)",
+          "datum": {
+            "type": "VerticalReferenceFrame",
+            "name": "North American Vertical Datum 1988"
+          },
+          "coordinate_system": {
+            "subtype": "vertical",
+            "axis": [
+              {
+                "name": "Up",
+                "abbreviation": "",
+                "direction": "up",
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                }
+              }
+            ]
+          },
+          "geoid_model": {
+            "name": "GEOID18"
+          },
+          "id": {
+            "authority": "EPSG",
+            "code": 5703
+          }
+        }
+      ]
+    },
+    "stats_keys": [
+      "bbox",
+      "statistic"
+    ],
+    "metadata_keys": [
+      "comp_spatialreference",
+      "compressed",
+      "copc",
+      "count",
+      "creation_doy",
+      "creation_year",
+      "dataformat_id",
+      "dataoffset",
+      "filesource_id",
+      "global_encoding",
+      "global_encoding_base64",
+      "header_size",
+      "major_version",
+      "maxx",
+      "maxy",
+      "maxz",
+      "minor_version",
+      "minx",
+      "miny",
+      "minz",
+      "offset_x",
+      "offset_y",
+      "offset_z",
+      "point_length",
+      "project_id",
+      "scale_x",
+      "scale_y",
+      "scale_z",
+      "software_id",
+      "spatialreference",
+      "srs",
+      "system_id",
+      "vlr_0",
+      "vlr_1"
+    ],
+    "source_file": "USGS_LPC_CA_SierraNevada_B22_10SGH4238.laz"
+  },
+  {
+    "count": 32063001,
+    "compressed": true,
+    "major_version": 1,
+    "minor_version": 4,
+    "dataformat_id": 6,
+    "srs": {
+      "compoundwkt": "COMPD_CS[\"NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)\",PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83 (National Spatial Reference System 2011)\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]],VERT_CS[\"NAVD88 height - Geoid18 (m)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Up\",UP],AUTHORITY[\"EPSG\",\"5703\"]]]",
+      "horizontal": "PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83_National_Spatial_Reference_System_2011\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]]",
+      "isgeocentric": false,
+      "isgeographic": false,
+      "json": {
+        "type": "CompoundCRS",
+        "name": "NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)",
+        "components": [
+          {
+            "type": "ProjectedCRS",
+            "name": "NAD83(2011) / UTM zone 10N",
+            "base_crs": {
+              "type": "GeographicCRS",
+              "name": "NAD83(2011)",
+              "datum": {
+                "type": "GeodeticReferenceFrame",
+                "name": "NAD83 (National Spatial Reference System 2011)",
+                "ellipsoid": {
+                  "name": "GRS 1980",
+                  "semi_major_axis": 6378137,
+                  "inverse_flattening": 298.257222101
+                }
+              },
+              "coordinate_system": {
+                "subtype": "ellipsoidal",
+                "axis": [
+                  {
+                    "name": "Geodetic latitude",
+                    "abbreviation": "Lat",
+                    "direction": "north",
+                    "unit": "degree"
+                  },
+                  {
+                    "name": "Geodetic longitude",
+                    "abbreviation": "Lon",
+                    "direction": "east",
+                    "unit": "degree"
+                  }
+                ]
+              },
+              "id": {
+                "authority": "EPSG",
+                "code": 6318
+              }
+            },
+            "conversion": {
+              "name": "UTM zone 10N",
+              "method": {
+                "name": "Transverse Mercator",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 9807
+                }
+              },
+              "parameters": [
+                {
+                  "name": "Latitude of natural origin",
+                  "value": 0,
+                  "unit": "degree",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8801
+                  }
+                },
+                {
+                  "name": "Longitude of natural origin",
+                  "value": -123,
+                  "unit": "degree",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8802
+                  }
+                },
+                {
+                  "name": "Scale factor at natural origin",
+                  "value": 0.9996,
+                  "unit": "unity",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8805
+                  }
+                },
+                {
+                  "name": "False easting",
+                  "value": 500000,
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  },
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8806
+                  }
+                },
+                {
+                  "name": "False northing",
+                  "value": 0,
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  },
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8807
+                  }
+                }
+              ]
+            },
+            "coordinate_system": {
+              "subtype": "Cartesian",
+              "axis": [
+                {
+                  "name": "X",
+                  "abbreviation": "",
+                  "direction": "east",
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  }
+                },
+                {
+                  "name": "Y",
+                  "abbreviation": "",
+                  "direction": "north",
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  }
+                }
+              ]
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 6339
+            }
+          },
+          {
+            "type": "VerticalCRS",
+            "name": "NAVD88 height - Geoid18 (m)",
+            "datum": {
+              "type": "VerticalReferenceFrame",
+              "name": "North American Vertical Datum 1988"
+            },
+            "coordinate_system": {
+              "subtype": "vertical",
+              "axis": [
+                {
+                  "name": "Up",
+                  "abbreviation": "",
+                  "direction": "up",
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  }
+                }
+              ]
+            },
+            "geoid_model": {
+              "name": "GEOID18"
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 5703
+            }
+          }
+        ]
+      },
+      "prettycompoundwkt": "COMPD_CS[\"NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)\",\n    PROJCS[\"NAD83(2011) / UTM zone 10N\",\n        GEOGCS[\"NAD83(2011)\",\n            DATUM[\"NAD83_National_Spatial_Reference_System_2011\",\n                SPHEROID[\"GRS 1980\",6378137,298.257222101,\n                    AUTHORITY[\"EPSG\",\"7019\"]],\n                AUTHORITY[\"EPSG\",\"1116\"]],\n            PRIMEM[\"Greenwich\",0,\n                AUTHORITY[\"EPSG\",\"8901\"]],\n            UNIT[\"degree\",0.0174532925199433,\n                AUTHORITY[\"EPSG\",\"9122\"]],\n            AUTHORITY[\"EPSG\",\"6318\"]],\n        PROJECTION[\"Transverse_Mercator\"],\n        PARAMETER[\"latitude_of_origin\",0],\n        PARAMETER[\"central_meridian\",-123],\n        PARAMETER[\"scale_factor\",0.9996],\n        PARAMETER[\"false_easting\",500000],\n        PARAMETER[\"false_northing\",0],\n        UNIT[\"meter\",1,\n            AUTHORITY[\"EPSG\",\"9001\"]],\n        AXIS[\"X\",EAST],\n        AXIS[\"Y\",NORTH],\n        AUTHORITY[\"EPSG\",\"6339\"]],\n    VERT_CS[\"NAVD88 height - Geoid18 (m)\",\n        VERT_DATUM[\"North American Vertical Datum 1988\",2005,\n            AUTHORITY[\"EPSG\",\"5103\"]],\n        UNIT[\"meter\",1,\n            AUTHORITY[\"EPSG\",\"9001\"]],\n        AXIS[\"Up\",UP],\n        AUTHORITY[\"EPSG\",\"5703\"]]]",
+      "prettywkt": "PROJCS[\"NAD83(2011) / UTM zone 10N\",\n    GEOGCS[\"NAD83(2011)\",\n        DATUM[\"NAD83_National_Spatial_Reference_System_2011\",\n            SPHEROID[\"GRS 1980\",6378137,298.257222101,\n                AUTHORITY[\"EPSG\",\"7019\"]],\n            AUTHORITY[\"EPSG\",\"1116\"]],\n        PRIMEM[\"Greenwich\",0,\n            AUTHORITY[\"EPSG\",\"8901\"]],\n        UNIT[\"degree\",0.0174532925199433,\n            AUTHORITY[\"EPSG\",\"9122\"]],\n        AUTHORITY[\"EPSG\",\"6318\"]],\n    PROJECTION[\"Transverse_Mercator\"],\n    PARAMETER[\"latitude_of_origin\",0],\n    PARAMETER[\"central_meridian\",-123],\n    PARAMETER[\"scale_factor\",0.9996],\n    PARAMETER[\"false_easting\",500000],\n    PARAMETER[\"false_northing\",0],\n    UNIT[\"meter\",1,\n        AUTHORITY[\"EPSG\",\"9001\"]],\n    AXIS[\"X\",EAST],\n    AXIS[\"Y\",NORTH],\n    AUTHORITY[\"EPSG\",\"6339\"]]",
+      "proj4": "+proj=utm +zone=10 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +vunits=m +no_defs",
+      "units": {
+        "horizontal": "meter",
+        "vertical": "meter"
+      },
+      "vertical": "VERT_CS[\"NAVD88 height - Geoid18 (m)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Up\",UP],AUTHORITY[\"EPSG\",\"5703\"]]",
+      "wkt": "PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83_National_Spatial_Reference_System_2011\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]]"
+    },
+    "native_bounds": {
+      "minx": 743000,
+      "maxx": 743999.99,
+      "miny": 4237000,
+      "maxy": 4237999.99,
+      "minz": 1485.17,
+      "maxz": 1722.99
+    },
+    "srs_wkt": "COMPD_CS[\"NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)\",PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83 (National Spatial Reference System 2011)\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]],VERT_CS[\"NAVD88 height - Geoid18 (m)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Up\",UP],AUTHORITY[\"EPSG\",\"5703\"]]]",
+    "srs_json": {
+      "type": "CompoundCRS",
+      "name": "NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)",
+      "components": [
+        {
+          "type": "ProjectedCRS",
+          "name": "NAD83(2011) / UTM zone 10N",
+          "base_crs": {
+            "type": "GeographicCRS",
+            "name": "NAD83(2011)",
+            "datum": {
+              "type": "GeodeticReferenceFrame",
+              "name": "NAD83 (National Spatial Reference System 2011)",
+              "ellipsoid": {
+                "name": "GRS 1980",
+                "semi_major_axis": 6378137,
+                "inverse_flattening": 298.257222101
+              }
+            },
+            "coordinate_system": {
+              "subtype": "ellipsoidal",
+              "axis": [
+                {
+                  "name": "Geodetic latitude",
+                  "abbreviation": "Lat",
+                  "direction": "north",
+                  "unit": "degree"
+                },
+                {
+                  "name": "Geodetic longitude",
+                  "abbreviation": "Lon",
+                  "direction": "east",
+                  "unit": "degree"
+                }
+              ]
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 6318
+            }
+          },
+          "conversion": {
+            "name": "UTM zone 10N",
+            "method": {
+              "name": "Transverse Mercator",
+              "id": {
+                "authority": "EPSG",
+                "code": 9807
+              }
+            },
+            "parameters": [
+              {
+                "name": "Latitude of natural origin",
+                "value": 0,
+                "unit": "degree",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8801
+                }
+              },
+              {
+                "name": "Longitude of natural origin",
+                "value": -123,
+                "unit": "degree",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8802
+                }
+              },
+              {
+                "name": "Scale factor at natural origin",
+                "value": 0.9996,
+                "unit": "unity",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8805
+                }
+              },
+              {
+                "name": "False easting",
+                "value": 500000,
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                },
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8806
+                }
+              },
+              {
+                "name": "False northing",
+                "value": 0,
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                },
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8807
+                }
+              }
+            ]
+          },
+          "coordinate_system": {
+            "subtype": "Cartesian",
+            "axis": [
+              {
+                "name": "X",
+                "abbreviation": "",
+                "direction": "east",
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                }
+              },
+              {
+                "name": "Y",
+                "abbreviation": "",
+                "direction": "north",
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                }
+              }
+            ]
+          },
+          "id": {
+            "authority": "EPSG",
+            "code": 6339
+          }
+        },
+        {
+          "type": "VerticalCRS",
+          "name": "NAVD88 height - Geoid18 (m)",
+          "datum": {
+            "type": "VerticalReferenceFrame",
+            "name": "North American Vertical Datum 1988"
+          },
+          "coordinate_system": {
+            "subtype": "vertical",
+            "axis": [
+              {
+                "name": "Up",
+                "abbreviation": "",
+                "direction": "up",
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                }
+              }
+            ]
+          },
+          "geoid_model": {
+            "name": "GEOID18"
+          },
+          "id": {
+            "authority": "EPSG",
+            "code": 5703
+          }
+        }
+      ]
+    },
+    "stats_keys": [
+      "bbox",
+      "statistic"
+    ],
+    "metadata_keys": [
+      "comp_spatialreference",
+      "compressed",
+      "copc",
+      "count",
+      "creation_doy",
+      "creation_year",
+      "dataformat_id",
+      "dataoffset",
+      "filesource_id",
+      "global_encoding",
+      "global_encoding_base64",
+      "header_size",
+      "major_version",
+      "maxx",
+      "maxy",
+      "maxz",
+      "minor_version",
+      "minx",
+      "miny",
+      "minz",
+      "offset_x",
+      "offset_y",
+      "offset_z",
+      "point_length",
+      "project_id",
+      "scale_x",
+      "scale_y",
+      "scale_z",
+      "software_id",
+      "spatialreference",
+      "srs",
+      "system_id",
+      "vlr_0",
+      "vlr_1"
+    ],
+    "source_file": "USGS_LPC_CA_SierraNevada_B22_10SGH4337.laz"
+  },
+  {
+    "count": 36002705,
+    "compressed": true,
+    "major_version": 1,
+    "minor_version": 4,
+    "dataformat_id": 6,
+    "srs": {
+      "compoundwkt": "COMPD_CS[\"NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)\",PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83 (National Spatial Reference System 2011)\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]],VERT_CS[\"NAVD88 height - Geoid18 (m)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Up\",UP],AUTHORITY[\"EPSG\",\"5703\"]]]",
+      "horizontal": "PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83_National_Spatial_Reference_System_2011\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]]",
+      "isgeocentric": false,
+      "isgeographic": false,
+      "json": {
+        "type": "CompoundCRS",
+        "name": "NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)",
+        "components": [
+          {
+            "type": "ProjectedCRS",
+            "name": "NAD83(2011) / UTM zone 10N",
+            "base_crs": {
+              "type": "GeographicCRS",
+              "name": "NAD83(2011)",
+              "datum": {
+                "type": "GeodeticReferenceFrame",
+                "name": "NAD83 (National Spatial Reference System 2011)",
+                "ellipsoid": {
+                  "name": "GRS 1980",
+                  "semi_major_axis": 6378137,
+                  "inverse_flattening": 298.257222101
+                }
+              },
+              "coordinate_system": {
+                "subtype": "ellipsoidal",
+                "axis": [
+                  {
+                    "name": "Geodetic latitude",
+                    "abbreviation": "Lat",
+                    "direction": "north",
+                    "unit": "degree"
+                  },
+                  {
+                    "name": "Geodetic longitude",
+                    "abbreviation": "Lon",
+                    "direction": "east",
+                    "unit": "degree"
+                  }
+                ]
+              },
+              "id": {
+                "authority": "EPSG",
+                "code": 6318
+              }
+            },
+            "conversion": {
+              "name": "UTM zone 10N",
+              "method": {
+                "name": "Transverse Mercator",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 9807
+                }
+              },
+              "parameters": [
+                {
+                  "name": "Latitude of natural origin",
+                  "value": 0,
+                  "unit": "degree",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8801
+                  }
+                },
+                {
+                  "name": "Longitude of natural origin",
+                  "value": -123,
+                  "unit": "degree",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8802
+                  }
+                },
+                {
+                  "name": "Scale factor at natural origin",
+                  "value": 0.9996,
+                  "unit": "unity",
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8805
+                  }
+                },
+                {
+                  "name": "False easting",
+                  "value": 500000,
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  },
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8806
+                  }
+                },
+                {
+                  "name": "False northing",
+                  "value": 0,
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  },
+                  "id": {
+                    "authority": "EPSG",
+                    "code": 8807
+                  }
+                }
+              ]
+            },
+            "coordinate_system": {
+              "subtype": "Cartesian",
+              "axis": [
+                {
+                  "name": "X",
+                  "abbreviation": "",
+                  "direction": "east",
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  }
+                },
+                {
+                  "name": "Y",
+                  "abbreviation": "",
+                  "direction": "north",
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  }
+                }
+              ]
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 6339
+            }
+          },
+          {
+            "type": "VerticalCRS",
+            "name": "NAVD88 height - Geoid18 (m)",
+            "datum": {
+              "type": "VerticalReferenceFrame",
+              "name": "North American Vertical Datum 1988"
+            },
+            "coordinate_system": {
+              "subtype": "vertical",
+              "axis": [
+                {
+                  "name": "Up",
+                  "abbreviation": "",
+                  "direction": "up",
+                  "unit": {
+                    "type": "LinearUnit",
+                    "name": "meter",
+                    "conversion_factor": 1
+                  }
+                }
+              ]
+            },
+            "geoid_model": {
+              "name": "GEOID18"
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 5703
+            }
+          }
+        ]
+      },
+      "prettycompoundwkt": "COMPD_CS[\"NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)\",\n    PROJCS[\"NAD83(2011) / UTM zone 10N\",\n        GEOGCS[\"NAD83(2011)\",\n            DATUM[\"NAD83_National_Spatial_Reference_System_2011\",\n                SPHEROID[\"GRS 1980\",6378137,298.257222101,\n                    AUTHORITY[\"EPSG\",\"7019\"]],\n                AUTHORITY[\"EPSG\",\"1116\"]],\n            PRIMEM[\"Greenwich\",0,\n                AUTHORITY[\"EPSG\",\"8901\"]],\n            UNIT[\"degree\",0.0174532925199433,\n                AUTHORITY[\"EPSG\",\"9122\"]],\n            AUTHORITY[\"EPSG\",\"6318\"]],\n        PROJECTION[\"Transverse_Mercator\"],\n        PARAMETER[\"latitude_of_origin\",0],\n        PARAMETER[\"central_meridian\",-123],\n        PARAMETER[\"scale_factor\",0.9996],\n        PARAMETER[\"false_easting\",500000],\n        PARAMETER[\"false_northing\",0],\n        UNIT[\"meter\",1,\n            AUTHORITY[\"EPSG\",\"9001\"]],\n        AXIS[\"X\",EAST],\n        AXIS[\"Y\",NORTH],\n        AUTHORITY[\"EPSG\",\"6339\"]],\n    VERT_CS[\"NAVD88 height - Geoid18 (m)\",\n        VERT_DATUM[\"North American Vertical Datum 1988\",2005,\n            AUTHORITY[\"EPSG\",\"5103\"]],\n        UNIT[\"meter\",1,\n            AUTHORITY[\"EPSG\",\"9001\"]],\n        AXIS[\"Up\",UP],\n        AUTHORITY[\"EPSG\",\"5703\"]]]",
+      "prettywkt": "PROJCS[\"NAD83(2011) / UTM zone 10N\",\n    GEOGCS[\"NAD83(2011)\",\n        DATUM[\"NAD83_National_Spatial_Reference_System_2011\",\n            SPHEROID[\"GRS 1980\",6378137,298.257222101,\n                AUTHORITY[\"EPSG\",\"7019\"]],\n            AUTHORITY[\"EPSG\",\"1116\"]],\n        PRIMEM[\"Greenwich\",0,\n            AUTHORITY[\"EPSG\",\"8901\"]],\n        UNIT[\"degree\",0.0174532925199433,\n            AUTHORITY[\"EPSG\",\"9122\"]],\n        AUTHORITY[\"EPSG\",\"6318\"]],\n    PROJECTION[\"Transverse_Mercator\"],\n    PARAMETER[\"latitude_of_origin\",0],\n    PARAMETER[\"central_meridian\",-123],\n    PARAMETER[\"scale_factor\",0.9996],\n    PARAMETER[\"false_easting\",500000],\n    PARAMETER[\"false_northing\",0],\n    UNIT[\"meter\",1,\n        AUTHORITY[\"EPSG\",\"9001\"]],\n    AXIS[\"X\",EAST],\n    AXIS[\"Y\",NORTH],\n    AUTHORITY[\"EPSG\",\"6339\"]]",
+      "proj4": "+proj=utm +zone=10 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +vunits=m +no_defs",
+      "units": {
+        "horizontal": "meter",
+        "vertical": "meter"
+      },
+      "vertical": "VERT_CS[\"NAVD88 height - Geoid18 (m)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Up\",UP],AUTHORITY[\"EPSG\",\"5703\"]]",
+      "wkt": "PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83_National_Spatial_Reference_System_2011\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]]"
+    },
+    "native_bounds": {
+      "minx": 743000,
+      "maxx": 743999.99,
+      "miny": 4238000,
+      "maxy": 4238999.99,
+      "minz": 1556.93,
+      "maxz": 1754.36
+    },
+    "srs_wkt": "COMPD_CS[\"NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)\",PROJCS[\"NAD83(2011) / UTM zone 10N\",GEOGCS[\"NAD83(2011)\",DATUM[\"NAD83 (National Spatial Reference System 2011)\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"1116\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"6318\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-123],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\"6339\"]],VERT_CS[\"NAVD88 height - Geoid18 (m)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"meter\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Up\",UP],AUTHORITY[\"EPSG\",\"5703\"]]]",
+    "srs_json": {
+      "type": "CompoundCRS",
+      "name": "NAD83(2011) / UTM zone 10N + NAVD88 height - Geoid18 (m)",
+      "components": [
+        {
+          "type": "ProjectedCRS",
+          "name": "NAD83(2011) / UTM zone 10N",
+          "base_crs": {
+            "type": "GeographicCRS",
+            "name": "NAD83(2011)",
+            "datum": {
+              "type": "GeodeticReferenceFrame",
+              "name": "NAD83 (National Spatial Reference System 2011)",
+              "ellipsoid": {
+                "name": "GRS 1980",
+                "semi_major_axis": 6378137,
+                "inverse_flattening": 298.257222101
+              }
+            },
+            "coordinate_system": {
+              "subtype": "ellipsoidal",
+              "axis": [
+                {
+                  "name": "Geodetic latitude",
+                  "abbreviation": "Lat",
+                  "direction": "north",
+                  "unit": "degree"
+                },
+                {
+                  "name": "Geodetic longitude",
+                  "abbreviation": "Lon",
+                  "direction": "east",
+                  "unit": "degree"
+                }
+              ]
+            },
+            "id": {
+              "authority": "EPSG",
+              "code": 6318
+            }
+          },
+          "conversion": {
+            "name": "UTM zone 10N",
+            "method": {
+              "name": "Transverse Mercator",
+              "id": {
+                "authority": "EPSG",
+                "code": 9807
+              }
+            },
+            "parameters": [
+              {
+                "name": "Latitude of natural origin",
+                "value": 0,
+                "unit": "degree",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8801
+                }
+              },
+              {
+                "name": "Longitude of natural origin",
+                "value": -123,
+                "unit": "degree",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8802
+                }
+              },
+              {
+                "name": "Scale factor at natural origin",
+                "value": 0.9996,
+                "unit": "unity",
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8805
+                }
+              },
+              {
+                "name": "False easting",
+                "value": 500000,
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                },
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8806
+                }
+              },
+              {
+                "name": "False northing",
+                "value": 0,
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                },
+                "id": {
+                  "authority": "EPSG",
+                  "code": 8807
+                }
+              }
+            ]
+          },
+          "coordinate_system": {
+            "subtype": "Cartesian",
+            "axis": [
+              {
+                "name": "X",
+                "abbreviation": "",
+                "direction": "east",
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                }
+              },
+              {
+                "name": "Y",
+                "abbreviation": "",
+                "direction": "north",
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                }
+              }
+            ]
+          },
+          "id": {
+            "authority": "EPSG",
+            "code": 6339
+          }
+        },
+        {
+          "type": "VerticalCRS",
+          "name": "NAVD88 height - Geoid18 (m)",
+          "datum": {
+            "type": "VerticalReferenceFrame",
+            "name": "North American Vertical Datum 1988"
+          },
+          "coordinate_system": {
+            "subtype": "vertical",
+            "axis": [
+              {
+                "name": "Up",
+                "abbreviation": "",
+                "direction": "up",
+                "unit": {
+                  "type": "LinearUnit",
+                  "name": "meter",
+                  "conversion_factor": 1
+                }
+              }
+            ]
+          },
+          "geoid_model": {
+            "name": "GEOID18"
+          },
+          "id": {
+            "authority": "EPSG",
+            "code": 5703
+          }
+        }
+      ]
+    },
+    "stats_keys": [
+      "bbox",
+      "statistic"
+    ],
+    "metadata_keys": [
+      "comp_spatialreference",
+      "compressed",
+      "copc",
+      "count",
+      "creation_doy",
+      "creation_year",
+      "dataformat_id",
+      "dataoffset",
+      "filesource_id",
+      "global_encoding",
+      "global_encoding_base64",
+      "header_size",
+      "major_version",
+      "maxx",
+      "maxy",
+      "maxz",
+      "minor_version",
+      "minx",
+      "miny",
+      "minz",
+      "offset_x",
+      "offset_y",
+      "offset_z",
+      "point_length",
+      "project_id",
+      "scale_x",
+      "scale_y",
+      "scale_z",
+      "software_id",
+      "spatialreference",
+      "srs",
+      "system_id",
+      "vlr_0",
+      "vlr_1"
+    ],
+    "source_file": "USGS_LPC_CA_SierraNevada_B22_10SGH4338.laz"
+  }
+]

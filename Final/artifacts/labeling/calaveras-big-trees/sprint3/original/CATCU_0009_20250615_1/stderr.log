@@ -1,0 +1,67 @@
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Attaching package: ‘data.table’
+
+The following objects are masked from ‘package:dplyr’:
+
+    between, first, last
+
+terra 1.7.78
+
+Attaching package: ‘terra’
+
+The following object is masked from ‘package:data.table’:
+
+    shift
+
+
+Attaching package: ‘lidR’
+
+The following objects are masked from ‘package:terra’:
+
+    area, crs, crs<-, is.empty
+
+
+Attaching package: ‘e1071’
+
+The following object is masked from ‘package:terra’:
+
+    interpolate
+
+Linking to GEOS 3.7.2, GDAL 3.0.4, PROJ 6.3.2; sf_use_s2() is TRUE
+
+Attaching package: ‘sf’
+
+The following object is masked from ‘package:lidR’:
+
+    st_concave_hull
+
+
+Attaching package: ‘Morpho’
+
+The following object is masked from ‘package:terra’:
+
+    classify
+
+Loading required package: magrittr
+
+Attaching package: ‘magrittr’
+
+The following objects are masked from ‘package:terra’:
+
+    extract, inset
+
+performing point classification on multiple stems
+Warning messages:
+1: 846 points do not belong in the raster. Nearest neighbor was used to assign a value. 
+2: st_centroid assumes attributes are constant over geometries 

@@ -1,0 +1,41 @@
+Delaunay rasterization[================================================--] 96% (4 threads)
+Delaunay rasterization[================================================--] 97% (4 threads)
+Delaunay rasterization[=================================================-] 98% (4 threads)
+Delaunay rasterization[=================================================-] 99% (4 threads)
+Delaunay rasterization[==================================================] 100% (4 threads)
+   INDEX        METRIC ENABLED
+1      1             N    TRUE
+2      2       MinDist   FALSE
+3      3       MaxDist   FALSE
+4      4      MeanDist    TRUE
+5      5        SdDist   FALSE
+6      6     Linearity   FALSE
+7      7     Planarity   FALSE
+8      8    Scattering   FALSE
+9      9  Omnivariance   FALSE
+10    10    Anisotropy   FALSE
+11    11    Eigentropy   FALSE
+12    12      EigenSum   FALSE
+13    13     Curvature    TRUE
+14    14     KnnRadius   FALSE
+15    15    KnnDensity   FALSE
+16    16   Verticality    TRUE
+17    17        ZRange   FALSE
+18    18           ZSd   FALSE
+19    19   KnnRadius2d   FALSE
+20    20  KnnDensity2d   FALSE
+21    21    EigenSum2d   FALSE
+22    22  EigenRatio2d   FALSE
+23    23   EigenValue1   FALSE
+24    24   EigenValue2   FALSE
+25    25   EigenValue3   FALSE
+26    26 EigenVector11   FALSE
+27    27 EigenVector21   FALSE
+28    28 EigenVector31   FALSE
+29    29 EigenVector12   FALSE
+30    30 EigenVector22   FALSE
+31    31 EigenVector32   FALSE
+32    32 EigenVector13    TRUE
+33    33 EigenVector23    TRUE
+34    34 EigenVector33    TRUE
+
