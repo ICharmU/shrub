@@ -1,6 +1,13 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any
+
+
+# -----------------------------------------------------------------------------
+# Column name registries
+# -----------------------------------------------------------------------------
 
 
 @dataclass(frozen=True)
@@ -61,3 +68,129 @@ class LabelArtifactColumns:
     qa_overlay_path: str = "qa_overlay_path"
     n_objects: str = "n_objects"
     n_valid_objects: str = "n_valid_objects"
+
+
+# -----------------------------------------------------------------------------
+# Generic pipeline / scalability framework models
+# -----------------------------------------------------------------------------
+
+
+class PipelineDomain(str, Enum):
+    LABELING = "label_engineering"
+    FEATURES = "feature_engineering"
+    MODELING = "modeling"
+    POSTPROCESSING = "postprocessing"
+    SHARED = "shared"
+
+
+class RepresentationTarget(str, Enum):
+    RASTER = "raster"
+    OBJECT = "object"
+    BOTH = "both"
+
+
+class SpatialScope(str, Enum):
+    PIXEL = "pixel-level"
+    OBJECT = "object-level"
+    PATCH = "patch-level"
+    SITE = "site-level"
+
+
+class ResolutionScope(str, Enum):
+    NATIVE = "native_only"
+    MULTI = "multi_resolution"
+    COARSE = "coarse_only_prior"
+
+
+class AvailabilityTier(str, Enum):
+    UNIVERSAL = "universal"
+    MOST = "most_sites"
+    PARTIAL = "partial_site_conditional"
+
+
+class RuntimeTier(str, Enum):
+    CHEAP = "cheap"
+    MODERATE = "moderate"
+    EXPENSIVE = "expensive"
+
+
+class ModuleStatus(str, Enum):
+    CANDIDATE = "candidate"
+    EXPERIMENTAL = "experimental"
+    PROMOTED = "promoted"
+    REJECTED = "rejected"
+
+
+@dataclass
+class ModuleCard:
+    name: str
+    domain: PipelineDomain
+    representation_target: RepresentationTarget
+    spatial_scope: SpatialScope
+    resolution_scope: ResolutionScope
+    availability_tier: AvailabilityTier
+    runtime_tier: RuntimeTier
+
+    description: str
+    inputs_required: list[str] = field(default_factory=list)
+    outputs_produced: list[str] = field(default_factory=list)
+
+    strengths: list[str] = field(default_factory=list)
+    weaknesses: list[str] = field(default_factory=list)
+    notes: list[str] = field(default_factory=list)
+
+    status: ModuleStatus = ModuleStatus.CANDIDATE
+
+    gate_coverage: str | None = None
+    gate_alignment: str | None = None
+    gate_information: str | None = None
+    gate_resource: str | None = None
+    gate_robustness: str | None = None
+
+    coverage_score: float | None = None
+    alignment_score: float | None = None
+    information_score: float | None = None
+    resource_score: float | None = None
+    robustness_score: float | None = None
+
+    evidence: dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class CanonicalRasterOutputs:
+    labels: Any = None
+    features: Any = None
+    predictions: Any = None
+    qa_overlays: Any = None
+
+
+@dataclass
+class CanonicalObjectOutputs:
+    objects: Any = None
+    predicted_objects: Any = None
+    source_provenance: Any = None
+    quality_flags: Any = None
+
+
+@dataclass
+class ExperimentState:
+    experiment_name: str
+    active_modules: list[str]
+    notes: str = ""
+
+    raster_outputs: CanonicalRasterOutputs = field(default_factory=CanonicalRasterOutputs)
+    object_outputs: CanonicalObjectOutputs = field(default_factory=CanonicalObjectOutputs)
+    qa_outputs: dict[str, Any] = field(default_factory=dict)
+    section_status: dict[str, str] = field(default_factory=dict)
+
+
+@dataclass
+class PipelineRunResult:
+    pipeline_name: str
+    success: bool
+    status: str
+    raster_outputs: CanonicalRasterOutputs = field(default_factory=CanonicalRasterOutputs)
+    object_outputs: CanonicalObjectOutputs = field(default_factory=CanonicalObjectOutputs)
+    qa_outputs: dict[str, Any] = field(default_factory=dict)
+    metrics: dict[str, Any] = field(default_factory=dict)
+    notes: list[str] = field(default_factory=list)
