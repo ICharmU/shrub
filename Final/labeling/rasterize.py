@@ -12,7 +12,8 @@ from rasterio.warp import reproject
 
 from Final.labeling.alignment import GridSpec
 from Final.config import ProjectConfig
-from Final.labeling.confidence import radial_confidence
+from Final.labeling.confidence import boundary_confidence_from_mask, compose_pixel_confidence
+from Final.labeling.subspace_reduction import filter_small_mask_components
 from Final.models import ShrubObjectColumns
 
 
@@ -33,7 +34,15 @@ def draw_filled_circle(mask: np.ndarray, center_row: float, center_col: float, r
     return inside, (r0, r1, c0, c1)
 
 
-def rasterize_objects(df: pd.DataFrame, grid: GridSpec, cfg: ProjectConfig):
+def rasterize_objects(
+    df: pd.DataFrame,
+    grid: GridSpec,
+    cfg: ProjectConfig,
+    *,
+    boundary_mode: str = "radial",
+    apply_mask_subspace_reduction: bool = False,
+    min_component_pixels: int = 4,
+):
     binary = np.full((grid.height, grid.width), cfg.raster.background_value, dtype=np.uint8)
     confidence = np.full((grid.height, grid.width), cfg.raster.confidence_background, dtype=np.float32)
     object_id = np.zeros((grid.height, grid.width), dtype=np.int32)
@@ -41,23 +50,48 @@ def rasterize_objects(df: pd.DataFrame, grid: GridSpec, cfg: ProjectConfig):
     for _, row in df.iterrows():
         if not bool(row.get(COLS.valid_object, True)):
             continue
+
         r = float(row[COLS.row])
         c = float(row[COLS.col])
         rad_m = float(row[COLS.radius_m])
         rad_px_x = rad_m / max(grid.pixel_size_x, 1e-6)
         rad_px_y = rad_m / max(grid.pixel_size_y, 1e-6)
 
-        _, bounds = draw_filled_circle(binary, r, c, rad_px_y, rad_px_x, value=cfg.raster.shrub_value)
+        temp_patch = np.zeros((grid.height, grid.width), dtype=np.uint8)
+        _, bounds = draw_filled_circle(temp_patch, r, c, rad_px_y, rad_px_x, value=1)
+
         r0, r1, c0, c1 = bounds
-        yy, xx = np.ogrid[r0:r1 + 1, c0:c1 + 1]
-        dist = np.sqrt(((yy - r) / max(rad_px_y, 1e-6)) ** 2 + ((xx - c) / max(rad_px_x, 1e-6)) ** 2)
-        inside = dist <= 1.0
-        conf_patch = radial_confidence(dist, 1.0, center=cfg.raster.confidence_center, edge=cfg.raster.confidence_edge)
-        confidence[r0:r1 + 1, c0:c1 + 1][inside] = np.maximum(
-            confidence[r0:r1 + 1, c0:c1 + 1][inside],
-            conf_patch[inside],
+        local_mask = temp_patch[r0:r1 + 1, c0:c1 + 1].astype(bool)
+
+        binary[r0:r1 + 1, c0:c1 + 1][local_mask] = cfg.raster.shrub_value
+        object_id[r0:r1 + 1, c0:c1 + 1][local_mask] = int(row[COLS.object_id])
+
+        local_boundary_conf = boundary_confidence_from_mask(
+            local_mask.astype(np.uint8),
+            mode=boundary_mode,
+            center=cfg.raster.confidence_center,
+            edge=cfg.raster.confidence_edge,
         )
-        object_id[r0:r1 + 1, c0:c1 + 1][inside] = int(row[COLS.object_id])
+
+        local_conf = compose_pixel_confidence(
+            local_boundary_conf,
+            object_confidence=row.get(COLS.object_confidence, 1.0),
+            temporal_confidence_value=row.get(COLS.temporal_confidence, np.nan),
+            transform_confidence_value=row.get(COLS.transform_confidence, np.nan),
+        )
+
+        confidence[r0:r1 + 1, c0:c1 + 1][local_mask] = np.maximum(
+            confidence[r0:r1 + 1, c0:c1 + 1][local_mask],
+            local_conf[local_mask],
+        )
+
+    if apply_mask_subspace_reduction:
+        binary, confidence, object_id = filter_small_mask_components(
+            binary,
+            confidence,
+            object_id,
+            min_component_pixels=min_component_pixels,
+        )
 
     return binary, confidence, object_id
 
