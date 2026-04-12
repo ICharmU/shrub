@@ -1,0 +1,16 @@
+name: fe_3dep
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - pip=26.0.1
+  - python>=3.12
+  - nbformat
+  - jupyterlab
+  - ipython
+  - ipykernel
+  - numpy
+  - earthengine-api
+  - geemap
+  - folium
+  
