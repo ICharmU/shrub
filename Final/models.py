@@ -194,3 +194,28 @@ class PipelineRunResult:
     qa_outputs: dict[str, Any] = field(default_factory=dict)
     metrics: dict[str, Any] = field(default_factory=dict)
     notes: list[str] = field(default_factory=list)
+
+@dataclass
+class ModuleVariant:
+    module_name: str
+    enabled: bool = True
+    variant_name: str = "default"
+    params: dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class StageCacheRecord:
+    stage_name: str
+    data_signature: str
+    config_signature: str
+    module_variants: list[dict[str, Any]] = field(default_factory=list)
+    artifact_paths: dict[str, Any] = field(default_factory=dict)
+    success: bool = False
+    created_at: str | None = None
+    notes: list[str] = field(default_factory=list)
+
+
+@dataclass
+class PipelineModuleState:
+    pipeline_name: str
+    stage_modules: dict[str, list[ModuleVariant]] = field(default_factory=dict)
