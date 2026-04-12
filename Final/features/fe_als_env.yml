@@ -1,0 +1,26 @@
+name: fe_als_alt
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - pip=26.0.1
+  - python>=3.12
+  - nbformat
+  - jupyterlab
+  - ipython
+  - ipykernel
+  - scipy 
+  - rasterio
+  - numpy
+  - pandas
+  - pillow
+  - matplotlib
+  - laspy
+  - open3d
+  - dash>=2.14.0
+  - pdal
+  - python-pdal
+  - pyproj
+  # imports for plot testing. below dependencies are optional
+  - pywavelets
+  - cv2 
