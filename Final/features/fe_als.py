@@ -3,8 +3,12 @@ import pdal
 import open3d as o3d
 import numpy as np
 from scipy.spatial import cKDTree
+from scipy.stats import binned_statistic_2d
+from scipy.ndimage import distance_transform_edt, minimum_filter
 import plotly.graph_objects as go
 import json
+import rasterio
+from rasterio.transform import from_origin
 
 ######################
 # SIGNALS
@@ -203,9 +207,29 @@ def segment_trees_dbscan(input_las, output_las, eps=0.8, min_points=15, height_t
     # Labels 0, 1, 2... are unique tree IDs.
     labels = np.array(pcd.cluster_dbscan(eps=eps, min_points=min_points, print_progress=True))
     
-    max_label = labels
-
+    max_label = labels.max()
+    print(f"Identified {max_label + 1} distinct clusters (trees/canopy sections).")
+    
+    # 4. Map the labels back to the original LAS file
+    # Initialize an array of -1 (noise/unclassified) for ALL points
+    full_labels = np.full(len(las.points), -1, dtype=np.int32)
+    
+    # Inject the canopy labels into the correct indices using our mask
+    full_labels[canopy_mask] = labels
+    
+    # 5. Save back to LAS
+    print("Writing results to new LAS file...")
+    las.add_extra_dim(laspy.ExtraBytesParams(name="tree_id", type=np.int32))
+    las.tree_id = full_labels
+    
     las.write(output_las)
+    print(f"Success! Saved to {output_las}.")
+
+####################
+# Tree vs Shrub Identification (not particularly useful atm)
+# come back to this during pipeline completion. 
+# functions below are meant to match classifications from different bounding boxes by comparing overlapping points.
+####################
 
 def classify_vegetation_rules(input_las, output_las):
     """
@@ -247,11 +271,6 @@ def classify_vegetation_rules(input_las, output_las):
     las.write(output_las)
     print(f"Success! Classification saved to {output_las}.")
 
-####################
-# ***part of classifying tree vs shrub
-# come back to this during pipeline completion. 
-# functions below are meant to match classifications from different bounding boxes by comparing overlapping points.
-####################
 def get_overlap_mask(points, bbox_overlap):
     """
     Returns a boolean mask of points that fall strictly within the overlap bounding box.
@@ -335,6 +354,191 @@ def align_tile_labels(points_A, labels_A, points_B, labels_B, bbox_overlap):
 # HEIGHT RASTERS
 ######################
 
+
+# note this expects a 2d image as the result of ALS compression above
+def calculate_distance_to_tall_canopy(chm_grid, resolution=1.0, height_threshold=5.0):
+    """
+    Calculates the distance from every pixel to the nearest tall canopy pixel.
+    
+    Parameters:
+        chm_grid (np.ndarray): The gap-filled Canopy Height Model raster.
+        resolution (float): The pixel size in meters.
+        height_threshold (float): Minimum height to be considered "tall canopy".
+    """
+    print(f"Calculating distance to canopy > {height_threshold}m...")
+    
+    # 1. Create a boolean mask of the tall canopy
+    # True = Tall Canopy, False = Open space / Short veg
+    is_tall = chm_grid >= height_threshold
+    
+    # 2. Prepare the grid for the EDT algorithm
+    # EDT measures the distance to the closest '0' (False) value. 
+    # Therefore, we need to invert our mask: Tall canopy becomes 0, everything else is 1.
+    edt_input = ~is_tall
+    
+    # 3. Run the distance transform
+    # This returns the distance in *pixels*
+    distance_in_pixels = distance_transform_edt(edt_input)
+    
+    # 4. Convert to physical units (meters)
+    distance_meters = distance_in_pixels * resolution
+    
+    return distance_meters.astype(np.float32)
+
+
+def calculate_local_relief(chm_grid, window_size_pixels=5):
+    """
+    Calculates Local Relief using a moving focal window.
+    
+    Parameters:
+        chm_grid (np.ndarray): The gap-filled Canopy Height Model raster.
+        window_size_pixels (int): The size of the moving window (e.g., 5 means a 5x5 pixel box).
+                                  Must be an odd number to have a true center pixel.
+    """
+    print(f"Calculating local relief (focal window: {window_size_pixels}x{window_size_pixels})...")
+    
+    # 1. Calculate the minimum height in the neighborhood of every pixel
+    local_min_grid = minimum_filter(chm_grid, size=window_size_pixels)
+    
+    # 2. Subtract the local minimum from the actual height
+    local_relief = chm_grid - local_min_grid
+    
+    # Ensure no negative artifacts from floating point math
+    local_relief = np.maximum(local_relief, 0.0)
+
+    return local_relief.astype(np.float32)
+
+def create_height_rasters(input_las, output_prefix, resolution=1.0):
+    """
+    Generates core height rasters (Max, Mean, and Count) from a LAS file.
+    """
+    las = laspy.read(input_las)
+    x, y, z = las.x, las.y, las.HeightAboveGround # Assuming HAG is calculated
+    
+    # 1. Define the grid boundaries based on the point cloud extent
+    x_min, x_max = np.min(x), np.max(x)
+    y_min, y_max = np.min(y), np.max(y)
+    
+    # Calculate number of pixels (bins)
+    cols = int(np.ceil((x_max - x_min) / resolution))
+    rows = int(np.ceil((y_max - y_min) / resolution))
+    
+    # Define bin edges
+    x_edges = np.linspace(x_min, x_max, cols + 1)
+    y_edges = np.linspace(y_min, y_max, rows + 1)
+    
+    print(f"Creating {cols}x{rows} rasters at {resolution}m resolution...")
+    
+    # 2. Calculate Statistics using SciPy
+    # MAX (Canopy Height Model)
+    chm_grid, _, _, _ = binned_statistic_2d(x, y, z, statistic='max', bins=[x_edges, y_edges])
+    
+    # MEAN
+    mean_grid, _, _, _ = binned_statistic_2d(x, y, z, statistic='mean', bins=[x_edges, y_edges])
+    
+    # POINT COUNT (needed for density metrics later)
+    count_grid, _, _, _ = binned_statistic_2d(x, y, z, statistic='count', bins=[x_edges, y_edges])
+
+    # 3. Format grids for GIS (SciPy outputs X/Y differently than standard images)
+    # We must transpose and flip the array so North is up
+    chm_grid = np.rot90(chm_grid)
+    mean_grid = np.rot90(mean_grid)
+    
+
+    safe_chm_math = np.nan_to_num(chm_grid, nan=0.0)
+    dist_to_canopy = calculate_distance_to_tall_canopy(safe_chm_math, resolution=1.0, height_threshold=5.0)
+    local_relief = calculate_local_relief(safe_chm_math, window_size_pixels=5)
+
+    # Replace NaNs (pixels with no points) with a NoData value (e.g., -9999)
+    chm_grid = np.nan_to_num(chm_grid, nan=-9999)
+    mean_grid = np.nan_to_num(mean_grid, nan=-9999)
+    dist_to_canopy = np.nan_to_num(dist_to_canopy, nan=-9999)
+    local_relief = np.nan_to_num(local_relief, nan=-9999)
+    
+    # 4. Save to GeoTIFF using Rasterio
+    transform = from_origin(x_min, y_max, resolution, resolution)
+    
+    def save_tiff(grid, filename):
+        with rasterio.open(
+            filename, 'w', driver='GTiff',
+            height=grid.shape[0], width=grid.shape[1],
+            count=1, dtype=grid.dtype,
+            crs=las.header.parse_crs(), # Retain original projection
+            transform=transform, nodata=-9999
+        ) as dst:
+            dst.write(grid, 1)
+            
+    save_tiff(chm_grid, f"{output_prefix}_CHM_Max.tif")
+    save_tiff(mean_grid, f"{output_prefix}_Mean.tif")
+    save_tiff(dist_to_canopy, f"{output_prefix}_Distance_to_Tall_Canopy.tif")
+    save_tiff(local_relief, f"{output_prefix}_Local_Relief.tif")
+    print("Rasters saved successfully.")
+
+def calculate_knn_node_metrics(points, k=30):
+    """
+    Calculates variance, roughness, vertical heterogeneity, and local maxima density 
+    for each node based on its K-Nearest Neighbors.
+    """
+    # 1. Build the KD-Tree
+    print(f"Building KDTree and querying {k} nearest neighbors...")
+    tree = cKDTree(points)
+    distances, indices = tree.query(points, k=k, workers=-1)
+    
+    # 2. Extract Z-values for all neighbors
+    z = points[:, 2]
+    neighbor_z = z[indices]
+    
+    # --- Metrics ---
+    print("Calculating local height variance...")
+    variance = np.var(neighbor_z, axis=1)
+    
+    print("Calculating roughness...")
+    roughness = np.std(neighbor_z, axis=1)
+    
+    print("Calculating vertical heterogeneity...")
+    mean_z = np.mean(neighbor_z, axis=1)
+    safe_mean_z = np.where(mean_z == 0, 1e-6, mean_z)
+    heterogeneity = roughness / safe_mean_z
+    
+    print("Calculating local maxima density...")
+    is_local_max = (z == np.max(neighbor_z, axis=1))
+    neighbor_is_max = is_local_max[indices]
+    maxima_count = np.sum(neighbor_is_max, axis=1)
+    maxima_density = maxima_count / k
+    
+    return variance, roughness, heterogeneity, maxima_density
+
+
+def process_las_knn_metrics(input_las, output_las, k=30):
+    """
+    Reads a LAS file, calculates KNN metrics for every point, 
+    and saves the results to a new LAS file.
+    """
+    print(f"\nReading {input_las}...")
+    las = laspy.read(input_las)
+    
+    # 1. Stack X, Y, Z coordinates into an Nx3 NumPy array
+    points = np.vstack((las.x, las.y, las.z)).transpose()
+    
+    # 2. Run the KNN metric calculations
+    variance, roughness, heterogeneity, maxima_density = calculate_knn_node_metrics(points, k=k)
+    
+    # 3. Add the new dimensions to the LAS file schema
+    print("\nWriting results to new LAS file...")
+    las.add_extra_dim(laspy.ExtraBytesParams(name="knn_variance", type=np.float32))
+    las.add_extra_dim(laspy.ExtraBytesParams(name="knn_roughness", type=np.float32))
+    las.add_extra_dim(laspy.ExtraBytesParams(name="knn_heterogeneity", type=np.float32))
+    las.add_extra_dim(laspy.ExtraBytesParams(name="knn_maxima_density", type=np.float32))
+    
+    # 4. Map the calculated arrays to the new dimensions
+    las.knn_variance = variance.astype(np.float32)
+    las.knn_roughness = roughness.astype(np.float32)
+    las.knn_heterogeneity = heterogeneity.astype(np.float32)
+    las.knn_maxima_density = maxima_density.astype(np.float32)
+    
+    # 5. Save the file
+    las.write(output_las)
+    print(f"Success! Processed point cloud saved to {output_las}.")
 
 ######################
 # HELPERS
