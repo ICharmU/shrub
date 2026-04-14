@@ -13,58 +13,18 @@ from rasterio.transform import from_origin
 ######################
 # SIGNALS
 ######################
-def calculate_roughness_knn(points, k=20):
-    """
-    Calculates local roughness (Z-standard deviation) using K-Nearest Neighbors.
-    
-    Parameters:
-        points (numpy.ndarray): Nx3 array of X, Y, Z coordinates.
-        k (int): Number of nearest neighbors to evaluate.
-        
-    Returns:
-        numpy.ndarray: 1D array of roughness values matching the input point order.
-    """
-    # 1. Isolate X and Y for a 2.5D surface search 
-    # (Use points[:, :3] if you want a true 3D spherical neighborhood)
-    xy = points[:, :2]
-    z = points[:, 2]
-    
-    # 2. Build the spatial index
-    print("Building KDTree...")
-    tree = cKDTree(xy)
-    
-    # 3. Query the 'k' closest neighbors for every single point
-    # workers=-1 tells SciPy to parallelize across all available CPU cores
-    print(f"Querying {k} nearest neighbors...")
-    distances, indices = tree.query(xy, k=k, workers=-1)
-    
-    # 4. Extract the Z-elevations for all retrieved neighbors
-    # 'indices' is an (N, k) array. This maps our Z array to an (N, k) array of elevations.
-    neighbor_z_values = z[indices]
-    
-    # 5. Vectorized Standard Deviation
-    # Calculate the standard deviation across the k-axis (axis=1)
-    print("Calculating standard deviation...")
-    roughness = np.std(neighbor_z_values, axis=1)
-    
-    return roughness
-
 def calculate_height_above_ground(input_las, output_las):
     """
     Runs a PDAL pipeline to classify ground points and calculate 
     Height Above Ground (HAG) for a LAS/LAZ file.
     """
     
-    # Define the PDAL pipeline as a Python dictionary - C++ compilation
     pipeline_dict = [
         {
             "type": "readers.las",
             "filename": input_las
         },
         {
-            # Step 1: Ground Classification
-            # SMRF (Simple Morphological Filter) is generally faster and 
-            # requires less parameter tuning than CSF for standard terrain.
             "type": "filters.smrf",
             "ignore": "Classification[7:7]", # Ignore noise points if they exist
             "slope": 0.15,
@@ -73,31 +33,24 @@ def calculate_height_above_ground(input_las, output_las):
             "scalar": 1.25
         },
         {
-            # Step 2: Calculate Height Above Ground
-            # hag_nn uses nearest-neighbor interpolation from the ground surface.
             "type": "filters.hag_nn"
         },
         {
-            # Step 3: Write the output
             "type": "writers.las",
             "filename": output_las,
-            # We must explicitly tell the writer to include our new HAG dimension
             "extra_dims": "HeightAboveGround=float32" 
         }
     ]
     
-    # Convert the dictionary to a JSON string
     pipeline_json = json.dumps(pipeline_dict)
     
-    # Create and execute the PDAL pipeline
-    print(f"Starting PDAL pipeline for {input_las}...")
+    # print(f"Starting PDAL pipeline for {input_las}...")
     pipeline = pdal.Pipeline(pipeline_json)
     
     try:
-        # execute() returns the number of points processed
         count = pipeline.execute()
-        print(f"Successfully processed {count} points.")
-        print(f"Saved to {output_las} with new 'HeightAboveGround' dimension.")
+        # print(f"Successfully processed {count} points.")
+        # print(f"Saved to {output_las} with new 'HeightAboveGround' dimension.")
         
     except Exception as e:
         print(f"Pipeline failed: {e}")
@@ -111,7 +64,7 @@ def calculate_surface_angle(input_las, output_las, knn=30):
         output_las (str): Path to save the processed LAS/LAZ file.
         knn (int): Number of nearest neighbors to use for normal estimation.
     """
-    print(f"Reading {input_las}...")
+    # print(f"Reading {input_las}...")
     las = laspy.read(input_las)
     
     # 1. Stack coordinates into an Nx3 NumPy array
@@ -123,7 +76,7 @@ def calculate_surface_angle(input_las, output_las, knn=30):
     
     # 3. Estimate Normals
     # We use a KDTree search with a defined number of neighbors (knn)
-    print(f"Estimating normals using {knn} nearest neighbors...")
+    # print(f"Estimating normals using {knn} nearest neighbors...")
     pcd.estimate_normals(
         search_param=o3d.geometry.KDTreeSearchParamKNN(knn=knn)
     )
@@ -136,7 +89,7 @@ def calculate_surface_angle(input_las, output_las, knn=30):
     normals = np.asarray(pcd.normals)
     
     # 5. Calculate the Slope Angle (in degrees)
-    print("Calculating surface angles...")
+    # print("Calculating surface angles...")
     # Extract the Z component of the normal vectors
     nz = normals[:, 2]
     
@@ -147,7 +100,7 @@ def calculate_surface_angle(input_las, output_las, knn=30):
     slope_degrees = np.degrees(slope_radians)
     
     # 6. Save back to LAS
-    print("Writing results to new LAS file...")
+    # print("Writing results to new LAS file...")
     
     # Add new dimensions for the normal vectors (useful for advanced processing)
     # and the calculated slope angle
@@ -162,7 +115,7 @@ def calculate_surface_angle(input_las, output_las, knn=30):
     las.slope_degrees = slope_degrees
     
     las.write(output_las)
-    print(f"Success! Saved to {output_las}.")
+    # print(f"Success! Saved to {output_las}.")
 
 def segment_trees_dbscan(input_las, output_las, eps=0.8, min_points=15, height_threshold=2.0):
     """
@@ -175,7 +128,7 @@ def segment_trees_dbscan(input_las, output_las, eps=0.8, min_points=15, height_t
         min_points (int): Minimum number of points to form a dense cluster.
         height_threshold (float): Minimum height above ground to be considered canopy.
     """
-    print(f"Reading {input_las}...")
+    # print(f"Reading {input_las}...")
     las = laspy.read(input_las)
     
     # 1. Filter the points
@@ -185,7 +138,7 @@ def segment_trees_dbscan(input_las, output_las, eps=0.8, min_points=15, height_t
     try:
         hag = las.HeightAboveGround
     except AttributeError:
-        print("Error: 'HeightAboveGround' dimension not found. Please run PDAL HAG first.")
+        # print("Error: 'HeightAboveGround' dimension not found. Please run PDAL HAG first.")
         return
 
     # Create a boolean mask: True for points > height_threshold
@@ -197,7 +150,7 @@ def segment_trees_dbscan(input_las, output_las, eps=0.8, min_points=15, height_t
                                las.z[canopy_mask])).transpose()
     
     # 2. Convert to Open3D PointCloud
-    print(f"Clustering {len(canopy_points)} canopy points...")
+    # print(f"Clustering {len(canopy_points)} canopy points...")
     pcd = o3d.geometry.PointCloud()
     pcd.points = o3d.utility.Vector3dVector(canopy_points)
     
@@ -208,7 +161,7 @@ def segment_trees_dbscan(input_las, output_las, eps=0.8, min_points=15, height_t
     labels = np.array(pcd.cluster_dbscan(eps=eps, min_points=min_points, print_progress=True))
     
     max_label = labels.max()
-    print(f"Identified {max_label + 1} distinct clusters (trees/canopy sections).")
+    # print(f"Identified {max_label + 1} distinct clusters (trees/canopy sections).")
     
     # 4. Map the labels back to the original LAS file
     # Initialize an array of -1 (noise/unclassified) for ALL points
@@ -218,12 +171,12 @@ def segment_trees_dbscan(input_las, output_las, eps=0.8, min_points=15, height_t
     full_labels[canopy_mask] = labels
     
     # 5. Save back to LAS
-    print("Writing results to new LAS file...")
+    # print("Writing results to new LAS file...")
     las.add_extra_dim(laspy.ExtraBytesParams(name="tree_id", type=np.int32))
     las.tree_id = full_labels
     
     las.write(output_las)
-    print(f"Success! Saved to {output_las}.")
+    # print(f"Success! Saved to {output_las}.")
 
 ####################
 # Tree vs Shrub Identification (not particularly useful atm)
@@ -235,14 +188,14 @@ def classify_vegetation_rules(input_las, output_las):
     """
     Classifies points into Shrubs vs Trees using hardcoded logic rules.
     """
-    print(f"Reading {input_las}...")
+    # print(f"Reading {input_las}...")
     las = laspy.read(input_las)
     
     # Ensure HAG exists
     try:
         hag = las.HeightAboveGround
     except AttributeError:
-        print("Error: 'HeightAboveGround' not found. Run PDAL HAG first.")
+        # print("Error: 'HeightAboveGround' not found. Run PDAL HAG first.")
         return
 
     # 1. Initialize a new classification array (0 = Unclassified)
@@ -267,9 +220,9 @@ def classify_vegetation_rules(input_las, output_las):
     # We can either overwrite the native LAS 'classification' dimension or create a new one
     las.classification = veg_class
     
-    print("Writing results...")
+    # print("Writing results...")
     las.write(output_las)
-    print(f"Success! Classification saved to {output_las}.")
+    # print(f"Success! Classification saved to {output_las}.")
 
 def get_overlap_mask(points, bbox_overlap):
     """
@@ -291,7 +244,7 @@ def align_tile_labels(points_A, labels_A, points_B, labels_B, bbox_overlap):
     Returns:
         numpy.ndarray: The remapped labels for Tile B.
     """
-    print("Isolating overlap regions...")
+    # print("Isolating overlap regions...")
     # 1. Isolate the points that live in the shared boundary
     mask_A = get_overlap_mask(points_A, bbox_overlap)
     mask_B = get_overlap_mask(points_B, bbox_overlap)
@@ -305,17 +258,17 @@ def align_tile_labels(points_A, labels_A, points_B, labels_B, bbox_overlap):
     if len(overlap_points_A) == 0 or len(overlap_points_B) == 0:
         raise ValueError("No points found inside the provided overlap bounding box.")
 
-    print(f"Found {len(overlap_points_A)} points in Tile A's overlap and {len(overlap_points_B)} in Tile B's.")
+    # print(f"Found {len(overlap_points_A)} points in Tile A's overlap and {len(overlap_points_B)} in Tile B's.")
 
     # 2. Match points perfectly using a KD-Tree
     # We query Tile A's tree using Tile B's points to find the exact nearest neighbors
-    print("Matching points across tiles...")
+    # print("Matching points across tiles...")
     tree_A = cKDTree(overlap_points_A[:, :2]) # Match based on X, Y
     distances, indices_A = tree_A.query(overlap_points_B[:, :2], k=1)
     
     # 3. Build a mapping dictionary based on majority vote
     # We map what Tile B *thinks* it is, to what Tile A *knows* it is
-    print("Calculating label consensus...")
+    # print("Calculating label consensus...")
     unique_labels_B = np.unique(labels_B)
     label_mapping = {}
     
@@ -340,10 +293,10 @@ def align_tile_labels(points_A, labels_A, points_B, labels_B, bbox_overlap):
         most_frequent_label_A = np.bincount(corresponding_labels_in_A).argmax()
         
         label_mapping[label_b] = most_frequent_label_A
-        print(f"Tile B Label {label_b}  --->  Maps to Tile A Label {most_frequent_label_A}")
+        # print(f"Tile B Label {label_b}  --->  Maps to Tile A Label {most_frequent_label_A}")
 
     # 4. Apply the mapping to the ENTIRETY of Tile B
-    print("Applying remapped labels to Tile B...")
+    # print("Applying remapped labels to Tile B...")
     remapped_labels_B = np.copy(labels_B)
     for old_label, new_label in label_mapping.items():
         remapped_labels_B[labels_B == old_label] = new_label
@@ -364,7 +317,7 @@ def calculate_distance_to_tall_canopy(chm_grid, resolution=1.0, height_threshold
         resolution (float): The pixel size in meters.
         height_threshold (float): Minimum height to be considered "tall canopy".
     """
-    print(f"Calculating distance to canopy > {height_threshold}m...")
+    # print(f"Calculating distance to canopy > {height_threshold}m...")
     
     # 1. Create a boolean mask of the tall canopy
     # True = Tall Canopy, False = Open space / Short veg
@@ -394,7 +347,7 @@ def calculate_local_relief(chm_grid, window_size_pixels=5):
         window_size_pixels (int): The size of the moving window (e.g., 5 means a 5x5 pixel box).
                                   Must be an odd number to have a true center pixel.
     """
-    print(f"Calculating local relief (focal window: {window_size_pixels}x{window_size_pixels})...")
+    # print(f"Calculating local relief (focal window: {window_size_pixels}x{window_size_pixels})...")
     
     # 1. Calculate the minimum height in the neighborhood of every pixel
     local_min_grid = minimum_filter(chm_grid, size=window_size_pixels)
@@ -426,7 +379,7 @@ def create_height_rasters(input_las, output_prefix, resolution=1.0):
     x_edges = np.linspace(x_min, x_max, cols + 1)
     y_edges = np.linspace(y_min, y_max, rows + 1)
     
-    print(f"Creating {cols}x{rows} rasters at {resolution}m resolution...")
+    # print(f"Creating {cols}x{rows} rasters at {resolution}m resolution...")
     
     # 2. Calculate Statistics using SciPy
     # MAX (Canopy Height Model)
@@ -471,48 +424,14 @@ def create_height_rasters(input_las, output_prefix, resolution=1.0):
     save_tiff(mean_grid, f"{output_prefix}_Mean.tif")
     save_tiff(dist_to_canopy, f"{output_prefix}_Distance_to_Tall_Canopy.tif")
     save_tiff(local_relief, f"{output_prefix}_Local_Relief.tif")
-    print("Rasters saved successfully.")
-
-def calculate_knn_node_metrics(points, k=30):
-    """
-    Calculates variance, roughness, vertical heterogeneity, and local maxima density 
-    for each node based on its K-Nearest Neighbors.
-    """
-    # 1. Build the KD-Tree
-    print(f"Building KDTree and querying {k} nearest neighbors...")
-    tree = cKDTree(points)
-    distances, indices = tree.query(points, k=k, workers=-1)
-    
-    # 2. Extract Z-values for all neighbors
-    z = points[:, 2]
-    neighbor_z = z[indices]
-    
-    # --- Metrics ---
-    print("Calculating local height variance...")
-    variance = np.var(neighbor_z, axis=1)
-    
-    print("Calculating roughness...")
-    roughness = np.std(neighbor_z, axis=1)
-    
-    print("Calculating vertical heterogeneity...")
-    mean_z = np.mean(neighbor_z, axis=1)
-    safe_mean_z = np.where(mean_z == 0, 1e-6, mean_z)
-    heterogeneity = roughness / safe_mean_z
-    
-    print("Calculating local maxima density...")
-    is_local_max = (z == np.max(neighbor_z, axis=1))
-    neighbor_is_max = is_local_max[indices]
-    maxima_count = np.sum(neighbor_is_max, axis=1)
-    maxima_density = maxima_count / k
-    
-    return variance, roughness, heterogeneity, maxima_density
+    # print("Rasters saved successfully.")
 
 def process_las_knn_metrics(input_las, output_las, k=30):
     """
     Reads a LAS file, calculates KNN metrics for every point, 
     and saves the results to a new LAS file.
     """
-    print(f"\nReading {input_las}...")
+    # print(f"\nReading {input_las}...")
     las = laspy.read(input_las)
     
     # 1. Stack X, Y, Z coordinates into an Nx3 NumPy array
@@ -522,7 +441,7 @@ def process_las_knn_metrics(input_las, output_las, k=30):
     variance, roughness, heterogeneity, maxima_density = calculate_knn_node_metrics(points, k=k)
     
     # 3. Add the new dimensions to the LAS file schema
-    print("\nWriting results to new LAS file...")
+    # print("\nWriting results to new LAS file...")
     las.add_extra_dim(laspy.ExtraBytesParams(name="knn_variance", type=np.float32))
     las.add_extra_dim(laspy.ExtraBytesParams(name="knn_roughness", type=np.float32))
     las.add_extra_dim(laspy.ExtraBytesParams(name="knn_heterogeneity", type=np.float32))
@@ -536,7 +455,76 @@ def process_las_knn_metrics(input_las, output_las, k=30):
     
     # 5. Save the file
     las.write(output_las)
-    print(f"Success! Processed point cloud saved to {output_las}.")
+    # print(f"Success! Processed point cloud saved to {output_las}.")
+
+def calculate_knn_node_metrics(points, k=30):
+    """
+    Calculates variance, roughness, vertical heterogeneity, and local maxima density 
+    for each node based on its K-Nearest Neighbors.
+    """
+    # 1. Build the KD-Tree
+    # # print(f"Building KDTree and querying {k} nearest neighbors...")
+    tree = cKDTree(points)
+    distances, indices = tree.query(points, k=k, workers=-1)
+    
+    # 2. Extract Z-values for all neighbors
+    z = points[:, 2]
+    neighbor_z = z[indices]
+    
+    # --- Metrics ---
+    # # print("Calculating local height variance...")
+    variance = np.var(neighbor_z, axis=1)
+    
+    # # print("Calculating roughness...")
+    roughness = np.std(neighbor_z, axis=1)
+    
+    # # print("Calculating vertical heterogeneity...")
+    mean_z = np.mean(neighbor_z, axis=1)
+    safe_mean_z = np.where(mean_z == 0, 1e-6, mean_z)
+    heterogeneity = roughness / safe_mean_z
+    
+    # # print("Calculating local maxima density...")
+    is_local_max = (z == np.max(neighbor_z, axis=1))
+    neighbor_is_max = is_local_max[indices]
+    maxima_count = np.sum(neighbor_is_max, axis=1)
+    maxima_density = maxima_count / k
+    
+    return variance, roughness, heterogeneity, maxima_density
+
+def calculate_roughness_knn(points, k=20):
+    """
+    Calculates local roughness (Z-standard deviation) using K-Nearest Neighbors.
+    
+    Parameters:
+        points (numpy.ndarray): Nx3 array of X, Y, Z coordinates.
+        k (int): Number of nearest neighbors to evaluate.
+        
+    Returns:
+        numpy.ndarray: 1D array of roughness values matching the input point order.
+    """
+    xy = points[:, :2]
+    z = points[:, 2]
+    
+    tree = cKDTree(xy)
+    
+    distances, indices = tree.query(xy, k=k, workers=-1)
+    
+    neighbor_z_values = z[indices]
+    
+    roughness = np.std(neighbor_z_values, axis=1)
+    
+    return roughness
+
+def process_las_roughness(input_path, output_path, k=30):
+    las = laspy.read(input_path)
+    points = np.vstack((las.x, las.y, las.z)).transpose()
+    
+    roughness = calculate_roughness_knn(points, k=k)
+    
+    las.add_extra_dim(laspy.ExtraBytesParams(name="roughness", type=np.float32))
+    las.roughness = roughness
+    
+    las.write(output_path)
 
 ######################
 # HELPERS
@@ -574,15 +562,3 @@ def plot_als(input_path):
     )
 
     fig.show()
-
-def process_las_roughness(input_path, output_path, k=30):
-    las = laspy.read(input_path)
-    points = np.vstack((las.x, las.y, las.z)).transpose()
-    
-    roughness = calculate_roughness_knn(points, k=k)
-    
-    las.add_extra_dim(laspy.ExtraBytesParams(name="roughness", type=np.float32))
-    las.roughness = roughness
-    
-    las.write(output_path)
-    print(f"Saved processed point cloud to {output_path}")
