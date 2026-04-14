@@ -219,3 +219,61 @@ class StageCacheRecord:
 class PipelineModuleState:
     pipeline_name: str
     stage_modules: dict[str, list[ModuleVariant]] = field(default_factory=dict)
+
+class CacheRetentionMode(str, Enum):
+    FULL = "full"
+    LEAN = "lean"
+    MANIFEST_ONLY = "manifest_only"
+
+
+@dataclass
+class SearchAxis:
+    key: str
+    values: list[Any]
+    stage_name: str | None = None
+    module_key: str | None = None
+
+
+@dataclass
+class CachePolicy:
+    require_manifest: bool = True
+    allow_legacy_reuse: bool = False
+    retention_mode: CacheRetentionMode = CacheRetentionMode.LEAN
+    artifact_keys_to_prune: tuple[str, ...] = ()
+    prune_after_success: bool = False
+
+
+@dataclass
+class ModuleSpec:
+    key: str
+    stage_name: str
+    enabled_key: str | None = None
+    variant_key: str | None = None
+    param_keys: tuple[str, ...] = ()
+    include_in_state: bool = True
+
+
+@dataclass
+class StageSpec:
+    name: str
+    module_keys: list[str]
+    cache_policy: CachePolicy = field(default_factory=CachePolicy)
+
+
+@dataclass
+class PipelineSpec:
+    pipeline_name: str
+    domain: PipelineDomain
+    stages: list[StageSpec]
+    modules: dict[str, ModuleSpec]
+    search_axes: list[SearchAxis] = field(default_factory=list)
+
+
+@dataclass
+class PipelineStateUpdate:
+    section_name: str
+    status: str
+    active_modules: list[str] = field(default_factory=list)
+    qa_outputs: dict[str, Any] = field(default_factory=dict)
+    metrics: dict[str, Any] = field(default_factory=dict)
+    notes: list[str] = field(default_factory=list)

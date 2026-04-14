@@ -23,9 +23,14 @@ from Final.models import (
     PipelineRunResult,
     CanonicalRasterOutputs,
     CanonicalObjectOutputs,
-    ModuleVariant,
-    PipelineModuleState,
+    PipelineSpec,
+    StageSpec,
+    ModuleSpec,
+    SearchAxis,
+    CachePolicy,
+    CacheRetentionMode,
 )
+from Final.pipeline_caching import hash_payload
 from Final.gating import (
     QACheckSpec,
     QACheckResult,
@@ -34,12 +39,7 @@ from Final.gating import (
 )
 from Final.shared_utils import get_logger
 
-from Final.labeling.caching import (
-    hash_payload,
-    is_valid_stage_cache,
-    read_stage_cache_manifest,
-    write_stage_cache_manifest,
-)
+
 from Final.labeling.sprint3_runner import (
     summarize_ptx_entries_by_site,
     select_ptx_entries,
@@ -125,105 +125,168 @@ class LabelingPipeline(BasePipeline):
         self.logger = get_logger("labeling.pipeline")
         self.pipeline_config = pipeline_config or LabelingPipelineConfig()
 
-    def module_state(self) -> PipelineModuleState:
-        return PipelineModuleState(
-            pipeline_name="labeling",
-            stage_modules={
-                "sprint3": [
-                    ModuleVariant(
-                        module_name="labeling.sprint3",
-                        enabled=True,
-                        variant_name="|".join(self.pipeline_config.sprint3_variants),
-                        params={
-                            "max_ptx_per_site": self.pipeline_config.max_ptx_per_site,
-                            "force_rerun_sprint3": self.pipeline_config.force_rerun_sprint3,
-                            "require_success_artifacts_sprint3": self.pipeline_config.require_success_artifacts_sprint3,
-                        },
-                    )
-                ],
-                "standardize": [
-                    ModuleVariant(
-                        module_name="labeling.standardize.base",
-                        enabled=True,
-                        variant_name="base",
-                        params={},
-                    )
-                ],
-                "refine": [
-                    ModuleVariant(
-                        module_name="labeling.refine.shape_descriptors",
-                        enabled=self.pipeline_config.use_shape_descriptors,
-                        variant_name="enabled" if self.pipeline_config.use_shape_descriptors else "disabled",
-                        params={},
+        def build_pipeline_spec(self) -> PipelineSpec:
+            modules = {
+                "labeling.sprint3.execution": ModuleSpec(
+                    key="labeling.sprint3.execution",
+                    stage_name="sprint3",
+                    enabled_key=None,
+                    variant_key="sprint3_variants",
+                    param_keys=("max_ptx_per_site", "force_rerun_sprint3", "require_success_artifacts_sprint3"),
+                ),
+                "labeling.standardize.base": ModuleSpec(
+                    key="labeling.standardize.base",
+                    stage_name="standardize",
+                ),
+                "labeling.refine.shape_descriptors": ModuleSpec(
+                    key="labeling.refine.shape_descriptors",
+                    stage_name="refine",
+                    enabled_key="use_shape_descriptors",
+                ),
+                "labeling.refine.temporal_confidence": ModuleSpec(
+                    key="labeling.refine.temporal_confidence",
+                    stage_name="refine",
+                    enabled_key="use_temporal_confidence",
+                    param_keys=("site_reference_dates",),
+                ),
+                "labeling.refine.object_subspace_filter": ModuleSpec(
+                    key="labeling.refine.object_subspace_filter",
+                    stage_name="refine",
+                    enabled_key="use_object_subspace_filter",
+                    param_keys=(
+                        "subspace_min_object_confidence",
+                        "subspace_min_transform_confidence",
+                        "subspace_min_temporal_confidence",
+                        "subspace_max_height_m",
                     ),
-                    ModuleVariant(
-                        module_name="labeling.refine.temporal_confidence",
-                        enabled=self.pipeline_config.use_temporal_confidence,
-                        variant_name="enabled" if self.pipeline_config.use_temporal_confidence else "disabled",
-                        params={
-                            "site_reference_dates": self.pipeline_config.site_reference_dates,
-                        },
+                ),
+                "labeling.transfer.base": ModuleSpec(
+                    key="labeling.transfer.base",
+                    stage_name="transfer",
+                ),
+                "labeling.rasterize.mode": ModuleSpec(
+                    key="labeling.rasterize.mode",
+                    stage_name="rasterize",
+                    variant_key="rasterization_mode",
+                ),
+                "labeling.boundary_confidence": ModuleSpec(
+                    key="labeling.boundary_confidence",
+                    stage_name="rasterize",
+                    enabled_key="use_boundary_confidence",
+                    variant_key="boundary_confidence_mode",
+                ),
+                "labeling.mask_subspace_reduction": ModuleSpec(
+                    key="labeling.mask_subspace_reduction",
+                    stage_name="rasterize",
+                    enabled_key="use_object_subspace_filter",
+                    param_keys=("subspace_min_component_pixels",),
+                ),
+                "labeling.multires_export": ModuleSpec(
+                    key="labeling.multires_export",
+                    stage_name="rasterize",
+                    param_keys=("multires",),
+                ),
+            }
+    
+            stages = [
+                StageSpec(
+                    name="sprint3",
+                    module_keys=["labeling.sprint3.execution"],
+                    cache_policy=CachePolicy(
+                        require_manifest=False,   # sprint3 runner has its own scoped cache already
+                        allow_legacy_reuse=False,
+                        retention_mode=CacheRetentionMode.LEAN,
                     ),
-                    ModuleVariant(
-                        module_name="labeling.refine.object_subspace_filter",
-                        enabled=self.pipeline_config.use_object_subspace_filter,
-                        variant_name="enabled" if self.pipeline_config.use_object_subspace_filter else "disabled",
-                        params={
-                            "subspace_min_object_confidence": self.pipeline_config.subspace_min_object_confidence,
-                            "subspace_min_transform_confidence": self.pipeline_config.subspace_min_transform_confidence,
-                            "subspace_min_temporal_confidence": self.pipeline_config.subspace_min_temporal_confidence,
-                            "subspace_max_height_m": self.pipeline_config.subspace_max_height_m,
-                        },
+                ),
+                StageSpec(
+                    name="standardize",
+                    module_keys=["labeling.standardize.base"],
+                    cache_policy=CachePolicy(
+                        require_manifest=True,
+                        allow_legacy_reuse=False,
+                        retention_mode=CacheRetentionMode.LEAN,
                     ),
-                ],
-                "transfer": [
-                    ModuleVariant(
-                        module_name="labeling.transfer.base",
-                        enabled=True,
-                        variant_name="base",
-                        params={},
-                    )
-                ],
-                "rasterize": [
-                    ModuleVariant(
-                        module_name="labeling.rasterize.mode",
-                        enabled=True,
-                        variant_name=self.pipeline_config.rasterization_mode,
-                        params={},
+                ),
+                StageSpec(
+                    name="refine",
+                    module_keys=[
+                        "labeling.refine.shape_descriptors",
+                        "labeling.refine.temporal_confidence",
+                        "labeling.refine.object_subspace_filter",
+                    ],
+                    cache_policy=CachePolicy(
+                        require_manifest=True,
+                        allow_legacy_reuse=False,
+                        retention_mode=CacheRetentionMode.LEAN,
                     ),
-                    ModuleVariant(
-                        module_name="labeling.boundary_confidence",
-                        enabled=self.pipeline_config.use_boundary_confidence,
-                        variant_name=self.pipeline_config.boundary_confidence_mode if self.pipeline_config.use_boundary_confidence else "disabled",
-                        params={},
+                ),
+                StageSpec(
+                    name="transfer",
+                    module_keys=["labeling.transfer.base"],
+                    cache_policy=CachePolicy(
+                        require_manifest=True,
+                        allow_legacy_reuse=False,
+                        retention_mode=CacheRetentionMode.LEAN,
                     ),
-                    ModuleVariant(
-                        module_name="labeling.mask_subspace_reduction",
-                        enabled=self.pipeline_config.use_object_subspace_filter,
-                        variant_name="enabled" if self.pipeline_config.use_object_subspace_filter else "disabled",
-                        params={
-                            "subspace_min_component_pixels": self.pipeline_config.subspace_min_component_pixels,
-                        },
+                ),
+                StageSpec(
+                    name="rasterize",
+                    module_keys=[
+                        "labeling.rasterize.mode",
+                        "labeling.boundary_confidence",
+                        "labeling.mask_subspace_reduction",
+                        "labeling.multires_export",
+                    ],
+                    cache_policy=CachePolicy(
+                        require_manifest=True,
+                        allow_legacy_reuse=False,
+                        retention_mode=CacheRetentionMode.LEAN,
+                        # later, if disk gets too tight, you can add artifact_keys_to_prune=("qa_path",)
+                        prune_after_success=False,
                     ),
-                    ModuleVariant(
-                        module_name="labeling.multires_export",
-                        enabled=True,
-                        variant_name="fixed",
-                        params={"multires": self.pipeline_config.multires},
-                    ),
-                ],
-            },
-        )
-
-    def stage_module_variants(self, stage_name: str) -> list[ModuleVariant]:
-        return self.module_state().stage_modules.get(stage_name, [])
-
-    def stage_config_signature(self, stage_name: str) -> str:
-        payload = {
-            "stage_name": stage_name,
-            "module_variants": [asdict(mv) for mv in self.stage_module_variants(stage_name)],
-        }
-        return hash_payload(payload)
+                ),
+            ]
+    
+            search_axes = [
+                SearchAxis(
+                    key="sprint3_variants",
+                    values=[("revised",), ("original", "revised")],
+                    stage_name="sprint3",
+                    module_key="labeling.sprint3.execution",
+                ),
+                SearchAxis(
+                    key="use_temporal_confidence",
+                    values=[False, True],
+                    stage_name="refine",
+                    module_key="labeling.refine.temporal_confidence",
+                ),
+                SearchAxis(
+                    key="boundary_confidence_mode",
+                    values=["radial", "universal"],
+                    stage_name="rasterize",
+                    module_key="labeling.boundary_confidence",
+                ),
+                SearchAxis(
+                    key="use_object_subspace_filter",
+                    values=[False, True],
+                    stage_name="refine",
+                    module_key="labeling.refine.object_subspace_filter",
+                ),
+                SearchAxis(
+                    key="max_ptx_per_site",
+                    values=[1],
+                    stage_name="sprint3",
+                    module_key="labeling.sprint3.execution",
+                ),
+            ]
+    
+            return PipelineSpec(
+                pipeline_name="labeling",
+                domain=PipelineDomain.LABELING,
+                stages=stages,
+                modules=modules,
+                search_axes=search_axes,
+            )
 
     def standardize_stage_data_signature(self, runs_df: pd.DataFrame) -> str:
         payload = {
@@ -350,14 +413,14 @@ class LabelingPipeline(BasePipeline):
         )
         config_sig = self.stage_config_signature("transfer") + "__" + self.stage_config_signature("rasterize")
         cache_dir = self.transfer_stage_cache_dir(site, plot_id, source_version, data_sig, config_sig)
-    
+
         cache_object_csv = cache_dir / "objects_transferred.csv"
         cache_artifacts_csv = cache_dir / "artifacts.csv"
-    
+
         return (
-            is_valid_stage_cache(
+            self.validate_stage_cache(
+                stage_name="transfer",
                 stage_cache_dir=cache_dir,
-                expected_stage_name="transfer_rasterize",
                 expected_data_signature=data_sig,
                 expected_config_signature=config_sig,
             )
@@ -391,46 +454,9 @@ class LabelingPipeline(BasePipeline):
         d.mkdir(parents=True, exist_ok=True)
         return d
 
-    def build_config_space(self) -> list[dict]:
-        """
-        Enumerate the label-pipeline config variants we want the controller
-        to be aware of. Keep this intentionally small and explicit for now.
-        """
-        base = self.config_dict()
-
-        axes = {
-            "sprint3_variants": [
-                ("revised",),
-                ("original", "revised"),
-            ],
-            "use_temporal_confidence": [False, True],
-            "use_boundary_confidence": [True],
-            "boundary_confidence_mode": ["radial", "universal"],
-            "use_object_subspace_filter": [False, True],
-            "max_ptx_per_site": [1],
-        }
-
-        variants = []
-        keys = list(axes.keys())
-        for values in product(*[axes[k] for k in keys]):
-            cfg = dict(base)
-            for k, v in zip(keys, values):
-                cfg[k] = v
-            variants.append(cfg)
-
-        # dedup in case future axes collapse to same config
-        seen = set()
-        unique_variants = []
-        for cfg in variants:
-            sig = self.config_signature(cfg)
-            if sig not in seen:
-                seen.add(sig)
-                unique_variants.append(cfg)
-        return unique_variants
-
     def config_space_frame(self) -> pd.DataFrame:
         rows = []
-        for cfg in self.build_config_space():
+        for cfg in self.enumerate_config_space():
             rows.append(
                 {
                     "config_signature": self.config_signature(cfg),
@@ -665,9 +691,9 @@ class LabelingPipeline(BasePipeline):
         cache_dir = self.standardize_stage_cache_dir(data_sig, config_sig)
         cache_csv = cache_dir / "objects_standardized.csv"
 
-        if is_valid_stage_cache(
+        if self.validate_stage_cache(
+            stage_name="standardize",
             stage_cache_dir=cache_dir,
-            expected_stage_name="standardize",
             expected_data_signature=data_sig,
             expected_config_signature=config_sig,
         ) and cache_csv.exists():
@@ -683,12 +709,11 @@ class LabelingPipeline(BasePipeline):
         )
         objects.to_csv(cache_csv, index=False)
 
-        write_stage_cache_manifest(
-            stage_cache_dir=cache_dir,
+        self.write_stage_cache(
             stage_name="standardize",
+            stage_cache_dir=cache_dir,
             data_signature=data_sig,
             config_signature=config_sig,
-            module_variants=self.stage_module_variants("standardize"),
             artifact_paths={"objects_csv": str(cache_csv)},
             success=True,
             notes=["Standardized Sprint 3 manifest outputs."],
@@ -710,9 +735,9 @@ class LabelingPipeline(BasePipeline):
         cache_dir = self.refine_stage_cache_dir(data_sig, config_sig)
         cache_csv = cache_dir / "objects_refined.csv"
 
-        if is_valid_stage_cache(
+        if self.validate_stage_cache(
+            stage_name="refine",
             stage_cache_dir=cache_dir,
-            expected_stage_name="refine",
             expected_data_signature=data_sig,
             expected_config_signature=config_sig,
         ) and cache_csv.exists():
@@ -738,12 +763,11 @@ class LabelingPipeline(BasePipeline):
         )
         refined.to_csv(cache_csv, index=False)
 
-        write_stage_cache_manifest(
-            stage_cache_dir=cache_dir,
+        self.write_stage_cache(
             stage_name="refine",
+            stage_cache_dir=cache_dir,
             data_signature=data_sig,
             config_signature=config_sig,
-            module_variants=self.stage_module_variants("refine"),
             artifact_paths={"objects_csv": str(cache_csv)},
             success=True,
             notes=["Refined object table with module-aware config."],
@@ -1025,9 +1049,9 @@ class LabelingPipeline(BasePipeline):
 
         if (
             (not force_rerun)
-            and is_valid_stage_cache(
+            and self.validate_stage_cache(
+                stage_name="transfer",
                 stage_cache_dir=cache_dir,
-                expected_stage_name="transfer_rasterize",
                 expected_data_signature=data_sig,
                 expected_config_signature=config_sig,
             )
@@ -1105,12 +1129,11 @@ class LabelingPipeline(BasePipeline):
         objects.to_csv(cache_object_csv, index=False)
         artifacts_df.to_csv(cache_artifacts_csv, index=False)
 
-        write_stage_cache_manifest(
+        self.write_stage_cache(
+            stage_name="transfer",
             stage_cache_dir=cache_dir,
-            stage_name="transfer_rasterize",
             data_signature=data_sig,
             config_signature=config_sig,
-            module_variants=self.stage_module_variants("transfer") + self.stage_module_variants("rasterize"),
             artifact_paths={
                 "objects_csv": str(cache_object_csv),
                 "artifacts_csv": str(cache_artifacts_csv),
@@ -1341,6 +1364,6 @@ class LabelingPipeline(BasePipeline):
             notes=notes,
         )
 
-        self.save_run_result(result)
+        self.save_run_result(result, subdir=signature)
         self.save_pipeline_run_manifest(result, signature=signature)
         return result
