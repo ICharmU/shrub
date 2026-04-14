@@ -354,7 +354,6 @@ def align_tile_labels(points_A, labels_A, points_B, labels_B, bbox_overlap):
 # HEIGHT RASTERS
 ######################
 
-
 # note this expects a 2d image as the result of ALS compression above
 def calculate_distance_to_tall_canopy(chm_grid, resolution=1.0, height_threshold=5.0):
     """
@@ -507,7 +506,6 @@ def calculate_knn_node_metrics(points, k=30):
     maxima_density = maxima_count / k
     
     return variance, roughness, heterogeneity, maxima_density
-
 
 def process_las_knn_metrics(input_las, output_las, k=30):
     """
