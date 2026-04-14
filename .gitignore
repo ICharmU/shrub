@@ -1,7 +1,7 @@
-artifacts/*
+artifacts/
 *.tif
 *.ptx
-/Sprint 1/Extra/task_2/datasets/*
+/Sprint 1/Extra/task_2/datasets/
 
 client_secrets.json
 drive_config.yaml
