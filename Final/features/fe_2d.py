@@ -181,7 +181,7 @@ def get_wavelet_features(band, wavelet_type='db2', level=2):
     
     return np.dstack(features)
 
-def fast_cpu_gabor(band, frequency, theta):
+def fast_cpu_gabor(band, frequency=1, theta=np.pi/4):
     # 1. Generate the kernel
     kernel = np.real(gabor_kernel(frequency, theta=theta))
     
