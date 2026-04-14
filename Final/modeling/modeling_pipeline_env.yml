@@ -10,6 +10,11 @@ dependencies:
   - ipython
   - ipykernel
   - numpy
+  - pandas
   - scikit-learn
   - scipy 
   - matplotlib
+  - opencv
+  - torch
+  - torchvision
+
