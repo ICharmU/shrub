@@ -1,0 +1,20 @@
+name: modeling_pipeline
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - pip
+  - python
+  - nbformat
+  - jupyterlab
+  - ipython
+  - ipykernel
+  - numpy
+  - pandas
+  - scikit-learn
+  - scipy 
+  - matplotlib
+  - opencv
+  - torch
+  - torchvision
+

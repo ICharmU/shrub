@@ -65,7 +65,7 @@ def save_as_tif(vegetation_feature_family, export_region, out_fname):
     Note that if the image trying to be saved is too large, the download will fail silently.
     """
     out_tif = os.path.join(os.getcwd(), out_fname)
-    print(f"Starting download to: {out_tif}")
+    # print(f"Starting download to: {out_tif}")
 
     try:
         download_url = vegetation_feature_family.getDownloadURL({
@@ -84,23 +84,23 @@ def save_as_tif(vegetation_feature_family, export_region, out_fname):
     except Exception as e:
         print(f"Unknown exception occurred:\n\n{e}")
 
-    print("Download complete!")
+    # print("Download complete!")
 
 #################
 # EXAMPLE
 #################
-ee.Authenticate()
-ee.Initialize(project="shrub-488520")
+# ee.Authenticate()
+# ee.Initialize(project="shrub-488520")
 
-rap_image = ee.ImageCollection("projects/rap-data-365417/assets/vegetation-cover-10m").first()
-actual_bands = rap_image.bandNames().getInfo()
+# rap_image = ee.ImageCollection("projects/rap-data-365417/assets/vegetation-cover-10m").first()
+# actual_bands = rap_image.bandNames().getInfo()
 
-veg_features = extract_coarse_vegetation_prior(
-    veg_image=rap_image,
-    shrub_band_name='SHR', 
-    comp_band_names=actual_bands, # Perennial and Annual grasses
-    context_radius=500
-)
+# veg_features = extract_coarse_vegetation_prior(
+#     veg_image=rap_image,
+#     shrub_band_name='SHR', 
+#     comp_band_names=actual_bands, # Perennial and Annual grasses
+#     context_radius=500
+# )
 
-export_region = ee.Geometry.Rectangle([-105.6, 40.35, -105.55, 40.4])
-save_as_tif(veg_features, export_region, Path("Final") / "features" / "processed" / "coarse_vegetation_features.tif")
+# export_region = ee.Geometry.Rectangle([-105.6, 40.35, -105.55, 40.4])
+# save_as_tif(veg_features, export_region, Path("Final") / "features" / "processed" / "coarse_vegetation_features.tif")
