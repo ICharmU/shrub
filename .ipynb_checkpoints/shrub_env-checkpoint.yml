@@ -1,0 +1,21 @@
+name: shrub
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - pip=26.0.1
+  - python>=3.12
+  - nbformat=5.10.4
+  - jupyterlab=4.4.7
+  - ipython=9.5.0
+  - numpy
+  - pandas
+  - pillow
+  - matplotlib
+  - laspy
+  - open3d
+  - scikit-learn
+  - pip:
+    - --extra-index-url=https://pypi.nvidia.com 
+    - cuml-cu12
+

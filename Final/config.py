@@ -28,6 +28,17 @@ DEFAULT_SITES = [
 class SiteConfig:
     sites: list[str] = field(default_factory=lambda: list(DEFAULT_SITES))
 
+@dataclass
+class ArtifactStoreConfig:
+    enabled: bool = False
+    mode: str = "local"   # "local", "drive", "hybrid"
+
+    local_storage_root: Path = FINAL_ROOT / "artifact_store_local"
+
+    drive_registry_path: Path = FINAL_ROOT / "artifact_registry.yaml"
+    drive_config_path: Path = PROJECT_ROOT / "drive_config.yaml"
+    drive_client_secrets_path: Path = PROJECT_ROOT / "client_secrets.json"
+    drive_credentials_path: Path = PROJECT_ROOT / "pydrive_credentials.json"
 
 @dataclass
 class DataConfig:
@@ -140,6 +151,7 @@ class ProjectConfig:
     output: OutputConfig = field(default_factory=OutputConfig)
     labeling: LabelingConfig = field(default_factory=LabelingConfig)
     features: FeatureConfig = field(default_factory=FeatureConfig)
+    artifact_store: ArtifactStoreConfig = field(default_factory=ArtifactStoreConfig)
 
     debug: bool = False
 
@@ -190,6 +202,12 @@ class ProjectConfig:
         self.output.modeling_root = Path(self.output.modeling_root).resolve()
         self.output.postprocessing_root = Path(self.output.postprocessing_root).resolve()
         self.output.logs_root = Path(self.output.logs_root).resolve()
+
+        self.artifact_store.local_storage_root = Path(self.artifact_store.local_storage_root).resolve()
+        self.artifact_store.drive_registry_path = Path(self.artifact_store.drive_registry_path).resolve()
+        self.artifact_store.drive_config_path = Path(self.artifact_store.drive_config_path).resolve()
+        self.artifact_store.drive_client_secrets_path = Path(self.artifact_store.drive_client_secrets_path).resolve()
+        self.artifact_store.drive_credentials_path = Path(self.artifact_store.drive_credentials_path).resolve()
 
         self.ensure_dirs()
         return self

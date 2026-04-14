@@ -125,168 +125,168 @@ class LabelingPipeline(BasePipeline):
         self.logger = get_logger("labeling.pipeline")
         self.pipeline_config = pipeline_config or LabelingPipelineConfig()
 
-        def build_pipeline_spec(self) -> PipelineSpec:
-            modules = {
-                "labeling.sprint3.execution": ModuleSpec(
-                    key="labeling.sprint3.execution",
-                    stage_name="sprint3",
-                    enabled_key=None,
-                    variant_key="sprint3_variants",
-                    param_keys=("max_ptx_per_site", "force_rerun_sprint3", "require_success_artifacts_sprint3"),
+    def build_pipeline_spec(self) -> PipelineSpec:
+        modules = {
+            "labeling.sprint3.execution": ModuleSpec(
+                key="labeling.sprint3.execution",
+                stage_name="sprint3",
+                enabled_key=None,
+                variant_key="sprint3_variants",
+                param_keys=("max_ptx_per_site", "force_rerun_sprint3", "require_success_artifacts_sprint3"),
+            ),
+            "labeling.standardize.base": ModuleSpec(
+                key="labeling.standardize.base",
+                stage_name="standardize",
+            ),
+            "labeling.refine.shape_descriptors": ModuleSpec(
+                key="labeling.refine.shape_descriptors",
+                stage_name="refine",
+                enabled_key="use_shape_descriptors",
+            ),
+            "labeling.refine.temporal_confidence": ModuleSpec(
+                key="labeling.refine.temporal_confidence",
+                stage_name="refine",
+                enabled_key="use_temporal_confidence",
+                param_keys=("site_reference_dates",),
+            ),
+            "labeling.refine.object_subspace_filter": ModuleSpec(
+                key="labeling.refine.object_subspace_filter",
+                stage_name="refine",
+                enabled_key="use_object_subspace_filter",
+                param_keys=(
+                    "subspace_min_object_confidence",
+                    "subspace_min_transform_confidence",
+                    "subspace_min_temporal_confidence",
+                    "subspace_max_height_m",
                 ),
-                "labeling.standardize.base": ModuleSpec(
-                    key="labeling.standardize.base",
-                    stage_name="standardize",
+            ),
+            "labeling.transfer.base": ModuleSpec(
+                key="labeling.transfer.base",
+                stage_name="transfer",
+            ),
+            "labeling.rasterize.mode": ModuleSpec(
+                key="labeling.rasterize.mode",
+                stage_name="rasterize",
+                variant_key="rasterization_mode",
+            ),
+            "labeling.boundary_confidence": ModuleSpec(
+                key="labeling.boundary_confidence",
+                stage_name="rasterize",
+                enabled_key="use_boundary_confidence",
+                variant_key="boundary_confidence_mode",
+            ),
+            "labeling.mask_subspace_reduction": ModuleSpec(
+                key="labeling.mask_subspace_reduction",
+                stage_name="rasterize",
+                enabled_key="use_object_subspace_filter",
+                param_keys=("subspace_min_component_pixels",),
+            ),
+            "labeling.multires_export": ModuleSpec(
+                key="labeling.multires_export",
+                stage_name="rasterize",
+                param_keys=("multires",),
+            ),
+        }
+
+        stages = [
+            StageSpec(
+                name="sprint3",
+                module_keys=["labeling.sprint3.execution"],
+                cache_policy=CachePolicy(
+                    require_manifest=False,   # sprint3 runner has its own scoped cache already
+                    allow_legacy_reuse=False,
+                    retention_mode=CacheRetentionMode.LEAN,
                 ),
-                "labeling.refine.shape_descriptors": ModuleSpec(
-                    key="labeling.refine.shape_descriptors",
-                    stage_name="refine",
-                    enabled_key="use_shape_descriptors",
+            ),
+            StageSpec(
+                name="standardize",
+                module_keys=["labeling.standardize.base"],
+                cache_policy=CachePolicy(
+                    require_manifest=True,
+                    allow_legacy_reuse=False,
+                    retention_mode=CacheRetentionMode.LEAN,
                 ),
-                "labeling.refine.temporal_confidence": ModuleSpec(
-                    key="labeling.refine.temporal_confidence",
-                    stage_name="refine",
-                    enabled_key="use_temporal_confidence",
-                    param_keys=("site_reference_dates",),
+            ),
+            StageSpec(
+                name="refine",
+                module_keys=[
+                    "labeling.refine.shape_descriptors",
+                    "labeling.refine.temporal_confidence",
+                    "labeling.refine.object_subspace_filter",
+                ],
+                cache_policy=CachePolicy(
+                    require_manifest=True,
+                    allow_legacy_reuse=False,
+                    retention_mode=CacheRetentionMode.LEAN,
                 ),
-                "labeling.refine.object_subspace_filter": ModuleSpec(
-                    key="labeling.refine.object_subspace_filter",
-                    stage_name="refine",
-                    enabled_key="use_object_subspace_filter",
-                    param_keys=(
-                        "subspace_min_object_confidence",
-                        "subspace_min_transform_confidence",
-                        "subspace_min_temporal_confidence",
-                        "subspace_max_height_m",
-                    ),
+            ),
+            StageSpec(
+                name="transfer",
+                module_keys=["labeling.transfer.base"],
+                cache_policy=CachePolicy(
+                    require_manifest=True,
+                    allow_legacy_reuse=False,
+                    retention_mode=CacheRetentionMode.LEAN,
                 ),
-                "labeling.transfer.base": ModuleSpec(
-                    key="labeling.transfer.base",
-                    stage_name="transfer",
+            ),
+            StageSpec(
+                name="rasterize",
+                module_keys=[
+                    "labeling.rasterize.mode",
+                    "labeling.boundary_confidence",
+                    "labeling.mask_subspace_reduction",
+                    "labeling.multires_export",
+                ],
+                cache_policy=CachePolicy(
+                    require_manifest=True,
+                    allow_legacy_reuse=False,
+                    retention_mode=CacheRetentionMode.LEAN,
+                    # later, if disk gets too tight, you can add artifact_keys_to_prune=("qa_path",)
+                    prune_after_success=False,
                 ),
-                "labeling.rasterize.mode": ModuleSpec(
-                    key="labeling.rasterize.mode",
-                    stage_name="rasterize",
-                    variant_key="rasterization_mode",
-                ),
-                "labeling.boundary_confidence": ModuleSpec(
-                    key="labeling.boundary_confidence",
-                    stage_name="rasterize",
-                    enabled_key="use_boundary_confidence",
-                    variant_key="boundary_confidence_mode",
-                ),
-                "labeling.mask_subspace_reduction": ModuleSpec(
-                    key="labeling.mask_subspace_reduction",
-                    stage_name="rasterize",
-                    enabled_key="use_object_subspace_filter",
-                    param_keys=("subspace_min_component_pixels",),
-                ),
-                "labeling.multires_export": ModuleSpec(
-                    key="labeling.multires_export",
-                    stage_name="rasterize",
-                    param_keys=("multires",),
-                ),
-            }
-    
-            stages = [
-                StageSpec(
-                    name="sprint3",
-                    module_keys=["labeling.sprint3.execution"],
-                    cache_policy=CachePolicy(
-                        require_manifest=False,   # sprint3 runner has its own scoped cache already
-                        allow_legacy_reuse=False,
-                        retention_mode=CacheRetentionMode.LEAN,
-                    ),
-                ),
-                StageSpec(
-                    name="standardize",
-                    module_keys=["labeling.standardize.base"],
-                    cache_policy=CachePolicy(
-                        require_manifest=True,
-                        allow_legacy_reuse=False,
-                        retention_mode=CacheRetentionMode.LEAN,
-                    ),
-                ),
-                StageSpec(
-                    name="refine",
-                    module_keys=[
-                        "labeling.refine.shape_descriptors",
-                        "labeling.refine.temporal_confidence",
-                        "labeling.refine.object_subspace_filter",
-                    ],
-                    cache_policy=CachePolicy(
-                        require_manifest=True,
-                        allow_legacy_reuse=False,
-                        retention_mode=CacheRetentionMode.LEAN,
-                    ),
-                ),
-                StageSpec(
-                    name="transfer",
-                    module_keys=["labeling.transfer.base"],
-                    cache_policy=CachePolicy(
-                        require_manifest=True,
-                        allow_legacy_reuse=False,
-                        retention_mode=CacheRetentionMode.LEAN,
-                    ),
-                ),
-                StageSpec(
-                    name="rasterize",
-                    module_keys=[
-                        "labeling.rasterize.mode",
-                        "labeling.boundary_confidence",
-                        "labeling.mask_subspace_reduction",
-                        "labeling.multires_export",
-                    ],
-                    cache_policy=CachePolicy(
-                        require_manifest=True,
-                        allow_legacy_reuse=False,
-                        retention_mode=CacheRetentionMode.LEAN,
-                        # later, if disk gets too tight, you can add artifact_keys_to_prune=("qa_path",)
-                        prune_after_success=False,
-                    ),
-                ),
-            ]
-    
-            search_axes = [
-                SearchAxis(
-                    key="sprint3_variants",
-                    values=[("revised",), ("original", "revised")],
-                    stage_name="sprint3",
-                    module_key="labeling.sprint3.execution",
-                ),
-                SearchAxis(
-                    key="use_temporal_confidence",
-                    values=[False, True],
-                    stage_name="refine",
-                    module_key="labeling.refine.temporal_confidence",
-                ),
-                SearchAxis(
-                    key="boundary_confidence_mode",
-                    values=["radial", "universal"],
-                    stage_name="rasterize",
-                    module_key="labeling.boundary_confidence",
-                ),
-                SearchAxis(
-                    key="use_object_subspace_filter",
-                    values=[False, True],
-                    stage_name="refine",
-                    module_key="labeling.refine.object_subspace_filter",
-                ),
-                SearchAxis(
-                    key="max_ptx_per_site",
-                    values=[1],
-                    stage_name="sprint3",
-                    module_key="labeling.sprint3.execution",
-                ),
-            ]
-    
-            return PipelineSpec(
-                pipeline_name="labeling",
-                domain=PipelineDomain.LABELING,
-                stages=stages,
-                modules=modules,
-                search_axes=search_axes,
-            )
+            ),
+        ]
+
+        search_axes = [
+            SearchAxis(
+                key="sprint3_variants",
+                values=[("revised",), ("original", "revised")],
+                stage_name="sprint3",
+                module_key="labeling.sprint3.execution",
+            ),
+            SearchAxis(
+                key="use_temporal_confidence",
+                values=[False, True],
+                stage_name="refine",
+                module_key="labeling.refine.temporal_confidence",
+            ),
+            SearchAxis(
+                key="boundary_confidence_mode",
+                values=["radial", "universal"],
+                stage_name="rasterize",
+                module_key="labeling.boundary_confidence",
+            ),
+            SearchAxis(
+                key="use_object_subspace_filter",
+                values=[False, True],
+                stage_name="refine",
+                module_key="labeling.refine.object_subspace_filter",
+            ),
+            SearchAxis(
+                key="max_ptx_per_site",
+                values=[1],
+                stage_name="sprint3",
+                module_key="labeling.sprint3.execution",
+            ),
+        ]
+
+        return PipelineSpec(
+            pipeline_name="labeling",
+            domain=PipelineDomain.LABELING,
+            stages=stages,
+            modules=modules,
+            search_axes=search_axes,
+        )
 
     def standardize_stage_data_signature(self, runs_df: pd.DataFrame) -> str:
         payload = {

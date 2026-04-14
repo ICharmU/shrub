@@ -277,3 +277,17 @@ class PipelineStateUpdate:
     qa_outputs: dict[str, Any] = field(default_factory=dict)
     metrics: dict[str, Any] = field(default_factory=dict)
     notes: list[str] = field(default_factory=list)
+
+class StorageTier(str, Enum):
+    LOCAL_ONLY = "local_only"
+    REMOTE_ONLY = "remote_only"
+    LOCAL_THEN_REMOTE = "local_then_remote"
+    LOCAL_CACHEABLE = "local_cacheable"
+
+@dataclass
+class ArtifactSpec:
+    key: str
+    rel_path_template: str
+    storage_tier: StorageTier
+    required_for_resume: bool = True
+    prune_local_after_push: bool = False
