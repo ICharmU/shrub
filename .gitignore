@@ -2,3 +2,4 @@ artifacts/*
 *.tif
 *.ptx
 /Sprint 1/Extra/task_2/datasets/*
+*.pyc

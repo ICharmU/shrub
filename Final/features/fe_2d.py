@@ -52,7 +52,7 @@ def get_color_diff(band, kernel):
         band - 2d array of pixels
         kernel - kernel for convolution
     """
-    color_diff = convolve2d(band, kernel, mode="same") .astype(int)
+    color_diff = convolve2d(band, kernel, mode="same").astype(int)
 
     # plotting color diff is not useful, but patterns can be learned from it
     return color_diff
