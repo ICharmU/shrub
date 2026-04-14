@@ -1,0 +1,7 @@
+PyWavelets
+pandas
+scikit-image
+scikit-learn
+rasterio
+opencv-python
+scipy

@@ -1,0 +1,29 @@
+name: features_pipeline
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - pip
+  - python
+  - nbformat
+  - jupyterlab
+  - ipython
+  - ipykernel
+  - numpy
+  - earthengine-api
+  - geemap
+  - folium
+  - pywavelets
+  - scipy 
+  - rasterio
+  - pillow
+  - matplotlib
+  - scikit-image
+  - laspy
+  - dash>=2.14.0 # old dash version is missing module
+  - pdal
+  - python-pdal
+  - pyproj
+  # allow readme.txt overwrite
+  - opencv
+  - open3d
