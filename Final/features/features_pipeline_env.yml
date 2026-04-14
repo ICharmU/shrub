@@ -27,7 +27,3 @@ dependencies:
   # allow readme.txt overwrite
   - opencv
   - open3d
-
-  # python -m pip install open3d opencv-python
-  # conda install <package_name> --clobber
-  # conda install <package_name> --clobber
