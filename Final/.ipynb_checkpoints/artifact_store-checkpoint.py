@@ -158,12 +158,21 @@ class DriveRegistryArtifactStore(ArtifactStore):
         if self.credentials_path.exists():
             gauth.LoadCredentialsFile(str(self.credentials_path))
 
-        if gauth.credentials is None or gauth.access_token_expired:
+        if gauth.credentials is None:
+            # No credentials exist yet
             print("[artifact_store] Performing Google OAuth (one-time).")
             gauth.LocalWebserverAuth()
-            gauth.SaveCredentialsFile(str(self.credentials_path))
+        elif gauth.access_token_expired:
+            # Token exists but is expired. Refresh it quietly!
+            print("[artifact_store] Refreshing expired Google Drive credentials.")
+            gauth.Refresh()
         else:
+            # Token exists and is valid
             print("[artifact_store] Using cached Google Drive credentials.")
+            gauth.Authorize()
+            
+        # Always save to ensure updated tokens (like new access tokens) are cached
+        gauth.SaveCredentialsFile(str(self.credentials_path))
 
         drive = GoogleDrive(gauth)
         root_id = self._load_drive_root_id()
