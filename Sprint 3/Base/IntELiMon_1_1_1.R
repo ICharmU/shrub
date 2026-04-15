@@ -626,14 +626,16 @@ if (!exists("rasterize_canopy")) {
   }
   
   # Calculate distance from plot center
-  getDist<-function(pts){
-    pts$pnt_id <- row.names(dat)
-    pts$count <- 1
-    
-    pts<- pts %>% mutate(returned = dplyr::if_else(x==0 & y==0 & z==0, 0, 1))
-    pts$dist <- sqrt(pts$x^2 + pts$y^2 + pts$z^2)
-    return(pts)    
-  }
+  
+
+getDist <- function(pts){
+  # Base R replacement for broken dplyr engine
+  pts$returned <- ifelse(pts$x == 0 & pts$y == 0 & pts$z == 0, 0, 1)
+  pts$dist <- sqrt(pts$x^2 + pts$y^2 + pts$z^2)
+  pts <- pts[pts$returned == 1, ]
+  return(pts)
+}
+
   
   # Create multiple fields to denote if a return reached each radii (0 = did not pass through, 1 = passed through)
   binRad <- function(pts, radii){
@@ -820,7 +822,7 @@ if (!exists("rasterize_canopy")) {
     regPnts$id <- withSphere
     
     # Clip out only Cartesian points in cylinder extent. 
-    regPnts <- mutate(regPnts, dist = sqrt(centerX^2+centerY^2))
+    regPnts$dist <- sqrt(regPnts$centerX^2 + regPnts$centerY^2)
     regPntsClip <- regPnts %>% filter(dist <= clipRadius)
     # Join data from closest spherical voxel to each Cartesian point
     regPnts3 <- dplyr::left_join(regPntsClip, asPnts2, by="id")
@@ -1203,8 +1205,8 @@ if (!exists("rasterize_canopy")) {
       # get dbh and height
       inv = tlsInventory(las_norm, d_method = shapeFit(shape = 'circle', algorithm = 'ransac'))
       
-      inv <- inv %>% mutate(DBH = (inv$Radius * 39.37) * 2)
-      inv <- inv %>% mutate(BasalA = (DBH * DBH) * 0.005454)
+      inv <- inv$DBH <- (inv$Radius * 39.37) * 2
+      inv <- inv$BasalA <- (inv$DBH * inv$DBH) * 0.005454
     } else {
       inv  = data.frame(TreeID = c(0L),
                         X = c(0L),
