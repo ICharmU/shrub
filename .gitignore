@@ -7,7 +7,7 @@ artifacts/
 client_secrets.json
 drive_config.yaml
 pydrive_credentials.json
-cache_credentials.json
+cached_credentials.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

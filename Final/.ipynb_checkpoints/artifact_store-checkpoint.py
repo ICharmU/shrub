@@ -153,10 +153,13 @@ class DriveRegistryArtifactStore(ArtifactStore):
             raise ImportError("pydrive2 is required for DriveRegistryArtifactStore")
 
         gauth = GoogleAuth()
+        
         gauth.LoadClientConfigFile(str(self.client_secrets_path))
 
         if self.credentials_path.exists():
             gauth.LoadCredentialsFile(str(self.credentials_path))
+
+        gauth.settings['get_refresh_token'] = True
 
         if gauth.credentials is None:
             # No credentials exist yet

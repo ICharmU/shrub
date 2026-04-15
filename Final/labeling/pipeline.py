@@ -688,6 +688,7 @@ class LabelingPipeline(BasePipeline):
             )
             and cache_object_csv.exists()
             and cache_artifacts_csv.exists()
+        )
         
 
     def _current_config_signature(self) -> str:
