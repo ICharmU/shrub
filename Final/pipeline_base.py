@@ -5,6 +5,7 @@ from dataclasses import asdict, is_dataclass
 from pathlib import Path
 import json
 from itertools import product
+import pandas as pd
 
 from Final.shared_utils import get_logger
 from Final.models import (
@@ -13,9 +14,12 @@ from Final.models import (
     PipelineRunResult,
     PipelineSpec,
     PipelineStateUpdate,
+    ExecutionEligibility, 
+    ExecutionEligibilityStatus, 
+    RuntimeRequirementMode
 )
 from Final.pipeline_caching import hash_payload, is_valid_stage_cache, prune_stage_artifacts, write_stage_cache_manifest
-
+from Final.runtime_detection import detect_runtime_capabilities
 
 class BasePipeline(ABC):
     """
@@ -49,6 +53,8 @@ class BasePipeline(ABC):
         if self._pipeline_spec_cache is None:
             self._pipeline_spec_cache = self.build_pipeline_spec()
         return self._pipeline_spec_cache
+    
+    
 
     def config_dict(self) -> dict:
         if hasattr(self, "pipeline_config"):
@@ -145,8 +151,6 @@ class BasePipeline(ABC):
         return unique
 
     def config_space_frame(self):
-        import pandas as pd
-
         rows = []
         for cfg in self.enumerate_config_space():
             row = dict(cfg)
@@ -247,3 +251,56 @@ class BasePipeline(ABC):
         path.write_text(json.dumps(asdict(result), indent=2, default=str), encoding="utf-8")
         self.logger.info("Saved pipeline run result to %s", path)
         return path
+    
+    def runtime_report(self):
+        return detect_runtime_capabilities(self.cfg)
+
+    def module_runtime_eligibility(self, module_key: str, runtime_report=None) -> ExecutionEligibility:
+        runtime_report = runtime_report or self.runtime_report()
+        spec = self.module_spec(module_key)
+        req = getattr(spec, "runtime_requirement", None)
+
+        if req is None:
+            return ExecutionEligibility(
+                status=ExecutionEligibilityStatus.ELIGIBLE,
+                satisfied_capabilities=list(runtime_report.capabilities),
+                detected_image_key=runtime_report.detected_image_key,
+                reason="No runtime requirement declared.",
+            )
+
+        caps = set(runtime_report.capabilities)
+        required = set(req.required_capabilities or ())
+        allowed_images = set(req.allowed_images or ())
+
+        image_ok = True
+        if allowed_images:
+            image_ok = runtime_report.detected_image_key in allowed_images
+
+        if req.mode == RuntimeRequirementMode.ANY:
+            cap_ok = (not required) or bool(caps.intersection(required))
+        else:
+            cap_ok = required.issubset(caps)
+
+        ok = image_ok and cap_ok
+        return ExecutionEligibility(
+            status=ExecutionEligibilityStatus.ELIGIBLE if ok else ExecutionEligibilityStatus.INELIGIBLE,
+            satisfied_capabilities=sorted(caps.intersection(required)),
+            missing_capabilities=sorted(required - caps),
+            detected_image_key=runtime_report.detected_image_key,
+            reason="eligible" if ok else "runtime requirement not satisfied",
+        )
+
+    def stage_runtime_eligibility(self, stage_name: str, runtime_report=None) -> dict[str, ExecutionEligibility]:
+        runtime_report = runtime_report or self.runtime_report()
+        return {
+            module_key: self.module_runtime_eligibility(module_key, runtime_report=runtime_report)
+            for module_key in self.stage_spec(stage_name).module_keys
+        }
+
+    def sync_artifact_registry_if_available(self) -> None:
+        store = getattr(self, "artifact_store", None)
+        if store is not None:
+            try:
+                store.sync_registry()
+            except Exception as e:
+                self.logger.warning("Artifact registry sync failed: %s", e)

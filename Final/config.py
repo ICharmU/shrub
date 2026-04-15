@@ -13,7 +13,6 @@ from Final.paths import (
     POSTPROCESSING_ROOT,
 )
 
-
 DEFAULT_SITES = [
     "calaveras-big-trees",
     "dl-bliss",
@@ -22,7 +21,6 @@ DEFAULT_SITES = [
     "sedgwick",
     "shaver-lake",
 ]
-
 
 @dataclass
 class SiteConfig:
@@ -39,6 +37,97 @@ class ArtifactStoreConfig:
     drive_config_path: Path = PROJECT_ROOT / "drive_config.yaml"
     drive_client_secrets_path: Path = PROJECT_ROOT / "client_secrets.json"
     drive_credentials_path: Path = PROJECT_ROOT / "pydrive_credentials.json"
+
+@dataclass
+class ArtifactStorePolicyConfig:
+    push_large_artifacts_to_remote: bool = False
+    prune_local_after_remote_push: bool = False
+    verify_remote_before_prune: bool = True
+
+
+@dataclass
+class RuntimeImageSpecConfig:
+    key: str
+    aliases: tuple[str, ...] = ()
+    marker_env_vars: dict[str, str] = field(default_factory=dict)
+    marker_files: tuple[str, ...] = ()
+    required_executables: tuple[str, ...] = ()
+    required_python_modules: tuple[str, ...] = ()
+    provided_capabilities: tuple[str, ...] = ()
+
+
+@dataclass
+class RuntimeDetectionConfig:
+    image_env_var_names: tuple[str, ...] = (
+        "SHRUBWISE_IMAGE",
+        "CONTAINER_IMAGE",
+        "DOCKER_IMAGE",
+        "JUPYTER_IMAGE_SPEC",
+    )
+    conda_env_var_names: tuple[str, ...] = ("CONDA_DEFAULT_ENV",)
+    detect_executables: tuple[str, ...] = ("python", "Rscript", "pdal")
+    detect_python_modules: tuple[str, ...] = ("numpy", "pandas", "rasterio", "scipy")
+    marker_file_candidates: tuple[str, ...] = (
+        "/etc/shrubwise_image.json",
+        "/etc/container_image_name",
+    )
+    strict_image_name_match: bool = False
+
+DEFAULT_RUNTIME_IMAGES = [
+    RuntimeImageSpecConfig(
+        key="intelimon-shrubs",
+        aliases=("pramonettivega/intelimon-shrubs", "intelimon-shrubs"),
+        required_executables=("Rscript",),
+        provided_capabilities=(
+            "runtime:rscript",
+            "runtime:intelimon_sprint3",
+        ),
+    ),
+    RuntimeImageSpecConfig(
+        key="shrubs-labels-v1",
+        aliases=("pramonettivega/shrubs-labels:v1", "shrubs-labels:v1"),
+        required_executables=("python", "pdal"),
+        required_python_modules=("numpy", "pandas", "rasterio"),
+        provided_capabilities=(
+            "runtime:python",
+            "runtime:pdal",
+            "runtime:rasterio",
+            "runtime:labeling_transfer",
+            "runtime:features",
+            "runtime:modeling",
+        ),
+    ),
+]
+
+@dataclass
+class CoordinationConfig:
+    enabled: bool = True
+    root_prefix: str = "coordination"
+    locks_prefix: str = "locks"
+    status_prefix: str = "status"
+    heartbeat_interval_sec: int = 60
+    stale_lock_timeout_sec: int = 15 * 60
+    sync_registry_before_claim: bool = True
+    sync_registry_after_stage: bool = True
+    hydrate_remote_before_compute: bool = True
+
+
+@dataclass
+class RuntimePolicyConfig:
+    skip_ineligible_stages: bool = True
+    wait_for_upstream_outputs: bool = True
+    allow_partial_pipeline_execution: bool = True
+    claim_work_before_run: bool = True
+    attach_runtime_report_to_manifests: bool = True
+    hydrate_remote_before_rerun: bool = True
+
+
+@dataclass
+class PipelineStorageConfig:
+    enable_local_store: bool = True
+    enable_drive_store: bool = False
+    use_hybrid_store: bool = False
+    fail_if_drive_missing: bool = False
 
 @dataclass
 class DataConfig:
@@ -141,6 +230,21 @@ class FeatureConfig:
     canonical_grid_source: str = "naip"
     object_table_enabled: bool = True
 
+@dataclass
+class LabelingRuntimeConfig:
+    storage: PipelineStorageConfig = field(default_factory=PipelineStorageConfig)
+    storage_policy: ArtifactStorePolicyConfig = field(default_factory=ArtifactStorePolicyConfig)
+    require_capability_sprint3: tuple[str, ...] = ("runtime:intelimon_sprint3",)
+    require_capability_standardize: tuple[str, ...] = ("runtime:python",)
+    require_capability_refine: tuple[str, ...] = ("runtime:python",)
+    require_capability_transfer: tuple[str, ...] = ("runtime:labeling_transfer",)
+    require_capability_rasterize: tuple[str, ...] = ("runtime:labeling_transfer",)
+
+
+@dataclass
+class FeatureRuntimeConfig:
+    storage: PipelineStorageConfig = field(default_factory=PipelineStorageConfig)
+    storage_policy: ArtifactStorePolicyConfig = field(default_factory=ArtifactStorePolicyConfig)
 
 @dataclass
 class ProjectConfig:
@@ -151,7 +255,14 @@ class ProjectConfig:
     output: OutputConfig = field(default_factory=OutputConfig)
     labeling: LabelingConfig = field(default_factory=LabelingConfig)
     features: FeatureConfig = field(default_factory=FeatureConfig)
+
     artifact_store: ArtifactStoreConfig = field(default_factory=ArtifactStoreConfig)
+    runtime_detection: RuntimeDetectionConfig = field(default_factory=RuntimeDetectionConfig)
+    coordination: CoordinationConfig = field(default_factory=CoordinationConfig)
+    runtime_policy: RuntimePolicyConfig = field(default_factory=RuntimePolicyConfig)
+    runtime_images: list[RuntimeImageSpecConfig] = field(default_factory=lambda: list(DEFAULT_RUNTIME_IMAGES))
+    labeling_runtime: LabelingRuntimeConfig = field(default_factory=LabelingRuntimeConfig)
+    features_runtime: FeatureRuntimeConfig = field(default_factory=FeatureRuntimeConfig)
 
     debug: bool = False
 

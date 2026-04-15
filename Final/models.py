@@ -242,6 +242,47 @@ class CachePolicy:
     artifact_keys_to_prune: tuple[str, ...] = ()
     prune_after_success: bool = False
 
+class RuntimeRequirementMode(str, Enum):
+    ALL = "all"
+    ANY = "any"
+
+
+class ExecutionEligibilityStatus(str, Enum):
+    ELIGIBLE = "eligible"
+    INELIGIBLE = "ineligible"
+    BLOCKED = "blocked"
+    UNKNOWN = "unknown"
+
+
+@dataclass
+class RuntimeCapabilityReport:
+    detected_image_key: str | None = None
+    detected_image_alias: str | None = None
+    detected_conda_env: str | None = None
+    capabilities: list[str] = field(default_factory=list)
+    available_executables: list[str] = field(default_factory=list)
+    available_python_modules: list[str] = field(default_factory=list)
+    marker_files_found: list[str] = field(default_factory=list)
+    marker_env_matches: dict[str, str] = field(default_factory=dict)
+    notes: list[str] = field(default_factory=list)
+
+
+@dataclass
+class RuntimeRequirement:
+    required_capabilities: tuple[str, ...] = ()
+    allowed_images: tuple[str, ...] = ()
+    mode: RuntimeRequirementMode = RuntimeRequirementMode.ALL
+    notes: list[str] = field(default_factory=list)
+
+
+@dataclass
+class ExecutionEligibility:
+    status: ExecutionEligibilityStatus
+    satisfied_capabilities: list[str] = field(default_factory=list)
+    missing_capabilities: list[str] = field(default_factory=list)
+    detected_image_key: str | None = None
+    reason: str = ""
+    notes: list[str] = field(default_factory=list)
 
 @dataclass
 class ModuleSpec:
@@ -251,6 +292,7 @@ class ModuleSpec:
     variant_key: str | None = None
     param_keys: tuple[str, ...] = ()
     include_in_state: bool = True
+    runtime_requirement: RuntimeRequirement | None = None
 
 
 @dataclass
