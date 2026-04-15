@@ -482,3 +482,12 @@ files:
   features/calaveras-big-trees/91fef1517fca02cc/stack/stack_registry.json:
     drive_file_id: 1dGSOpmdulmoUpa4ZwF_GteRD33QXznez
     local_path: features/calaveras-big-trees/91fef1517fca02cc/stack/stack_registry.json
+  labeling/88fb2c6936cb/run_manifest.json:
+    drive_file_id: 1G5EdPChG3BlpL8QPkSAGWBlhI_e8srMu
+    local_path: labeling/88fb2c6936cb/run_manifest.json
+  labeling/88fb2c6936cb/summaries/artifacts_all.csv:
+    drive_file_id: 1WsB1xWX9SpT6SG86nQxObCXRXd0kbzW-
+    local_path: labeling/88fb2c6936cb/summaries/artifacts_all.csv
+  labeling/88fb2c6936cb/summaries/objects_all.csv:
+    drive_file_id: 1nl9Yk_2rhvuTXj9LE-NFXRuXre-7cfh6
+    local_path: labeling/88fb2c6936cb/summaries/objects_all.csv

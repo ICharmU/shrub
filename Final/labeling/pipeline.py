@@ -31,6 +31,9 @@ from Final.models import (
     CacheRetentionMode,
     ArtifactSpec,
     StorageTier,
+    RuntimeRequirement,
+    RuntimeRequirementMode,
+    ExecutionEligibilityStatus,
 )
 from Final.artifact_store import (
     LocalArtifactStore,
@@ -38,6 +41,7 @@ from Final.artifact_store import (
     HybridArtifactStore,
 )
 from Final.pipeline_caching import hash_payload
+from Final.coordination import CoordinationManager
 from Final.gating import (
     QACheckSpec,
     QACheckResult,
@@ -76,24 +80,6 @@ from Final.labeling.manifests import (
 )
 
 @dataclass
-class LabelingStorageConfig:
-    enable_local_store: bool = True
-    enable_drive_store: bool = False
-    use_hybrid_store: bool = False
-
-    push_large_artifacts_to_remote: bool = False
-    prune_local_after_remote_push: bool = False
-    verify_remote_before_prune: bool = True
-
-    local_storage_root: Path | None = None
-    drive_registry_path: Path | None = None
-    drive_config_path: Path | None = None
-    client_secrets_path: Path | None = None
-    credentials_path: Path | None = None
-
-    fail_if_drive_missing: bool = False
-
-@dataclass
 class LabelingPipelineConfig:
     sprint3_variant: str = "revised"
     use_shape_descriptors: bool = True
@@ -109,7 +95,6 @@ class LabelingPipelineConfig:
     nonfatal_qa_overlay: bool = True
 
     # Sprint 3 execution / caching
-    storage: LabelingStorageConfig = field(default_factory=LabelingStorageConfig)
     run_sprint3: bool = True
     sprint3_variants: tuple[str, ...] = ("original", "revised")
     max_ptx_per_site: int | None = 1
@@ -150,21 +135,17 @@ class LabelingPipeline(BasePipeline):
         self.logger = get_logger("labeling.pipeline")
         self.pipeline_config = pipeline_config or LabelingPipelineConfig()
 
-        storage = self.pipeline_config.storage
+        storage = self.cfg.labeling_runtime.storage
+        global_store = self.cfg.artifact_store
 
-        project_root = cfg.data.project_root
-        if storage.local_storage_root is None:
-            storage.local_storage_root = cfg.output.labeling_root / "artifact_store_local"
-        if storage.drive_registry_path is None:
-            storage.drive_registry_path = project_root / "Final" / "artifact_registry.yaml"
-        if storage.drive_config_path is None:
-            storage.drive_config_path = project_root / "drive_config.yaml"
-        if storage.client_secrets_path is None:
-            storage.client_secrets_path = project_root / "client_secrets.json"
-        if storage.credentials_path is None:
-            storage.credentials_path = project_root / "pydrive_credentials.json"
+        if global_store.local_storage_root is None:
+            global_store.local_storage_root = cfg.output.labeling_root / "artifact_store_local"
 
         self.artifact_store = self._build_artifact_store()
+        self.coordination = CoordinationManager(
+            self.artifact_store,
+            root_prefix=self.cfg.coordination.root_prefix,
+        )
 
     def artifact_specs(self) -> dict[str, ArtifactSpec]:
         return {
@@ -276,21 +257,37 @@ class LabelingPipeline(BasePipeline):
                 enabled_key=None,
                 variant_key="sprint3_variants",
                 param_keys=("max_ptx_per_site", "force_rerun_sprint3", "require_success_artifacts_sprint3"),
+                runtime_requirement=RuntimeRequirement(
+                    required_capabilities=self.cfg.labeling_runtime.require_capability_sprint3,
+                    mode=RuntimeRequirementMode.ALL,
+                ),
             ),
             "labeling.standardize.base": ModuleSpec(
                 key="labeling.standardize.base",
                 stage_name="standardize",
+                runtime_requirement=RuntimeRequirement(
+                    required_capabilities=self.cfg.labeling_runtime.require_capability_standardize,
+                    mode=RuntimeRequirementMode.ALL,
+                ),
             ),
             "labeling.refine.shape_descriptors": ModuleSpec(
                 key="labeling.refine.shape_descriptors",
                 stage_name="refine",
                 enabled_key="use_shape_descriptors",
+                runtime_requirement=RuntimeRequirement(
+                    required_capabilities=self.cfg.labeling_runtime.require_capability_refine,
+                    mode=RuntimeRequirementMode.ALL,
+                ),
             ),
             "labeling.refine.temporal_confidence": ModuleSpec(
                 key="labeling.refine.temporal_confidence",
                 stage_name="refine",
                 enabled_key="use_temporal_confidence",
                 param_keys=("site_reference_dates",),
+                runtime_requirement=RuntimeRequirement(
+                    required_capabilities=self.cfg.labeling_runtime.require_capability_refine,
+                    mode=RuntimeRequirementMode.ALL,
+                ),
             ),
             "labeling.refine.object_subspace_filter": ModuleSpec(
                 key="labeling.refine.object_subspace_filter",
@@ -302,32 +299,56 @@ class LabelingPipeline(BasePipeline):
                     "subspace_min_temporal_confidence",
                     "subspace_max_height_m",
                 ),
+                runtime_requirement=RuntimeRequirement(
+                    required_capabilities=self.cfg.labeling_runtime.require_capability_refine,
+                    mode=RuntimeRequirementMode.ALL,
+                ),
             ),
             "labeling.transfer.base": ModuleSpec(
                 key="labeling.transfer.base",
                 stage_name="transfer",
+                runtime_requirement=RuntimeRequirement(
+                    required_capabilities=self.cfg.labeling_runtime.require_capability_transfer,
+                    mode=RuntimeRequirementMode.ALL,
+                ),
             ),
             "labeling.rasterize.mode": ModuleSpec(
                 key="labeling.rasterize.mode",
                 stage_name="rasterize",
                 variant_key="rasterization_mode",
+                runtime_requirement=RuntimeRequirement(
+                    required_capabilities=self.cfg.labeling_runtime.require_capability_rasterize,
+                    mode=RuntimeRequirementMode.ALL,
+                ),
             ),
             "labeling.boundary_confidence": ModuleSpec(
                 key="labeling.boundary_confidence",
                 stage_name="rasterize",
                 enabled_key="use_boundary_confidence",
                 variant_key="boundary_confidence_mode",
+                runtime_requirement=RuntimeRequirement(
+                    required_capabilities=self.cfg.labeling_runtime.require_capability_rasterize,
+                    mode=RuntimeRequirementMode.ALL,
+                ),
             ),
             "labeling.mask_subspace_reduction": ModuleSpec(
                 key="labeling.mask_subspace_reduction",
                 stage_name="rasterize",
                 enabled_key="use_object_subspace_filter",
                 param_keys=("subspace_min_component_pixels",),
+                runtime_requirement=RuntimeRequirement(
+                    required_capabilities=self.cfg.labeling_runtime.require_capability_rasterize,
+                    mode=RuntimeRequirementMode.ALL,
+                ),
             ),
             "labeling.multires_export": ModuleSpec(
                 key="labeling.multires_export",
                 stage_name="rasterize",
                 param_keys=("multires",),
+                runtime_requirement=RuntimeRequirement(
+                    required_capabilities=self.cfg.labeling_runtime.require_capability_rasterize,
+                    mode=RuntimeRequirementMode.ALL,
+                ),
             ),
         }
 
@@ -432,19 +453,20 @@ class LabelingPipeline(BasePipeline):
         )
 
     def _build_artifact_store(self):
-        storage = self.pipeline_config.storage
-
+        storage = self.cfg.labeling_runtime.storage
+        global_store = self.cfg.artifact_store
+    
         local_store = LocalArtifactStore(
             repo_root=self.cfg.data.project_root,
-            storage_root=Path(storage.local_storage_root),
+            storage_root=Path(global_store.local_storage_root),
         )
-
+    
         drive_store = None
         if storage.enable_drive_store:
             missing = [
                 str(p) for p in [
-                    storage.client_secrets_path,
-                    storage.drive_config_path,
+                    global_store.drive_client_secrets_path,
+                    global_store.drive_config_path,
                 ]
                 if not Path(p).exists()
             ]
@@ -456,20 +478,20 @@ class LabelingPipeline(BasePipeline):
             else:
                 drive_store = DriveRegistryArtifactStore(
                     repo_root=self.cfg.data.project_root,
-                    registry_path=Path(storage.drive_registry_path),
-                    drive_config_path=Path(storage.drive_config_path),
-                    client_secrets_path=Path(storage.client_secrets_path),
-                    credentials_path=Path(storage.credentials_path),
+                    registry_path=Path(global_store.drive_registry_path),
+                    drive_config_path=Path(global_store.drive_config_path),
+                    client_secrets_path=Path(global_store.drive_client_secrets_path),
+                    credentials_path=Path(global_store.drive_credentials_path),
                 )
-
+    
         if storage.use_hybrid_store and drive_store is not None:
             self.logger.info("Using HybridArtifactStore for labeling pipeline")
             return HybridArtifactStore(local_store=local_store, remote_store=drive_store)
-
+    
         if drive_store is not None and not storage.enable_local_store:
             self.logger.info("Using DriveRegistryArtifactStore only for labeling pipeline")
             return drive_store
-
+    
         self.logger.info("Using LocalArtifactStore only for labeling pipeline")
         return local_store
 
@@ -487,6 +509,23 @@ class LabelingPipeline(BasePipeline):
             return self.artifact_store.local_store.storage_root / rel_path
         return self.cfg.output.labeling_root / "_remote_stage" / rel_path
 
+    def stage_is_eligible(self, stage_name: str, runtime_report=None) -> tuple[bool, dict]:
+        runtime_report = runtime_report or self.runtime_report()
+        elig = self.stage_runtime_eligibility(stage_name, runtime_report=runtime_report)
+        all_ok = all(v.status == ExecutionEligibilityStatus.ELIGIBLE for v in elig.values())
+        return all_ok, elig
+    
+    
+    def stage_block_reason(self, stage_name: str, runtime_report=None) -> str:
+        ok, elig = self.stage_is_eligible(stage_name, runtime_report=runtime_report)
+        if ok:
+            return ""
+        msgs = []
+        for module_key, info in elig.items():
+            if info.status != ExecutionEligibilityStatus.ELIGIBLE:
+                msgs.append(f"{module_key}: missing={info.missing_capabilities}")
+        return "; ".join(msgs)
+
     def _remote_exists(self, rel_path: str) -> bool:
         try:
             return self.artifact_store.exists(rel_path)
@@ -495,28 +534,29 @@ class LabelingPipeline(BasePipeline):
 
     def _push_if_needed(self, local_path: Path, artifact_key: str, rel_path: str) -> str | None:
         spec = self._artifact_spec(artifact_key)
-        storage = self.pipeline_config.storage
-
+        storage = self.cfg.labeling_runtime.storage
+        policy = self.cfg.labeling_runtime.storage_policy
+    
         should_push = (
-            storage.push_large_artifacts_to_remote
+            policy.push_large_artifacts_to_remote
             and spec.storage_tier in {StorageTier.LOCAL_THEN_REMOTE, StorageTier.REMOTE_ONLY}
             and isinstance(self.artifact_store, (HybridArtifactStore, DriveRegistryArtifactStore))
         )
         if not should_push:
             return None
-
+    
         self.logger.info("PUSH ARTIFACT | key=%s | rel_path=%s", artifact_key, rel_path)
         return self.artifact_store.push(local_path, rel_path=rel_path)
 
     def _prune_if_allowed(self, local_path: Path, artifact_key: str, rel_path: str) -> None:
         spec = self._artifact_spec(artifact_key)
-        storage = self.pipeline_config.storage
-
-        if not storage.prune_local_after_remote_push:
+        policy = self.cfg.labeling_runtime.storage_policy
+    
+        if not policy.prune_local_after_remote_push:
             return
         if not spec.prune_local_after_push:
             return
-        if storage.verify_remote_before_prune and not self._remote_exists(rel_path):
+        if policy.verify_remote_before_prune and not self._remote_exists(rel_path):
             return
         if local_path.exists():
             local_path.unlink()
@@ -843,16 +883,24 @@ class LabelingPipeline(BasePipeline):
         """
         signature = signature or self.config_signature()
         manifest_path = self.run_manifest_path(signature)
-
+    
         if manifest_path.exists():
             payload = json.loads(manifest_path.read_text(encoding="utf-8"))
             self.logger.info("Using existing labeling run manifest for signature=%s", signature)
             return PipelineRunResult(**payload)
-
-        # bridge mode: if global summaries exist, adopt them into this signature
+    
+        payload = self._try_load_json_artifact(
+            "run_manifest",
+            config_signature=signature,
+        )
+        if payload is not None:
+            self.logger.info("Using remote-backed labeling run manifest for signature=%s", signature)
+            return PipelineRunResult(**payload)
+    
+        # bridge mode remains the same below
         global_objects = self.summary_dir / "objects_all.csv"
         global_artifacts = self.summary_dir / "artifacts_all.csv"
-
+    
         if (
             self.pipeline_config.allow_adopt_global_outputs
             and global_objects.exists()
@@ -862,17 +910,17 @@ class LabelingPipeline(BasePipeline):
                 "No config-specific run manifest for signature=%s, but found existing global labeling summaries. Adopting them.",
                 signature,
             )
-
+    
             objects_df = pd.read_csv(global_objects)
             artifacts_df = pd.read_csv(global_artifacts)
-
+    
             adopted_objects, adopted_artifacts = self.finalize_outputs(
                 objects_df,
                 artifacts_df,
                 signature=signature,
                 write_global=False,
             )
-
+    
             result = PipelineRunResult(
                 pipeline_name=self.pipeline_name,
                 success=(not objects_df.empty) and (not artifacts_df.empty),
@@ -907,13 +955,20 @@ class LabelingPipeline(BasePipeline):
             )
             self.save_pipeline_run_manifest(result, signature=signature)
             return result
-
+    
         return None
 
     def save_pipeline_run_manifest(self, result: PipelineRunResult, signature: str | None = None) -> Path:
         signature = signature or self.config_signature()
         path = self.run_manifest_path(signature)
         path.write_text(json.dumps(asdict(result), indent=2, default=str), encoding="utf-8")
+    
+        self._persist_file_artifact(
+            path,
+            "run_manifest",
+            config_signature=signature,
+        )
+    
         self.logger.info("Saved labeling run manifest to %s", path)
         return path
 
@@ -1575,6 +1630,7 @@ class LabelingPipeline(BasePipeline):
             else:
                 raise
 
+        multires_artifact_paths = {}
         for res in self.pipeline_config.multires:
             if float(res) == 1.0:
                 continue
@@ -1588,12 +1644,64 @@ class LabelingPipeline(BasePipeline):
             write_single_band_geotiff(multires_binary_path, b_res, b_grid, dtype="uint8", nodata=self.cfg.raster.background_value)
             write_single_band_geotiff(multires_conf_path, c_res, c_grid, dtype="float32", nodata=self.cfg.raster.confidence_background)
 
+        binary_rel_path, binary_remote_ref = self._persist_file_artifact(
+            paths["binary_path"],
+            "binary_mask",
+            site=site,
+            config_signature=self._current_config_signature(),
+            source_version=str(source_version),
+            plot_id=plot_id,
+        )
+        conf_rel_path, conf_remote_ref = self._persist_file_artifact(
+            paths["confidence_path"],
+            "confidence_mask",
+            site=site,
+            config_signature=self._current_config_signature(),
+            source_version=str(source_version),
+            plot_id=plot_id,
+        )
+        object_id_rel_path, object_id_remote_ref = self._persist_file_artifact(
+            paths["object_id_path"],
+            "object_id_raster",
+            site=site,
+            config_signature=self._current_config_signature(),
+            source_version=str(source_version),
+            plot_id=plot_id,
+        )
+        object_table_rel_path, object_table_remote_ref = self._persist_file_artifact(
+            paths["object_table_path"],
+            "object_table",
+            site=site,
+            config_signature=self._current_config_signature(),
+            source_version=str(source_version),
+            plot_id=plot_id,
+        )
+
+        qa_rel_path = None
+        qa_remote_ref = None
+        if paths["qa_path"].exists():
+            qa_rel_path, qa_remote_ref = self._persist_file_artifact(
+                paths["qa_path"],
+                "qa_overlay",
+                site=site,
+                config_signature=self._current_config_signature(),
+                source_version=str(source_version),
+                plot_id=plot_id,
+            )
+
         artifacts_df = self.build_artifact_rows_from_disk(
             site=site,
             plot_id=plot_id,
             source_version=source_version,
             objects_df=objects,
         )
+
+        # attach rel paths for downstream hydration/reuse
+        artifacts_df["binary_mask_rel_path"] = binary_rel_path
+        artifacts_df["confidence_mask_rel_path"] = conf_rel_path
+        artifacts_df["object_id_raster_rel_path"] = object_id_rel_path
+        artifacts_df["object_table_rel_path"] = object_table_rel_path
+        artifacts_df["qa_overlay_rel_path"] = qa_rel_path
 
         objects.to_csv(cache_object_csv, index=False)
         artifacts_df.to_csv(cache_artifacts_csv, index=False)
@@ -1606,13 +1714,14 @@ class LabelingPipeline(BasePipeline):
             artifact_paths={
                 "objects_csv": str(cache_object_csv),
                 "artifacts_csv": str(cache_artifacts_csv),
-                "binary_path": str(paths["binary_path"]),
-                "confidence_path": str(paths["confidence_path"]),
-                "object_id_path": str(paths["object_id_path"]),
-                "qa_path": str(paths["qa_path"]),
+                "binary_rel_path": binary_rel_path,
+                "confidence_rel_path": conf_rel_path,
+                "object_id_rel_path": object_id_rel_path,
+                "object_table_rel_path": object_table_rel_path,
+                "qa_rel_path": qa_rel_path,
             },
             success=True,
-            notes=["Transfer+rasterize outputs cached with module-aware signatures."],
+            notes=["Transfer+rasterize outputs cached with remote-backed artifact rel paths."],
         )
 
         self.logger.info(
@@ -1728,26 +1837,35 @@ class LabelingPipeline(BasePipeline):
         write_global: bool = True,
     ) -> tuple[Path, Path]:
         signature = signature or self.config_signature()
-
+    
         run_summary_dir = self.run_summary_dir(signature)
         objects_csv = run_summary_dir / "objects_all.csv"
         artifacts_csv = run_summary_dir / "artifacts_all.csv"
-
+    
         objects_df.to_csv(objects_csv, index=False)
         artifacts_df.to_csv(artifacts_csv, index=False)
-
+    
+        self._persist_file_artifact(
+            objects_csv,
+            "objects_summary",
+            config_signature=signature,
+        )
+        self._persist_file_artifact(
+            artifacts_csv,
+            "artifacts_summary",
+            config_signature=signature,
+        )
+    
         if write_global:
             self.summary_dir.mkdir(parents=True, exist_ok=True)
             global_objects_csv = self.summary_dir / "objects_all.csv"
             global_artifacts_csv = self.summary_dir / "artifacts_all.csv"
             objects_df.to_csv(global_objects_csv, index=False)
             artifacts_df.to_csv(global_artifacts_csv, index=False)
-
+    
         self.logger.info(
             "Saved labeling summaries for signature=%s to %s and %s",
-            signature,
-            objects_csv,
-            artifacts_csv,
+            signature, objects_csv, artifacts_csv
         )
         return objects_csv, artifacts_csv
 
@@ -1762,36 +1880,90 @@ class LabelingPipeline(BasePipeline):
         notes: list[str] | None = None,
     ) -> PipelineRunResult:
         notes = notes or []
-
+    
+        self.sync_artifact_registry_if_available()
+        if self.cfg.coordination.enabled and self.cfg.coordination.sync_registry_before_claim:
+            self.coordination.sync()
+    
         signature = self.config_signature()
-
+        runtime_report = self.runtime_report()
+    
         existing = self.try_load_existing_run(signature=signature)
         if existing is not None:
             self.logger.info("Resuming/reusing existing labeling run for signature=%s", signature)
             return existing
-
-        sprint3_manifest_df = self.stage_run_sprint3()
+    
+        runtime_notes = [
+            f"runtime_image={runtime_report.detected_image_key}",
+            f"runtime_capabilities={','.join(runtime_report.capabilities)}",
+        ]
+        notes = list(notes) + runtime_notes
+    
+        executed_stages = []
+        skipped_stages = {}
+    
+        # Stage: sprint3
+        sprint3_ok, sprint3_elig = self.stage_is_eligible("sprint3", runtime_report=runtime_report)
+        if sprint3_ok:
+            sprint3_manifest_df = self.stage_run_sprint3()
+            executed_stages.append("sprint3")
+        else:
+            sprint3_manifest_df = pd.DataFrame()
+            skipped_stages["sprint3"] = self.stage_block_reason("sprint3", runtime_report=runtime_report)
+            self.logger.info("Skipping stage=sprint3 | reason=%s", skipped_stages["sprint3"])
+    
         manifest_source = manifest_csv if manifest_csv is not None else self.sprint3_manifest_csv
-
-        objects_std = self.stage_load_and_standardize_objects(manifest_csv=manifest_source)
-        objects_refined = self.stage_refine_objects(objects_std)
-        objects_all, artifacts_all = self.stage_transfer_all_sites(objects_refined)
+    
+        # Stage: standardize
+        standardize_ok, _ = self.stage_is_eligible("standardize", runtime_report=runtime_report)
+        if standardize_ok:
+            objects_std = self.stage_load_and_standardize_objects(manifest_csv=manifest_source)
+            executed_stages.append("standardize")
+        else:
+            objects_std = pd.DataFrame()
+            skipped_stages["standardize"] = self.stage_block_reason("standardize", runtime_report=runtime_report)
+            self.logger.info("Skipping stage=standardize | reason=%s", skipped_stages["standardize"])
+    
+        # Stage: refine
+        refine_ok, _ = self.stage_is_eligible("refine", runtime_report=runtime_report)
+        if refine_ok and not objects_std.empty:
+            objects_refined = self.stage_refine_objects(objects_std)
+            executed_stages.append("refine")
+        else:
+            objects_refined = objects_std.copy()
+            if not refine_ok:
+                skipped_stages["refine"] = self.stage_block_reason("refine", runtime_report=runtime_report)
+                self.logger.info("Skipping stage=refine | reason=%s", skipped_stages["refine"])
+    
+        # Stage: transfer/rasterize
+        transfer_ok, _ = self.stage_is_eligible("transfer", runtime_report=runtime_report)
+        rasterize_ok, _ = self.stage_is_eligible("rasterize", runtime_report=runtime_report)
+    
+        if transfer_ok and rasterize_ok and not objects_refined.empty:
+            objects_all, artifacts_all = self.stage_transfer_all_sites(objects_refined)
+            executed_stages.extend(["transfer", "rasterize"])
+        else:
+            objects_all, artifacts_all = pd.DataFrame(), pd.DataFrame()
+            if not transfer_ok:
+                skipped_stages["transfer"] = self.stage_block_reason("transfer", runtime_report=runtime_report)
+                self.logger.info("Skipping stage=transfer | reason=%s", skipped_stages["transfer"])
+            if not rasterize_ok:
+                skipped_stages["rasterize"] = self.stage_block_reason("rasterize", runtime_report=runtime_report)
+                self.logger.info("Skipping stage=rasterize | reason=%s", skipped_stages["rasterize"])
+    
         objects_csv, artifacts_csv = self.finalize_outputs(
             objects_all,
             artifacts_all,
             signature=signature,
             write_global=True,
         )
-
-        #module_specs = self.build_module_specs()
-        #qa_evals = self.evaluate_labeling_qc(objects_df=objects_all, artifacts_df=artifacts_all)
-
+    
         success = (not objects_all.empty) and (not artifacts_all.empty)
-        status = "success" if success else "empty_outputs"
-
+        status = "success" if success else "partial_or_empty_outputs"
+    
         stage_cache_root = self.cfg.output.labeling_root / "stage_cache"
         stage_cache_manifest_count = len(list(stage_cache_root.rglob("stage_cache_manifest.json"))) if stage_cache_root.exists() else 0
-
+    
         result = PipelineRunResult(
             pipeline_name=self.pipeline_name,
             success=success,
@@ -1814,25 +1986,25 @@ class LabelingPipeline(BasePipeline):
                 "objects_csv": str(objects_csv),
                 "artifacts_csv": str(artifacts_csv),
                 "artifacts_manifest_csv": str(self.sprint4_manifest_csv),
-                # "module_specs": {k: vars(v) for k, v in module_specs.items()},
-                # "module_qc": {
-                #     k: {
-                #         "pass_rate": v.pass_rate,
-                #         "mean_score": v.mean_score,
-                #         "results": [vars(r) for r in v.results],
-                #     }
-                #     for k, v in qa_evals.items()
-                # },
+                "runtime_report": asdict(runtime_report),
+                "executed_stages": executed_stages,
+                "skipped_stages": skipped_stages,
             },
             metrics={
                 "n_object_rows": int(len(objects_all)),
                 "n_artifact_rows": int(len(artifacts_all)),
                 "n_sites": int(objects_all["site_id"].nunique()) if "site_id" in objects_all.columns and not objects_all.empty else 0,
                 "stage_cache_manifest_count": int(stage_cache_manifest_count),
+                "n_executed_stages": int(len(executed_stages)),
+                "n_skipped_stages": int(len(skipped_stages)),
             },
             notes=notes,
         )
-
+    
         self.save_run_result(result, subdir=signature)
         self.save_pipeline_run_manifest(result, signature=signature)
+    
+        if self.cfg.coordination.enabled and self.cfg.coordination.sync_registry_after_stage:
+            self.coordination.sync()
+    
         return result

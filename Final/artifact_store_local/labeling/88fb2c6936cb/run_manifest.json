@@ -1,0 +1,67 @@
+{
+  "pipeline_name": "labeling",
+  "success": false,
+  "status": "partial_or_empty_outputs",
+  "raster_outputs": {
+    "labels": "Empty DataFrame\nColumns: []\nIndex: []",
+    "features": null,
+    "predictions": null,
+    "qa_overlays": null
+  },
+  "object_outputs": {
+    "objects": "Empty DataFrame\nColumns: []\nIndex: []",
+    "predicted_objects": null,
+    "source_provenance": null,
+    "quality_flags": null
+  },
+  "qa_outputs": {
+    "objects_csv": "/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/pipeline_runs/88fb2c6936cb/summaries/objects_all.csv",
+    "artifacts_csv": "/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/pipeline_runs/88fb2c6936cb/summaries/artifacts_all.csv",
+    "artifacts_manifest_csv": "/home/jovyan/work/Dry-shRub/shrub/Final/artifacts/labeling/manifests/sprint4_artifacts.csv",
+    "runtime_report": {
+      "detected_image_key": "intelimon-shrubs",
+      "detected_image_alias": "pramonettivega/intelimon-shrubs",
+      "detected_conda_env": null,
+      "capabilities": [
+        "runtime:intelimon_sprint3",
+        "runtime:rasterio",
+        "runtime:rscript"
+      ],
+      "available_executables": [
+        "Rscript"
+      ],
+      "available_python_modules": [
+        "numpy",
+        "pandas",
+        "rasterio",
+        "scipy"
+      ],
+      "marker_files_found": [],
+      "marker_env_matches": {
+        "JUPYTER_IMAGE_SPEC": "pramonettivega/intelimon-shrubs"
+      },
+      "notes": []
+    },
+    "executed_stages": [
+      "sprint3"
+    ],
+    "skipped_stages": {
+      "standardize": "labeling.standardize.base: missing=['runtime:python']",
+      "refine": "labeling.refine.shape_descriptors: missing=['runtime:python']; labeling.refine.temporal_confidence: missing=['runtime:python']; labeling.refine.object_subspace_filter: missing=['runtime:python']",
+      "transfer": "labeling.transfer.base: missing=['runtime:labeling_transfer']",
+      "rasterize": "labeling.rasterize.mode: missing=['runtime:labeling_transfer']; labeling.boundary_confidence: missing=['runtime:labeling_transfer']; labeling.mask_subspace_reduction: missing=['runtime:labeling_transfer']; labeling.multires_export: missing=['runtime:labeling_transfer']"
+    }
+  },
+  "metrics": {
+    "n_object_rows": 0,
+    "n_artifact_rows": 0,
+    "n_sites": 0,
+    "stage_cache_manifest_count": 2,
+    "n_executed_stages": 1,
+    "n_skipped_stages": 4
+  },
+  "notes": [
+    "runtime_image=intelimon-shrubs",
+    "runtime_capabilities=runtime:intelimon_sprint3,runtime:rasterio,runtime:rscript"
+  ]
+}
