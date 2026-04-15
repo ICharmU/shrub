@@ -7,3 +7,8 @@ gdown
 google-api-python-client 
 pyarrow 
 scikit-learn
+rasterio
+scikit-image
+PyWavelets
+scipy
+opencv-python

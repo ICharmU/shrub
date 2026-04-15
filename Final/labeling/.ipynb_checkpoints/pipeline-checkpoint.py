@@ -29,6 +29,13 @@ from Final.models import (
     SearchAxis,
     CachePolicy,
     CacheRetentionMode,
+    ArtifactSpec,
+    StorageTier,
+)
+from Final.artifact_store import (
+    LocalArtifactStore,
+    DriveRegistryArtifactStore,
+    HybridArtifactStore,
 )
 from Final.pipeline_caching import hash_payload
 from Final.gating import (
@@ -68,6 +75,23 @@ from Final.labeling.manifests import (
     site_to_tif_name,
 )
 
+@dataclass
+class LabelingStorageConfig:
+    enable_local_store: bool = True
+    enable_drive_store: bool = False
+    use_hybrid_store: bool = False
+
+    push_large_artifacts_to_remote: bool = False
+    prune_local_after_remote_push: bool = False
+    verify_remote_before_prune: bool = True
+
+    local_storage_root: Path | None = None
+    drive_registry_path: Path | None = None
+    drive_config_path: Path | None = None
+    client_secrets_path: Path | None = None
+    credentials_path: Path | None = None
+
+    fail_if_drive_missing: bool = False
 
 @dataclass
 class LabelingPipelineConfig:
@@ -85,6 +109,7 @@ class LabelingPipelineConfig:
     nonfatal_qa_overlay: bool = True
 
     # Sprint 3 execution / caching
+    storage: LabelingStorageConfig = field(default_factory=LabelingStorageConfig)
     run_sprint3: bool = True
     sprint3_variants: tuple[str, ...] = ("original", "revised")
     max_ptx_per_site: int | None = 1
@@ -124,6 +149,124 @@ class LabelingPipeline(BasePipeline):
         )
         self.logger = get_logger("labeling.pipeline")
         self.pipeline_config = pipeline_config or LabelingPipelineConfig()
+
+        storage = self.pipeline_config.storage
+
+        project_root = cfg.data.project_root
+        if storage.local_storage_root is None:
+            storage.local_storage_root = cfg.output.labeling_root / "artifact_store_local"
+        if storage.drive_registry_path is None:
+            storage.drive_registry_path = project_root / "Final" / "artifact_registry.yaml"
+        if storage.drive_config_path is None:
+            storage.drive_config_path = project_root / "drive_config.yaml"
+        if storage.client_secrets_path is None:
+            storage.client_secrets_path = project_root / "client_secrets.json"
+        if storage.credentials_path is None:
+            storage.credentials_path = project_root / "pydrive_credentials.json"
+
+        self.artifact_store = self._build_artifact_store()
+
+    def artifact_specs(self) -> dict[str, ArtifactSpec]:
+        return {
+            "site_metadata_manifest": ArtifactSpec(
+                key="site_metadata_manifest",
+                rel_path_template="labeling/{site}/{config_signature}/site_assets/site_metadata_manifest.json",
+                storage_tier=StorageTier.LOCAL_THEN_REMOTE,
+                required_for_resume=True,
+                prune_local_after_push=False,
+            ),
+            "source_inventory": ArtifactSpec(
+                key="source_inventory",
+                rel_path_template="labeling/{site}/{config_signature}/site_assets/source_inventory.json",
+                storage_tier=StorageTier.LOCAL_THEN_REMOTE,
+                required_for_resume=True,
+                prune_local_after_push=False,
+            ),
+            "als_metadata_json": ArtifactSpec(
+                key="als_metadata_json",
+                rel_path_template="labeling/{site}/{config_signature}/site_assets/als_metadata.json",
+                storage_tier=StorageTier.LOCAL_THEN_REMOTE,
+                required_for_resume=True,
+                prune_local_after_push=False,
+            ),
+            "transform_index": ArtifactSpec(
+                key="transform_index",
+                rel_path_template="labeling/{site}/{config_signature}/transforms/transform_index.json",
+                storage_tier=StorageTier.LOCAL_THEN_REMOTE,
+                required_for_resume=True,
+                prune_local_after_push=False,
+            ),
+            "transform_txt": ArtifactSpec(
+                key="transform_txt",
+                rel_path_template="labeling/{site}/{config_signature}/transforms/{plot_id}.txt",
+                storage_tier=StorageTier.LOCAL_THEN_REMOTE,
+                required_for_resume=True,
+                prune_local_after_push=False,
+            ),
+            "binary_mask": ArtifactSpec(
+                key="binary_mask",
+                rel_path_template="labeling/{site}/{config_signature}/{source_version}/{plot_id}/mask.tif",
+                storage_tier=StorageTier.LOCAL_THEN_REMOTE,
+                required_for_resume=True,
+                prune_local_after_push=True,
+            ),
+            "confidence_mask": ArtifactSpec(
+                key="confidence_mask",
+                rel_path_template="labeling/{site}/{config_signature}/{source_version}/{plot_id}/confidence.tif",
+                storage_tier=StorageTier.LOCAL_THEN_REMOTE,
+                required_for_resume=True,
+                prune_local_after_push=True,
+            ),
+            "object_id_raster": ArtifactSpec(
+                key="object_id_raster",
+                rel_path_template="labeling/{site}/{config_signature}/{source_version}/{plot_id}/object_id.tif",
+                storage_tier=StorageTier.LOCAL_THEN_REMOTE,
+                required_for_resume=True,
+                prune_local_after_push=True,
+            ),
+            "object_table": ArtifactSpec(
+                key="object_table",
+                rel_path_template="labeling/{site}/{config_signature}/{source_version}/{plot_id}/objects.csv",
+                storage_tier=StorageTier.LOCAL_THEN_REMOTE,
+                required_for_resume=True,
+                prune_local_after_push=False,
+            ),
+            "qa_overlay": ArtifactSpec(
+                key="qa_overlay",
+                rel_path_template="labeling/{site}/{config_signature}/{source_version}/{plot_id}/overlay.png",
+                storage_tier=StorageTier.LOCAL_THEN_REMOTE,
+                required_for_resume=False,
+                prune_local_after_push=True,
+            ),
+            "objects_summary": ArtifactSpec(
+                key="objects_summary",
+                rel_path_template="labeling/{config_signature}/summaries/objects_all.csv",
+                storage_tier=StorageTier.LOCAL_THEN_REMOTE,
+                required_for_resume=True,
+                prune_local_after_push=False,
+            ),
+            "artifacts_summary": ArtifactSpec(
+                key="artifacts_summary",
+                rel_path_template="labeling/{config_signature}/summaries/artifacts_all.csv",
+                storage_tier=StorageTier.LOCAL_THEN_REMOTE,
+                required_for_resume=True,
+                prune_local_after_push=False,
+            ),
+            "run_manifest": ArtifactSpec(
+                key="run_manifest",
+                rel_path_template="labeling/{config_signature}/run_manifest.json",
+                storage_tier=StorageTier.LOCAL_THEN_REMOTE,
+                required_for_resume=True,
+                prune_local_after_push=False,
+            ),
+            "run_result": ArtifactSpec(
+                key="run_result",
+                rel_path_template="labeling/{config_signature}/labeling_run_result.json",
+                storage_tier=StorageTier.LOCAL_THEN_REMOTE,
+                required_for_resume=True,
+                prune_local_after_push=False,
+            ),
+        }
 
     def build_pipeline_spec(self) -> PipelineSpec:
         modules = {
@@ -288,6 +431,125 @@ class LabelingPipeline(BasePipeline):
             search_axes=search_axes,
         )
 
+    def _build_artifact_store(self):
+        storage = self.pipeline_config.storage
+
+        local_store = LocalArtifactStore(
+            repo_root=self.cfg.data.project_root,
+            storage_root=Path(storage.local_storage_root),
+        )
+
+        drive_store = None
+        if storage.enable_drive_store:
+            missing = [
+                str(p) for p in [
+                    storage.client_secrets_path,
+                    storage.drive_config_path,
+                ]
+                if not Path(p).exists()
+            ]
+            if missing:
+                msg = f"Missing Drive config files: {missing}"
+                if storage.fail_if_drive_missing:
+                    raise FileNotFoundError(msg)
+                self.logger.warning(msg)
+            else:
+                drive_store = DriveRegistryArtifactStore(
+                    repo_root=self.cfg.data.project_root,
+                    registry_path=Path(storage.drive_registry_path),
+                    drive_config_path=Path(storage.drive_config_path),
+                    client_secrets_path=Path(storage.client_secrets_path),
+                    credentials_path=Path(storage.credentials_path),
+                )
+
+        if storage.use_hybrid_store and drive_store is not None:
+            self.logger.info("Using HybridArtifactStore for labeling pipeline")
+            return HybridArtifactStore(local_store=local_store, remote_store=drive_store)
+
+        if drive_store is not None and not storage.enable_local_store:
+            self.logger.info("Using DriveRegistryArtifactStore only for labeling pipeline")
+            return drive_store
+
+        self.logger.info("Using LocalArtifactStore only for labeling pipeline")
+        return local_store
+
+    def _artifact_spec(self, key: str) -> ArtifactSpec:
+        return self.artifact_specs()[key]
+
+    def _render_rel_path(self, artifact_key: str, **kwargs) -> str:
+        spec = self._artifact_spec(artifact_key)
+        return spec.rel_path_template.format(**kwargs)
+
+    def _local_artifact_path(self, rel_path: str) -> Path:
+        if isinstance(self.artifact_store, LocalArtifactStore):
+            return self.artifact_store.storage_root / rel_path
+        if isinstance(self.artifact_store, HybridArtifactStore):
+            return self.artifact_store.local_store.storage_root / rel_path
+        return self.cfg.output.labeling_root / "_remote_stage" / rel_path
+
+    def _remote_exists(self, rel_path: str) -> bool:
+        try:
+            return self.artifact_store.exists(rel_path)
+        except Exception:
+            return False
+
+    def _push_if_needed(self, local_path: Path, artifact_key: str, rel_path: str) -> str | None:
+        spec = self._artifact_spec(artifact_key)
+        storage = self.pipeline_config.storage
+
+        should_push = (
+            storage.push_large_artifacts_to_remote
+            and spec.storage_tier in {StorageTier.LOCAL_THEN_REMOTE, StorageTier.REMOTE_ONLY}
+            and isinstance(self.artifact_store, (HybridArtifactStore, DriveRegistryArtifactStore))
+        )
+        if not should_push:
+            return None
+
+        self.logger.info("PUSH ARTIFACT | key=%s | rel_path=%s", artifact_key, rel_path)
+        return self.artifact_store.push(local_path, rel_path=rel_path)
+
+    def _prune_if_allowed(self, local_path: Path, artifact_key: str, rel_path: str) -> None:
+        spec = self._artifact_spec(artifact_key)
+        storage = self.pipeline_config.storage
+
+        if not storage.prune_local_after_remote_push:
+            return
+        if not spec.prune_local_after_push:
+            return
+        if storage.verify_remote_before_prune and not self._remote_exists(rel_path):
+            return
+        if local_path.exists():
+            local_path.unlink()
+            self.logger.info("PRUNED LOCAL ARTIFACT | rel_path=%s", rel_path)
+
+    def _persist_file_artifact(self, local_path: Path, artifact_key: str, **fmt) -> tuple[str, str | None]:
+        rel_path = self._render_rel_path(artifact_key, **fmt)
+        remote_ref = self._push_if_needed(local_path, artifact_key, rel_path)
+        self._prune_if_allowed(local_path, artifact_key, rel_path)
+        return rel_path, remote_ref
+
+    def _persist_json_artifact(self, payload: dict, artifact_key: str, **fmt) -> tuple[Path, str, str | None]:
+        rel_path = self._render_rel_path(artifact_key, **fmt)
+        local_path = self._local_artifact_path(rel_path)
+        local_path.parent.mkdir(parents=True, exist_ok=True)
+        local_path.write_text(json.dumps(payload, indent=2, default=str), encoding="utf-8")
+        remote_ref = self._push_if_needed(local_path, artifact_key, rel_path)
+        self._prune_if_allowed(local_path, artifact_key, rel_path)
+        return local_path, rel_path, remote_ref
+
+    def _try_load_json_artifact(self, artifact_key: str, **fmt) -> dict | None:
+        rel_path = self._render_rel_path(artifact_key, **fmt)
+        local_path = self._local_artifact_path(rel_path)
+
+        if local_path.exists():
+            return json.loads(local_path.read_text(encoding="utf-8"))
+
+        if self._remote_exists(rel_path):
+            pulled = self.artifact_store.pull(rel_path, local_path=local_path)
+            return json.loads(Path(pulled).read_text(encoding="utf-8"))
+
+        return None
+
     def standardize_stage_data_signature(self, runs_df: pd.DataFrame) -> str:
         payload = {
             "rows": runs_df[
@@ -426,6 +688,110 @@ class LabelingPipeline(BasePipeline):
             )
             and cache_object_csv.exists()
             and cache_artifacts_csv.exists()
+        
+
+    def _current_config_signature(self) -> str:
+        return self.config_signature()
+    
+    
+    def _site_metadata_manifest_cache_payload(self, *, site: str, naip_local: Path, als_meta: list[dict]) -> dict:
+        return {
+            "site": site,
+            "naip_local": str(naip_local),
+            "als_metadata_count": len(als_meta),
+            "als_metadata": als_meta,
+            "saved_at": datetime.now(timezone.utc).isoformat(),
+        }
+    
+    
+    def _build_source_inventory(self, site: str) -> dict:
+        site_base = site_to_remote_base(self.cfg, site)
+    
+        naip_name = site_to_tif_name(site)
+        naip_url = f"{site_base}/{self.cfg.data.naip_3dep_dir}/{naip_name}"
+        als_url = f"{site_base}/{self.cfg.data.als_dir}"
+    
+        inventory = {
+            "site": site,
+            "site_base": site_base,
+            "naip": {
+                "expected_name": naip_name,
+                "remote_url": naip_url,
+            },
+            "als": {
+                "remote_url": als_url,
+                "files": [],
+            },
+            "saved_at": datetime.now(timezone.utc).isoformat(),
+        }
+    
+        try:
+            als_files = list_files_with_suffix(als_url, (".laz", ".las", ".copc.laz"))
+            inventory["als"]["files"] = als_files
+        except Exception as e:
+            inventory["als"]["error"] = str(e)
+    
+        return inventory
+    
+    
+    def _load_source_inventory(self, site: str) -> dict | None:
+        payload = self._try_load_json_artifact(
+            "source_inventory",
+            site=site,
+            config_signature=self._current_config_signature(),
+        )
+        return payload
+    
+    
+    def _persist_source_inventory(self, site: str, inventory: dict) -> None:
+        self._persist_json_artifact(
+            inventory,
+            "source_inventory",
+            site=site,
+            config_signature=self._current_config_signature(),
+        )
+    
+    
+    def _load_site_metadata_manifest(self, site: str) -> dict | None:
+        payload = self._try_load_json_artifact(
+            "site_metadata_manifest",
+            site=site,
+            config_signature=self._current_config_signature(),
+        )
+        return payload
+    
+    
+    def _persist_site_metadata_manifest(self, site: str, *, naip_local: Path, als_meta: list[dict]) -> None:
+        payload = self._site_metadata_manifest_cache_payload(
+            site=site,
+            naip_local=naip_local,
+            als_meta=als_meta,
+        )
+        self._persist_json_artifact(
+            payload,
+            "site_metadata_manifest",
+            site=site,
+            config_signature=self._current_config_signature(),
+        )
+    
+    
+    def _load_cached_als_metadata_artifact(self, site: str) -> list[dict] | None:
+        payload = self._try_load_json_artifact(
+            "als_metadata_json",
+            site=site,
+            config_signature=self._current_config_signature(),
+        )
+        if payload is None:
+            return None
+        return payload.get("rows", [])
+    
+    
+    def _persist_als_metadata_artifact(self, site: str, rows: list[dict]) -> None:
+        self._persist_json_artifact(
+            {"site": site, "rows": rows},
+            "als_metadata_json",
+            site=site,
+            config_signature=self._current_config_signature(),
         )
 
     # -------------------------------------------------------------------------
@@ -792,12 +1158,49 @@ class LabelingPipeline(BasePipeline):
             return False
 
     def prepare_site_assets(self, site: str, force_refresh: bool = False):
-        site_base = site_to_remote_base(self.cfg, site)
-
-        naip_name = site_to_tif_name(site)
+        config_signature = self._current_config_signature()
+    
+        # ------------------------------------------------------------
+        # 1) Manifest-first reuse
+        # ------------------------------------------------------------
+        if not force_refresh:
+            site_manifest = self._load_site_metadata_manifest(site)
+            if site_manifest is not None:
+                naip_local = Path(site_manifest["naip_local"])
+                als_meta = site_manifest.get("als_metadata", [])
+    
+                if naip_local.exists() and self.validate_cached_naip(naip_local):
+                    self.logger.info(
+                        "Using site metadata manifest for site=%s | naip=%s | als_meta_rows=%d",
+                        site, naip_local, len(als_meta)
+                    )
+                    return naip_local, als_meta
+    
+                self.logger.warning(
+                    "Site metadata manifest found for site=%s but local NAIP path is missing/invalid: %s",
+                    site, naip_local
+                )
+    
+        # ------------------------------------------------------------
+        # 2) Source inventory artifact
+        # ------------------------------------------------------------
+        inventory = None if force_refresh else self._load_source_inventory(site)
+        if inventory is None:
+            inventory = self._build_source_inventory(site)
+            self._persist_source_inventory(site, inventory)
+            self.logger.info("Built and persisted source inventory for site=%s", site)
+        else:
+            self.logger.info("Using cached source inventory for site=%s", site)
+    
+        site_base = inventory["site_base"]
+        naip_name = inventory["naip"]["expected_name"]
+        naip_url = inventory["naip"]["remote_url"]
+    
+        # ------------------------------------------------------------
+        # 3) NAIP local cache with validation
+        # ------------------------------------------------------------
         naip_local = self._site_naip_cache_root(site) / naip_name
-        naip_url = f"{site_base}/{self.cfg.data.naip_3dep_dir}/{naip_name}"
-
+    
         use_cached_naip = False
         if (not force_refresh) and naip_local.exists():
             if self.validate_cached_naip(naip_local):
@@ -806,27 +1209,43 @@ class LabelingPipeline(BasePipeline):
             else:
                 self.logger.warning("Deleting corrupt cached NAIP for site=%s: %s", site, naip_local)
                 naip_local.unlink(missing_ok=True)
-
+    
         if not use_cached_naip:
             self.logger.info("Downloading NAIP for site=%s to %s", site, naip_local)
             download_file(naip_url, naip_local)
             if not self.validate_cached_naip(naip_local):
                 raise RuntimeError(f"Downloaded NAIP for site={site} is unreadable: {naip_local}")
-
+    
+        # ------------------------------------------------------------
+        # 4) ALS metadata: local cache -> remote artifact -> recompute
+        # ------------------------------------------------------------
         als_cache_dir = self._site_als_cache_root(site)
         als_meta_json = als_cache_dir / "als_metadata.json"
-
+    
+        als_meta = None
+    
         if (not force_refresh) and als_meta_json.exists():
             self.logger.info("Using cached ALS metadata for site=%s: %s", site, als_meta_json)
             als_meta = json.loads(als_meta_json.read_text(encoding="utf-8"))
-        else:
-            als_url = f"{site_base}/{self.cfg.data.als_dir}"
-            als_files = list_files_with_suffix(als_url, (".laz", ".las", ".copc.laz"))
+    
+        if als_meta is None and not force_refresh:
+            artifact_rows = self._load_cached_als_metadata_artifact(site)
+            if artifact_rows is not None:
+                self.logger.info("Using remote/local artifact-backed ALS metadata for site=%s", site)
+                als_meta = artifact_rows
+                als_meta_json.write_text(json.dumps(als_meta, indent=2), encoding="utf-8")
+    
+        if als_meta is None:
+            als_files = inventory.get("als", {}).get("files", [])
             if not als_files:
-                raise RuntimeError(f"No ALS files found for site '{site}' at {als_url}")
-
+                als_url = f"{site_base}/{self.cfg.data.als_dir}"
+                als_files = list_files_with_suffix(als_url, (".laz", ".las", ".copc.laz"))
+    
+            if not als_files:
+                raise RuntimeError(f"No ALS files found for site '{site}'")
+    
             self.logger.info("Downloading %d ALS file(s) for site=%s to extract metadata", len(als_files), site)
-
+    
             records = []
             scratch_dir = Path(tempfile.mkdtemp(prefix=f"labeling_als_{site}_"))
             try:
@@ -845,11 +1264,17 @@ class LabelingPipeline(BasePipeline):
                     scratch_dir.rmdir()
                 except Exception:
                     pass
-
+    
             als_meta_json.write_text(json.dumps(records, indent=2), encoding="utf-8")
             als_meta = records
+            self._persist_als_metadata_artifact(site, als_meta)
             self.logger.info("Cached ALS metadata for site=%s at %s", site, als_meta_json)
-
+    
+        # ------------------------------------------------------------
+        # 5) Persist site metadata manifest
+        # ------------------------------------------------------------
+        self._persist_site_metadata_manifest(site, naip_local=naip_local, als_meta=als_meta)
+    
         return naip_local, als_meta
 
     # -------------------------------------------------------------------------
@@ -857,53 +1282,96 @@ class LabelingPipeline(BasePipeline):
     # -------------------------------------------------------------------------
 
     def get_site_transform_index(self, site: str, force_refresh: bool = False) -> dict:
-        index_path = self._site_transform_index_path(site)
-
-        if (not force_refresh) and index_path.exists():
-            self.logger.info("Using cached transform index for site=%s: %s", site, index_path)
-            return json.loads(index_path.read_text(encoding="utf-8"))
-
+        if not force_refresh:
+            payload = self._try_load_json_artifact(
+                "transform_index",
+                site=site,
+                config_signature=self._current_config_signature(),
+            )
+            if payload is not None:
+                self.logger.info("Using artifact-backed transform index for site=%s", site)
+    
+                # keep local mirror in the old cache location too
+                index_path = self._site_transform_index_path(site)
+                index_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+                return payload
+    
         remote_dir = f"{site_to_remote_base(self.cfg, site)}/{self.cfg.data.transformations_dir}"
         entries = list_files_with_suffix(remote_dir, (".txt",))
         index = {entry["name"]: entry["url"] for entry in entries}
+    
+        index_path = self._site_transform_index_path(site)
         index_path.write_text(json.dumps(index, indent=2), encoding="utf-8")
+        self._persist_json_artifact(
+            index,
+            "transform_index",
+            site=site,
+            config_signature=self._current_config_signature(),
+        )
+    
         self.logger.info("Cached transform index for site=%s with %d entries", site, len(index))
         return index
 
     def get_transform_local_cached(self, site: str, plot_id: str, force_refresh: bool = False) -> Path:
         transform_name = shrub_csv_to_transform_name(f"{plot_id}.csv")
         transform_local = self._site_transform_cache_root(site) / transform_name
-
+    
         if (not force_refresh) and transform_local.exists():
             self.logger.info("Using cached transform for site=%s plot_id=%s", site, plot_id)
             return transform_local
-
+    
+        rel_path = self._render_rel_path(
+            "transform_txt",
+            site=site,
+            config_signature=self._current_config_signature(),
+            plot_id=plot_id,
+        )
+    
+        if (not force_refresh) and self._remote_exists(rel_path):
+            self.logger.info("Pulling transform from artifact store for site=%s plot_id=%s", site, plot_id)
+            pulled = self.artifact_store.pull(rel_path, local_path=transform_local)
+            return Path(pulled)
+    
         transform_index = self.get_site_transform_index(site, force_refresh=force_refresh)
-
+    
+        chosen_name = None
+        transform_url = None
+    
         if transform_name in transform_index:
+            chosen_name = transform_name
             transform_url = transform_index[transform_name]
             self.logger.info("Downloading exact-match transform for site=%s plot_id=%s", site, plot_id)
-            download_file(transform_url, transform_local)
-            return transform_local
-
-        fallback_names = sorted(
-            name for name in transform_index
-            if name.startswith(plot_id) and name.endswith("toALS.txt")
-        )
-        if fallback_names:
-            chosen = fallback_names[0]
-            transform_url = transform_index[chosen]
-            self.logger.warning(
-                "Exact transform missing for site=%s plot_id=%s; using fallback transform %s",
-                site, plot_id, chosen
+        else:
+            fallback_names = sorted(
+                name for name in transform_index
+                if name.startswith(plot_id) and name.endswith("toALS.txt")
             )
-            download_file(transform_url, transform_local)
-            return transform_local
-
-        raise FileNotFoundError(
-            f"No transform file found for site={site}, plot_id={plot_id}. "
-            f"Expected exact name {transform_name} or fallback starting with {plot_id}."
+            if fallback_names:
+                chosen_name = fallback_names[0]
+                transform_url = transform_index[chosen_name]
+                self.logger.warning(
+                    "Exact transform missing for site=%s plot_id=%s; using fallback transform %s",
+                    site, plot_id, chosen_name
+                )
+    
+        if transform_url is None:
+            raise FileNotFoundError(
+                f"No transform file found for site={site}, plot_id={plot_id}. "
+                f"Expected exact name {transform_name} or fallback starting with {plot_id}."
+            )
+    
+        download_file(transform_url, transform_local)
+    
+        # Persist through artifact store under the plot_id-based rel path
+        self._persist_file_artifact(
+            transform_local,
+            "transform_txt",
+            site=site,
+            config_signature=self._current_config_signature(),
+            plot_id=plot_id,
         )
+    
+        return transform_local
 
     # -------------------------------------------------------------------------
     # Stage 5: output paths / output cache
