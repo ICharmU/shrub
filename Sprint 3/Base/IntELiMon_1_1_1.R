@@ -1,18 +1,3 @@
-
-options(rlang_backtrace_on_error = "full")
-options(error = function() {
-    sink(stderr())
-    cat("\n================ TRACEBACK START ================\n")
-    print(sys.calls())
-    if (requireNamespace("rlang", quietly = TRUE)) {
-        cat("\n--- RLANG TRACE ---\n")
-        print(rlang::trace_back(bottom = NULL))
-    }
-    cat("\n=================================================\n")
-    sink()
-    q("no", status=1)
-})
-options(error = function() { cat("\n--- TRACEBACK ---\n"); print(sys.calls()); q("no", status=1) })
 # ##################################################################################################################
 # 
 # 
@@ -115,59 +100,7 @@ options(error = function() { cat("\n--- TRACEBACK ---\n"); print(sys.calls()); q
   library(data.table)# required
   library(terra)#required
   library(rlas)# required
-  library(lidR)
-# --- Berkeley TLS Pipeline: Terra-to-Raster Bridge ---
-if (!exists("tlsNormalize2")) {
-  tlsNormalize2 <- function(las, dtm, min_res = 0.5, keep_ground = TRUE) {
-    message("Using shimmed tlsNormalize2 (with Terra Bridge)...")
-
-    # lidR v3 (legacy) only accepts 'RasterLayer' from the 'raster' package.
-    # We must convert the modern 'SpatRaster' (terra) back to the old format.
-    if (inherits(dtm, "SpatRaster")) {
-      dtm <- raster::raster(dtm)
-    }
-
-    # Perform normalization using the converted DTM
-    las <- lidR::lasnormalize(las, dtm)
-
-    if (!keep_ground) {
-      las <- lidR::filter_poi(las, Classification != 2)
-    }
-    if (min_res > 0) {
-      las <- lidR::lasfilterdecimate(las, lidR::random(1/min_res))
-    }
-    return(las)
-  }
-}
-
-# Ensure other shims also respect the requested package format
-if (!exists("rasterize_terrain")) {
-  rasterize_terrain <- function(las, res, algorithm = lidR::tin(), pkg = "terra", ...) {
-    dtm <- lidR::grid_terrain(las, res = res, algorithm = algorithm, ...)
-    if (pkg == "terra") return(terra::rast(dtm))
-    return(dtm)
-  }
-}
-
-if (!exists("rasterize_canopy")) {
-  rasterize_canopy <- function(las, res, algorithm = lidR::p2r(), pkg = "terra", ...) {
-    chm <- lidR::grid_canopy(las, res = res, algorithm = algorithm, ...)
-    if (pkg == "terra") return(terra::rast(chm))
-    return(chm)
-  }
-}
-# ----------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-# required
+  library(lidR)# required
   library(e1071)# required
   library(geometry)# required
   library(sf)# required
@@ -626,16 +559,14 @@ if (!exists("rasterize_canopy")) {
   }
   
   # Calculate distance from plot center
-  
-
-getDist <- function(pts){
-  # Base R replacement for broken dplyr engine
-  pts$returned <- ifelse(pts$x == 0 & pts$y == 0 & pts$z == 0, 0, 1)
-  pts$dist <- sqrt(pts$x^2 + pts$y^2 + pts$z^2)
-  pts <- pts[pts$returned == 1, ]
-  return(pts)
-}
-
+  getDist<-function(pts){
+    pts$pnt_id <- row.names(dat)
+    pts$count <- 1
+    
+    pts<- pts %>% mutate(returned = dplyr::if_else(x==0 & y==0 & z==0, 0, 1))
+    pts$dist <- sqrt(pts$x^2 + pts$y^2 + pts$z^2)
+    return(pts)    
+  }
   
   # Create multiple fields to denote if a return reached each radii (0 = did not pass through, 1 = passed through)
   binRad <- function(pts, radii){
@@ -807,7 +738,7 @@ getDist <- function(pts){
     toCart$y <- toCart$y*-1
     
     # Merge result to original points
-    asPnts2 <- cbind(asPnts2, toCart)
+    asPnts2 <- bind_cols(asPnts2, toCart)
     # At point ID as attribute
     asPnts2$id <- as.numeric(row.names(asPnts2))
     
@@ -822,7 +753,7 @@ getDist <- function(pts){
     regPnts$id <- withSphere
     
     # Clip out only Cartesian points in cylinder extent. 
-    regPnts$dist <- sqrt(regPnts$centerX^2 + regPnts$centerY^2)
+    regPnts <- mutate(regPnts, dist = sqrt(centerX^2+centerY^2))
     regPntsClip <- regPnts %>% filter(dist <= clipRadius)
     # Join data from closest spherical voxel to each Cartesian point
     regPnts3 <- dplyr::left_join(regPntsClip, asPnts2, by="id")
@@ -1151,7 +1082,7 @@ getDist <- function(pts){
     colnames(dat)[1:4] <- c("x","y","z", "Intensity")
     per_gap <- perGapFunc(dat)
     header_info <- ptx.header(file.path(inDir, inputPtx))
-    metricsOut <- cbind(metricsOut, per_gap)
+    metricsOut <- bind_cols(metricsOut, per_gap)
     dat2 <- getDist(dat)
     rm(dat)
     gc()
@@ -1170,11 +1101,11 @@ getDist <- function(pts){
     gc()
     
     sph_summary <- summarizeSpheres(prop_out, dtm, radii, spacing, clipRadius, h1, h2, h3, h4, binMax)
-    metricsOut <- cbind(metricsOut, sph_summary)
+    metricsOut <- bind_cols(metricsOut, sph_summary)
     
     # Create metrics of voxelized point cloud
     voxmetrics = toMetrics(thin, "vox_")
-    metricsOut <- cbind(metricsOut, voxmetrics)
+    metricsOut <- bind_cols(metricsOut, voxmetrics)
     
     # Create Canopy Height Model
     chm <- rasterize_canopy(thin, res = .5, p2r(0.7))  
@@ -1205,8 +1136,8 @@ getDist <- function(pts){
       # get dbh and height
       inv = tlsInventory(las_norm, d_method = shapeFit(shape = 'circle', algorithm = 'ransac'))
       
-      inv <- inv$DBH <- (inv$Radius * 39.37) * 2
-      inv <- inv$BasalA <- (inv$DBH * inv$DBH) * 0.005454
+      inv <- inv %>% mutate(DBH = (inv$Radius * 39.37) * 2)
+      inv <- inv %>% mutate(BasalA = (DBH * DBH) * 0.005454)
     } else {
       inv  = data.frame(TreeID = c(0L),
                         X = c(0L),
@@ -1281,7 +1212,7 @@ getDist <- function(pts){
     gc()
     
     fem <- data.frame(TBA, Basalarea, MeanTH, MDBH, TreesN, MaxTH, SDHT, CBH, LAI, ULAI, MLAI, OLAI, FHD, GiSimp, LAHV, GCvol, USvol, MSvol, OSvol)
-    metricsOut <- cbind(metricsOut, fem)
+    metricsOut <- bind_cols(metricsOut, fem)
     
     write.csv(inv, file.path(outDir, "Inventory", paste0(filename, "_inv.csv")))
   
@@ -1289,7 +1220,7 @@ getDist <- function(pts){
     # Height Segmentation  
     veght0to3m <- filter_poi(justfuels, Z > 0L, Z < 3L)
     fuelmetrics = toMetrics(veght0to3m, "fuel0_3")
-    metricsOut <- cbind(metricsOut, fuelmetrics)
+    metricsOut <- bind_cols(metricsOut, fuelmetrics)
     rm(justfuels)
     gc()
     
@@ -1311,7 +1242,7 @@ getDist <- function(pts){
     veght2@data[treeID < 200, Classification := 21]
     shrubs<- filter_poi(veght2, Z > 0L, Classification == 21L)
     shrubmetrics = toMetrics(shrubs, "shrubs_")
-    metricsOut <- cbind(metricsOut, shrubmetrics)
+    metricsOut <- bind_cols(metricsOut, shrubmetrics)
     rm(veght0to3m)
     gc()
     
@@ -1360,19 +1291,19 @@ getDist <- function(pts){
     
     write.csv(shrubinv, paste0(outDir, "/Shrubs/", substr(inputPtx, 1, nchar(inputPtx)-4), ".csv"))
     SFM <- data.frame(ShrubsN, shrubArea, scaledShrubArea, MeanSH, MeanSA, MaxSH, SDSHT, MeanSD, MaxSD, MinSD, SDSD)
-    metricsOut <- cbind(metricsOut, SFM) 
+    metricsOut <- bind_cols(metricsOut, SFM) 
     
     # Fine Fuels Layer
     fuelht<- filter_poi(veght2, Z > 0L, Classification < 21L, Z < 3L)
     finemetrics = toMetrics(fuelht, "fine_")
-    metricsOut <- cbind(metricsOut, finemetrics)
+    metricsOut <- bind_cols(metricsOut, finemetrics)
     rm(veght2)
     gc()
     
     # Filter 1-10hr fuels
     lin2<- filter_poi(fuelht, Linearity > 0.8)
     hr0_10_metrics = toMetrics(lin2, "hr0_10_")
-    metricsOut <- cbind(metricsOut, hr0_10_metrics)
+    metricsOut <- bind_cols(metricsOut, hr0_10_metrics)
     
     # Filter 100-1000hr fuels
     CWD<- filter_poi(fuelht, Linearity < 0.5)
@@ -1381,7 +1312,7 @@ getDist <- function(pts){
     CWD <- filter_poi(CWD, Verticality < 68)
     CWD <- nnFilter3(CWD)
     hr100_1000_metrics = toMetrics(CWD, "hr100_1000_")
-    metricsOut <- cbind(metricsOut, hr100_1000_metrics)
+    metricsOut <- bind_cols(metricsOut, hr100_1000_metrics)
     
     # Replace NAs with 0 and write out final table
     metricsOut <- metricsOut %>% replace(is.na(.), 0)
