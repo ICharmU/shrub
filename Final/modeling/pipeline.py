@@ -1,46 +1,15 @@
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, f1_score, recall_score, precision_score
-import numpy as np
-import cv2
-import pandas as pd
+from sklearn.metrics import accuracy_score, f1_score, recall_score, precision_score, jaccard_score
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from torch.utils.data import TensorDataset, DataLoader
-from torchvision.models import resnet18
-import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, f1_score, recall_score, precision_score
-import torch
-import torch.nn as nn
-import torch.optim as optim
-from torch.utils.data import TensorDataset, DataLoader
-import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, f1_score, recall_score, precision_score
-import matplotlib.pyplot as plt
-import cv2
-import numpy as np
-import torch
-import torch.nn as nn
-import torch.optim as optim
-from torch.utils.data import TensorDataset, DataLoader
-from sklearn.metrics import accuracy_score, jaccard_score
-import torch
-import torch.nn as nn
-import torch.optim as optim
-from torch.utils.data import DataLoader, TensorDataset
-import numpy as np
-from sklearn.metrics import jaccard_score
-import os
-import torch
-from torch.utils.data import Dataset, DataLoader
-from PIL import Image
+from torch.utils.data import TensorDataset, DataLoader, Dataset
 from torchvision.transforms import v2
-
-
-
+from torchvision.models import resnet18
+from PIL import Image
+import numpy as np
+import os
 
 ####################
 # BASELINES
@@ -479,7 +448,6 @@ def train_unet_model(model, train_loader, eval_loader, device, epochs,
     
     return train_losses, eval_losses, best_loss
 
-
 def evaluate_unet_predictions(model, eval_loader, device, probability_threshold=0.5):
     """
     Generate predictions and probabilities on evaluation set.
@@ -666,8 +634,6 @@ class LibraryUNetMultiBand(nn.Module):
         logits = torch.log(output_clamped / (1 - output_clamped))
         
         return logits
-    
-
 
 ####################
 # HELPERS
@@ -862,4 +828,3 @@ class SegmentationDataset(Dataset):
             mask = self.transform(mask)
 
         return image, mask
-
