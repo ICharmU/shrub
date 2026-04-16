@@ -479,6 +479,9 @@ files:
   features/calaveras-big-trees/91fef1517fca02cc/naip/veg_idx/chunk_00047.npz:
     drive_file_id: 1Y1IVgMUzav0a-2iVUH0zox59dsUnomi-
     local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/veg_idx/chunk_00047.npz
+  features/calaveras-big-trees/91fef1517fca02cc/objects/object_features.csv:
+    drive_file_id: 1Xz0rVTsowt0nmEvuaho61tIYcMyy-Qz-
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/objects/object_features.csv
   features/calaveras-big-trees/91fef1517fca02cc/stack/stack_registry.json:
     drive_file_id: 1dGSOpmdulmoUpa4ZwF_GteRD33QXznez
     local_path: features/calaveras-big-trees/91fef1517fca02cc/stack/stack_registry.json
@@ -491,3 +494,246 @@ files:
   labeling/88fb2c6936cb/summaries/objects_all.csv:
     drive_file_id: 1nl9Yk_2rhvuTXj9LE-NFXRuXre-7cfh6
     local_path: labeling/88fb2c6936cb/summaries/objects_all.csv
+  labeling/calaveras-big-trees/88fb2c6936cb/site_assets/site_metadata_manifest.json:
+    drive_file_id: 1GvB4tUYhKG2Ulpn2SgqO6MepdXnlpenB
+    local_path: labeling/calaveras-big-trees/88fb2c6936cb/site_assets/site_metadata_manifest.json
+  labeling/calaveras-big-trees/88fb2c6936cb/sprint3_original/CATCU_0009_20250615_1/confidence.tif:
+    drive_file_id: 1MdJK1W7VwCfwcYPaLTkTuAVS-Z4SaUOH
+    local_path: labeling/calaveras-big-trees/88fb2c6936cb/sprint3_original/CATCU_0009_20250615_1/confidence.tif
+  labeling/calaveras-big-trees/88fb2c6936cb/sprint3_original/CATCU_0009_20250615_1/mask.tif:
+    drive_file_id: 1qjWDSc4SXr0jV-hkBEXBG069otEQlJDT
+    local_path: labeling/calaveras-big-trees/88fb2c6936cb/sprint3_original/CATCU_0009_20250615_1/mask.tif
+  labeling/calaveras-big-trees/88fb2c6936cb/sprint3_original/CATCU_0009_20250615_1/object_id.tif:
+    drive_file_id: 18IisVNhl3LzkSo9Fhh4SPXWzESsieFfB
+    local_path: labeling/calaveras-big-trees/88fb2c6936cb/sprint3_original/CATCU_0009_20250615_1/object_id.tif
+  labeling/calaveras-big-trees/88fb2c6936cb/sprint3_original/CATCU_0009_20250615_1/objects.csv:
+    drive_file_id: 1trI0YwT4dWtxqm0tqJz2Wh-3wHpCwe-B
+    local_path: labeling/calaveras-big-trees/88fb2c6936cb/sprint3_original/CATCU_0009_20250615_1/objects.csv
+  labeling/calaveras-big-trees/88fb2c6936cb/sprint3_original/CATCU_0009_20250615_1/overlay.png:
+    drive_file_id: 1UQWDVh4jxwNnpi5K_mTsBsp1d0PJJuD1
+    local_path: labeling/calaveras-big-trees/88fb2c6936cb/sprint3_original/CATCU_0009_20250615_1/overlay.png
+  labeling/calaveras-big-trees/88fb2c6936cb/sprint3_revised/CATCU_0009_20250615_1/confidence.tif:
+    drive_file_id: 10dLxn5bH6yIqcFM2MD8LEmEqEEVdGNK-
+    local_path: labeling/calaveras-big-trees/88fb2c6936cb/sprint3_revised/CATCU_0009_20250615_1/confidence.tif
+  labeling/calaveras-big-trees/88fb2c6936cb/sprint3_revised/CATCU_0009_20250615_1/mask.tif:
+    drive_file_id: 1G9Vru2VgYfrrsHwBzcbC7SilPgJ3YO4w
+    local_path: labeling/calaveras-big-trees/88fb2c6936cb/sprint3_revised/CATCU_0009_20250615_1/mask.tif
+  labeling/calaveras-big-trees/88fb2c6936cb/sprint3_revised/CATCU_0009_20250615_1/object_id.tif:
+    drive_file_id: 1q1ofp9RyMOe_n6zmevODHac8lVp4y6aH
+    local_path: labeling/calaveras-big-trees/88fb2c6936cb/sprint3_revised/CATCU_0009_20250615_1/object_id.tif
+  labeling/calaveras-big-trees/88fb2c6936cb/sprint3_revised/CATCU_0009_20250615_1/objects.csv:
+    drive_file_id: 1nWozcIyB7kgoSm05ncRfVPUrtmx16-_j
+    local_path: labeling/calaveras-big-trees/88fb2c6936cb/sprint3_revised/CATCU_0009_20250615_1/objects.csv
+  labeling/calaveras-big-trees/88fb2c6936cb/sprint3_revised/CATCU_0009_20250615_1/overlay.png:
+    drive_file_id: 1Exz4omGk4vs3ZsHtG3u5MSINXJWedXiu
+    local_path: labeling/calaveras-big-trees/88fb2c6936cb/sprint3_revised/CATCU_0009_20250615_1/overlay.png
+  labeling/calaveras-big-trees/88fb2c6936cb/transforms/CATCU_0009_20250615_1.txt:
+    drive_file_id: 1xZsO5q9whI1d5z7eTdyLpTO1m8V6jDuX
+    local_path: labeling/calaveras-big-trees/88fb2c6936cb/transforms/CATCU_0009_20250615_1.txt
+  labeling/calaveras-big-trees/88fb2c6936cb/transforms/transform_index.json:
+    drive_file_id: 1_F8Qkq0kdR2ie5_XAcA0-Za8uke9OodC
+    local_path: labeling/calaveras-big-trees/88fb2c6936cb/transforms/transform_index.json
+  labeling/dl-bliss/88fb2c6936cb/site_assets/als_metadata.json:
+    drive_file_id: 1bR6UdS1mcXFP0j6QSYK6X1ITAAXXloV6
+    local_path: labeling/dl-bliss/88fb2c6936cb/site_assets/als_metadata.json
+  labeling/dl-bliss/88fb2c6936cb/site_assets/site_metadata_manifest.json:
+    drive_file_id: 1eUpyRMrSL4WOSweGiwAyS1KE_rJblCWN
+    local_path: labeling/dl-bliss/88fb2c6936cb/site_assets/site_metadata_manifest.json
+  labeling/dl-bliss/88fb2c6936cb/sprint3_original/CAAEU_0027_20250728_1/confidence.tif:
+    drive_file_id: 1jr6Ni-IUYQIzSOfOJLMXVNU7vpP6Z3Ru
+    local_path: labeling/dl-bliss/88fb2c6936cb/sprint3_original/CAAEU_0027_20250728_1/confidence.tif
+  labeling/dl-bliss/88fb2c6936cb/sprint3_original/CAAEU_0027_20250728_1/mask.tif:
+    drive_file_id: 1xSKjzJVJBYXRsMjKrole3nvcibcTdxV-
+    local_path: labeling/dl-bliss/88fb2c6936cb/sprint3_original/CAAEU_0027_20250728_1/mask.tif
+  labeling/dl-bliss/88fb2c6936cb/sprint3_original/CAAEU_0027_20250728_1/object_id.tif:
+    drive_file_id: 1cmLZPBPnVHR6MSl-ZJgjLT8PaJsdeyti
+    local_path: labeling/dl-bliss/88fb2c6936cb/sprint3_original/CAAEU_0027_20250728_1/object_id.tif
+  labeling/dl-bliss/88fb2c6936cb/sprint3_original/CAAEU_0027_20250728_1/objects.csv:
+    drive_file_id: 1r32UeIV1gA22m60flMVbHEzojZnWBakI
+    local_path: labeling/dl-bliss/88fb2c6936cb/sprint3_original/CAAEU_0027_20250728_1/objects.csv
+  labeling/dl-bliss/88fb2c6936cb/sprint3_revised/CAAEU_0027_20250728_1/confidence.tif:
+    drive_file_id: 1RfZp5tCkm_IKJ-2B-ltNcU5VTZb8JWZI
+    local_path: labeling/dl-bliss/88fb2c6936cb/sprint3_revised/CAAEU_0027_20250728_1/confidence.tif
+  labeling/dl-bliss/88fb2c6936cb/sprint3_revised/CAAEU_0027_20250728_1/mask.tif:
+    drive_file_id: 134PROFbm_2MhUAoJ_H02AGuVN7G7AS8m
+    local_path: labeling/dl-bliss/88fb2c6936cb/sprint3_revised/CAAEU_0027_20250728_1/mask.tif
+  labeling/dl-bliss/88fb2c6936cb/sprint3_revised/CAAEU_0027_20250728_1/object_id.tif:
+    drive_file_id: 1IfYnirMYkPDfVitfmCRHErg4hoVeGLHn
+    local_path: labeling/dl-bliss/88fb2c6936cb/sprint3_revised/CAAEU_0027_20250728_1/object_id.tif
+  labeling/dl-bliss/88fb2c6936cb/sprint3_revised/CAAEU_0027_20250728_1/objects.csv:
+    drive_file_id: 1LJiDHm6o8P2GcQUPHEKF8ZbccXhK1jjh
+    local_path: labeling/dl-bliss/88fb2c6936cb/sprint3_revised/CAAEU_0027_20250728_1/objects.csv
+  labeling/dl-bliss/88fb2c6936cb/transforms/CAAEU_0027_20250728_1.txt:
+    drive_file_id: 1BgkgfxSGsV0p0ikKw25BQ8xqZSDbq63B
+    local_path: labeling/dl-bliss/88fb2c6936cb/transforms/CAAEU_0027_20250728_1.txt
+  labeling/dl-bliss/88fb2c6936cb/transforms/transform_index.json:
+    drive_file_id: 1FJl6LsDU3-utJlrvWLdQUprnnkkouSsL
+    local_path: labeling/dl-bliss/88fb2c6936cb/transforms/transform_index.json
+  labeling/independence-lake/88fb2c6936cb/site_assets/als_metadata.json:
+    drive_file_id: 1OaDcxSymXUMfJfT15n42yHVDaOCd5eZ8
+    local_path: labeling/independence-lake/88fb2c6936cb/site_assets/als_metadata.json
+  labeling/independence-lake/88fb2c6936cb/site_assets/site_metadata_manifest.json:
+    drive_file_id: 13RxKz1pnaJthcMAXym6Eha5LzVQydqxo
+    local_path: labeling/independence-lake/88fb2c6936cb/site_assets/site_metadata_manifest.json
+  labeling/independence-lake/88fb2c6936cb/sprint3_original/CATNF_6118_20250820_1/confidence.tif:
+    drive_file_id: 1i-n5kLZqQtt0BcXQj8L-9Bqx8Uls9jjv
+    local_path: labeling/independence-lake/88fb2c6936cb/sprint3_original/CATNF_6118_20250820_1/confidence.tif
+  labeling/independence-lake/88fb2c6936cb/sprint3_original/CATNF_6118_20250820_1/mask.tif:
+    drive_file_id: 1gdLp0Jq3-gSTs7dIx_40sY31fVMhiymS
+    local_path: labeling/independence-lake/88fb2c6936cb/sprint3_original/CATNF_6118_20250820_1/mask.tif
+  labeling/independence-lake/88fb2c6936cb/sprint3_original/CATNF_6118_20250820_1/object_id.tif:
+    drive_file_id: 10lEDXIUt9-sPEeSIltUgl0upG9OCFxi2
+    local_path: labeling/independence-lake/88fb2c6936cb/sprint3_original/CATNF_6118_20250820_1/object_id.tif
+  labeling/independence-lake/88fb2c6936cb/sprint3_original/CATNF_6118_20250820_1/objects.csv:
+    drive_file_id: 1Dq6ZKg51UQmyhxtZc-U2zpWa8mOYXV2G
+    local_path: labeling/independence-lake/88fb2c6936cb/sprint3_original/CATNF_6118_20250820_1/objects.csv
+  labeling/independence-lake/88fb2c6936cb/sprint3_original/CATNF_6118_20250820_1/overlay.png:
+    drive_file_id: 1djFIp6OIsHw4slyFmiYLLz_f1_mIVfWh
+    local_path: labeling/independence-lake/88fb2c6936cb/sprint3_original/CATNF_6118_20250820_1/overlay.png
+  labeling/independence-lake/88fb2c6936cb/sprint3_revised/CATNF_6118_20250820_1/confidence.tif:
+    drive_file_id: 1tHiKQTOfpXF9ie7a5o4H48ckDt-0XoRL
+    local_path: labeling/independence-lake/88fb2c6936cb/sprint3_revised/CATNF_6118_20250820_1/confidence.tif
+  labeling/independence-lake/88fb2c6936cb/sprint3_revised/CATNF_6118_20250820_1/mask.tif:
+    drive_file_id: 1fIbiT1XIhRZDOsf5UiIWGX6vLvljwDKF
+    local_path: labeling/independence-lake/88fb2c6936cb/sprint3_revised/CATNF_6118_20250820_1/mask.tif
+  labeling/independence-lake/88fb2c6936cb/sprint3_revised/CATNF_6118_20250820_1/object_id.tif:
+    drive_file_id: 1h7S0Y9gdcwWxngj3aH0uChMD1w-2MfSf
+    local_path: labeling/independence-lake/88fb2c6936cb/sprint3_revised/CATNF_6118_20250820_1/object_id.tif
+  labeling/independence-lake/88fb2c6936cb/sprint3_revised/CATNF_6118_20250820_1/objects.csv:
+    drive_file_id: 1RzM2EqASxpO0Lz0m8zF1o-Hvl4A2aYSI
+    local_path: labeling/independence-lake/88fb2c6936cb/sprint3_revised/CATNF_6118_20250820_1/objects.csv
+  labeling/independence-lake/88fb2c6936cb/sprint3_revised/CATNF_6118_20250820_1/overlay.png:
+    drive_file_id: 1IUEjXhvXLdiKBWHAASzGwoUI5_QkUwll
+    local_path: labeling/independence-lake/88fb2c6936cb/sprint3_revised/CATNF_6118_20250820_1/overlay.png
+  labeling/independence-lake/88fb2c6936cb/transforms/CATNF_6118_20250820_1.txt:
+    drive_file_id: 1Hq5RiW9dO5PgV_pUNHm6WK1I0VNDYQQ5
+    local_path: labeling/independence-lake/88fb2c6936cb/transforms/CATNF_6118_20250820_1.txt
+  labeling/independence-lake/88fb2c6936cb/transforms/transform_index.json:
+    drive_file_id: 1SnuOjEpqhAPobJPY22rNxXly58DbW64V
+    local_path: labeling/independence-lake/88fb2c6936cb/transforms/transform_index.json
+  labeling/pacific-union-college/88fb2c6936cb/site_assets/als_metadata.json:
+    drive_file_id: 1Y24i3oWc--m_TdGkMW6OjEMWBJVysNVB
+    local_path: labeling/pacific-union-college/88fb2c6936cb/site_assets/als_metadata.json
+  labeling/pacific-union-college/88fb2c6936cb/site_assets/site_metadata_manifest.json:
+    drive_file_id: 1hjnpvYAa2UOprSvX1mibkOvYAzTp0G13
+    local_path: labeling/pacific-union-college/88fb2c6936cb/site_assets/site_metadata_manifest.json
+  labeling/pacific-union-college/88fb2c6936cb/sprint3_original/CALNU_0039_20250810_1/confidence.tif:
+    drive_file_id: 1xkomwJdiU5yo9uHyF8_RGzwNI0swgzJP
+    local_path: labeling/pacific-union-college/88fb2c6936cb/sprint3_original/CALNU_0039_20250810_1/confidence.tif
+  labeling/pacific-union-college/88fb2c6936cb/sprint3_original/CALNU_0039_20250810_1/mask.tif:
+    drive_file_id: 1Fsvhs0wDbozz_HMKxSPEE1B6q7lh7eoN
+    local_path: labeling/pacific-union-college/88fb2c6936cb/sprint3_original/CALNU_0039_20250810_1/mask.tif
+  labeling/pacific-union-college/88fb2c6936cb/sprint3_original/CALNU_0039_20250810_1/object_id.tif:
+    drive_file_id: 1y3PjeVzA1xnM0NC1KUbaT7ZgkfRsdWbF
+    local_path: labeling/pacific-union-college/88fb2c6936cb/sprint3_original/CALNU_0039_20250810_1/object_id.tif
+  labeling/pacific-union-college/88fb2c6936cb/sprint3_original/CALNU_0039_20250810_1/objects.csv:
+    drive_file_id: 1rYhxFwoPrWpBf8mEn1LpedNZLgMGcGwT
+    local_path: labeling/pacific-union-college/88fb2c6936cb/sprint3_original/CALNU_0039_20250810_1/objects.csv
+  labeling/pacific-union-college/88fb2c6936cb/sprint3_original/CALNU_0039_20250810_1/overlay.png:
+    drive_file_id: 15cZYY2dctTmddhLeQzLo-j_-vuLRmakA
+    local_path: labeling/pacific-union-college/88fb2c6936cb/sprint3_original/CALNU_0039_20250810_1/overlay.png
+  labeling/pacific-union-college/88fb2c6936cb/sprint3_revised/CALNU_0039_20250810_1/confidence.tif:
+    drive_file_id: 1okM9qBRZRaToO2MmcQlrpZ3ye1s_hb1r
+    local_path: labeling/pacific-union-college/88fb2c6936cb/sprint3_revised/CALNU_0039_20250810_1/confidence.tif
+  labeling/pacific-union-college/88fb2c6936cb/sprint3_revised/CALNU_0039_20250810_1/mask.tif:
+    drive_file_id: 1xG7H7SUPPswwOzlDkp6GoOkSAdlKuYjJ
+    local_path: labeling/pacific-union-college/88fb2c6936cb/sprint3_revised/CALNU_0039_20250810_1/mask.tif
+  labeling/pacific-union-college/88fb2c6936cb/sprint3_revised/CALNU_0039_20250810_1/object_id.tif:
+    drive_file_id: 1BSIKVNXB2qlXliXMklk5jk08lx9-DJum
+    local_path: labeling/pacific-union-college/88fb2c6936cb/sprint3_revised/CALNU_0039_20250810_1/object_id.tif
+  labeling/pacific-union-college/88fb2c6936cb/sprint3_revised/CALNU_0039_20250810_1/objects.csv:
+    drive_file_id: 1F0AnvMOR_MYx_fEthXbzMWFmgTZ2o3ug
+    local_path: labeling/pacific-union-college/88fb2c6936cb/sprint3_revised/CALNU_0039_20250810_1/objects.csv
+  labeling/pacific-union-college/88fb2c6936cb/sprint3_revised/CALNU_0039_20250810_1/overlay.png:
+    drive_file_id: 1NK6k2DLFM2fdxpj65tE3_EKFMqlFRBJX
+    local_path: labeling/pacific-union-college/88fb2c6936cb/sprint3_revised/CALNU_0039_20250810_1/overlay.png
+  labeling/pacific-union-college/88fb2c6936cb/transforms/CALNU_0039_20250810_1.txt:
+    drive_file_id: 1kJOmICzvl8fsTH1d3ugSvs6Re2TfkUrd
+    local_path: labeling/pacific-union-college/88fb2c6936cb/transforms/CALNU_0039_20250810_1.txt
+  labeling/pacific-union-college/88fb2c6936cb/transforms/transform_index.json:
+    drive_file_id: 1YvLnJfCbqMNky-MUti53B5OI0iekfT82
+    local_path: labeling/pacific-union-college/88fb2c6936cb/transforms/transform_index.json
+  labeling/sedgwick/88fb2c6936cb/site_assets/als_metadata.json:
+    drive_file_id: 1heNdaeoNJseOfELf9n8pTaMi4tMC5fuC
+    local_path: labeling/sedgwick/88fb2c6936cb/site_assets/als_metadata.json
+  labeling/sedgwick/88fb2c6936cb/site_assets/site_metadata_manifest.json:
+    drive_file_id: 1t0I1zPoQFZuBm37nWeCg4G2WsC-f_t49
+    local_path: labeling/sedgwick/88fb2c6936cb/site_assets/site_metadata_manifest.json
+  labeling/sedgwick/88fb2c6936cb/sprint3_original/CASBC_0087_20250712_1/confidence.tif:
+    drive_file_id: 1nQ9u1TsQWdIrt3qO1ZYDbX5n32udVzYp
+    local_path: labeling/sedgwick/88fb2c6936cb/sprint3_original/CASBC_0087_20250712_1/confidence.tif
+  labeling/sedgwick/88fb2c6936cb/sprint3_original/CASBC_0087_20250712_1/mask.tif:
+    drive_file_id: 1WLSpfBq1ZC4r1cLTZeHGC-_sS06eZCs5
+    local_path: labeling/sedgwick/88fb2c6936cb/sprint3_original/CASBC_0087_20250712_1/mask.tif
+  labeling/sedgwick/88fb2c6936cb/sprint3_original/CASBC_0087_20250712_1/object_id.tif:
+    drive_file_id: 1nnXSeQrNIWqJ3GSFsbcO-DIc0r-Eb_yS
+    local_path: labeling/sedgwick/88fb2c6936cb/sprint3_original/CASBC_0087_20250712_1/object_id.tif
+  labeling/sedgwick/88fb2c6936cb/sprint3_original/CASBC_0087_20250712_1/objects.csv:
+    drive_file_id: 1RAv_X0zPBlu8QikY6n1-aEhoPhFFDkoE
+    local_path: labeling/sedgwick/88fb2c6936cb/sprint3_original/CASBC_0087_20250712_1/objects.csv
+  labeling/sedgwick/88fb2c6936cb/sprint3_original/CASBC_0087_20250712_1/overlay.png:
+    drive_file_id: 1B7jnxkDvthTRraF2cnPp4IR22ZRIJl49
+    local_path: labeling/sedgwick/88fb2c6936cb/sprint3_original/CASBC_0087_20250712_1/overlay.png
+  labeling/sedgwick/88fb2c6936cb/sprint3_revised/CASBC_0087_20250712_1/confidence.tif:
+    drive_file_id: 12X5FE1jApS2L7wiHtUQxyDqkeJg656NM
+    local_path: labeling/sedgwick/88fb2c6936cb/sprint3_revised/CASBC_0087_20250712_1/confidence.tif
+  labeling/sedgwick/88fb2c6936cb/sprint3_revised/CASBC_0087_20250712_1/mask.tif:
+    drive_file_id: 1JkyG3lqd8pi3La6Av4YzzZdjHnbf8B9z
+    local_path: labeling/sedgwick/88fb2c6936cb/sprint3_revised/CASBC_0087_20250712_1/mask.tif
+  labeling/sedgwick/88fb2c6936cb/sprint3_revised/CASBC_0087_20250712_1/object_id.tif:
+    drive_file_id: 1rAZyb4MpuXO4sM8u2GAwbIlE08R3bpbn
+    local_path: labeling/sedgwick/88fb2c6936cb/sprint3_revised/CASBC_0087_20250712_1/object_id.tif
+  labeling/sedgwick/88fb2c6936cb/sprint3_revised/CASBC_0087_20250712_1/objects.csv:
+    drive_file_id: 1pRHMA2QgbozqiDphugxKoVbcIzJQ0wzD
+    local_path: labeling/sedgwick/88fb2c6936cb/sprint3_revised/CASBC_0087_20250712_1/objects.csv
+  labeling/sedgwick/88fb2c6936cb/sprint3_revised/CASBC_0087_20250712_1/overlay.png:
+    drive_file_id: 1DU7s2_pgD9OlasT5DoyW8_VnSbTn8mGa
+    local_path: labeling/sedgwick/88fb2c6936cb/sprint3_revised/CASBC_0087_20250712_1/overlay.png
+  labeling/sedgwick/88fb2c6936cb/transforms/CASBC_0087_20250712_1.txt:
+    drive_file_id: 1_3lShpzhrSBKJdVZGSNI8RULQ_0J0Svi
+    local_path: labeling/sedgwick/88fb2c6936cb/transforms/CASBC_0087_20250712_1.txt
+  labeling/sedgwick/88fb2c6936cb/transforms/transform_index.json:
+    drive_file_id: 10aSEwtMvTQnA42xtCp741Mstgk9pK6ZO
+    local_path: labeling/sedgwick/88fb2c6936cb/transforms/transform_index.json
+  labeling/shaver-lake/88fb2c6936cb/site_assets/als_metadata.json:
+    drive_file_id: 1_VNKJuAAC0pU1B8hcF51raa0ggwHzt2q
+    local_path: labeling/shaver-lake/88fb2c6936cb/site_assets/als_metadata.json
+  labeling/shaver-lake/88fb2c6936cb/site_assets/site_metadata_manifest.json:
+    drive_file_id: 1tcXFoaQbJW1NtEkbJ854kV4teoUODp_f
+    local_path: labeling/shaver-lake/88fb2c6936cb/site_assets/site_metadata_manifest.json
+  labeling/shaver-lake/88fb2c6936cb/sprint3_original/CAFKU_0096_20240804_1/confidence.tif:
+    drive_file_id: 1lPgSzLCmg2OG8nmjd3NWnmWpzU1zz7QX
+    local_path: labeling/shaver-lake/88fb2c6936cb/sprint3_original/CAFKU_0096_20240804_1/confidence.tif
+  labeling/shaver-lake/88fb2c6936cb/sprint3_original/CAFKU_0096_20240804_1/mask.tif:
+    drive_file_id: 1nisbgOY5V0d6F_Ro91oW3VaeEK5TcV2Y
+    local_path: labeling/shaver-lake/88fb2c6936cb/sprint3_original/CAFKU_0096_20240804_1/mask.tif
+  labeling/shaver-lake/88fb2c6936cb/sprint3_original/CAFKU_0096_20240804_1/object_id.tif:
+    drive_file_id: 1gIUyxku7rVQE8JYcbmOP7yq2BT7eQOvC
+    local_path: labeling/shaver-lake/88fb2c6936cb/sprint3_original/CAFKU_0096_20240804_1/object_id.tif
+  labeling/shaver-lake/88fb2c6936cb/sprint3_original/CAFKU_0096_20240804_1/objects.csv:
+    drive_file_id: 1Lg27bEpGMlgthgJlRNISQ8-WMKG1eq_h
+    local_path: labeling/shaver-lake/88fb2c6936cb/sprint3_original/CAFKU_0096_20240804_1/objects.csv
+  labeling/shaver-lake/88fb2c6936cb/sprint3_original/CAFKU_0096_20240804_1/overlay.png:
+    drive_file_id: 1Yn0lA4gTBdJuVACzHJOSGnNoc6YCr1Gb
+    local_path: labeling/shaver-lake/88fb2c6936cb/sprint3_original/CAFKU_0096_20240804_1/overlay.png
+  labeling/shaver-lake/88fb2c6936cb/sprint3_revised/CAFKU_0096_20240804_1/confidence.tif:
+    drive_file_id: 1hlXGyoDsSFSY8twbXr8ooXlLjzlxg5K-
+    local_path: labeling/shaver-lake/88fb2c6936cb/sprint3_revised/CAFKU_0096_20240804_1/confidence.tif
+  labeling/shaver-lake/88fb2c6936cb/sprint3_revised/CAFKU_0096_20240804_1/mask.tif:
+    drive_file_id: 1vzCCR5TxGQk1WyjSVIlS4IbpwVgX6hgG
+    local_path: labeling/shaver-lake/88fb2c6936cb/sprint3_revised/CAFKU_0096_20240804_1/mask.tif
+  labeling/shaver-lake/88fb2c6936cb/sprint3_revised/CAFKU_0096_20240804_1/object_id.tif:
+    drive_file_id: 1_ai33w_JQA73e2gFghKLs9JsxYils0Yw
+    local_path: labeling/shaver-lake/88fb2c6936cb/sprint3_revised/CAFKU_0096_20240804_1/object_id.tif
+  labeling/shaver-lake/88fb2c6936cb/sprint3_revised/CAFKU_0096_20240804_1/objects.csv:
+    drive_file_id: 1jK_O2gv7OJPI3yW43ZpiqaifM3Ak0iih
+    local_path: labeling/shaver-lake/88fb2c6936cb/sprint3_revised/CAFKU_0096_20240804_1/objects.csv
+  labeling/shaver-lake/88fb2c6936cb/sprint3_revised/CAFKU_0096_20240804_1/overlay.png:
+    drive_file_id: 14GmljGt-o02tlPl1_EQzihhg-92LmTyG
+    local_path: labeling/shaver-lake/88fb2c6936cb/sprint3_revised/CAFKU_0096_20240804_1/overlay.png
+  labeling/shaver-lake/88fb2c6936cb/transforms/CAFKU_0096_20240804_1.txt:
+    drive_file_id: 1SzWJvQxwh8DnGauLz9PR78OnNJ-Adew2
+    local_path: labeling/shaver-lake/88fb2c6936cb/transforms/CAFKU_0096_20240804_1.txt
+  labeling/shaver-lake/88fb2c6936cb/transforms/transform_index.json:
+    drive_file_id: 1yY516wYzcXPGLT_VEny5yYiKz5OZq92s
+    local_path: labeling/shaver-lake/88fb2c6936cb/transforms/transform_index.json

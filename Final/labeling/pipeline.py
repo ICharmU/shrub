@@ -972,6 +972,63 @@ class LabelingPipeline(BasePipeline):
         self.logger.info("Saved labeling run manifest to %s", path)
         return path
 
+    def executed_stages_from_result(self, result: PipelineRunResult) -> set[str]:
+        return set((result.qa_outputs or {}).get("executed_stages", []) or [])
+    
+    
+    def skipped_stages_from_result(self, result: PipelineRunResult) -> dict[str, str]:
+        return dict((result.qa_outputs or {}).get("skipped_stages", {}) or {})
+    
+    
+    def runnable_stages_for_runtime(self, runtime_report=None) -> set[str]:
+        runtime_report = runtime_report or self.runtime_report()
+        runnable = set()
+        for stage in self.pipeline_spec.stages:
+            ok, _ = self.stage_is_eligible(stage.name, runtime_report=runtime_report)
+            if ok:
+                runnable.add(stage.name)
+        return runnable
+    
+    
+    def additional_runnable_stages_remaining(
+        self,
+        existing: PipelineRunResult,
+        *,
+        runtime_report=None,
+    ) -> set[str]:
+        runtime_report = runtime_report or self.runtime_report()
+        already_done = self.executed_stages_from_result(existing)
+        runnable_now = self.runnable_stages_for_runtime(runtime_report=runtime_report)
+        return runnable_now - already_done
+    
+    
+    def should_reuse_existing_run(
+        self,
+        existing: PipelineRunResult,
+        *,
+        runtime_report=None,
+    ) -> tuple[bool, str]:
+        runtime_report = runtime_report or self.runtime_report()
+        policy = self.cfg.labeling_runtime
+    
+        if existing.success:
+            if policy.reuse_successful_runs:
+                return True, "existing run is successful"
+            return False, "successful reuse disabled by config"
+    
+        # partial/incomplete run
+        if not policy.resume_partial_runs:
+            return True, "partial runs are configured to be reused, not resumed"
+    
+        remaining = self.additional_runnable_stages_remaining(existing, runtime_report=runtime_report)
+        if remaining:
+            return False, f"partial run can be resumed; remaining runnable stages={sorted(remaining)}"
+    
+        if policy.reuse_partial_runs_when_no_new_stages_are_eligible:
+            return True, "partial run reused because no new stages are eligible on this runtime"
+    
+        return False, "partial run not reused by policy"
+
     # -------------------------------------------------------------------------
     # Stage 1: Sprint 3 manifest -> canonical objects
     # -------------------------------------------------------------------------
@@ -1889,9 +1946,23 @@ class LabelingPipeline(BasePipeline):
         runtime_report = self.runtime_report()
     
         existing = self.try_load_existing_run(signature=signature)
+
         if existing is not None:
-            self.logger.info("Resuming/reusing existing labeling run for signature=%s", signature)
-            return existing
+            reuse_ok, reuse_reason = self.should_reuse_existing_run(
+                existing,
+                runtime_report=runtime_report,
+            )
+            if reuse_ok:
+                self.logger.info(
+                    "Reusing existing labeling run for signature=%s | reason=%s",
+                    signature, reuse_reason
+                )
+                return existing
+        
+            self.logger.info(
+                "Existing labeling run will be resumed instead of reused for signature=%s | reason=%s",
+                signature, reuse_reason
+            )
     
         runtime_notes = [
             f"runtime_image={runtime_report.detected_image_key}",
@@ -1959,7 +2030,14 @@ class LabelingPipeline(BasePipeline):
         )
     
         success = (not objects_all.empty) and (not artifacts_all.empty)
-        status = "success" if success else "partial_or_empty_outputs"
+        if success:
+            status = "success"
+        elif executed_stages and skipped_stages:
+            status = "partial_runtime_gated"
+        elif executed_stages:
+            status = "partial_or_empty_outputs"
+        else:
+            status = "no_eligible_stages"
     
         stage_cache_root = self.cfg.output.labeling_root / "stage_cache"
         stage_cache_manifest_count = len(list(stage_cache_root.rglob("stage_cache_manifest.json"))) if stage_cache_root.exists() else 0

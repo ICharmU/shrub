@@ -1,19 +1,26 @@
 artifacts/
 **/artifacts/*
+
+
+**/artifact_store_local/*
+artifact_store_local/
 *.tif
 *.ptx
 /Sprint 1/Extra/task_2/datasets/
+
 
 client_secrets.json
 drive_config.yaml
 pydrive_credentials.json
 cached_credentials.json
+.countlines.cache.json
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
-
+**/__pycache__/*
 # C extensions
 *.so
 

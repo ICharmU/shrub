@@ -234,11 +234,16 @@ class FeatureConfig:
 class LabelingRuntimeConfig:
     storage: PipelineStorageConfig = field(default_factory=PipelineStorageConfig)
     storage_policy: ArtifactStorePolicyConfig = field(default_factory=ArtifactStorePolicyConfig)
+    
     require_capability_sprint3: tuple[str, ...] = ("runtime:intelimon_sprint3",)
     require_capability_standardize: tuple[str, ...] = ("runtime:python",)
     require_capability_refine: tuple[str, ...] = ("runtime:python",)
     require_capability_transfer: tuple[str, ...] = ("runtime:labeling_transfer",)
     require_capability_rasterize: tuple[str, ...] = ("runtime:labeling_transfer",)
+
+    resume_partial_runs: bool = True
+    reuse_successful_runs: bool = True
+    reuse_partial_runs_when_no_new_stages_are_eligible: bool = True
 
 
 @dataclass
