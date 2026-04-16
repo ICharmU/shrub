@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import rasterio
-from rasterio.windows import from_bounds
+from rasterio.windows import from_bounds, Window
 from skimage.transform import resize
 
 from Final.models import ShrubObjectColumns
@@ -41,14 +41,38 @@ def create_overlay_figure(naip_path: str | Path, mask_path: str | Path, out_path
 
     with rasterio.open(naip_path) as nsrc:
         win = from_bounds(*mask_bounds, transform=nsrc.transform)
-        rgb = nsrc.read([1, 2, 3], window=win).astype(float)
+        win = win.round_offsets().round_lengths()
+
+        # clip to dataset bounds
+        row_off = max(0, int(win.row_off))
+        col_off = max(0, int(win.col_off))
+        height = min(int(win.height), nsrc.height - row_off)
+        width = min(int(win.width), nsrc.width - col_off)
+        if height <= 0 or width <= 0:
+            raise ValueError("Overlay window falls outside NAIP extent.")
+
+        safe_win = Window(col_off, row_off, width, height)
+        rgb = nsrc.read([1, 2, 3], window=safe_win, boundless=False).astype(float)
 
     for i in range(3):
         b = rgb[i]
-        rgb[i] = (b - b.min()) / (b.max() - b.min() + 1e-9)
+        finite = np.isfinite(b)
+        if finite.any():
+            vmin, vmax = b[finite].min(), b[finite].max()
+            rgb[i] = (b - vmin) / (vmax - vmin + 1e-9)
+        else:
+            rgb[i] = 0.0
+
     rgb_display = np.moveaxis(rgb, 0, -1)
 
-    mask_resized = resize(mask, (rgb_display.shape[0], rgb_display.shape[1]), order=0, preserve_range=True, anti_aliasing=False)
+    mask_resized = resize(
+        mask,
+        (rgb_display.shape[0], rgb_display.shape[1]),
+        order=0,
+        preserve_range=True,
+        anti_aliasing=False,
+    )
+
     overlay = np.zeros((*mask_resized.shape, 4), dtype=float)
     overlay[mask_resized == 1] = [1.0, 0.1, 0.1, 0.6]
 
@@ -67,3 +91,5 @@ def create_overlay_figure(naip_path: str | Path, mask_path: str | Path, out_path
         out_path.parent.mkdir(parents=True, exist_ok=True)
         fig.savefig(out_path, dpi=150, bbox_inches="tight")
     return fig
+
+

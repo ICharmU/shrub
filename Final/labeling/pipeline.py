@@ -40,7 +40,7 @@ from Final.artifact_store import (
     DriveRegistryArtifactStore,
     HybridArtifactStore,
 )
-from Final.pipeline_caching import hash_payload
+from Final.pipeline_caching import hash_payload, read_stage_cache_manifest, write_stage_cache_manifest
 from Final.coordination import CoordinationManager
 from Final.gating import (
     QACheckSpec,
@@ -576,18 +576,80 @@ class LabelingPipeline(BasePipeline):
         remote_ref = self._push_if_needed(local_path, artifact_key, rel_path)
         self._prune_if_allowed(local_path, artifact_key, rel_path)
         return local_path, rel_path, remote_ref
+    
+    def validate_hydrated_artifact(self, *, rel_path: str, local_path: Path, artifact_key: str | None = None) -> bool:
+        try:
+            if artifact_key in {"binary_mask", "confidence_mask", "object_id_raster"}:
+                with rasterio.open(local_path) as src:
+                    src.read(1, window=Window(0, 0, min(16, src.width), min(16, src.height)))
+                return True
+
+            if artifact_key in {"objects_summary", "artifacts_summary", "object_table"}:
+                pd.read_csv(local_path, nrows=5)
+                return True
+
+            if artifact_key in {"run_manifest", "site_metadata_manifest", "source_inventory", "als_metadata_json", "transform_index"}:
+                json.loads(local_path.read_text(encoding="utf-8"))
+                return True
+
+            if artifact_key == "qa_overlay":
+                return local_path.exists() and local_path.stat().st_size > 0
+
+            if artifact_key == "transform_txt":
+                return local_path.exists() and local_path.stat().st_size > 0
+
+            return super().validate_hydrated_artifact(rel_path=rel_path, local_path=local_path, artifact_key=artifact_key)
+        except Exception as e:
+            self.logger.warning(
+                "HYDRATE VALIDATE FAIL | rel_path=%s | artifact_key=%s | error=%s",
+                rel_path, artifact_key, e
+            )
+            return False
 
     def _try_load_json_artifact(self, artifact_key: str, **fmt) -> dict | None:
         rel_path = self._render_rel_path(artifact_key, **fmt)
         local_path = self._local_artifact_path(rel_path)
 
         if local_path.exists():
-            return json.loads(local_path.read_text(encoding="utf-8"))
+            try:
+                if self.validate_hydrated_artifact(
+                    rel_path=rel_path,
+                    local_path=local_path,
+                    artifact_key=artifact_key,
+                ):
+                    self.logger.info(
+                        "JSON ARTIFACT HIT | key=%s | rel_path=%s | source=local",
+                        artifact_key, rel_path
+                    )
+                    return json.loads(local_path.read_text(encoding="utf-8"))
+                else:
+                    self.logger.warning(
+                        "JSON ARTIFACT INVALID | key=%s | rel_path=%s | source=local | deleting local copy",
+                        artifact_key, rel_path
+                    )
+                    local_path.unlink(missing_ok=True)
+            except Exception as e:
+                self.logger.warning(
+                    "JSON ARTIFACT LOCAL READ FAIL | key=%s | rel_path=%s | error=%s",
+                    artifact_key, rel_path, e
+                )
+                local_path.unlink(missing_ok=True)
 
         if self._remote_exists(rel_path):
-            pulled = self.artifact_store.pull(rel_path, local_path=local_path)
-            return json.loads(Path(pulled).read_text(encoding="utf-8"))
+            pulled = self.hydrate_and_validate_artifact(
+                rel_path=rel_path,
+                local_path=local_path,
+                artifact_key=artifact_key,
+                reason=f"load_json_artifact:{artifact_key}",
+            )
+            if pulled is not None:
+                self.logger.info(
+                    "JSON ARTIFACT HIT | key=%s | rel_path=%s | source=remote",
+                    artifact_key, rel_path
+                )
+                return json.loads(Path(pulled).read_text(encoding="utf-8"))
 
+        self.logger.info("JSON ARTIFACT MISS | key=%s | rel_path=%s", artifact_key, rel_path)
         return None
 
     def standardize_stage_data_signature(self, runs_df: pd.DataFrame) -> str:
@@ -729,6 +791,86 @@ class LabelingPipeline(BasePipeline):
             and cache_object_csv.exists()
             and cache_artifacts_csv.exists()
         )
+    
+    def _is_rel_path_string(self, value: str) -> bool:
+        return isinstance(value, str) and value.startswith("labeling/")
+
+    def reconcile_artifact_reference(self, *, key: str, value):
+        if value is None:
+            return {"status": "missing"}
+
+        artifact_key = None
+        if key.endswith("_rel_path"):
+            artifact_key = key.replace("_rel_path", "")
+        elif key in self.artifact_specs():
+            artifact_key = key
+
+        # rel-path case
+        if isinstance(value, str) and self._is_rel_path_string(value):
+            rel_path = value
+            local_path = self._local_artifact_path(rel_path)
+
+            hydrated = None
+            if (not local_path.exists()) and self._remote_exists(rel_path):
+                hydrated = self.hydrate_and_validate_artifact(
+                    rel_path=rel_path,
+                    local_path=local_path,
+                    artifact_key=artifact_key,
+                    reason=f"reconcile:{key}",
+                )
+            elif local_path.exists():
+                ok = self.validate_hydrated_artifact(
+                    rel_path=rel_path,
+                    local_path=local_path,
+                    artifact_key=artifact_key,
+                )
+                if not ok and self._remote_exists(rel_path):
+                    self.logger.warning(
+                        "RECONCILE LOCAL INVALID | key=%s | rel_path=%s | attempting rehydrate",
+                        key, rel_path
+                    )
+                    local_path.unlink(missing_ok=True)
+                    hydrated = self.hydrate_and_validate_artifact(
+                        rel_path=rel_path,
+                        local_path=local_path,
+                        artifact_key=artifact_key,
+                        reason=f"reconcile_invalid_local:{key}",
+                    )
+
+            if artifact_key in self.artifact_specs():
+                if local_path.exists():
+                    self._prune_if_allowed(local_path, artifact_key, rel_path)
+
+            return {
+                "status": "reconciled_rel_path",
+                "rel_path": rel_path,
+                "artifact_key": artifact_key,
+                "exists_local": local_path.exists(),
+                "exists_remote": self._remote_exists(rel_path),
+                "hydrated_now": hydrated is not None,
+            }
+
+        # local file case
+        p = Path(value) if isinstance(value, str) else None
+        if p is not None and p.exists() and p.is_file():
+            try:
+                rel_path = str(p.relative_to(self.cfg.data.project_root))
+            except Exception:
+                return {"status": "local_only", "path": str(p)}
+
+            if not self._remote_exists(rel_path):
+                self.logger.info("RECONCILE PUSH | key=%s | rel_path=%s", key, rel_path)
+                self.artifact_store.push(p, rel_path=rel_path)
+
+            return {
+                "status": "reconciled_local_path",
+                "rel_path": rel_path,
+                "artifact_key": artifact_key,
+                "exists_local": p.exists(),
+                "exists_remote": self._remote_exists(rel_path),
+            }
+
+        return {"status": "unhandled", "value": value}
         
 
     def _current_config_signature(self) -> str:
@@ -875,6 +1017,70 @@ class LabelingPipeline(BasePipeline):
                 }
             )
         return pd.DataFrame(rows).sort_values("config_signature").reset_index(drop=True)
+    
+    def enforce_storage_policy_for_existing_run(
+        self,
+        *,
+        signature: str | None = None,
+        existing: PipelineRunResult | None = None,
+    ) -> dict[str, dict]:
+        signature = signature or self.config_signature()
+        existing = existing or self.try_load_existing_run(signature=signature)
+
+        report = {
+            "signature": signature,
+            "run_level": {},
+            "stage_caches": {},
+        }
+
+        # Run-level artifacts
+        run_rel_paths = {
+            "objects_summary": self._render_rel_path("objects_summary", config_signature=signature),
+            "artifacts_summary": self._render_rel_path("artifacts_summary", config_signature=signature),
+            "run_manifest": self._render_rel_path("run_manifest", config_signature=signature),
+            "run_result": self._render_rel_path("run_result", config_signature=signature),
+        }
+
+        for artifact_key, rel_path in run_rel_paths.items():
+            report["run_level"][artifact_key] = self.reconcile_artifact_reference(
+                key=artifact_key,
+                value=rel_path,
+            )
+
+        # Stage cache directories
+        stage_cache_root = self.cfg.output.labeling_root / "stage_cache"
+        if stage_cache_root.exists():
+            for manifest_path in stage_cache_root.rglob("stage_cache_manifest.json"):
+                stage_cache_dir = manifest_path.parent
+                try:
+                    rec = read_stage_cache_manifest(stage_cache_dir)
+                    if rec is None:
+                        continue
+                    stage_name = rec.stage_name
+                    self.enforce_storage_policy_for_stage_cache(
+                        stage_name=stage_name,
+                        stage_cache_dir=stage_cache_dir,
+                    )
+                    report["stage_caches"][str(stage_cache_dir)] = {
+                        "stage_name": stage_name,
+                        "status": "reconciled",
+                    }
+                except Exception as e:
+                    self.logger.warning(
+                        "STORAGE POLICY RECONCILE FAIL | stage_cache_dir=%s | error=%s",
+                        stage_cache_dir, e
+                    )
+                    report["stage_caches"][str(stage_cache_dir)] = {
+                        "status": "error",
+                        "error": str(e),
+                    }
+
+        self.logger.info(
+            "EXISTING RUN STORAGE POLICY RECONCILE DONE | signature=%s | n_stage_caches=%d",
+            signature,
+            len(report["stage_caches"]),
+        )
+        return report
 
     def try_load_existing_run(self, signature: str | None = None) -> PipelineRunResult | None:
         """
@@ -1177,6 +1383,12 @@ class LabelingPipeline(BasePipeline):
             expected_config_signature=config_sig,
         ) and cache_csv.exists():
             self.logger.info("Using module-aware standardize cache | data=%s | config=%s", data_sig, config_sig)
+
+            self.enforce_storage_policy_for_stage_cache(
+                stage_name="standardize",
+                stage_cache_dir=cache_dir,
+            )
+
             return pd.read_csv(cache_csv)
 
         objects = standardize_sprint3_manifest(
@@ -1221,6 +1433,12 @@ class LabelingPipeline(BasePipeline):
             expected_config_signature=config_sig,
         ) and cache_csv.exists():
             self.logger.info("Using module-aware refine cache | data=%s | config=%s", data_sig, config_sig)
+
+            self.enforce_storage_policy_for_stage_cache(
+                stage_name="refine",
+                stage_cache_dir=cache_dir,
+            )
+
             return pd.read_csv(cache_csv)
 
         subspace_cfg = SubspaceReductionConfig(
@@ -1262,9 +1480,17 @@ class LabelingPipeline(BasePipeline):
     def validate_cached_naip(self, naip_path: Path) -> bool:
         try:
             with rasterio.open(naip_path) as src:
-                h = max(1, min(16, src.height))
-                w = max(1, min(16, src.width))
-                src.read([1], window=Window(0, 0, w, h))
+                samples = [
+                    (0, 0),
+                    (max(0, src.width // 2 - 8), max(0, src.height // 2 - 8)),
+                    (max(0, src.width - 16), max(0, src.height - 16)),
+                ]
+                for x, y in samples:
+                    w = min(16, src.width - x)
+                    h = min(16, src.height - y)
+                    if w <= 0 or h <= 0:
+                        continue
+                    src.read([1], window=Window(x, y, w, h))
             return True
         except Exception as e:
             self.logger.warning("Cached NAIP validation failed for %s: %s", naip_path, e)
@@ -1442,8 +1668,14 @@ class LabelingPipeline(BasePipeline):
     
         if (not force_refresh) and self._remote_exists(rel_path):
             self.logger.info("Pulling transform from artifact store for site=%s plot_id=%s", site, plot_id)
-            pulled = self.artifact_store.pull(rel_path, local_path=transform_local)
-            return Path(pulled)
+            pulled = self.hydrate_and_validate_artifact(
+                rel_path=rel_path,
+                local_path=transform_local,
+                artifact_key="transform_txt",
+                reason=f"get_transform_local_cached:{site}:{plot_id}",
+            )
+            if pulled is not None:
+                return Path(pulled)
     
         transform_index = self.get_site_transform_index(site, force_refresh=force_refresh)
     
@@ -1645,6 +1877,11 @@ class LabelingPipeline(BasePipeline):
             )
             cached_objects = pd.read_csv(cache_object_csv)
             cached_artifacts = pd.read_csv(cache_artifacts_csv)
+
+            self.reconcile_stage_artifacts_with_storage_policy(
+                stage_name="transfer",
+                artifact_paths=self.read_stage_cache_artifact_paths(cache_dir),
+            )
             return cached_objects, cached_artifacts
 
         if naip_path is None or als_meta is None:
@@ -1957,11 +2194,20 @@ class LabelingPipeline(BasePipeline):
                     "Reusing existing labeling run for signature=%s | reason=%s",
                     signature, reuse_reason
                 )
+                self.enforce_storage_policy_for_existing_run(
+                    signature=signature,
+                    existing=existing,
+                )
                 return existing
         
             self.logger.info(
                 "Existing labeling run will be resumed instead of reused for signature=%s | reason=%s",
                 signature, reuse_reason
+            )
+
+            self.enforce_storage_policy_for_existing_run(
+                signature=signature,
+                existing=existing,
             )
     
         runtime_notes = [

@@ -18,7 +18,8 @@ from Final.models import (
     ExecutionEligibilityStatus, 
     RuntimeRequirementMode
 )
-from Final.pipeline_caching import hash_payload, is_valid_stage_cache, prune_stage_artifacts, write_stage_cache_manifest
+from Final.pipeline_caching import hash_payload, is_valid_stage_cache, \
+    prune_stage_artifacts, write_stage_cache_manifest, read_stage_cache_manifest
 from Final.runtime_detection import detect_runtime_capabilities
 
 class BasePipeline(ABC):
@@ -304,3 +305,88 @@ class BasePipeline(ABC):
                 store.sync_registry()
             except Exception as e:
                 self.logger.warning("Artifact registry sync failed: %s", e)
+
+    def read_stage_cache_artifact_paths(self, stage_cache_dir: str | Path) -> dict:
+        rec = read_stage_cache_manifest(stage_cache_dir)
+        return rec.artifact_paths if rec is not None else {}
+
+    def reconcile_stage_artifacts_with_storage_policy(
+        self,
+        *,
+        stage_name: str,
+        artifact_paths: dict,
+    ) -> dict[str, dict]:
+        results = {}
+        for key, value in (artifact_paths or {}).items():
+            results[key] = self.reconcile_artifact_reference(key=key, value=value)
+
+        self.logger.info(
+            "STORAGE POLICY RECONCILE DONE | stage=%s | n_artifacts=%d | statuses=%s",
+            stage_name,
+            len(results),
+            {k: v.get("status") for k, v in results.items()},
+        )
+        return results
+
+
+    def reconcile_artifact_reference(self, *, key: str, value):
+        """
+        Base implementation is intentionally minimal.
+        Concrete pipelines can override to interpret rel paths vs local paths.
+        """
+        return {"status": "noop", "value": value}
+    
+    def hydrate_artifact(self, *, rel_path: str, local_path: str | Path | None = None, reason: str = "") -> Path | None:
+        store = getattr(self, "artifact_store", None)
+        if store is None:
+            self.logger.info("HYDRATE SKIP | no artifact store | rel_path=%s", rel_path)
+            return None
+
+        try:
+            self.logger.info("HYDRATE START | rel_path=%s | reason=%s", rel_path, reason)
+            pulled = store.pull(rel_path, local_path=local_path)
+            self.logger.info("HYDRATE DONE  | rel_path=%s | local_path=%s", rel_path, pulled)
+            return Path(pulled)
+        except Exception as e:
+            self.logger.warning("HYDRATE FAIL | rel_path=%s | reason=%s | error=%s", rel_path, reason, e)
+            return None
+        
+    def validate_hydrated_artifact(self, *, rel_path: str, local_path: Path, artifact_key: str | None = None) -> bool:
+        """
+        Default existence-only validation. Concrete pipelines should override for
+        TIFF/CSV/JSON-specific validation.
+        """
+        ok = local_path.exists() and local_path.is_file()
+        self.logger.info(
+            "HYDRATE VALIDATE | rel_path=%s | artifact_key=%s | ok=%s",
+            rel_path, artifact_key, ok
+        )
+        return ok
+    
+    def hydrate_and_validate_artifact(
+        self,
+        *,
+        rel_path: str,
+        local_path: str | Path | None = None,
+        artifact_key: str | None = None,
+        reason: str = "",
+    ) -> Path | None:
+        pulled = self.hydrate_artifact(rel_path=rel_path, local_path=local_path, reason=reason)
+        if pulled is None:
+            return None
+        ok = self.validate_hydrated_artifact(rel_path=rel_path, local_path=pulled, artifact_key=artifact_key)
+        if not ok:
+            self.logger.warning("HYDRATE INVALID | rel_path=%s | artifact_key=%s", rel_path, artifact_key)
+            return None
+        return pulled
+    
+    def enforce_storage_policy_for_stage_cache(self, *, stage_name: str, stage_cache_dir: str | Path) -> None:
+        artifact_paths = self.read_stage_cache_artifact_paths(stage_cache_dir)
+        self.logger.info(
+            "STORAGE POLICY RECONCILE | stage=%s | cache_dir=%s | n_artifacts=%d",
+            stage_name, stage_cache_dir, len(artifact_paths)
+        )
+        self.reconcile_stage_artifacts_with_storage_policy(
+            stage_name=stage_name,
+            artifact_paths=artifact_paths,
+        )
