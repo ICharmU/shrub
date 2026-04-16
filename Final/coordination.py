@@ -130,3 +130,97 @@ class CoordinationManager:
         if payload_update:
             payload.setdefault("payload", {}).update(payload_update)
         self.save_json(rel_path, payload)
+
+    def mark_failed(
+        self,
+        *,
+        experiment_name: str,
+        trial_id: str,
+        pipeline_name: str,
+        stage_name: str,
+        work_key: str,
+        owner_id: str | None = None,
+        error: str = "",
+        payload_update: dict | None = None,
+    ) -> None:
+        owner_id = owner_id or self.default_owner_id()
+        rel_path = self._rel_path(experiment_name, trial_id, pipeline_name, stage_name, f"{work_key}.json")
+        payload = self.load_json(rel_path) or {}
+        payload["owner_id"] = owner_id
+        payload["status"] = "failed"
+        payload["error"] = error
+        payload["heartbeat_at"] = utc_now_iso()
+        payload["finished_at"] = utc_now_iso()
+        if payload_update:
+            payload.setdefault("payload", {}).update(payload_update)
+        self.save_json(rel_path, payload)
+
+    def mark_blocked(
+        self,
+        *,
+        experiment_name: str,
+        trial_id: str,
+        pipeline_name: str,
+        stage_name: str,
+        work_key: str,
+        reason: str,
+        owner_id: str | None = None,
+        payload_update: dict | None = None,
+    ) -> None:
+        owner_id = owner_id or self.default_owner_id()
+        rel_path = self._rel_path(experiment_name, trial_id, pipeline_name, stage_name, f"{work_key}.json")
+        payload = self.load_json(rel_path) or {}
+        payload["owner_id"] = owner_id
+        payload["status"] = "blocked"
+        payload["reason"] = reason
+        payload["heartbeat_at"] = utc_now_iso()
+        if payload_update:
+            payload.setdefault("payload", {}).update(payload_update)
+        self.save_json(rel_path, payload)
+
+    def is_stale(self, payload: dict, *, now_ts: datetime | None = None) -> bool:
+        now_ts = now_ts or datetime.now(timezone.utc)
+        hb = payload.get("heartbeat_at") or payload.get("claimed_at")
+        ttl = int(payload.get("ttl_sec", 0) or 0)
+        if not hb or ttl <= 0:
+            return False
+        try:
+            hb_ts = datetime.fromisoformat(hb)
+        except Exception:
+            return False
+        return (now_ts - hb_ts).total_seconds() > ttl
+
+    def claim_work_if_available(
+        self,
+        *,
+        experiment_name: str,
+        trial_id: str,
+        pipeline_name: str,
+        stage_name: str,
+        work_key: str,
+        owner_id: str | None = None,
+        ttl_sec: int = 900,
+        payload: dict | None = None,
+    ) -> tuple[bool, dict]:
+        owner_id = owner_id or self.default_owner_id()
+        rel_path = self._rel_path(experiment_name, trial_id, pipeline_name, stage_name, f"{work_key}.json")
+        existing = self.load_json(rel_path)
+
+        if existing is not None:
+            status = existing.get("status")
+            if status in {"complete"}:
+                return False, existing
+            if status in {"claimed", "running"} and not self.is_stale(existing):
+                return False, existing
+
+        claim = WorkClaim(
+            work_key=work_key,
+            owner_id=owner_id,
+            status="claimed",
+            claimed_at=utc_now_iso(),
+            heartbeat_at=utc_now_iso(),
+            ttl_sec=ttl_sec,
+            payload=payload or {},
+        )
+        self.save_json(rel_path, asdict(claim))
+        return True, asdict(claim)

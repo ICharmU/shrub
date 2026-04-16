@@ -34,6 +34,8 @@ from Final.models import (
     RuntimeRequirement,
     RuntimeRequirementMode,
     ExecutionEligibilityStatus,
+    WorkUnitScope, 
+    WorkUnitStatus,
 )
 from Final.artifact_store import (
     LocalArtifactStore,
@@ -1235,6 +1237,219 @@ class LabelingPipeline(BasePipeline):
     
         return False, "partial run not reused by policy"
 
+    def enumerate_work_units(self, *, trial_id: str, config_signature: str | None = None, runtime_report=None) -> list[dict]:
+        config_signature = config_signature or self.config_signature()
+        runtime_report = runtime_report or self.runtime_report()
+
+        units = []
+
+        # Stage: sprint3
+        sprint3_ok, _ = self.stage_is_eligible("sprint3", runtime_report=runtime_report)
+        sprint3_complete = self.sprint3_manifest_csv.exists()
+
+        units.append({
+            "unit_id": f"{trial_id}:{self.pipeline_name}:sprint3",
+            "trial_id": trial_id,
+            "pipeline_name": self.pipeline_name,
+            "config_signature": config_signature,
+            "stage_name": "sprint3",
+            "work_key": "sprint3",
+            "scope": WorkUnitScope.STAGE.value,
+            "status": WorkUnitStatus.COMPLETE.value if sprint3_complete else (
+                WorkUnitStatus.PENDING.value if sprint3_ok else WorkUnitStatus.INELIGIBLE.value
+            ),
+            "dependencies": [],
+            "dependency_reasons": [],
+            "runtime_required_capabilities": list(self.cfg.labeling_runtime.require_capability_sprint3),
+            "runtime_eligible": sprint3_ok,
+            "priority": 10,
+        })
+
+        # Stage: standardize
+        standardize_ok, _ = self.stage_is_eligible("standardize", runtime_report=runtime_report)
+        standardize_ready = self.sprint3_manifest_csv.exists()
+
+        std_deps = []
+        std_dep_reasons = []
+        if not standardize_ready:
+            std_deps.append("sprint3")
+            std_dep_reasons.append("Sprint 3 manifest missing.")
+
+        std_complete = False
+        try:
+            manifest_csv = self.sprint3_manifest_csv
+            if manifest_csv.exists():
+                runs_df = pd.read_csv(manifest_csv)
+                if "returncode" in runs_df.columns:
+                    runs_df = runs_df[runs_df["returncode"] == 0].copy()
+                if "variant" in runs_df.columns and self.pipeline_config.sprint3_variants:
+                    runs_df = runs_df[runs_df["variant"].isin(self.pipeline_config.sprint3_variants)].copy()
+
+                data_sig = self.standardize_stage_data_signature(runs_df)
+                config_sig = self.stage_config_signature("standardize")
+                cache_dir = self.standardize_stage_cache_dir(data_sig, config_sig)
+                cache_csv = cache_dir / "objects_standardized.csv"
+                std_complete = (
+                    self.validate_stage_cache(
+                        stage_name="standardize",
+                        stage_cache_dir=cache_dir,
+                        expected_data_signature=data_sig,
+                        expected_config_signature=config_sig,
+                    )
+                    and cache_csv.exists()
+                )
+        except Exception:
+            std_complete = False
+
+        units.append({
+            "unit_id": f"{trial_id}:{self.pipeline_name}:standardize",
+            "trial_id": trial_id,
+            "pipeline_name": self.pipeline_name,
+            "config_signature": config_signature,
+            "stage_name": "standardize",
+            "work_key": "standardize",
+            "scope": WorkUnitScope.STAGE.value,
+            "status": WorkUnitStatus.COMPLETE.value if std_complete else (
+                WorkUnitStatus.PENDING.value if (standardize_ok and not std_deps) else (
+                    WorkUnitStatus.BLOCKED.value if standardize_ok else WorkUnitStatus.INELIGIBLE.value
+                )
+            ),
+            "dependencies": std_deps,
+            "dependency_reasons": std_dep_reasons,
+            "runtime_required_capabilities": list(self.cfg.labeling_runtime.require_capability_standardize),
+            "runtime_eligible": standardize_ok,
+            "priority": 20,
+        })
+
+        # Stage: refine
+        refine_ok, _ = self.stage_is_eligible("refine", runtime_report=runtime_report)
+        refine_deps = []
+        refine_dep_reasons = []
+        if not std_complete:
+            refine_deps.append("standardize")
+            refine_dep_reasons.append("Standardize output missing.")
+
+        refine_complete = False
+        try:
+            if std_complete and manifest_csv.exists():
+                runs_df = pd.read_csv(manifest_csv)
+                if "returncode" in runs_df.columns:
+                    runs_df = runs_df[runs_df["returncode"] == 0].copy()
+                if "variant" in runs_df.columns and self.pipeline_config.sprint3_variants:
+                    runs_df = runs_df[runs_df["variant"].isin(self.pipeline_config.sprint3_variants)].copy()
+
+                std_data_sig = self.standardize_stage_data_signature(runs_df)
+                std_config_sig = self.stage_config_signature("standardize")
+                std_cache_dir = self.standardize_stage_cache_dir(std_data_sig, std_config_sig)
+                std_cache_csv = std_cache_dir / "objects_standardized.csv"
+
+                if std_cache_csv.exists():
+                    std_df = pd.read_csv(std_cache_csv)
+                    ref_data_sig = self.refine_stage_data_signature(std_df)
+                    ref_config_sig = self.stage_config_signature("refine")
+                    ref_cache_dir = self.refine_stage_cache_dir(ref_data_sig, ref_config_sig)
+                    ref_cache_csv = ref_cache_dir / "objects_refined.csv"
+                    refine_complete = (
+                        self.validate_stage_cache(
+                            stage_name="refine",
+                            stage_cache_dir=ref_cache_dir,
+                            expected_data_signature=ref_data_sig,
+                            expected_config_signature=ref_config_sig,
+                        )
+                        and ref_cache_csv.exists()
+                    )
+        except Exception:
+            refine_complete = False
+
+        units.append({
+            "unit_id": f"{trial_id}:{self.pipeline_name}:refine",
+            "trial_id": trial_id,
+            "pipeline_name": self.pipeline_name,
+            "config_signature": config_signature,
+            "stage_name": "refine",
+            "work_key": "refine",
+            "scope": WorkUnitScope.STAGE.value,
+            "status": WorkUnitStatus.COMPLETE.value if refine_complete else (
+                WorkUnitStatus.PENDING.value if (refine_ok and not refine_deps) else (
+                    WorkUnitStatus.BLOCKED.value if refine_ok else WorkUnitStatus.INELIGIBLE.value
+                )
+            ),
+            "dependencies": refine_deps,
+            "dependency_reasons": refine_dep_reasons,
+            "runtime_required_capabilities": list(self.cfg.labeling_runtime.require_capability_refine),
+            "runtime_eligible": refine_ok,
+            "priority": 30,
+        })
+
+        # Plot-level transfer+rasterize units
+        transfer_ok, _ = self.stage_is_eligible("transfer", runtime_report=runtime_report)
+        rasterize_ok, _ = self.stage_is_eligible("rasterize", runtime_report=runtime_report)
+
+        if refine_complete:
+            try:
+                # load refined objects from cache
+                if manifest_csv.exists():
+                    runs_df = pd.read_csv(manifest_csv)
+                    if "returncode" in runs_df.columns:
+                        runs_df = runs_df[runs_df["returncode"] == 0].copy()
+                    if "variant" in runs_df.columns and self.pipeline_config.sprint3_variants:
+                        runs_df = runs_df[runs_df["variant"].isin(self.pipeline_config.sprint3_variants)].copy()
+
+                    std_data_sig = self.standardize_stage_data_signature(runs_df)
+                    std_config_sig = self.stage_config_signature("standardize")
+                    std_cache_dir = self.standardize_stage_cache_dir(std_data_sig, std_config_sig)
+                    std_cache_csv = std_cache_dir / "objects_standardized.csv"
+                    std_df = pd.read_csv(std_cache_csv)
+
+                    ref_data_sig = self.refine_stage_data_signature(std_df)
+                    ref_config_sig = self.stage_config_signature("refine")
+                    ref_cache_dir = self.refine_stage_cache_dir(ref_data_sig, ref_config_sig)
+                    ref_cache_csv = ref_cache_dir / "objects_refined.csv"
+
+                    refined_df = pd.read_csv(ref_cache_csv)
+
+                    grouped = refined_df.groupby(["site_id", "plot_id", "source_version"], dropna=False)
+                    for (site_id, plot_id, source_version), group_df in grouped:
+                        valid_cache = self.has_valid_transfer_stage_cache(
+                            site=site_id,
+                            plot_id=plot_id,
+                            source_version=source_version,
+                            objects_group=group_df,
+                        )
+
+                        deps = []
+                        dep_reasons = []
+
+                        units.append({
+                            "unit_id": f"{trial_id}:{self.pipeline_name}:transfer:{site_id}:{plot_id}:{source_version}",
+                            "trial_id": trial_id,
+                            "pipeline_name": self.pipeline_name,
+                            "config_signature": config_signature,
+                            "stage_name": "transfer",
+                            "work_key": f"{site_id}|{plot_id}|{source_version}",
+                            "scope": WorkUnitScope.PLOT.value,
+                            "status": WorkUnitStatus.COMPLETE.value if valid_cache else (
+                                WorkUnitStatus.PENDING.value if (transfer_ok and rasterize_ok and not deps) else (
+                                    WorkUnitStatus.BLOCKED.value if (transfer_ok and rasterize_ok) else WorkUnitStatus.INELIGIBLE.value
+                                )
+                            ),
+                            "dependencies": deps,
+                            "dependency_reasons": dep_reasons,
+                            "runtime_required_capabilities": sorted(
+                                set(self.cfg.labeling_runtime.require_capability_transfer)
+                                | set(self.cfg.labeling_runtime.require_capability_rasterize)
+                            ),
+                            "runtime_eligible": transfer_ok and rasterize_ok,
+                            "priority": 100,
+                            "site_id": site_id,
+                            "plot_id": plot_id,
+                            "source_version": source_version,
+                        })
+            except Exception:
+                pass
+
+        return units
+
     # -------------------------------------------------------------------------
     # Stage 1: Sprint 3 manifest -> canonical objects
     # -------------------------------------------------------------------------
@@ -2166,6 +2381,56 @@ class LabelingPipeline(BasePipeline):
     # -------------------------------------------------------------------------
     # Main run
     # -------------------------------------------------------------------------
+
+    def run_work_unit(self, unit: dict, *, trial_id: str, state=None):
+        stage_name = unit["stage_name"]
+
+        if stage_name == "sprint3":
+            return self.stage_run_sprint3()
+
+        if stage_name == "standardize":
+            manifest_source = self.sprint3_manifest_csv
+            return self.stage_load_and_standardize_objects(manifest_csv=manifest_source)
+
+        if stage_name == "refine":
+            manifest_source = self.sprint3_manifest_csv
+            objects_std = self.stage_load_and_standardize_objects(manifest_csv=manifest_source)
+            return self.stage_refine_objects(objects_std)
+
+        if stage_name == "transfer":
+            manifest_source = self.sprint3_manifest_csv
+            objects_std = self.stage_load_and_standardize_objects(manifest_csv=manifest_source)
+            objects_refined = self.stage_refine_objects(objects_std)
+
+            site_id = unit["site_id"]
+            plot_id = unit["plot_id"]
+            source_version = unit["source_version"]
+
+            group_df = objects_refined[
+                (objects_refined["site_id"] == site_id)
+                & (objects_refined["plot_id"] == plot_id)
+                & (objects_refined["source_version"] == source_version)
+            ].copy()
+
+            if group_df.empty:
+                raise ValueError(f"No refined objects found for transfer unit {unit['unit_id']}")
+
+            naip_local, als_meta = self.prepare_site_assets(
+                site_id,
+                force_refresh=self.pipeline_config.force_refresh_site_assets,
+            )
+
+            return self.process_one_object_group_to_labels(
+                site=site_id,
+                plot_id=plot_id,
+                source_version=source_version,
+                objects_group=group_df,
+                naip_path=naip_local,
+                als_meta=als_meta,
+                force_rerun=self.pipeline_config.force_rerun_sprint4,
+            )
+
+        raise NotImplementedError(f"Unknown labeling work unit stage={stage_name}")
 
     def run(
         self,

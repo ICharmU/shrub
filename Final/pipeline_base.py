@@ -16,7 +16,8 @@ from Final.models import (
     PipelineStateUpdate,
     ExecutionEligibility, 
     ExecutionEligibilityStatus, 
-    RuntimeRequirementMode
+    RuntimeRequirementMode,
+    WorkUnitRecord
 )
 from Final.pipeline_caching import hash_payload, is_valid_stage_cache, \
     prune_stage_artifacts, write_stage_cache_manifest, read_stage_cache_manifest
@@ -158,6 +159,14 @@ class BasePipeline(ABC):
             row["config_signature"] = hash_payload(cfg)
             rows.append(row)
         return pd.DataFrame(rows)
+
+    def stage_cache_exists(self, *, stage_name: str, stage_cache_dir: str | Path, expected_data_signature: str, expected_config_signature: str) -> bool:
+        return self.validate_stage_cache(
+            stage_name=stage_name,
+            stage_cache_dir=stage_cache_dir,
+            expected_data_signature=expected_data_signature,
+            expected_config_signature=expected_config_signature,
+        )
 
     def validate_stage_cache(
         self,
@@ -390,3 +399,23 @@ class BasePipeline(ABC):
             stage_name=stage_name,
             artifact_paths=artifact_paths,
         )
+
+    def enumerate_work_units(self, *, trial_id: str, config_signature: str | None = None, runtime_report=None) -> list[dict]:
+        """
+        Concrete pipelines should override this and return serializable work-unit dicts.
+        """
+        return []
+
+    def run_work_unit(self, unit: dict, *, trial_id: str, state=None):
+        """
+        Concrete pipelines should override this.
+        """
+        raise NotImplementedError(f"{self.pipeline_name} does not implement run_work_unit()")
+
+    def stage_required_capabilities(self, stage_name: str, runtime_report=None) -> list[str]:
+        runtime_report = runtime_report or self.runtime_report()
+        elig = self.stage_runtime_eligibility(stage_name, runtime_report=runtime_report)
+        caps = []
+        for info in elig.values():
+            caps.extend(info.missing_capabilities)
+        return sorted(set(caps))

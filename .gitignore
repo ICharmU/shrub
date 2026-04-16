@@ -1,9 +1,14 @@
 artifacts/
 **/artifacts/*
 
+coordination/
+**/coordination/*
 
 **/artifact_store_local/*
 artifact_store_local/
+
+
+
 *.tif
 *.ptx
 /Sprint 1/Extra/task_2/datasets/

@@ -81,15 +81,48 @@ class GridSearchController:
 
         return trial, state
 
-    def completed_trials_frame(self) -> pd.DataFrame:
-        rows = []
-        for path in sorted(self.controller.trials_dir.glob("*.json")):
-            payload = pd.read_json(path, typ="series").to_dict()
-            rows.append(
-                {
-                    "trial_id": payload.get("trial_id"),
-                    "status": payload.get("status"),
-                    "n_section_runs": len(payload.get("section_runs", {})),
-                }
-            )
+    def run_trials_work_queue(
+        self,
+        *,
+        trials: list[TrialRecord],
+        pipelines: dict[str, BasePipeline],
+        scheduler,
+        state,
+    ):
+        while True:
+            next_job = scheduler.select_next_job(trials=trials, pipelines=pipelines)
+            if next_job is None:
+                break
+    
+            trial, pipeline, unit = next_job
+            scheduler.run_claimed_job(trial=trial, pipeline=pipeline, unit=unit, state=state)
+
+    def trials_frame(self) -> pd.DataFrame:
+        rows = self.controller.trials_frame()
         return pd.DataFrame(rows)
+
+    def completed_trials_frame(self) -> pd.DataFrame:
+        df = self.trials_frame()
+        if df.empty:
+            return df
+        return df[df["status"] == "success"].reset_index(drop=True)
+
+    def get_or_create_trial_for_config(
+        self,
+        *,
+        pipeline: BasePipeline,
+        config_dict: dict,
+        trial_prefix: str | None = None,
+    ) -> TrialRecord:
+        config_signature = pipeline.config_signature(config_dict) if hasattr(pipeline, "config_signature") else ""
+        trial_prefix = trial_prefix or pipeline.pipeline_name
+        trial_id = f"{trial_prefix}_{config_signature}"
+
+        try:
+            trial = self.controller.load_trial(trial_id)
+        except Exception:
+            trial = self.controller.create_trial(trial_id=trial_id)
+
+        self.set_trial_section_config(trial, pipeline, config_dict)
+        self.controller.save_trial(trial)
+        return trial

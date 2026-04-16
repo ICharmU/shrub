@@ -35,6 +35,9 @@ class TrialRecord:
     score_summary: dict[str, Any] = field(default_factory=dict)
     notes: list[str] = field(default_factory=list)
 
+    work_units: dict[str, dict[str, Any]] = field(default_factory=dict)
+    resolution: dict[str, Any] = field(default_factory=dict)
+
 
 class ExperimentController:
     def __init__(self, experiment_root: str | Path, experiment_name: str):
@@ -88,6 +91,37 @@ class ExperimentController:
         }
         return TrialRecord(**payload)
 
+    def resolve_trial_status(self, trial: TrialRecord) -> str:
+        work_units = trial.work_units or {}
+        if not work_units:
+            if trial.section_runs:
+                # legacy fallback
+                if all(rec.status == "success" for rec in trial.section_runs.values()):
+                    return "success"
+                if any(str(rec.status).startswith("section_failed") for rec in trial.section_runs.values()):
+                    return "failed"
+                return "in_progress"
+            return "created"
+
+        statuses = [u.get("status") for u in work_units.values()]
+        if statuses and all(s == "complete" for s in statuses):
+            return "success"
+        if any(s == "failed" for s in statuses):
+            return "failed"
+        if any(s in {"claimed", "running"} for s in statuses):
+            return "running"
+        if any(s == "blocked" for s in statuses):
+            return "waiting"
+        if any(s in {"pending"} for s in statuses):
+            return "runnable"
+        if any(s == "complete" for s in statuses):
+            return "partial"
+        return "created"
+
+    def update_trial_resolution(self, trial: TrialRecord) -> None:
+        trial.status = self.resolve_trial_status(trial)
+        self.trial_resolution_summary(trial)
+
     def save_trial(self, trial: TrialRecord) -> Path:
         path = self.trial_path(trial.trial_id)
         payload = asdict(trial)
@@ -120,13 +154,85 @@ class ExperimentController:
             notes=result.notes,
         )
 
-        if result.success:
-            trial.status = "in_progress"
-        else:
+        if not result.success and not str(result.status).startswith("partial"):
             trial.status = f"section_failed:{section_name}"
+        else:
+            self.update_trial_resolution(trial)
 
     def next_pending_section(self, trial: TrialRecord, section_order: list[str]) -> str | None:
         for section_name in section_order:
             if not self.section_is_complete(trial, section_name):
                 return section_name
         return None
+
+    def upsert_work_unit(self, trial: TrialRecord, unit: dict) -> None:
+        unit_id = unit["unit_id"]
+        trial.work_units[unit_id] = dict(unit)
+        self.update_trial_resolution(trial)
+
+    def upsert_work_units(self, trial: TrialRecord, units: list[dict]) -> None:
+        for unit in units:
+            self.upsert_work_unit(trial, unit)
+        self.update_trial_resolution(trial)
+
+    def update_work_unit_status(
+        self,
+        trial: TrialRecord,
+        *,
+        unit_id: str,
+        status: str,
+        owner_id: str | None = None,
+        note: str | None = None,
+        extra: dict[str, Any] | None = None,
+    ) -> None:
+        if unit_id not in trial.work_units:
+            raise KeyError(f"Unknown unit_id={unit_id} for trial={trial.trial_id}")
+
+        unit = trial.work_units[unit_id]
+        unit["status"] = status
+        if owner_id is not None:
+            unit["owner_id"] = owner_id
+        if extra:
+            unit.update(extra)
+        if note:
+            unit.setdefault("notes", []).append(note)
+
+        self.update_trial_resolution(trial)
+
+    def trial_resolution_summary(self, trial: TrialRecord) -> dict[str, Any]:
+        work_units = trial.work_units or {}
+        statuses = [u.get("status", "pending") for u in work_units.values()]
+
+        summary = {
+            "trial_id": trial.trial_id,
+            "status": self.resolve_trial_status(trial),
+            "total_units": len(work_units),
+            "complete_units": sum(s == "complete" for s in statuses),
+            "runnable_units": sum(s == "pending" for s in statuses),
+            "blocked_units": sum(s == "blocked" for s in statuses),
+            "failed_units": sum(s == "failed" for s in statuses),
+            "ineligible_units": sum(s == "ineligible" for s in statuses),
+            "claimed_units": sum(s == "claimed" for s in statuses),
+            "running_units": sum(s == "running" for s in statuses),
+        }
+        trial.resolution = dict(summary)
+        return summary
+
+    def trials_frame(self) -> list[dict]:
+        rows = []
+        for path in sorted(self.trials_dir.glob("*.json")):
+            trial = self.load_trial(path.stem)
+            rows.append(
+                {
+                    "trial_id": trial.trial_id,
+                    "status": trial.status,
+                    "n_section_runs": len(trial.section_runs),
+                    "n_work_units": len(trial.work_units),
+                    **(trial.resolution or {}),
+                }
+            )
+        return rows
+
+    def completed_trials_frame(self) -> list[dict]:
+        rows = self.trials_frame()
+        return [r for r in rows if r.get("status") == "success"]

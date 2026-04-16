@@ -1,4 +1,7 @@
 files:
+  Final/artifacts/labeling/stage_cache/refine/cee93396a6deb42d__74517548077dde4c/objects_refined.csv:
+    drive_file_id: 1ZPYLL4cAj98Ev-jHElOSv4rsN1R6APja
+    local_path: Final/artifacts/labeling/stage_cache/refine/cee93396a6deb42d__74517548077dde4c/objects_refined.csv
   Final/artifacts/labeling/stage_cache/refine/cee93396a6deb42d__81a7a715b6f24619/objects_refined.csv:
     drive_file_id: 1V-YdjjUq4CjBBB8Eh0vnniwivR8r-TIW
     local_path: Final/artifacts/labeling/stage_cache/refine/cee93396a6deb42d__81a7a715b6f24619/objects_refined.csv
@@ -77,6 +80,42 @@ files:
   ? Final/artifacts/labeling/stage_cache/transfer/shaver-lake/sprint3_revised/CAFKU_0096_20240804_1/66bfed6b0b734abe__bbf2ea248ec46b3d__133badb2f3e7fc9d/objects_transferred.csv
   : drive_file_id: 1-u-Pi3rEOtRa6YnQ8PVQpBYi5krFy1cw
     local_path: Final/artifacts/labeling/stage_cache/transfer/shaver-lake/sprint3_revised/CAFKU_0096_20240804_1/66bfed6b0b734abe__bbf2ea248ec46b3d__133badb2f3e7fc9d/objects_transferred.csv
+  ? coordination/shrubwise_main/labeling_trial_01236fe9e16c/labeling/transfer/calaveras-big-trees|CATCU_0009_20250615_1|sprint3_original.json
+  : drive_file_id: 1I2DFF7r04kYUEO2Sfoxp1nR9mh8DF29z
+    local_path: coordination/shrubwise_main/labeling_trial_01236fe9e16c/labeling/transfer/calaveras-big-trees|CATCU_0009_20250615_1|sprint3_original.json
+  coordination/shrubwise_main/labeling_trial_074f2c2dc3a8/labeling/refine/refine.json:
+    drive_file_id: 1oUfxii1N56trsL7sYDNnXNmNSMU-f7UN
+    local_path: coordination/shrubwise_main/labeling_trial_074f2c2dc3a8/labeling/refine/refine.json
+  ? coordination/shrubwise_main/labeling_trial_074f2c2dc3a8/labeling/transfer/calaveras-big-trees|CATCU_0009_20250615_1|sprint3_original.json
+  : drive_file_id: 1NM3gnnqigt8dbYqog0jadGTzSbdzyI0k
+    local_path: coordination/shrubwise_main/labeling_trial_074f2c2dc3a8/labeling/transfer/calaveras-big-trees|CATCU_0009_20250615_1|sprint3_original.json
+  ? coordination/shrubwise_main/labeling_trial_074f2c2dc3a8/labeling/transfer/calaveras-big-trees|CATCU_0009_20250615_1|sprint3_revised.json
+  : drive_file_id: 1xXdpHpowzZV8FijYQJOCieXfKxEWrPul
+    local_path: coordination/shrubwise_main/labeling_trial_074f2c2dc3a8/labeling/transfer/calaveras-big-trees|CATCU_0009_20250615_1|sprint3_revised.json
+  ? coordination/shrubwise_main/labeling_trial_074f2c2dc3a8/labeling/transfer/dl-bliss|CAAEU_0027_20250728_1|sprint3_original.json
+  : drive_file_id: 1ebHJ5WFSe2CwWg74ueekLhaFGboO81R-
+    local_path: coordination/shrubwise_main/labeling_trial_074f2c2dc3a8/labeling/transfer/dl-bliss|CAAEU_0027_20250728_1|sprint3_original.json
+  coordination/shrubwise_main/labeling_trial_248d471f5527/labeling/refine/refine.json:
+    drive_file_id: 18d28DqJnh4QqKH5lNDygq4CykjGyByNH
+    local_path: coordination/shrubwise_main/labeling_trial_248d471f5527/labeling/refine/refine.json
+  coordination/shrubwise_main/labeling_trial_248d471f5527/labeling/standardize/standardize.json:
+    drive_file_id: 1X--FZeiEkkUzMFcRaM5to6FS9Q4q2ESh
+    local_path: coordination/shrubwise_main/labeling_trial_248d471f5527/labeling/standardize/standardize.json
+  coordination/shrubwise_main/labeling_trial_38814738feeb/labeling/refine/refine.json:
+    drive_file_id: 1gm2KWn6k1MJzzCdDODjN0RXbD5xB8Y4V
+    local_path: coordination/shrubwise_main/labeling_trial_38814738feeb/labeling/refine/refine.json
+  coordination/shrubwise_main/labeling_trial_5725ea41a55c/labeling/refine/refine.json:
+    drive_file_id: 1iouICXEbOZslV3eTSKO-kuZ4PPWLUI5j
+    local_path: coordination/shrubwise_main/labeling_trial_5725ea41a55c/labeling/refine/refine.json
+  coordination/shrubwise_main/labeling_trial_6930be0cde08/labeling/refine/refine.json:
+    drive_file_id: 1xhIlKLA62pWhJx_uVfM8JzekSIz5-DN4
+    local_path: coordination/shrubwise_main/labeling_trial_6930be0cde08/labeling/refine/refine.json
+  coordination/shrubwise_main/labeling_trial_8d0d163a7065/labeling/refine/refine.json:
+    drive_file_id: 1bFpVMuLusJF6LddEKweIgcicV-psAxrm
+    local_path: coordination/shrubwise_main/labeling_trial_8d0d163a7065/labeling/refine/refine.json
+  coordination/shrubwise_main/labeling_trial_c3d868cf458c/labeling/refine/refine.json:
+    drive_file_id: 1uQaFOYaf_iysa9_4ky0_UTSG9jhpiqXT
+    local_path: coordination/shrubwise_main/labeling_trial_c3d868cf458c/labeling/refine/refine.json
   features/calaveras-big-trees/91fef1517fca02cc/naip/multiscale/chunk_00000.npz:
     drive_file_id: 1K86mOdSYe7uJkGpZk-MZvT9AFmAO7bHe
     local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/multiscale/chunk_00000.npz
@@ -581,6 +620,9 @@ files:
   labeling/88fb2c6936cb/summaries/objects_all.csv:
     drive_file_id: 1nl9Yk_2rhvuTXj9LE-NFXRuXre-7cfh6
     local_path: labeling/88fb2c6936cb/summaries/objects_all.csv
+  labeling/calaveras-big-trees/01236fe9e16c/site_assets/source_inventory.json:
+    drive_file_id: 1iBnwJyKdQ6aGc8kwrwZDrM6CRcSZmp16
+    local_path: labeling/calaveras-big-trees/01236fe9e16c/site_assets/source_inventory.json
   labeling/calaveras-big-trees/88fb2c6936cb/site_assets/site_metadata_manifest.json:
     drive_file_id: 1GvB4tUYhKG2Ulpn2SgqO6MepdXnlpenB
     local_path: labeling/calaveras-big-trees/88fb2c6936cb/site_assets/site_metadata_manifest.json

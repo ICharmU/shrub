@@ -5,6 +5,7 @@ from dataclasses import asdict, is_dataclass
 from pathlib import Path
 import json
 from itertools import product
+import pandas as pd
 
 from Final.shared_utils import get_logger
 from Final.models import (
@@ -13,9 +14,14 @@ from Final.models import (
     PipelineRunResult,
     PipelineSpec,
     PipelineStateUpdate,
+    ExecutionEligibility, 
+    ExecutionEligibilityStatus, 
+    RuntimeRequirementMode,
+    WorkUnitRecord
 )
-from Final.pipeline_caching import hash_payload, is_valid_stage_cache, prune_stage_artifacts, write_stage_cache_manifest
-
+from Final.pipeline_caching import hash_payload, is_valid_stage_cache, \
+    prune_stage_artifacts, write_stage_cache_manifest, read_stage_cache_manifest
+from Final.runtime_detection import detect_runtime_capabilities
 
 class BasePipeline(ABC):
     """
@@ -49,6 +55,8 @@ class BasePipeline(ABC):
         if self._pipeline_spec_cache is None:
             self._pipeline_spec_cache = self.build_pipeline_spec()
         return self._pipeline_spec_cache
+    
+    
 
     def config_dict(self) -> dict:
         if hasattr(self, "pipeline_config"):
@@ -145,14 +153,20 @@ class BasePipeline(ABC):
         return unique
 
     def config_space_frame(self):
-        import pandas as pd
-
         rows = []
         for cfg in self.enumerate_config_space():
             row = dict(cfg)
             row["config_signature"] = hash_payload(cfg)
             rows.append(row)
         return pd.DataFrame(rows)
+
+    def stage_cache_exists(self, *, stage_name: str, stage_cache_dir: str | Path, expected_data_signature: str, expected_config_signature: str) -> bool:
+        return self.validate_stage_cache(
+            stage_name=stage_name,
+            stage_cache_dir=stage_cache_dir,
+            expected_data_signature=expected_data_signature,
+            expected_config_signature=expected_config_signature,
+        )
 
     def validate_stage_cache(
         self,
@@ -247,3 +261,161 @@ class BasePipeline(ABC):
         path.write_text(json.dumps(asdict(result), indent=2, default=str), encoding="utf-8")
         self.logger.info("Saved pipeline run result to %s", path)
         return path
+    
+    def runtime_report(self):
+        return detect_runtime_capabilities(self.cfg)
+
+    def module_runtime_eligibility(self, module_key: str, runtime_report=None) -> ExecutionEligibility:
+        runtime_report = runtime_report or self.runtime_report()
+        spec = self.module_spec(module_key)
+        req = getattr(spec, "runtime_requirement", None)
+
+        if req is None:
+            return ExecutionEligibility(
+                status=ExecutionEligibilityStatus.ELIGIBLE,
+                satisfied_capabilities=list(runtime_report.capabilities),
+                detected_image_key=runtime_report.detected_image_key,
+                reason="No runtime requirement declared.",
+            )
+
+        caps = set(runtime_report.capabilities)
+        required = set(req.required_capabilities or ())
+        allowed_images = set(req.allowed_images or ())
+
+        image_ok = True
+        if allowed_images:
+            image_ok = runtime_report.detected_image_key in allowed_images
+
+        if req.mode == RuntimeRequirementMode.ANY:
+            cap_ok = (not required) or bool(caps.intersection(required))
+        else:
+            cap_ok = required.issubset(caps)
+
+        ok = image_ok and cap_ok
+        return ExecutionEligibility(
+            status=ExecutionEligibilityStatus.ELIGIBLE if ok else ExecutionEligibilityStatus.INELIGIBLE,
+            satisfied_capabilities=sorted(caps.intersection(required)),
+            missing_capabilities=sorted(required - caps),
+            detected_image_key=runtime_report.detected_image_key,
+            reason="eligible" if ok else "runtime requirement not satisfied",
+        )
+
+    def stage_runtime_eligibility(self, stage_name: str, runtime_report=None) -> dict[str, ExecutionEligibility]:
+        runtime_report = runtime_report or self.runtime_report()
+        return {
+            module_key: self.module_runtime_eligibility(module_key, runtime_report=runtime_report)
+            for module_key in self.stage_spec(stage_name).module_keys
+        }
+
+    def sync_artifact_registry_if_available(self) -> None:
+        store = getattr(self, "artifact_store", None)
+        if store is not None:
+            try:
+                store.sync_registry()
+            except Exception as e:
+                self.logger.warning("Artifact registry sync failed: %s", e)
+
+    def read_stage_cache_artifact_paths(self, stage_cache_dir: str | Path) -> dict:
+        rec = read_stage_cache_manifest(stage_cache_dir)
+        return rec.artifact_paths if rec is not None else {}
+
+    def reconcile_stage_artifacts_with_storage_policy(
+        self,
+        *,
+        stage_name: str,
+        artifact_paths: dict,
+    ) -> dict[str, dict]:
+        results = {}
+        for key, value in (artifact_paths or {}).items():
+            results[key] = self.reconcile_artifact_reference(key=key, value=value)
+
+        self.logger.info(
+            "STORAGE POLICY RECONCILE DONE | stage=%s | n_artifacts=%d | statuses=%s",
+            stage_name,
+            len(results),
+            {k: v.get("status") for k, v in results.items()},
+        )
+        return results
+
+
+    def reconcile_artifact_reference(self, *, key: str, value):
+        """
+        Base implementation is intentionally minimal.
+        Concrete pipelines can override to interpret rel paths vs local paths.
+        """
+        return {"status": "noop", "value": value}
+    
+    def hydrate_artifact(self, *, rel_path: str, local_path: str | Path | None = None, reason: str = "") -> Path | None:
+        store = getattr(self, "artifact_store", None)
+        if store is None:
+            self.logger.info("HYDRATE SKIP | no artifact store | rel_path=%s", rel_path)
+            return None
+
+        try:
+            self.logger.info("HYDRATE START | rel_path=%s | reason=%s", rel_path, reason)
+            pulled = store.pull(rel_path, local_path=local_path)
+            self.logger.info("HYDRATE DONE  | rel_path=%s | local_path=%s", rel_path, pulled)
+            return Path(pulled)
+        except Exception as e:
+            self.logger.warning("HYDRATE FAIL | rel_path=%s | reason=%s | error=%s", rel_path, reason, e)
+            return None
+        
+    def validate_hydrated_artifact(self, *, rel_path: str, local_path: Path, artifact_key: str | None = None) -> bool:
+        """
+        Default existence-only validation. Concrete pipelines should override for
+        TIFF/CSV/JSON-specific validation.
+        """
+        ok = local_path.exists() and local_path.is_file()
+        self.logger.info(
+            "HYDRATE VALIDATE | rel_path=%s | artifact_key=%s | ok=%s",
+            rel_path, artifact_key, ok
+        )
+        return ok
+    
+    def hydrate_and_validate_artifact(
+        self,
+        *,
+        rel_path: str,
+        local_path: str | Path | None = None,
+        artifact_key: str | None = None,
+        reason: str = "",
+    ) -> Path | None:
+        pulled = self.hydrate_artifact(rel_path=rel_path, local_path=local_path, reason=reason)
+        if pulled is None:
+            return None
+        ok = self.validate_hydrated_artifact(rel_path=rel_path, local_path=pulled, artifact_key=artifact_key)
+        if not ok:
+            self.logger.warning("HYDRATE INVALID | rel_path=%s | artifact_key=%s", rel_path, artifact_key)
+            return None
+        return pulled
+    
+    def enforce_storage_policy_for_stage_cache(self, *, stage_name: str, stage_cache_dir: str | Path) -> None:
+        artifact_paths = self.read_stage_cache_artifact_paths(stage_cache_dir)
+        self.logger.info(
+            "STORAGE POLICY RECONCILE | stage=%s | cache_dir=%s | n_artifacts=%d",
+            stage_name, stage_cache_dir, len(artifact_paths)
+        )
+        self.reconcile_stage_artifacts_with_storage_policy(
+            stage_name=stage_name,
+            artifact_paths=artifact_paths,
+        )
+
+    def enumerate_work_units(self, *, trial_id: str, config_signature: str | None = None, runtime_report=None) -> list[dict]:
+        """
+        Concrete pipelines should override this and return serializable work-unit dicts.
+        """
+        return []
+
+    def run_work_unit(self, unit: dict, *, trial_id: str, state=None):
+        """
+        Concrete pipelines should override this.
+        """
+        raise NotImplementedError(f"{self.pipeline_name} does not implement run_work_unit()")
+
+    def stage_required_capabilities(self, stage_name: str, runtime_report=None) -> list[str]:
+        runtime_report = runtime_report or self.runtime_report()
+        elig = self.stage_runtime_eligibility(stage_name, runtime_report=runtime_report)
+        caps = []
+        for info in elig.values():
+            caps.extend(info.missing_capabilities)
+        return sorted(set(caps))

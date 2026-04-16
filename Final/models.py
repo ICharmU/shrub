@@ -333,3 +333,80 @@ class ArtifactSpec:
     storage_tier: StorageTier
     required_for_resume: bool = True
     prune_local_after_push: bool = False
+
+from enum import Enum
+
+
+class WorkUnitScope(str, Enum):
+    STAGE = "stage"
+    SITE = "site"
+    PLOT = "plot"
+
+
+class WorkUnitStatus(str, Enum):
+    PENDING = "pending"
+    BLOCKED = "blocked"
+    CLAIMED = "claimed"
+    RUNNING = "running"
+    COMPLETE = "complete"
+    FAILED = "failed"
+    STALE = "stale"
+    INELIGIBLE = "ineligible"
+
+
+class TrialResolutionStatus(str, Enum):
+    CREATED = "created"
+    RUNNABLE = "runnable"
+    WAITING = "waiting"
+    RUNNING = "running"
+    PARTIAL = "partial"
+    SUCCESS = "success"
+    FAILED = "failed"
+
+
+@dataclass
+class WorkUnitRecord:
+    unit_id: str
+    trial_id: str
+    pipeline_name: str
+    config_signature: str
+
+    stage_name: str
+    work_key: str
+    scope: WorkUnitScope
+
+    status: WorkUnitStatus = WorkUnitStatus.PENDING
+    dependencies: list[str] = field(default_factory=list)
+    dependency_reasons: list[str] = field(default_factory=list)
+
+    runtime_required_capabilities: list[str] = field(default_factory=list)
+    runtime_eligible: bool = True
+    priority: int = 100
+
+    site_id: str | None = None
+    plot_id: str | None = None
+    source_version: str | None = None
+
+    owner_id: str | None = None
+    started_at: str | None = None
+    heartbeat_at: str | None = None
+    finished_at: str | None = None
+
+    metrics: dict[str, Any] = field(default_factory=dict)
+    notes: list[str] = field(default_factory=list)
+
+
+@dataclass
+class TrialResolution:
+    trial_id: str
+    status: TrialResolutionStatus
+    total_units: int = 0
+    complete_units: int = 0
+    runnable_units: int = 0
+    blocked_units: int = 0
+    failed_units: int = 0
+    ineligible_units: int = 0
+    claimed_units: int = 0
+    running_units: int = 0
+    notes: list[str] = field(default_factory=list)
+
