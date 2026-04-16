@@ -1,4 +1,82 @@
 files:
+  Final/artifacts/labeling/stage_cache/refine/cee93396a6deb42d__81a7a715b6f24619/objects_refined.csv:
+    drive_file_id: 1V-YdjjUq4CjBBB8Eh0vnniwivR8r-TIW
+    local_path: Final/artifacts/labeling/stage_cache/refine/cee93396a6deb42d__81a7a715b6f24619/objects_refined.csv
+  Final/artifacts/labeling/stage_cache/standardize/3228b0743a1a2741__a368033307bb3009/objects_standardized.csv:
+    drive_file_id: 1FPjvZXTleG3dwnqLj4y2u2RUfjMDuJES
+    local_path: Final/artifacts/labeling/stage_cache/standardize/3228b0743a1a2741__a368033307bb3009/objects_standardized.csv
+  ? Final/artifacts/labeling/stage_cache/transfer/calaveras-big-trees/sprint3_original/CATCU_0009_20250615_1/bfe969ffd9bb7e4d__bbf2ea248ec46b3d__133badb2f3e7fc9d/artifacts.csv
+  : drive_file_id: 1OiaOEsp7yCFGomjGffHN8cS1ft0DVCIr
+    local_path: Final/artifacts/labeling/stage_cache/transfer/calaveras-big-trees/sprint3_original/CATCU_0009_20250615_1/bfe969ffd9bb7e4d__bbf2ea248ec46b3d__133badb2f3e7fc9d/artifacts.csv
+  ? Final/artifacts/labeling/stage_cache/transfer/calaveras-big-trees/sprint3_original/CATCU_0009_20250615_1/bfe969ffd9bb7e4d__bbf2ea248ec46b3d__133badb2f3e7fc9d/objects_transferred.csv
+  : drive_file_id: 1fDjdW1Xv27mM9N-80wXnOjFdCV4f8nhO
+    local_path: Final/artifacts/labeling/stage_cache/transfer/calaveras-big-trees/sprint3_original/CATCU_0009_20250615_1/bfe969ffd9bb7e4d__bbf2ea248ec46b3d__133badb2f3e7fc9d/objects_transferred.csv
+  ? Final/artifacts/labeling/stage_cache/transfer/calaveras-big-trees/sprint3_revised/CATCU_0009_20250615_1/77fcce70d981bdcd__bbf2ea248ec46b3d__133badb2f3e7fc9d/artifacts.csv
+  : drive_file_id: 1KrlojhpQR5VqxHywzkd2DiKiZ9EI4-_N
+    local_path: Final/artifacts/labeling/stage_cache/transfer/calaveras-big-trees/sprint3_revised/CATCU_0009_20250615_1/77fcce70d981bdcd__bbf2ea248ec46b3d__133badb2f3e7fc9d/artifacts.csv
+  ? Final/artifacts/labeling/stage_cache/transfer/calaveras-big-trees/sprint3_revised/CATCU_0009_20250615_1/77fcce70d981bdcd__bbf2ea248ec46b3d__133badb2f3e7fc9d/objects_transferred.csv
+  : drive_file_id: 1Q8S-KA7WA105CffAkDGYPBdk_InIZa6N
+    local_path: Final/artifacts/labeling/stage_cache/transfer/calaveras-big-trees/sprint3_revised/CATCU_0009_20250615_1/77fcce70d981bdcd__bbf2ea248ec46b3d__133badb2f3e7fc9d/objects_transferred.csv
+  ? Final/artifacts/labeling/stage_cache/transfer/dl-bliss/sprint3_original/CAAEU_0027_20250728_1/5367a2ebaf7a64ae__bbf2ea248ec46b3d__133badb2f3e7fc9d/artifacts.csv
+  : drive_file_id: 1mz3L6-z0aHN2oryo1h0T6khX50mzkgx4
+    local_path: Final/artifacts/labeling/stage_cache/transfer/dl-bliss/sprint3_original/CAAEU_0027_20250728_1/5367a2ebaf7a64ae__bbf2ea248ec46b3d__133badb2f3e7fc9d/artifacts.csv
+  ? Final/artifacts/labeling/stage_cache/transfer/dl-bliss/sprint3_original/CAAEU_0027_20250728_1/5367a2ebaf7a64ae__bbf2ea248ec46b3d__133badb2f3e7fc9d/objects_transferred.csv
+  : drive_file_id: 1KmCjX755LoSWC1H-dQsEgOFVycJZ2ZmR
+    local_path: Final/artifacts/labeling/stage_cache/transfer/dl-bliss/sprint3_original/CAAEU_0027_20250728_1/5367a2ebaf7a64ae__bbf2ea248ec46b3d__133badb2f3e7fc9d/objects_transferred.csv
+  ? Final/artifacts/labeling/stage_cache/transfer/dl-bliss/sprint3_revised/CAAEU_0027_20250728_1/9606b1ca062a8eea__bbf2ea248ec46b3d__133badb2f3e7fc9d/artifacts.csv
+  : drive_file_id: 12DU1d0oIAYbberBt0N8bWPXx2XGrO_SY
+    local_path: Final/artifacts/labeling/stage_cache/transfer/dl-bliss/sprint3_revised/CAAEU_0027_20250728_1/9606b1ca062a8eea__bbf2ea248ec46b3d__133badb2f3e7fc9d/artifacts.csv
+  ? Final/artifacts/labeling/stage_cache/transfer/dl-bliss/sprint3_revised/CAAEU_0027_20250728_1/9606b1ca062a8eea__bbf2ea248ec46b3d__133badb2f3e7fc9d/objects_transferred.csv
+  : drive_file_id: 1hDhJhAi6htRGo5OdW92H7yax77xkVmtM
+    local_path: Final/artifacts/labeling/stage_cache/transfer/dl-bliss/sprint3_revised/CAAEU_0027_20250728_1/9606b1ca062a8eea__bbf2ea248ec46b3d__133badb2f3e7fc9d/objects_transferred.csv
+  ? Final/artifacts/labeling/stage_cache/transfer/independence-lake/sprint3_original/CATNF_6118_20250820_1/62557497c9e77251__bbf2ea248ec46b3d__133badb2f3e7fc9d/artifacts.csv
+  : drive_file_id: 1wAgS8F-3ZhoVCUovW1hT_UbYsgS13hqX
+    local_path: Final/artifacts/labeling/stage_cache/transfer/independence-lake/sprint3_original/CATNF_6118_20250820_1/62557497c9e77251__bbf2ea248ec46b3d__133badb2f3e7fc9d/artifacts.csv
+  ? Final/artifacts/labeling/stage_cache/transfer/independence-lake/sprint3_original/CATNF_6118_20250820_1/62557497c9e77251__bbf2ea248ec46b3d__133badb2f3e7fc9d/objects_transferred.csv
+  : drive_file_id: 1uekA-Y1-Sd-eyc8OgMFww44lIfeMdmJl
+    local_path: Final/artifacts/labeling/stage_cache/transfer/independence-lake/sprint3_original/CATNF_6118_20250820_1/62557497c9e77251__bbf2ea248ec46b3d__133badb2f3e7fc9d/objects_transferred.csv
+  ? Final/artifacts/labeling/stage_cache/transfer/independence-lake/sprint3_revised/CATNF_6118_20250820_1/9a0f4d5988f4009b__bbf2ea248ec46b3d__133badb2f3e7fc9d/artifacts.csv
+  : drive_file_id: 1_uXM0SoxXlyXSHop2FOGkYBaUM7ja79s
+    local_path: Final/artifacts/labeling/stage_cache/transfer/independence-lake/sprint3_revised/CATNF_6118_20250820_1/9a0f4d5988f4009b__bbf2ea248ec46b3d__133badb2f3e7fc9d/artifacts.csv
+  ? Final/artifacts/labeling/stage_cache/transfer/independence-lake/sprint3_revised/CATNF_6118_20250820_1/9a0f4d5988f4009b__bbf2ea248ec46b3d__133badb2f3e7fc9d/objects_transferred.csv
+  : drive_file_id: 1TGD9PdfLfRR-qq_MYo5iD93Etfa0Hgfp
+    local_path: Final/artifacts/labeling/stage_cache/transfer/independence-lake/sprint3_revised/CATNF_6118_20250820_1/9a0f4d5988f4009b__bbf2ea248ec46b3d__133badb2f3e7fc9d/objects_transferred.csv
+  ? Final/artifacts/labeling/stage_cache/transfer/pacific-union-college/sprint3_original/CALNU_0039_20250810_1/153bfd7b6d291444__bbf2ea248ec46b3d__133badb2f3e7fc9d/artifacts.csv
+  : drive_file_id: 1am0yIcziJVa0dwBFzAi37f9y2oNd7BHq
+    local_path: Final/artifacts/labeling/stage_cache/transfer/pacific-union-college/sprint3_original/CALNU_0039_20250810_1/153bfd7b6d291444__bbf2ea248ec46b3d__133badb2f3e7fc9d/artifacts.csv
+  ? Final/artifacts/labeling/stage_cache/transfer/pacific-union-college/sprint3_original/CALNU_0039_20250810_1/153bfd7b6d291444__bbf2ea248ec46b3d__133badb2f3e7fc9d/objects_transferred.csv
+  : drive_file_id: 1UA5HJCdOgyFIHqgOX8erXPlecq_yfLpj
+    local_path: Final/artifacts/labeling/stage_cache/transfer/pacific-union-college/sprint3_original/CALNU_0039_20250810_1/153bfd7b6d291444__bbf2ea248ec46b3d__133badb2f3e7fc9d/objects_transferred.csv
+  ? Final/artifacts/labeling/stage_cache/transfer/pacific-union-college/sprint3_revised/CALNU_0039_20250810_1/0f124f4e45f44745__bbf2ea248ec46b3d__133badb2f3e7fc9d/artifacts.csv
+  : drive_file_id: 1HpTlfxmLPBEhbIk1nsbNQOOAx3aHWmna
+    local_path: Final/artifacts/labeling/stage_cache/transfer/pacific-union-college/sprint3_revised/CALNU_0039_20250810_1/0f124f4e45f44745__bbf2ea248ec46b3d__133badb2f3e7fc9d/artifacts.csv
+  ? Final/artifacts/labeling/stage_cache/transfer/pacific-union-college/sprint3_revised/CALNU_0039_20250810_1/0f124f4e45f44745__bbf2ea248ec46b3d__133badb2f3e7fc9d/objects_transferred.csv
+  : drive_file_id: 1UHhvZ2Ew9KKquDFZK_MyED8rAPnF57Z2
+    local_path: Final/artifacts/labeling/stage_cache/transfer/pacific-union-college/sprint3_revised/CALNU_0039_20250810_1/0f124f4e45f44745__bbf2ea248ec46b3d__133badb2f3e7fc9d/objects_transferred.csv
+  ? Final/artifacts/labeling/stage_cache/transfer/sedgwick/sprint3_original/CASBC_0087_20250712_1/8875a3b92efdea9a__bbf2ea248ec46b3d__133badb2f3e7fc9d/artifacts.csv
+  : drive_file_id: 1fWKeN10a6muWXwjuHj58A4BzIDuksaUp
+    local_path: Final/artifacts/labeling/stage_cache/transfer/sedgwick/sprint3_original/CASBC_0087_20250712_1/8875a3b92efdea9a__bbf2ea248ec46b3d__133badb2f3e7fc9d/artifacts.csv
+  ? Final/artifacts/labeling/stage_cache/transfer/sedgwick/sprint3_original/CASBC_0087_20250712_1/8875a3b92efdea9a__bbf2ea248ec46b3d__133badb2f3e7fc9d/objects_transferred.csv
+  : drive_file_id: 1qfqupzOhhY0I8BgzchnJUtFkELMe5vZr
+    local_path: Final/artifacts/labeling/stage_cache/transfer/sedgwick/sprint3_original/CASBC_0087_20250712_1/8875a3b92efdea9a__bbf2ea248ec46b3d__133badb2f3e7fc9d/objects_transferred.csv
+  ? Final/artifacts/labeling/stage_cache/transfer/sedgwick/sprint3_revised/CASBC_0087_20250712_1/477881a4f547acef__bbf2ea248ec46b3d__133badb2f3e7fc9d/artifacts.csv
+  : drive_file_id: 1F4Nou7TY561qpPWNGBnuJFJX9YgBAr5Z
+    local_path: Final/artifacts/labeling/stage_cache/transfer/sedgwick/sprint3_revised/CASBC_0087_20250712_1/477881a4f547acef__bbf2ea248ec46b3d__133badb2f3e7fc9d/artifacts.csv
+  ? Final/artifacts/labeling/stage_cache/transfer/sedgwick/sprint3_revised/CASBC_0087_20250712_1/477881a4f547acef__bbf2ea248ec46b3d__133badb2f3e7fc9d/objects_transferred.csv
+  : drive_file_id: 1HgFjmJXKwLQVOxlME5Hl5MlaDiXv-dxP
+    local_path: Final/artifacts/labeling/stage_cache/transfer/sedgwick/sprint3_revised/CASBC_0087_20250712_1/477881a4f547acef__bbf2ea248ec46b3d__133badb2f3e7fc9d/objects_transferred.csv
+  ? Final/artifacts/labeling/stage_cache/transfer/shaver-lake/sprint3_original/CAFKU_0096_20240804_1/e5904157683e64cd__bbf2ea248ec46b3d__133badb2f3e7fc9d/artifacts.csv
+  : drive_file_id: 1bFvqpeh7JgK1stro3n0wSHZ86RvK1M4g
+    local_path: Final/artifacts/labeling/stage_cache/transfer/shaver-lake/sprint3_original/CAFKU_0096_20240804_1/e5904157683e64cd__bbf2ea248ec46b3d__133badb2f3e7fc9d/artifacts.csv
+  ? Final/artifacts/labeling/stage_cache/transfer/shaver-lake/sprint3_original/CAFKU_0096_20240804_1/e5904157683e64cd__bbf2ea248ec46b3d__133badb2f3e7fc9d/objects_transferred.csv
+  : drive_file_id: 1rJuOfZE89wliEMK8TwEV6T62akSVsIvK
+    local_path: Final/artifacts/labeling/stage_cache/transfer/shaver-lake/sprint3_original/CAFKU_0096_20240804_1/e5904157683e64cd__bbf2ea248ec46b3d__133badb2f3e7fc9d/objects_transferred.csv
+  ? Final/artifacts/labeling/stage_cache/transfer/shaver-lake/sprint3_revised/CAFKU_0096_20240804_1/66bfed6b0b734abe__bbf2ea248ec46b3d__133badb2f3e7fc9d/artifacts.csv
+  : drive_file_id: 1PAvSWYc8mFOts0bcMMpv6P0jlWhcGloY
+    local_path: Final/artifacts/labeling/stage_cache/transfer/shaver-lake/sprint3_revised/CAFKU_0096_20240804_1/66bfed6b0b734abe__bbf2ea248ec46b3d__133badb2f3e7fc9d/artifacts.csv
+  ? Final/artifacts/labeling/stage_cache/transfer/shaver-lake/sprint3_revised/CAFKU_0096_20240804_1/66bfed6b0b734abe__bbf2ea248ec46b3d__133badb2f3e7fc9d/objects_transferred.csv
+  : drive_file_id: 1-u-Pi3rEOtRa6YnQ8PVQpBYi5krFy1cw
+    local_path: Final/artifacts/labeling/stage_cache/transfer/shaver-lake/sprint3_revised/CAFKU_0096_20240804_1/66bfed6b0b734abe__bbf2ea248ec46b3d__133badb2f3e7fc9d/objects_transferred.csv
   features/calaveras-big-trees/91fef1517fca02cc/naip/multiscale/chunk_00000.npz:
     drive_file_id: 1K86mOdSYe7uJkGpZk-MZvT9AFmAO7bHe
     local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/multiscale/chunk_00000.npz
@@ -485,6 +563,15 @@ files:
   features/calaveras-big-trees/91fef1517fca02cc/stack/stack_registry.json:
     drive_file_id: 1dGSOpmdulmoUpa4ZwF_GteRD33QXznez
     local_path: features/calaveras-big-trees/91fef1517fca02cc/stack/stack_registry.json
+  labeling/0bab4176c29e/run_manifest.json:
+    drive_file_id: 1vCYN2KxVDo7uQCCEtC483vsugRdo6hbe
+    local_path: labeling/0bab4176c29e/run_manifest.json
+  labeling/0bab4176c29e/summaries/artifacts_all.csv:
+    drive_file_id: 1F0gfVxKoDrJukBsnDrkRNJ7YsU47oate
+    local_path: labeling/0bab4176c29e/summaries/artifacts_all.csv
+  labeling/0bab4176c29e/summaries/objects_all.csv:
+    drive_file_id: 1Nzizhpi-g23Fs4LKGd4Uyt6-8btpdxS6
+    local_path: labeling/0bab4176c29e/summaries/objects_all.csv
   labeling/88fb2c6936cb/run_manifest.json:
     drive_file_id: 1G5EdPChG3BlpL8QPkSAGWBlhI_e8srMu
     local_path: labeling/88fb2c6936cb/run_manifest.json
