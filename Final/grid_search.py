@@ -30,6 +30,96 @@ class GridSearchController:
                     }
                 )
         return pd.DataFrame(rows)
+    
+    def trial_runtime_health_frame(
+        self,
+        *,
+        trials: list[TrialRecord],
+        pipelines_by_trial: dict[str, dict[str, BasePipeline]],
+    ) -> pd.DataFrame:
+        rows = []
+        for trial in trials:
+            for pipeline_name, pipeline in pipelines_by_trial.get(trial.trial_id, {}).items():
+                df = pipeline.pipeline_runtime_summary_frame()
+                if not df.empty:
+                    df = df.copy()
+                    df["trial_id"] = trial.trial_id
+                    rows.extend(df.to_dict(orient="records"))
+        return pd.DataFrame(rows)
+    
+    def trial_dependency_health_frame(
+        self,
+        *,
+        trials: list[TrialRecord],
+        pipelines_by_trial: dict[str, dict[str, BasePipeline]],
+    ) -> pd.DataFrame:
+        rows = []
+        for trial in trials:
+            for pipeline_name, pipeline in pipelines_by_trial.get(trial.trial_id, {}).items():
+                config_signature = pipeline.config_signature() if hasattr(pipeline, "config_signature") else ""
+                units = pipeline.enumerate_work_units(
+                    trial_id=trial.trial_id,
+                    config_signature=config_signature,
+                    runtime_report=pipeline.runtime_report(),
+                )
+                for unit in units:
+                    rows.append(
+                        {
+                            "trial_id": trial.trial_id,
+                            "pipeline_name": pipeline_name,
+                            "config_signature": config_signature,
+                            "unit_id": unit.get("unit_id"),
+                            "stage_name": unit.get("stage_name"),
+                            "scope": unit.get("scope"),
+                            "status": unit.get("status"),
+                            "runtime_eligible": unit.get("runtime_eligible"),
+                            "dependency_ready": not bool(unit.get("dependencies")),
+                            "dependencies": unit.get("dependencies", []),
+                            "dependency_reasons": unit.get("dependency_reasons", []),
+                            "priority": unit.get("priority"),
+                            "site_id": unit.get("site_id"),
+                            "plot_id": unit.get("plot_id"),
+                            "source_version": unit.get("source_version"),
+                        }
+                    )
+        return pd.DataFrame(rows)
+    
+    def grid_preflight_frame(
+        self,
+        *,
+        trials: list[TrialRecord],
+        pipelines_by_trial: dict[str, dict[str, BasePipeline]],
+    ) -> pd.DataFrame:
+        rows = []
+        for trial in trials:
+            for pipeline_name, pipeline in pipelines_by_trial.get(trial.trial_id, {}).items():
+                report = pipeline.build_trial_health_report(
+                    trial_id=trial.trial_id,
+                    config_signature=pipeline.config_signature() if hasattr(pipeline, "config_signature") else "",
+                    runtime_report=pipeline.runtime_report(),
+                )
+                for stage in report.stages:
+                    rows.append(
+                        {
+                            "trial_id": report.trial_id,
+                            "pipeline_name": report.pipeline_name,
+                            "config_signature": report.config_signature,
+                            "runtime_image_key": report.runtime_image_key,
+                            "stage_name": stage.stage_name,
+                            "runtime_eligible": stage.runtime_eligible,
+                            "dependency_ready": stage.dependency_ready,
+                            "status": stage.status,
+                            "missing_capabilities": stage.missing_capabilities,
+                            "blocking_dependencies": stage.blocking_dependencies,
+                            "n_total_units": stage.n_total_units,
+                            "n_complete_units": stage.n_complete_units,
+                            "n_pending_units": stage.n_pending_units,
+                            "n_blocked_units": stage.n_blocked_units,
+                            "n_failed_units": stage.n_failed_units,
+                            "n_ineligible_units": stage.n_ineligible_units,
+                        }
+                    )
+        return pd.DataFrame(rows)
 
     def set_trial_section_config(
         self,

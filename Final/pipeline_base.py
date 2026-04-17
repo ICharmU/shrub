@@ -17,7 +17,9 @@ from Final.models import (
     ExecutionEligibility, 
     ExecutionEligibilityStatus, 
     RuntimeRequirementMode,
-    WorkUnitRecord
+    WorkUnitRecord,
+    PipelineStageHealth,
+    TrialHealthReport,
 )
 from Final.pipeline_caching import hash_payload, is_valid_stage_cache, \
     prune_stage_artifacts, write_stage_cache_manifest, read_stage_cache_manifest
@@ -419,3 +421,134 @@ class BasePipeline(ABC):
         for info in elig.values():
             caps.extend(info.missing_capabilities)
         return sorted(set(caps))
+    
+    def shared_signature_for_stage(self, stage_name: str, **kwargs) -> str | None:
+        """
+        Override in concrete pipelines when a stage has a reusable cross-trial identity.
+        """
+        return None
+
+    def shared_artifact_family_for_stage(self, stage_name: str) -> str | None:
+        """
+        Override in concrete pipelines when a stage produces reusable shared artifacts.
+        """
+        return None
+    
+    def pipeline_runtime_summary_frame(self, runtime_report=None) -> pd.DataFrame:
+        runtime_report = runtime_report or self.runtime_report()
+        rows = []
+
+        for stage in self.pipeline_spec.stages:
+            elig = self.stage_runtime_eligibility(stage.name, runtime_report=runtime_report)
+            for module_key, info in elig.items():
+                mv = self.resolve_module_variant(module_key)
+                rows.append(
+                    {
+                        "pipeline_name": self.pipeline_name,
+                        "stage_name": stage.name,
+                        "module_key": module_key,
+                        "enabled": mv.enabled,
+                        "variant_name": mv.variant_name,
+                        "runtime_eligible": info.status == ExecutionEligibilityStatus.ELIGIBLE,
+                        "missing_capabilities": info.missing_capabilities,
+                        "reason": info.reason,
+                        "detected_image_key": info.detected_image_key,
+                    }
+                )
+        return pd.DataFrame(rows)
+    
+    def summarize_stage_health_from_units(
+        self,
+        *,
+        trial_id: str,
+        config_signature: str,
+        units: list[dict],
+        runtime_report=None,
+    ) -> list[PipelineStageHealth]:
+        runtime_report = runtime_report or self.runtime_report()
+        rows = []
+
+        for stage in self.pipeline_spec.stages:
+            stage_units = [u for u in units if u.get("stage_name") == stage.name]
+            elig = self.stage_runtime_eligibility(stage.name, runtime_report=runtime_report)
+
+            missing_caps = sorted(
+                {
+                    cap
+                    for info in elig.values()
+                    for cap in info.missing_capabilities
+                }
+            )
+
+            blocking_deps = sorted(
+                {
+                    dep
+                    for u in stage_units
+                    for dep in (u.get("dependencies") or [])
+                }
+            )
+
+            rows.append(
+                PipelineStageHealth(
+                    pipeline_name=self.pipeline_name,
+                    config_signature=config_signature,
+                    stage_name=stage.name,
+                    runtime_eligible=all(
+                        info.status == ExecutionEligibilityStatus.ELIGIBLE
+                        for info in elig.values()
+                    ),
+                    dependency_ready=all(not (u.get("dependencies") or []) for u in stage_units) if stage_units else True,
+                    status="complete" if stage_units and all(u.get("status") == "complete" for u in stage_units)
+                    else "failed" if any(u.get("status") == "failed" for u in stage_units)
+                    else "blocked" if any(u.get("status") == "blocked" for u in stage_units)
+                    else "pending",
+                    missing_capabilities=missing_caps,
+                    blocking_dependencies=blocking_deps,
+                    n_total_units=len(stage_units),
+                    n_complete_units=sum(u.get("status") == "complete" for u in stage_units),
+                    n_pending_units=sum(u.get("status") == "pending" for u in stage_units),
+                    n_blocked_units=sum(u.get("status") == "blocked" for u in stage_units),
+                    n_failed_units=sum(u.get("status") == "failed" for u in stage_units),
+                    n_ineligible_units=sum(u.get("status") == "ineligible" for u in stage_units),
+                )
+            )
+
+        return rows
+    
+    def build_trial_health_report(
+        self,
+        *,
+        trial_id: str,
+        config_signature: str | None = None,
+        runtime_report=None,
+    ) -> TrialHealthReport:
+        config_signature = config_signature or (
+            self.config_signature() if hasattr(self, "config_signature") else ""
+        )
+        runtime_report = runtime_report or self.runtime_report()
+
+        units = self.enumerate_work_units(
+            trial_id=trial_id,
+            config_signature=config_signature,
+            runtime_report=runtime_report,
+        )
+        stages = self.summarize_stage_health_from_units(
+            trial_id=trial_id,
+            config_signature=config_signature,
+            units=units,
+            runtime_report=runtime_report,
+        )
+
+        return TrialHealthReport(
+            trial_id=trial_id,
+            pipeline_name=self.pipeline_name,
+            config_signature=config_signature,
+            runtime_image_key=runtime_report.detected_image_key,
+            n_total_units=len(units),
+            n_complete_units=sum(u.get("status") == "complete" for u in units),
+            n_pending_units=sum(u.get("status") == "pending" for u in units),
+            n_blocked_units=sum(u.get("status") == "blocked" for u in units),
+            n_failed_units=sum(u.get("status") == "failed" for u in units),
+            n_ineligible_units=sum(u.get("status") == "ineligible" for u in units),
+            stages=stages,
+        )

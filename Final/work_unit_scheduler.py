@@ -13,6 +13,21 @@ class WorkUnitScheduler:
         self.controller = controller
         self.coordination = coordination
 
+    def effective_priority(self, unit: dict, trial_units: list[dict]) -> tuple[int, int, str]:
+        base = int(unit.get("priority", 100))
+        unlocked = 0
+
+        for other in trial_units:
+            deps = other.get("dependencies") or []
+            if unit.get("unit_id") in deps:
+                unlocked += 1
+            elif unit.get("work_key") in deps:
+                unlocked += 1
+            elif unit.get("stage_name") in deps:
+                unlocked += 1
+
+        return (base, -unlocked, unit.get("unit_id"))
+
     def refresh_trial_units(self, trial: TrialRecord, pipeline, runtime_report=None) -> TrialRecord:
         runtime_report = runtime_report or pipeline.runtime_report()
         units = pipeline.enumerate_work_units(
@@ -33,7 +48,11 @@ class WorkUnitScheduler:
         ]
         if not runnable:
             return None
-        runnable = sorted(runnable, key=lambda x: (x.get("priority", 100), x.get("unit_id")))
+
+        runnable = sorted(
+            runnable,
+            key=lambda u: self.effective_priority(u, trial_units),
+        )
         return runnable[0]
 
     def select_next_job(self, *, trials: list[TrialRecord], pipelines: dict[str, Any]):

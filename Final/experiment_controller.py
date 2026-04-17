@@ -236,3 +236,25 @@ class ExperimentController:
     def completed_trials_frame(self) -> list[dict]:
         rows = self.trials_frame()
         return [r for r in rows if r.get("status") == "success"]
+    
+    def trial_health_frame(self, trial: TrialRecord) -> list[dict]:
+        rows = []
+        for unit in (trial.work_units or {}).values():
+            rows.append(
+                {
+                    "trial_id": trial.trial_id,
+                    "unit_id": unit.get("unit_id"),
+                    "pipeline_name": unit.get("pipeline_name"),
+                    "stage_name": unit.get("stage_name"),
+                    "scope": unit.get("scope"),
+                    "status": unit.get("status"),
+                    "runtime_eligible": unit.get("runtime_eligible"),
+                    "dependencies": unit.get("dependencies", []),
+                    "dependency_reasons": unit.get("dependency_reasons", []),
+                    "priority": unit.get("priority"),
+                    "site_id": unit.get("site_id"),
+                    "plot_id": unit.get("plot_id"),
+                    "source_version": unit.get("source_version"),
+                }
+            )
+        return rows

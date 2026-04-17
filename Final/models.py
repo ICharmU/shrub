@@ -334,9 +334,6 @@ class ArtifactSpec:
     required_for_resume: bool = True
     prune_local_after_push: bool = False
 
-from enum import Enum
-
-
 class WorkUnitScope(str, Enum):
     STAGE = "stage"
     SITE = "site"
@@ -410,3 +407,71 @@ class TrialResolution:
     running_units: int = 0
     notes: list[str] = field(default_factory=list)
 
+class SharedArtifactStatus(str, Enum):
+    MISSING = "missing"
+    LOCAL_ONLY = "local_only"
+    REMOTE_ONLY = "remote_only"
+    HYDRATED = "hydrated"
+    VALID = "valid"
+    INVALID = "invalid"
+    STALE = "stale"
+
+
+@dataclass
+class SharedArtifactRecord:
+    artifact_family: str
+    shared_signature: str
+    producer_pipeline: str
+
+    rel_path: str | None = None
+    local_path: str | None = None
+    remote_ref: str | None = None
+
+    status: SharedArtifactStatus = SharedArtifactStatus.MISSING
+    required_by_trials: list[str] = field(default_factory=list)
+    source_trials: list[str] = field(default_factory=list)
+
+    metadata: dict[str, Any] = field(default_factory=dict)
+    notes: list[str] = field(default_factory=list)
+
+
+@dataclass
+class PipelineStageHealth:
+    pipeline_name: str
+    config_signature: str
+    stage_name: str
+
+    enabled: bool = True
+    runtime_eligible: bool = True
+    dependency_ready: bool = True
+
+    status: str = "unknown"
+    missing_capabilities: list[str] = field(default_factory=list)
+    blocking_dependencies: list[str] = field(default_factory=list)
+
+    n_total_units: int = 0
+    n_complete_units: int = 0
+    n_pending_units: int = 0
+    n_blocked_units: int = 0
+    n_failed_units: int = 0
+    n_ineligible_units: int = 0
+
+    notes: list[str] = field(default_factory=list)
+
+
+@dataclass
+class TrialHealthReport:
+    trial_id: str
+    pipeline_name: str
+    config_signature: str
+    runtime_image_key: str | None = None
+
+    n_total_units: int = 0
+    n_complete_units: int = 0
+    n_pending_units: int = 0
+    n_blocked_units: int = 0
+    n_failed_units: int = 0
+    n_ineligible_units: int = 0
+
+    stages: list[PipelineStageHealth] = field(default_factory=list)
+    notes: list[str] = field(default_factory=list)
