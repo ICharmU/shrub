@@ -4,6 +4,7 @@ from dataclasses import dataclass, field, asdict
 from pathlib import Path
 import json
 import tempfile
+from time import perf_counter
 from datetime import datetime, timezone
 import hashlib
 from itertools import product
@@ -1405,12 +1406,30 @@ class LabelingPipeline(BasePipeline):
     
         return False, "partial run not reused by policy"
 
-    def enumerate_work_units(self, *, trial_id: str, config_signature: str | None = None, runtime_report=None) -> list[dict]:
+    def enumerate_work_units(
+        self,
+        *,
+        trial_id: str,
+        config_signature: str | None = None,
+        runtime_report=None,
+        register_shared_requirements: bool = False,
+    ) -> list[dict]:
         config_signature = config_signature or self.config_signature()
         runtime_report = runtime_report or self.runtime_report()
 
         units = []
         manifest_csv = self.sprint3_manifest_csv
+
+        enum_t0 = perf_counter()
+
+        self.logger.info(
+            "ENUM WORK UNITS START | trial=%s | pipeline=%s | config=%s | register_shared_requirements=%s | runtime_image=%s",
+            trial_id,
+            self.pipeline_name,
+            config_signature,
+            register_shared_requirements,
+            getattr(runtime_report, "detected_image_key", None),
+        )
 
         # ------------------------------------------------------------------
         # Stage: site_assets (one per site, shared across trials)
@@ -1419,12 +1438,13 @@ class LabelingPipeline(BasePipeline):
             site_assets_ok = True  # asset prep itself is allowed wherever transfer-side python runs
             site_assets_shared_sig = self.shared_signature_site_assets(site)
 
-            self.register_shared_requirement(
-                artifact_family="labeling.site_assets",
-                shared_signature=site_assets_shared_sig,
-                trial_id=trial_id,
-                metadata={"site": site},
-            )
+            if register_shared_requirements and self.cfg.shared_artifacts.enable_shared_artifact_registry:
+                self.register_shared_requirement(
+                    artifact_family="labeling.site_assets",
+                    shared_signature=site_assets_shared_sig,
+                    trial_id=trial_id,
+                    metadata={"site": site},
+                )
 
             site_assets_complete = self.shared_artifact_is_valid(
                 artifact_family="labeling.site_assets",
@@ -1451,6 +1471,12 @@ class LabelingPipeline(BasePipeline):
                 "shared_artifact_family": "labeling.site_assets",
                 "shared_signature": site_assets_shared_sig,
             })
+
+        self.logger.info(
+            "ENUM WORK UNITS | trial=%s | stage=site_assets | n_units=%d",
+            trial_id,
+            sum(1 for u in units if u.get("stage_name") == "site_assets"),
+        )
 
         # ------------------------------------------------------------------
         # Stage: sprint3 (shared across trials)
@@ -1487,12 +1513,13 @@ class LabelingPipeline(BasePipeline):
                         ptx_name=ptx_name,
                         ptx_url=ptx_url,
                     )
-                    self.register_shared_requirement(
-                        artifact_family="labeling.sprint3.outputs",
-                        shared_signature=shared_sig,
-                        trial_id=trial_id,
-                        metadata={"site": site, "variant": variant, "ptx_name": ptx_name},
-                    )
+                    if register_shared_requirements and self.cfg.shared_artifacts.enable_shared_artifact_registry:
+                        self.register_shared_requirement(
+                            artifact_family="labeling.sprint3.outputs",
+                            shared_signature=shared_sig,
+                            trial_id=trial_id,
+                            metadata={"site": site, "variant": variant, "ptx_name": ptx_name},
+                        )
                     if not self.shared_artifact_is_valid(
                         artifact_family="labeling.sprint3.outputs",
                         shared_signature=shared_sig,
@@ -1521,6 +1548,13 @@ class LabelingPipeline(BasePipeline):
             "priority": 10,
         })
 
+        self.logger.info(
+            "ENUM WORK UNITS | trial=%s | stage=sprint3 | sprint3_complete=%s | sprint3_ok=%s",
+            trial_id,
+            sprint3_complete,
+            sprint3_ok,
+        )
+
         # ------------------------------------------------------------------
         # Stage: standardize
         # ------------------------------------------------------------------
@@ -1544,11 +1578,12 @@ class LabelingPipeline(BasePipeline):
 
                 if not runs_df.empty:
                     std_shared_sig = self.shared_signature_standardize(runs_df)
-                    self.register_shared_requirement(
-                        artifact_family="labeling.standardize.outputs",
-                        shared_signature=std_shared_sig,
-                        trial_id=trial_id,
-                    )
+                    if register_shared_requirements and self.cfg.shared_artifacts.enable_shared_artifact_registry:
+                        self.register_shared_requirement(
+                            artifact_family="labeling.standardize.outputs",
+                            shared_signature=std_shared_sig,
+                            trial_id=trial_id,
+                        )
 
                     std_complete = self.shared_artifact_is_valid(
                         artifact_family="labeling.standardize.outputs",
@@ -1592,6 +1627,13 @@ class LabelingPipeline(BasePipeline):
             "priority": 20,
         })
 
+        self.logger.info(
+            "ENUM WORK UNITS | trial=%s | stage=standardize | std_complete=%s | deps=%s",
+            trial_id,
+            std_complete,
+            std_deps,
+        )
+
         # ------------------------------------------------------------------
         # Stage: refine
         # ------------------------------------------------------------------
@@ -1616,11 +1658,12 @@ class LabelingPipeline(BasePipeline):
                     std_df = pd.read_csv(cache_csv)
                     ref_shared_sig = self.shared_signature_refine(std_df)
 
-                    self.register_shared_requirement(
-                        artifact_family="labeling.refine.outputs",
-                        shared_signature=ref_shared_sig,
-                        trial_id=trial_id,
-                    )
+                    if register_shared_requirements and self.cfg.shared_artifacts.enable_shared_artifact_registry:
+                        self.register_shared_requirement(
+                            artifact_family="labeling.refine.outputs",
+                            shared_signature=ref_shared_sig,
+                            trial_id=trial_id,
+                        )
 
                     refine_complete = self.shared_artifact_is_valid(
                         artifact_family="labeling.refine.outputs",
@@ -1664,6 +1707,13 @@ class LabelingPipeline(BasePipeline):
             "priority": 30,
         })
 
+        self.logger.info(
+            "ENUM WORK UNITS | trial=%s | stage=refine | refine_complete=%s | deps=%s",
+            trial_id,
+            refine_complete,
+            refine_deps,
+        )
+
         # ------------------------------------------------------------------
         # Plot-level transfer+rasterize units
         # ------------------------------------------------------------------
@@ -1688,16 +1738,17 @@ class LabelingPipeline(BasePipeline):
                             objects_group=group_df,
                         )
 
-                        self.register_shared_requirement(
-                            artifact_family="labeling.transfer.outputs",
-                            shared_signature=transfer_shared_sig,
-                            trial_id=trial_id,
-                            metadata={
-                                "site_id": site_id,
-                                "plot_id": plot_id,
-                                "source_version": source_version,
-                            },
-                        )
+                        if register_shared_requirements and self.cfg.shared_artifacts.enable_shared_artifact_registry:
+                            self.register_shared_requirement(
+                                artifact_family="labeling.transfer.outputs",
+                                shared_signature=transfer_shared_sig,
+                                trial_id=trial_id,
+                                metadata={
+                                    "site_id": site_id,
+                                    "plot_id": plot_id,
+                                    "source_version": source_version,
+                                },
+                            )
 
                         valid_shared = self.shared_artifact_is_valid(
                             artifact_family="labeling.transfer.outputs",
@@ -1749,8 +1800,26 @@ class LabelingPipeline(BasePipeline):
                             "shared_artifact_family": "labeling.transfer.outputs",
                             "shared_signature": transfer_shared_sig,
                         })
+
+                        n_transfer_units = sum(1 for u in units if u.get("stage_name") == "transfer")
+                        self.logger.info(
+                            "ENUM WORK UNITS | trial=%s | stage=transfer | n_units=%d | transfer_ok=%s | rasterize_ok=%s",
+                            trial_id,
+                            n_transfer_units,
+                            transfer_ok,
+                            rasterize_ok,
+                        )
             except Exception:
                 pass
+
+        enum_t1 = perf_counter()
+        self.logger.info(
+            "ENUM WORK UNITS DONE  | trial=%s | pipeline=%s | total_units=%d | dt=%.2fs",
+            trial_id,
+            self.pipeline_name,
+            len(units),
+            enum_t1 - enum_t0,
+        )
 
         return units
 

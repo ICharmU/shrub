@@ -4,6 +4,7 @@ from dataclasses import dataclass, field, asdict
 from pathlib import Path
 import json
 import tempfile
+from time import perf_counter
 from datetime import datetime, timezone
 import hashlib
 from itertools import product
@@ -36,6 +37,7 @@ from Final.models import (
     ExecutionEligibilityStatus,
     WorkUnitScope, 
     WorkUnitStatus,
+    SharedArtifactStatus
 )
 from Final.artifact_store import (
     LocalArtifactStore,
@@ -50,6 +52,7 @@ from Final.gating import (
     ModuleQAProfile,
     ModuleQAEvaluation,
 )
+from Final.shared_artifact_registry import SharedArtifactRegistry
 from Final.shared_utils import get_logger
 
 
@@ -148,6 +151,10 @@ class LabelingPipeline(BasePipeline):
             self.artifact_store,
             root_prefix=self.cfg.coordination.root_prefix,
         )
+        self.shared_registry = SharedArtifactRegistry(
+            self.artifact_store,
+            root_prefix=self.cfg.shared_artifacts.registry_prefix,
+        )
 
     def artifact_specs(self) -> dict[str, ArtifactSpec]:
         return {
@@ -199,6 +206,20 @@ class LabelingPipeline(BasePipeline):
                 storage_tier=StorageTier.LOCAL_THEN_REMOTE,
                 required_for_resume=True,
                 prune_local_after_push=True,
+            ),
+             "site_naip_raster": ArtifactSpec(
+                key="site_naip_raster",
+                rel_path_template="labeling/{site}/shared/site_assets/naip/{filename}",
+                storage_tier=StorageTier.LOCAL_THEN_REMOTE,
+                required_for_resume=True,
+                prune_local_after_push=False,
+            ),
+            "site_als_metadata_json": ArtifactSpec(
+                key="site_als_metadata_json",
+                rel_path_template="labeling/{site}/shared/site_assets/als_metadata/als_metadata.json",
+                storage_tier=StorageTier.LOCAL_THEN_REMOTE,
+                required_for_resume=True,
+                prune_local_after_push=False,
             ),
             "object_id_raster": ArtifactSpec(
                 key="object_id_raster",
@@ -1020,6 +1041,154 @@ class LabelingPipeline(BasePipeline):
             )
         return pd.DataFrame(rows).sort_values("config_signature").reset_index(drop=True)
     
+    def shared_artifact_family_for_stage(self, stage_name: str) -> str | None:
+        mapping = {
+            "site_assets": "labeling.site_assets",
+            "sprint3": "labeling.sprint3.outputs",
+            "standardize": "labeling.standardize.outputs",
+            "refine": "labeling.refine.outputs",
+            "transfer": "labeling.transfer.outputs",
+            "rasterize": "labeling.transfer.outputs",
+        }
+        return mapping.get(stage_name)
+    
+    def shared_signature_site_assets(self, site: str) -> str:
+        payload = {
+            "site": site,
+            "naip_name": site_to_tif_name(site),
+            "als_dir": self.cfg.data.als_dir,
+            "naip_dir": self.cfg.data.naip_3dep_dir,
+        }
+        return hash_payload(payload)
+    
+    def shared_signature_sprint3(self, *, site: str, variant: str, ptx_name: str | None, ptx_url: str | None) -> str:
+        payload = {
+            "site": site,
+            "variant": variant,
+            "ptx_name": ptx_name,
+            "ptx_url": ptx_url,
+            "max_ptx_per_site": self.pipeline_config.max_ptx_per_site,
+            "require_success_artifacts_sprint3": self.pipeline_config.require_success_artifacts_sprint3,
+        }
+        return hash_payload(payload)
+    
+    def shared_signature_standardize(self, runs_df: pd.DataFrame) -> str:
+        return self.standardize_stage_data_signature(runs_df)
+
+    def shared_signature_refine(self, objects_df: pd.DataFrame) -> str:
+        return self.refine_stage_data_signature(objects_df)
+
+    def shared_signature_transfer(
+        self,
+        *,
+        site: str,
+        plot_id: str,
+        source_version: str,
+        objects_group: pd.DataFrame,
+    ) -> str:
+        return self.transfer_stage_data_signature(
+            site=site,
+            plot_id=plot_id,
+            source_version=source_version,
+            objects_group=objects_group,
+        )
+    
+    def shared_signature_for_stage(self, stage_name: str, **kwargs) -> str | None:
+        if stage_name == "site_assets":
+            site = kwargs["site"]
+            return self.shared_signature_site_assets(site)
+        if stage_name == "sprint3":
+            return self.shared_signature_sprint3(
+                site=kwargs["site"],
+                variant=kwargs["variant"],
+                ptx_name=kwargs.get("ptx_name"),
+                ptx_url=kwargs.get("ptx_url"),
+            )
+        return None
+    
+    def shared_artifact_is_valid(
+        self,
+        *,
+        artifact_family: str,
+        shared_signature: str,
+    ) -> bool:
+        if not self.cfg.shared_artifacts.enable_shared_artifact_registry:
+            return False
+
+        rec = self.shared_registry.load(
+            artifact_family=artifact_family,
+            shared_signature=shared_signature,
+        )
+        if rec is None:
+            return False
+
+        return str(rec.status).lower().endswith("valid")
+    
+    def register_shared_requirement(
+        self,
+        *,
+        artifact_family: str,
+        shared_signature: str,
+        trial_id: str,
+        metadata: dict | None = None,
+    ):
+        if not self.cfg.shared_artifacts.enable_shared_artifact_registry:
+            return
+
+        rec = self.shared_registry.upsert_requirement(
+            artifact_family=artifact_family,
+            shared_signature=shared_signature,
+            producer_pipeline=self.pipeline_name,
+            trial_id=trial_id,
+        )
+        if metadata:
+            rec.metadata.update(metadata)
+            self.shared_registry.save(rec)
+    
+    def repair_or_rehydrate_artifact(
+        self,
+        *,
+        artifact_key: str,
+        rel_path: str,
+        local_path: Path,
+        validator_key: str | None = None,
+        recompute_fn=None,
+    ) -> Path | None:
+        policy = self.cfg.artifact_repair
+
+        if local_path.exists():
+            ok = self.validate_hydrated_artifact(
+                rel_path=rel_path,
+                local_path=local_path,
+                artifact_key=validator_key or artifact_key,
+            )
+            if ok:
+                return local_path
+
+            self.logger.warning(
+                "LOCAL ARTIFACT INVALID | key=%s | rel_path=%s | local_path=%s",
+                artifact_key, rel_path, local_path,
+            )
+            if policy.repair_invalid_local_assets:
+                local_path.unlink(missing_ok=True)
+
+        if policy.prefer_remote_hydration_for_invalid_local_assets and self._remote_exists(rel_path):
+            pulled = self.hydrate_and_validate_artifact(
+                rel_path=rel_path,
+                local_path=local_path,
+                artifact_key=validator_key or artifact_key,
+                reason=f"repair_or_rehydrate:{artifact_key}",
+            )
+            if pulled is not None:
+                return pulled
+
+        if recompute_fn is not None and policy.recompute_only_if_local_and_remote_invalid:
+            recompute_fn()
+            if local_path.exists():
+                return local_path
+
+        return None
+    
     def enforce_storage_policy_for_existing_run(
         self,
         *,
@@ -1237,15 +1406,129 @@ class LabelingPipeline(BasePipeline):
     
         return False, "partial run not reused by policy"
 
-    def enumerate_work_units(self, *, trial_id: str, config_signature: str | None = None, runtime_report=None) -> list[dict]:
+    def enumerate_work_units(
+        self,
+        *,
+        trial_id: str,
+        config_signature: str | None = None,
+        runtime_report=None,
+        register_shared_requirements: bool = False,
+    ) -> list[dict]:
         config_signature = config_signature or self.config_signature()
         runtime_report = runtime_report or self.runtime_report()
 
         units = []
+        manifest_csv = self.sprint3_manifest_csv
 
-        # Stage: sprint3
+        enum_t0 = perf_counter()
+
+        self.logger.info(
+            "ENUM WORK UNITS START | trial=%s | pipeline=%s | config=%s | register_shared_requirements=%s | runtime_image=%s",
+            trial_id,
+            self.pipeline_name,
+            config_signature,
+            register_shared_requirements,
+            getattr(runtime_report, "detected_image_key", None),
+        )
+
+        # ------------------------------------------------------------------
+        # Stage: site_assets (one per site, shared across trials)
+        # ------------------------------------------------------------------
+        for site in self.cfg.sites:
+            site_assets_ok = True  # asset prep itself is allowed wherever transfer-side python runs
+            site_assets_shared_sig = self.shared_signature_site_assets(site)
+
+            if register_shared_requirements and self.cfg.shared_artifacts.enable_shared_artifact_registry:
+                self.register_shared_requirement(
+                    artifact_family="labeling.site_assets",
+                    shared_signature=site_assets_shared_sig,
+                    trial_id=trial_id,
+                    metadata={"site": site},
+                )
+
+            site_assets_complete = self.shared_artifact_is_valid(
+                artifact_family="labeling.site_assets",
+                shared_signature=site_assets_shared_sig,
+            )
+
+            units.append({
+                "unit_id": f"{trial_id}:{self.pipeline_name}:site_assets:{site}",
+                "trial_id": trial_id,
+                "pipeline_name": self.pipeline_name,
+                "config_signature": config_signature,
+                "stage_name": "site_assets",
+                "work_key": site,
+                "scope": WorkUnitScope.SITE.value,
+                "status": WorkUnitStatus.COMPLETE.value if site_assets_complete else (
+                    WorkUnitStatus.PENDING.value if site_assets_ok else WorkUnitStatus.INELIGIBLE.value
+                ),
+                "dependencies": [],
+                "dependency_reasons": [],
+                "runtime_required_capabilities": list(self.cfg.labeling_runtime.require_capability_transfer),
+                "runtime_eligible": site_assets_ok,
+                "priority": 5,
+                "site_id": site,
+                "shared_artifact_family": "labeling.site_assets",
+                "shared_signature": site_assets_shared_sig,
+            })
+
+        self.logger.info(
+            "ENUM WORK UNITS | trial=%s | stage=site_assets | n_units=%d",
+            trial_id,
+            sum(1 for u in units if u.get("stage_name") == "site_assets"),
+        )
+
+        # ------------------------------------------------------------------
+        # Stage: sprint3 (shared across trials)
+        # ------------------------------------------------------------------
         sprint3_ok, _ = self.stage_is_eligible("sprint3", runtime_report=runtime_report)
-        sprint3_complete = self.sprint3_manifest_csv.exists()
+
+        ptx_summary_df = pd.DataFrame()
+        try:
+            if sprint3_ok:
+                ptx_summary_df = summarize_ptx_entries_by_site(
+                    cfg=self.cfg,
+                    site_ids=self.cfg.sites,
+                )
+                selected_ptx_df = select_ptx_entries(
+                    ptx_summary_df,
+                    max_ptx_per_site=self.pipeline_config.max_ptx_per_site,
+                )
+            else:
+                selected_ptx_df = pd.DataFrame()
+        except Exception:
+            selected_ptx_df = pd.DataFrame()
+
+        sprint3_shared_complete = False
+        if not selected_ptx_df.empty:
+            all_shared = True
+            for _, row in selected_ptx_df.iterrows():
+                site = row["site_id"]
+                ptx_name = row["ptx_name"]
+                ptx_url = row.get("ptx_url")
+                for variant in self.pipeline_config.sprint3_variants:
+                    shared_sig = self.shared_signature_sprint3(
+                        site=site,
+                        variant=variant,
+                        ptx_name=ptx_name,
+                        ptx_url=ptx_url,
+                    )
+                    if register_shared_requirements and self.cfg.shared_artifacts.enable_shared_artifact_registry:
+                        self.register_shared_requirement(
+                            artifact_family="labeling.sprint3.outputs",
+                            shared_signature=shared_sig,
+                            trial_id=trial_id,
+                            metadata={"site": site, "variant": variant, "ptx_name": ptx_name},
+                        )
+                    if not self.shared_artifact_is_valid(
+                        artifact_family="labeling.sprint3.outputs",
+                        shared_signature=shared_sig,
+                    ):
+                        all_shared = False
+            sprint3_shared_complete = all_shared
+
+        # fallback legacy/local manifest check
+        sprint3_complete = sprint3_shared_complete or manifest_csv.exists()
 
         units.append({
             "unit_id": f"{trial_id}:{self.pipeline_name}:sprint3",
@@ -1265,19 +1548,27 @@ class LabelingPipeline(BasePipeline):
             "priority": 10,
         })
 
+        self.logger.info(
+            "ENUM WORK UNITS | trial=%s | stage=sprint3 | sprint3_complete=%s | sprint3_ok=%s",
+            trial_id,
+            sprint3_complete,
+            sprint3_ok,
+        )
+
+        # ------------------------------------------------------------------
         # Stage: standardize
+        # ------------------------------------------------------------------
         standardize_ok, _ = self.stage_is_eligible("standardize", runtime_report=runtime_report)
-        standardize_ready = self.sprint3_manifest_csv.exists()
 
         std_deps = []
         std_dep_reasons = []
-        if not standardize_ready:
+        if not sprint3_complete:
             std_deps.append("sprint3")
-            std_dep_reasons.append("Sprint 3 manifest missing.")
+            std_dep_reasons.append("Sprint 3 shared outputs/manifest missing.")
 
         std_complete = False
+        runs_df = pd.DataFrame()
         try:
-            manifest_csv = self.sprint3_manifest_csv
             if manifest_csv.exists():
                 runs_df = pd.read_csv(manifest_csv)
                 if "returncode" in runs_df.columns:
@@ -1285,19 +1576,34 @@ class LabelingPipeline(BasePipeline):
                 if "variant" in runs_df.columns and self.pipeline_config.sprint3_variants:
                     runs_df = runs_df[runs_df["variant"].isin(self.pipeline_config.sprint3_variants)].copy()
 
-                data_sig = self.standardize_stage_data_signature(runs_df)
-                config_sig = self.stage_config_signature("standardize")
-                cache_dir = self.standardize_stage_cache_dir(data_sig, config_sig)
-                cache_csv = cache_dir / "objects_standardized.csv"
-                std_complete = (
-                    self.validate_stage_cache(
-                        stage_name="standardize",
-                        stage_cache_dir=cache_dir,
-                        expected_data_signature=data_sig,
-                        expected_config_signature=config_sig,
+                if not runs_df.empty:
+                    std_shared_sig = self.shared_signature_standardize(runs_df)
+                    if register_shared_requirements and self.cfg.shared_artifacts.enable_shared_artifact_registry:
+                        self.register_shared_requirement(
+                            artifact_family="labeling.standardize.outputs",
+                            shared_signature=std_shared_sig,
+                            trial_id=trial_id,
+                        )
+
+                    std_complete = self.shared_artifact_is_valid(
+                        artifact_family="labeling.standardize.outputs",
+                        shared_signature=std_shared_sig,
                     )
-                    and cache_csv.exists()
-                )
+
+                    if not std_complete:
+                        data_sig = self.standardize_stage_data_signature(runs_df)
+                        config_sig = self.stage_config_signature("standardize")
+                        cache_dir = self.standardize_stage_cache_dir(data_sig, config_sig)
+                        cache_csv = cache_dir / "objects_standardized.csv"
+                        std_complete = (
+                            self.validate_stage_cache(
+                                stage_name="standardize",
+                                stage_cache_dir=cache_dir,
+                                expected_data_signature=data_sig,
+                                expected_config_signature=config_sig,
+                            )
+                            and cache_csv.exists()
+                        )
         except Exception:
             std_complete = False
 
@@ -1321,43 +1627,63 @@ class LabelingPipeline(BasePipeline):
             "priority": 20,
         })
 
+        self.logger.info(
+            "ENUM WORK UNITS | trial=%s | stage=standardize | std_complete=%s | deps=%s",
+            trial_id,
+            std_complete,
+            std_deps,
+        )
+
+        # ------------------------------------------------------------------
         # Stage: refine
+        # ------------------------------------------------------------------
         refine_ok, _ = self.stage_is_eligible("refine", runtime_report=runtime_report)
+
         refine_deps = []
         refine_dep_reasons = []
         if not std_complete:
             refine_deps.append("standardize")
-            refine_dep_reasons.append("Standardize output missing.")
+            refine_dep_reasons.append("Standardize shared output missing.")
 
         refine_complete = False
+        std_df = pd.DataFrame()
         try:
-            if std_complete and manifest_csv.exists():
-                runs_df = pd.read_csv(manifest_csv)
-                if "returncode" in runs_df.columns:
-                    runs_df = runs_df[runs_df["returncode"] == 0].copy()
-                if "variant" in runs_df.columns and self.pipeline_config.sprint3_variants:
-                    runs_df = runs_df[runs_df["variant"].isin(self.pipeline_config.sprint3_variants)].copy()
+            if std_complete and not runs_df.empty:
+                data_sig = self.standardize_stage_data_signature(runs_df)
+                config_sig = self.stage_config_signature("standardize")
+                cache_dir = self.standardize_stage_cache_dir(data_sig, config_sig)
+                cache_csv = cache_dir / "objects_standardized.csv"
 
-                std_data_sig = self.standardize_stage_data_signature(runs_df)
-                std_config_sig = self.stage_config_signature("standardize")
-                std_cache_dir = self.standardize_stage_cache_dir(std_data_sig, std_config_sig)
-                std_cache_csv = std_cache_dir / "objects_standardized.csv"
+                if cache_csv.exists():
+                    std_df = pd.read_csv(cache_csv)
+                    ref_shared_sig = self.shared_signature_refine(std_df)
 
-                if std_cache_csv.exists():
-                    std_df = pd.read_csv(std_cache_csv)
-                    ref_data_sig = self.refine_stage_data_signature(std_df)
-                    ref_config_sig = self.stage_config_signature("refine")
-                    ref_cache_dir = self.refine_stage_cache_dir(ref_data_sig, ref_config_sig)
-                    ref_cache_csv = ref_cache_dir / "objects_refined.csv"
-                    refine_complete = (
-                        self.validate_stage_cache(
-                            stage_name="refine",
-                            stage_cache_dir=ref_cache_dir,
-                            expected_data_signature=ref_data_sig,
-                            expected_config_signature=ref_config_sig,
+                    if register_shared_requirements and self.cfg.shared_artifacts.enable_shared_artifact_registry:
+                        self.register_shared_requirement(
+                            artifact_family="labeling.refine.outputs",
+                            shared_signature=ref_shared_sig,
+                            trial_id=trial_id,
                         )
-                        and ref_cache_csv.exists()
+
+                    refine_complete = self.shared_artifact_is_valid(
+                        artifact_family="labeling.refine.outputs",
+                        shared_signature=ref_shared_sig,
                     )
+
+                    if not refine_complete:
+                        ref_data_sig = self.refine_stage_data_signature(std_df)
+                        ref_config_sig = self.stage_config_signature("refine")
+                        ref_cache_dir = self.refine_stage_cache_dir(ref_data_sig, ref_config_sig)
+                        ref_cache_csv = ref_cache_dir / "objects_refined.csv"
+                        refine_complete = (
+                            self.validate_stage_cache(
+                                stage_name="refine",
+                                stage_cache_dir=ref_cache_dir,
+                                expected_data_signature=ref_data_sig,
+                                expected_config_signature=ref_config_sig,
+                            )
+                            and ref_cache_csv.exists()
+                        )
         except Exception:
             refine_complete = False
 
@@ -1381,36 +1707,55 @@ class LabelingPipeline(BasePipeline):
             "priority": 30,
         })
 
+        self.logger.info(
+            "ENUM WORK UNITS | trial=%s | stage=refine | refine_complete=%s | deps=%s",
+            trial_id,
+            refine_complete,
+            refine_deps,
+        )
+
+        # ------------------------------------------------------------------
         # Plot-level transfer+rasterize units
+        # ------------------------------------------------------------------
         transfer_ok, _ = self.stage_is_eligible("transfer", runtime_report=runtime_report)
         rasterize_ok, _ = self.stage_is_eligible("rasterize", runtime_report=runtime_report)
 
         if refine_complete:
             try:
-                # load refined objects from cache
-                if manifest_csv.exists():
-                    runs_df = pd.read_csv(manifest_csv)
-                    if "returncode" in runs_df.columns:
-                        runs_df = runs_df[runs_df["returncode"] == 0].copy()
-                    if "variant" in runs_df.columns and self.pipeline_config.sprint3_variants:
-                        runs_df = runs_df[runs_df["variant"].isin(self.pipeline_config.sprint3_variants)].copy()
-
-                    std_data_sig = self.standardize_stage_data_signature(runs_df)
-                    std_config_sig = self.stage_config_signature("standardize")
-                    std_cache_dir = self.standardize_stage_cache_dir(std_data_sig, std_config_sig)
-                    std_cache_csv = std_cache_dir / "objects_standardized.csv"
-                    std_df = pd.read_csv(std_cache_csv)
-
+                if not std_df.empty:
                     ref_data_sig = self.refine_stage_data_signature(std_df)
                     ref_config_sig = self.stage_config_signature("refine")
                     ref_cache_dir = self.refine_stage_cache_dir(ref_data_sig, ref_config_sig)
                     ref_cache_csv = ref_cache_dir / "objects_refined.csv"
-
                     refined_df = pd.read_csv(ref_cache_csv)
 
                     grouped = refined_df.groupby(["site_id", "plot_id", "source_version"], dropna=False)
                     for (site_id, plot_id, source_version), group_df in grouped:
-                        valid_cache = self.has_valid_transfer_stage_cache(
+                        transfer_shared_sig = self.shared_signature_transfer(
+                            site=site_id,
+                            plot_id=plot_id,
+                            source_version=source_version,
+                            objects_group=group_df,
+                        )
+
+                        if register_shared_requirements and self.cfg.shared_artifacts.enable_shared_artifact_registry:
+                            self.register_shared_requirement(
+                                artifact_family="labeling.transfer.outputs",
+                                shared_signature=transfer_shared_sig,
+                                trial_id=trial_id,
+                                metadata={
+                                    "site_id": site_id,
+                                    "plot_id": plot_id,
+                                    "source_version": source_version,
+                                },
+                            )
+
+                        valid_shared = self.shared_artifact_is_valid(
+                            artifact_family="labeling.transfer.outputs",
+                            shared_signature=transfer_shared_sig,
+                        )
+
+                        valid_cache = valid_shared or self.has_valid_transfer_stage_cache(
                             site=site_id,
                             plot_id=plot_id,
                             source_version=source_version,
@@ -1419,6 +1764,14 @@ class LabelingPipeline(BasePipeline):
 
                         deps = []
                         dep_reasons = []
+
+                        site_assets_shared_sig = self.shared_signature_site_assets(site_id)
+                        if not self.shared_artifact_is_valid(
+                            artifact_family="labeling.site_assets",
+                            shared_signature=site_assets_shared_sig,
+                        ):
+                            deps.append(f"site_assets:{site_id}")
+                            dep_reasons.append(f"Shared site assets missing for site={site_id}")
 
                         units.append({
                             "unit_id": f"{trial_id}:{self.pipeline_name}:transfer:{site_id}:{plot_id}:{source_version}",
@@ -1444,9 +1797,29 @@ class LabelingPipeline(BasePipeline):
                             "site_id": site_id,
                             "plot_id": plot_id,
                             "source_version": source_version,
+                            "shared_artifact_family": "labeling.transfer.outputs",
+                            "shared_signature": transfer_shared_sig,
                         })
+
+                        n_transfer_units = sum(1 for u in units if u.get("stage_name") == "transfer")
+                        self.logger.info(
+                            "ENUM WORK UNITS | trial=%s | stage=transfer | n_units=%d | transfer_ok=%s | rasterize_ok=%s",
+                            trial_id,
+                            n_transfer_units,
+                            transfer_ok,
+                            rasterize_ok,
+                        )
             except Exception:
                 pass
+
+        enum_t1 = perf_counter()
+        self.logger.info(
+            "ENUM WORK UNITS DONE  | trial=%s | pipeline=%s | total_units=%d | dt=%.2fs",
+            trial_id,
+            self.pipeline_name,
+            len(units),
+            enum_t1 - enum_t0,
+        )
 
         return units
 
@@ -1532,6 +1905,27 @@ class LabelingPipeline(BasePipeline):
                     )
                     all_results.append(result)
                     append_results_manifest(self.sprint3_manifest_csv, [result])
+
+                    if self.cfg.shared_artifacts.enable_shared_artifact_registry:
+                        shared_sig = self.shared_signature_sprint3(
+                            site=site,
+                            variant=variant,
+                            ptx_name=ptx_entry["name"],
+                            ptx_url=ptx_entry["url"],
+                        )
+                        self.shared_registry.mark_available(
+                            artifact_family="labeling.sprint3.outputs",
+                            shared_signature=shared_sig,
+                            producer_pipeline=self.pipeline_name,
+                            source_trial=getattr(self, "_active_trial_id", None),
+                            metadata={
+                                "site": site,
+                                "variant": variant,
+                                "ptx_name": ptx_entry["name"],
+                                "used_cache": getattr(result, "used_cache", None),
+                            },
+                            status=SharedArtifactStatus.VALID,
+                        )
 
                     self.logger.info(
                         "Completed Sprint 3 | site=%s | variant=%s | ptx=%s | cache=%s",
@@ -1625,6 +2019,18 @@ class LabelingPipeline(BasePipeline):
             notes=["Standardized Sprint 3 manifest outputs."],
         )
 
+        if self.cfg.shared_artifacts.enable_shared_artifact_registry and not runs_df.empty:
+            shared_sig = self.shared_signature_standardize(runs_df)
+            self.shared_registry.mark_available(
+                artifact_family="labeling.standardize.outputs",
+                shared_signature=shared_sig,
+                producer_pipeline=self.pipeline_name,
+                local_path=str(cache_csv),
+                source_trial=getattr(self, "_active_trial_id", None),
+                metadata={"n_rows": int(len(objects))},
+                status=SharedArtifactStatus.VALID,
+            )
+
         self.logger.info("Standardized %d object rows from Sprint 3 manifest after variant filtering", len(objects))
         return objects
 
@@ -1684,6 +2090,18 @@ class LabelingPipeline(BasePipeline):
             success=True,
             notes=["Refined object table with module-aware config."],
         )
+
+        if self.cfg.shared_artifacts.enable_shared_artifact_registry and not objects_df.empty:
+            shared_sig = self.shared_signature_refine(objects_df)
+            self.shared_registry.mark_available(
+                artifact_family="labeling.refine.outputs",
+                shared_signature=shared_sig,
+                producer_pipeline=self.pipeline_name,
+                local_path=str(cache_csv),
+                source_trial=getattr(self, "_active_trial_id", None),
+                metadata={"n_rows": int(len(refined))},
+                status=SharedArtifactStatus.VALID,
+            )
 
         self.logger.info("Refined %d object rows", len(refined))
         return refined
@@ -1751,55 +2169,89 @@ class LabelingPipeline(BasePipeline):
         naip_url = inventory["naip"]["remote_url"]
     
         # ------------------------------------------------------------
-        # 3) NAIP local cache with validation
+        # 3) NAIP local cache with validation / repair / hydration
         # ------------------------------------------------------------
         naip_local = self._site_naip_cache_root(site) / naip_name
-    
+        naip_rel_path = self._render_rel_path(
+            "site_metadata_manifest",
+            site=site,
+            filename=naip_name,
+            #config_signature=self._current_config_signature(),
+        )
+
         use_cached_naip = False
-        if (not force_refresh) and naip_local.exists():
-            if self.validate_cached_naip(naip_local):
-                self.logger.info("Using cached NAIP for site=%s: %s", site, naip_local)
+        if not force_refresh:
+            repaired = self.repair_or_rehydrate_artifact(
+                artifact_key="site_naip_raster",
+                rel_path=naip_rel_path,
+                local_path=naip_local,
+                validator_key="binary_mask",
+                recompute_fn=None,
+            )
+            if repaired is not None and self.validate_cached_naip(repaired):
+                self.logger.info("Using cached/repaired/hydrated NAIP for site=%s: %s", site, repaired)
+                naip_local = repaired
                 use_cached_naip = True
-            else:
-                self.logger.warning("Deleting corrupt cached NAIP for site=%s: %s", site, naip_local)
-                naip_local.unlink(missing_ok=True)
-    
+
         if not use_cached_naip:
             self.logger.info("Downloading NAIP for site=%s to %s", site, naip_local)
             download_file(naip_url, naip_local)
             if not self.validate_cached_naip(naip_local):
                 raise RuntimeError(f"Downloaded NAIP for site={site} is unreadable: {naip_local}")
-    
+
+            self._persist_file_artifact(
+                naip_local,
+                "site_naip_raster",
+                site=site,
+                filename=naip_name,
+            )
+
+        if self.cfg.shared_artifacts.enable_shared_artifact_registry:
+            self.shared_registry.mark_available(
+                artifact_family="labeling.site_assets",
+                shared_signature=self.shared_signature_site_assets(site),
+                producer_pipeline=self.pipeline_name,
+                rel_path=naip_rel_path,
+                local_path=str(naip_local),
+                metadata={"site": site, "asset_type": "naip"},
+                status=SharedArtifactStatus.VALID,
+            )
+
         # ------------------------------------------------------------
         # 4) ALS metadata: local cache -> remote artifact -> recompute
         # ------------------------------------------------------------
         als_cache_dir = self._site_als_cache_root(site)
         als_meta_json = als_cache_dir / "als_metadata.json"
-    
+        als_meta_rel_path = self._render_rel_path(
+            "site_als_metadata_json",
+            site=site,
+        )
+
         als_meta = None
-    
-        if (not force_refresh) and als_meta_json.exists():
-            self.logger.info("Using cached ALS metadata for site=%s: %s", site, als_meta_json)
-            als_meta = json.loads(als_meta_json.read_text(encoding="utf-8"))
-    
-        if als_meta is None and not force_refresh:
-            artifact_rows = self._load_cached_als_metadata_artifact(site)
-            if artifact_rows is not None:
-                self.logger.info("Using remote/local artifact-backed ALS metadata for site=%s", site)
-                als_meta = artifact_rows
-                als_meta_json.write_text(json.dumps(als_meta, indent=2), encoding="utf-8")
-    
+
+        if not force_refresh:
+            repaired = self.repair_or_rehydrate_artifact(
+                artifact_key="site_als_metadata_json",
+                rel_path=als_meta_rel_path,
+                local_path=als_meta_json,
+                validator_key="als_metadata_json",
+                recompute_fn=None,
+            )
+            if repaired is not None:
+                self.logger.info("Using cached/repaired/hydrated ALS metadata for site=%s: %s", site, repaired)
+                als_meta = json.loads(repaired.read_text(encoding="utf-8"))
+
         if als_meta is None:
             als_files = inventory.get("als", {}).get("files", [])
             if not als_files:
                 als_url = f"{site_base}/{self.cfg.data.als_dir}"
                 als_files = list_files_with_suffix(als_url, (".laz", ".las", ".copc.laz"))
-    
+
             if not als_files:
                 raise RuntimeError(f"No ALS files found for site '{site}'")
-    
+
             self.logger.info("Downloading %d ALS file(s) for site=%s to extract metadata", len(als_files), site)
-    
+
             records = []
             scratch_dir = Path(tempfile.mkdtemp(prefix=f"labeling_als_{site}_"))
             try:
@@ -1818,11 +2270,27 @@ class LabelingPipeline(BasePipeline):
                     scratch_dir.rmdir()
                 except Exception:
                     pass
-    
+
             als_meta_json.write_text(json.dumps(records, indent=2), encoding="utf-8")
             als_meta = records
-            self._persist_als_metadata_artifact(site, als_meta)
+
+            self._persist_file_artifact(
+                als_meta_json,
+                "site_als_metadata_json",
+                site=site,
+            )
             self.logger.info("Cached ALS metadata for site=%s at %s", site, als_meta_json)
+
+        if self.cfg.shared_artifacts.enable_shared_artifact_registry:
+            self.shared_registry.mark_available(
+                artifact_family="labeling.site_assets",
+                shared_signature=self.shared_signature_site_assets(site),
+                producer_pipeline=self.pipeline_name,
+                rel_path=als_meta_rel_path,
+                local_path=str(als_meta_json),
+                metadata={"site": site, "asset_type": "als_metadata"},
+                status=SharedArtifactStatus.VALID,
+            )
     
         # ------------------------------------------------------------
         # 5) Persist site metadata manifest
@@ -2233,6 +2701,28 @@ class LabelingPipeline(BasePipeline):
             notes=["Transfer+rasterize outputs cached with remote-backed artifact rel paths."],
         )
 
+        if self.cfg.shared_artifacts.enable_shared_artifact_registry:
+            shared_sig = self.shared_signature_transfer(
+                site=site,
+                plot_id=plot_id,
+                source_version=source_version,
+                objects_group=objects_group,
+            )
+            self.shared_registry.mark_available(
+                artifact_family="labeling.transfer.outputs",
+                shared_signature=shared_sig,
+                producer_pipeline=self.pipeline_name,
+                local_path=str(cache_artifacts_csv),
+                source_trial=getattr(self, "_active_trial_id", None),
+                metadata={
+                    "site_id": site,
+                    "plot_id": plot_id,
+                    "source_version": source_version,
+                    "n_rows": int(len(artifacts_df)),
+                },
+                status=SharedArtifactStatus.VALID,
+            )
+
         self.logger.info(
             "Finished Sprint 4 transfer | site=%s | plot_id=%s | source_version=%s",
             site, plot_id, source_version
@@ -2384,6 +2874,8 @@ class LabelingPipeline(BasePipeline):
 
     def run_work_unit(self, unit: dict, *, trial_id: str, state=None):
         stage_name = unit["stage_name"]
+
+        self._active_trial_id = trial_id
 
         if stage_name == "sprint3":
             return self.stage_run_sprint3()

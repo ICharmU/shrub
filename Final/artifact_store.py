@@ -197,6 +197,28 @@ class DriveRegistryArtifactStore(ArtifactStore):
             raise ValueError("rel_path cannot be empty")
         return list(parts[:-1]), parts[-1]
 
+    def _safe_list_files(self, drive, query: str):
+        """
+        Robust wrapper around PyDrive2 ListFile/GetList().
+        Handles older 'items' style payloads, newer 'files' style payloads,
+        and error-shaped responses more gracefully.
+        """
+        try:
+            file_list = drive.ListFile({"q": query})
+            result = file_list.GetList()
+            return result
+        except KeyError as e:
+            meta = getattr(file_list, "metadata", None)
+            if isinstance(meta, dict):
+                if "files" in meta and isinstance(meta["files"], list):
+                    return meta["files"]
+                if "error" in meta:
+                    raise RuntimeError(f"Drive ListFile returned error payload: {meta['error']}")
+                raise RuntimeError(f"Drive ListFile returned unexpected metadata keys: {list(meta.keys())}") from e
+            raise
+        except Exception:
+            raise
+
     def _ensure_remote_folder_chain(self, drive, root_id: str, folder_parts: list[str]) -> str:
         parent_id = root_id
         for folder_name in folder_parts:
@@ -206,7 +228,7 @@ class DriveRegistryArtifactStore(ArtifactStore):
                 f"title = '{folder_name_q}' and "
                 "mimeType = 'application/vnd.google-apps.folder' and trashed=false"
             )
-            folder_list = drive.ListFile({"q": query}).GetList()
+            folder_list = self._safe_list_files(drive, query)
             if folder_list:
                 parent_id = folder_list[0]["id"]
             else:
@@ -233,7 +255,7 @@ class DriveRegistryArtifactStore(ArtifactStore):
                 f"title = '{folder_name_q}' and "
                 "mimeType = 'application/vnd.google-apps.folder' and trashed=false"
             )
-            flist = drive.ListFile({"q": query}).GetList()
+            flist = self._safe_list_files(drive, query)
             if not flist:
                 return None, None
             parent_id = flist[0]["id"]
@@ -243,7 +265,7 @@ class DriveRegistryArtifactStore(ArtifactStore):
             f"'{parent_id}' in parents and "
             f"title = '{filename_q}' and trashed=false"
         )
-        files = drive.ListFile({"q": query}).GetList()
+        files = self._safe_list_files(drive, query)
         if not files:
             return drive, None
         return drive, files[0]

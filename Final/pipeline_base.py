@@ -6,6 +6,7 @@ from pathlib import Path
 import json
 from itertools import product
 import pandas as pd
+from time import perf_counter
 
 from Final.shared_utils import get_logger
 from Final.models import (
@@ -20,6 +21,7 @@ from Final.models import (
     WorkUnitRecord,
     PipelineStageHealth,
     TrialHealthReport,
+    PipelinePreflightSnapshot,
 )
 from Final.pipeline_caching import hash_payload, is_valid_stage_cache, \
     prune_stage_artifacts, write_stage_cache_manifest, read_stage_cache_manifest
@@ -402,9 +404,18 @@ class BasePipeline(ABC):
             artifact_paths=artifact_paths,
         )
 
-    def enumerate_work_units(self, *, trial_id: str, config_signature: str | None = None, runtime_report=None) -> list[dict]:
+    def enumerate_work_units(
+        self,
+        *,
+        trial_id: str,
+        config_signature: str | None = None,
+        runtime_report=None,
+        register_shared_requirements: bool = False,
+    ) -> list[dict]:
         """
         Concrete pipelines should override this and return serializable work-unit dicts.
+
+        register_shared_requirements=False keeps preflight/reporting side-effect free.
         """
         return []
 
@@ -531,6 +542,7 @@ class BasePipeline(ABC):
             trial_id=trial_id,
             config_signature=config_signature,
             runtime_report=runtime_report,
+            register_shared_requirements=False,
         )
         stages = self.summarize_stage_health_from_units(
             trial_id=trial_id,
@@ -551,4 +563,72 @@ class BasePipeline(ABC):
             n_failed_units=sum(u.get("status") == "failed" for u in units),
             n_ineligible_units=sum(u.get("status") == "ineligible" for u in units),
             stages=stages,
+        )
+
+    def build_preflight_snapshot(
+        self,
+        *,
+        trial_id: str,
+        config_signature: str | None = None,
+        runtime_report=None,
+        log_prefix: str = "",
+    ) -> PipelinePreflightSnapshot:
+        config_signature = config_signature or (
+            self.config_signature() if hasattr(self, "config_signature") else ""
+        )
+
+        t0 = perf_counter()
+        runtime_report = runtime_report or self.runtime_report()
+        t1 = perf_counter()
+
+        self.logger.info(
+            "%sPREFLIGHT SNAPSHOT | pipeline=%s | trial=%s | step=runtime_report | dt=%.2fs",
+            log_prefix,
+            self.pipeline_name,
+            trial_id,
+            t1 - t0,
+        )
+
+        units = self.enumerate_work_units(
+            trial_id=trial_id,
+            config_signature=config_signature,
+            runtime_report=runtime_report,
+            register_shared_requirements=False,
+        )
+        t2 = perf_counter()
+
+        self.logger.info(
+            "%sPREFLIGHT SNAPSHOT | pipeline=%s | trial=%s | step=enumerate_work_units | n_units=%d | dt=%.2fs",
+            log_prefix,
+            self.pipeline_name,
+            trial_id,
+            len(units),
+            t2 - t1,
+        )
+
+        stage_health = self.summarize_stage_health_from_units(
+            trial_id=trial_id,
+            config_signature=config_signature,
+            units=units,
+            runtime_report=runtime_report,
+        )
+        t3 = perf_counter()
+
+        self.logger.info(
+            "%sPREFLIGHT SNAPSHOT | pipeline=%s | trial=%s | step=stage_health | n_stages=%d | dt=%.2fs | total=%.2fs",
+            log_prefix,
+            self.pipeline_name,
+            trial_id,
+            len(stage_health),
+            t3 - t2,
+            t3 - t0,
+        )
+
+        return PipelinePreflightSnapshot(
+            trial_id=trial_id,
+            pipeline_name=self.pipeline_name,
+            config_signature=config_signature,
+            runtime_report=asdict(runtime_report),
+            work_units=units,
+            stage_health_rows=[asdict(x) for x in stage_health],
         )

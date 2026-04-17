@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import asdict
 from typing import Any
 import time
+import pandas as pd
 
 from Final.coordination import CoordinationManager
 from Final.experiment_controller import ExperimentController, TrialRecord
@@ -12,6 +13,52 @@ class WorkUnitScheduler:
     def __init__(self, controller: ExperimentController, coordination: CoordinationManager):
         self.controller = controller
         self.coordination = coordination
+
+    def scheduler_snapshot_rows(self, *, trials: list[TrialRecord]):
+        rows = []
+        for trial in trials:
+            summary = self.controller.trial_resolution_summary(trial)
+            rows.append(summary)
+        return rows
+
+    def scheduler_snapshot_frame(self, *, trials: list[TrialRecord]):
+        return pd.DataFrame(self.scheduler_snapshot_rows(trials=trials))
+
+    def current_trial_frame(self, *, trial: TrialRecord):
+        rows = self.controller.trial_health_frame(trial)
+        df = pd.DataFrame(rows)
+        if df.empty:
+            return df
+        cols = [
+            "trial_id", "pipeline_name", "stage_name", "scope", "status",
+            "runtime_eligible", "priority", "site_id", "plot_id",
+            "source_version", "dependencies", "dependency_reasons",
+        ]
+        keep = [c for c in cols if c in df.columns]
+        return df[keep].sort_values(
+            ["status", "stage_name", "priority", "site_id", "plot_id"],
+            na_position="last",
+        ).reset_index(drop=True)
+
+    def candidate_frame(self, *, candidates: list[dict], top_n: int = 10):
+        rows = []
+        for c in candidates[:top_n]:
+            unit = c["unit"]
+            rows.append(
+                {
+                    "trial_id": c["trial"].trial_id,
+                    "pipeline_name": c["pipeline"].pipeline_name,
+                    "unit_id": unit.get("unit_id"),
+                    "stage_name": unit.get("stage_name"),
+                    "scope": unit.get("scope"),
+                    "priority": unit.get("priority"),
+                    "effective_priority": c.get("effective_priority"),
+                    "site_id": unit.get("site_id"),
+                    "plot_id": unit.get("plot_id"),
+                    "source_version": unit.get("source_version"),
+                }
+            )
+        return pd.DataFrame(rows)
 
     def effective_priority(self, unit: dict, trial_units: list[dict]) -> tuple[int, int, str]:
         base = int(unit.get("priority", 100))
@@ -34,6 +81,7 @@ class WorkUnitScheduler:
             trial_id=trial.trial_id,
             config_signature=pipeline.config_signature(),
             runtime_report=runtime_report,
+            register_shared_requirements=True,
         )
         self.controller.upsert_work_units(trial, units)
         self.controller.save_trial(trial)
@@ -55,33 +103,93 @@ class WorkUnitScheduler:
         )
         return runnable[0]
 
-    def select_next_job(self, *, trials: list[TrialRecord], pipelines: dict[str, Any]):
+    def collect_candidate_jobs(self, *, trials: list[TrialRecord], pipelines: dict[str, Any]):
         candidates = []
-
+        total_pairs = sum(
+            1
+            for trial in trials
+            for pipeline_name in pipelines.keys()
+            if pipeline_name in trial.section_configs
+        )
+        done = 0
+    
         for trial in trials:
             for pipeline_name, pipeline in pipelines.items():
                 if pipeline_name not in trial.section_configs:
                     continue
-
+    
+                done += 1
+                pipeline.logger.info(
+                    "SCHEDULER SCAN | %d/%d | trial=%s | pipeline=%s",
+                    done, total_pairs, trial.trial_id, pipeline_name
+                )
+    
                 runtime_report = pipeline.runtime_report()
                 trial = self.refresh_trial_units(trial, pipeline, runtime_report=runtime_report)
-
-                unit = self.select_next_runnable_unit(list(trial.work_units.values()))
-                if unit is not None:
-                    candidates.append((trial, pipeline, unit))
-
-        if not candidates:
-            return None
-
+    
+                trial_units = list(trial.work_units.values())
+                runnable = [
+                    u for u in trial_units
+                    if u.get("status") == "pending"
+                    and u.get("runtime_eligible", True)
+                    and not u.get("dependencies")
+                ]
+    
+                pipeline.logger.info(
+                    "SCHEDULER SCAN DONE | trial=%s | pipeline=%s | runnable=%d | total_units=%d",
+                    trial.trial_id,
+                    pipeline_name,
+                    len(runnable),
+                    len(trial_units),
+                )
+    
+                for unit in runnable:
+                    eff = self.effective_priority(unit, trial_units)
+                    candidates.append(
+                        {
+                            "trial": trial,
+                            "pipeline": pipeline,
+                            "unit": unit,
+                            "effective_priority": eff,
+                            "base_priority": unit.get("priority", 100),
+                        }
+                    )
+    
         candidates = sorted(
             candidates,
             key=lambda x: (
-                x[2].get("priority", 100),
-                x[0].trial_id,
-                x[2].get("unit_id"),
+                x["effective_priority"],
+                x["trial"].trial_id,
+                x["unit"].get("unit_id"),
             ),
         )
-        return candidates[0]
+    
+        if candidates:
+            top = candidates[0]
+            top_unit = top["unit"]
+            top["pipeline"].logger.info(
+                "SCHEDULER PICK | trial=%s | unit=%s | stage=%s | scope=%s | eff=%s | total_candidates=%d",
+                top["trial"].trial_id,
+                top_unit.get("unit_id"),
+                top_unit.get("stage_name"),
+                top_unit.get("scope"),
+                top["effective_priority"],
+                len(candidates),
+            )
+        else:
+            # use any pipeline logger if available
+            if pipelines:
+                next(iter(pipelines.values())).logger.info("SCHEDULER PICK | no runnable candidates")
+    
+        return candidates
+
+    def select_next_job(self, *, trials: list[TrialRecord], pipelines: dict[str, Any]):
+        candidates = self.collect_candidate_jobs(trials=trials, pipelines=pipelines)
+        if not candidates:
+            return None
+
+        top = candidates[0]
+        return top["trial"], top["pipeline"], top["unit"]
 
     def claim_unit(self, *, trial: TrialRecord, pipeline, unit: dict) -> tuple[bool, dict]:
         owner_id = self.coordination.default_owner_id()

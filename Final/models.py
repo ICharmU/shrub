@@ -475,3 +475,13 @@ class TrialHealthReport:
 
     stages: list[PipelineStageHealth] = field(default_factory=list)
     notes: list[str] = field(default_factory=list)
+
+@dataclass
+class PipelinePreflightSnapshot:
+    trial_id: str
+    pipeline_name: str
+    config_signature: str
+    runtime_report: dict[str, Any] = field(default_factory=dict)
+    work_units: list[dict[str, Any]] = field(default_factory=list)
+    stage_health_rows: list[dict[str, Any]] = field(default_factory=list)
+    notes: list[str] = field(default_factory=list)

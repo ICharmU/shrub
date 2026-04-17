@@ -1,0 +1,30 @@
+{
+  "artifact_family": "labeling.transfer.outputs",
+  "shared_signature": "0f124f4e45f44745",
+  "producer_pipeline": "labeling",
+  "rel_path": null,
+  "local_path": null,
+  "remote_ref": null,
+  "status": "missing",
+  "required_by_trials": [
+    "labeling_trial_15a87fd1fa6a",
+    "labeling_trial_8475fdd27e30",
+    "labeling_trial_7568adeff82a",
+    "labeling_trial_be110217cd7d",
+    "labeling_trial_3628fb5a1777",
+    "labeling_trial_69512a22f6c7",
+    "labeling_trial_0bab4176c29e",
+    "labeling_trial_8a2bf48671e7",
+    "labeling_trial_9b7b2b083481",
+    "labeling_trial_2a5857f983d5",
+    "labeling_trial_5960d3bed0d8",
+    "labeling_trial_b8a727c60919"
+  ],
+  "source_trials": [],
+  "metadata": {
+    "site_id": "pacific-union-college",
+    "plot_id": "CALNU_0039_20250810_1",
+    "source_version": "sprint3_revised"
+  },
+  "notes": []
+}
