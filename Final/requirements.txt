@@ -12,3 +12,7 @@ scikit-image
 PyWavelets
 scipy
 opencv-python
+torch
+torchvision
+captum
+mrmr_selection

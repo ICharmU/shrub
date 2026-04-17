@@ -404,6 +404,23 @@ class BasePipeline(ABC):
             artifact_paths=artifact_paths,
         )
 
+    def work_unit_refresh_fingerprint(
+        self,
+        *,
+        trial_id: str,
+        config_signature: str | None = None,
+        runtime_report=None,
+    ) -> str:
+        runtime_report = runtime_report or self.runtime_report()
+        payload = {
+            "pipeline_name": self.pipeline_name,
+            "trial_id": trial_id,
+            "config_signature": config_signature or "",
+            "runtime_image": getattr(runtime_report, "detected_image_key", None),
+            "runtime_caps": sorted(getattr(runtime_report, "capabilities", []) or []),
+        }
+        return hash_payload(payload)
+
     def enumerate_work_units(
         self,
         *,

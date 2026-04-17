@@ -37,7 +37,7 @@ class TrialRecord:
 
     work_units: dict[str, dict[str, Any]] = field(default_factory=dict)
     resolution: dict[str, Any] = field(default_factory=dict)
-
+    scheduler_meta: dict[str, Any] = field(default_factory=dict)
 
 class ExperimentController:
     def __init__(self, experiment_root: str | Path, experiment_name: str):

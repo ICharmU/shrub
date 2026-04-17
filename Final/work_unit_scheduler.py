@@ -75,15 +75,60 @@ class WorkUnitScheduler:
 
         return (base, -unlocked, unit.get("unit_id"))
 
-    def refresh_trial_units(self, trial: TrialRecord, pipeline, runtime_report=None) -> TrialRecord:
+    def refresh_trial_units(
+        self,
+        trial: TrialRecord,
+        pipeline,
+        runtime_report=None,
+        force: bool = False,
+    ) -> TrialRecord:
         runtime_report = runtime_report or pipeline.runtime_report()
+        config_signature = pipeline.config_signature() if hasattr(pipeline, "config_signature") else ""
+        new_fp = pipeline.work_unit_refresh_fingerprint(
+            trial_id=trial.trial_id,
+            config_signature=config_signature,
+            runtime_report=runtime_report,
+        )
+    
+        pipeline_meta = (trial.scheduler_meta or {}).get(pipeline.pipeline_name, {})
+        old_fp = pipeline_meta.get("work_unit_fingerprint")
+    
+        has_live_units = any(
+            u.get("status") in {"claimed", "running"}
+            for u in (trial.work_units or {}).values()
+            if u.get("pipeline_name") == pipeline.pipeline_name
+        )
+    
+        if (not force) and old_fp == new_fp and trial.work_units and not has_live_units:
+            pipeline.logger.info(
+                "SCHEDULER REFRESH SKIP | trial=%s | pipeline=%s | fingerprint_unchanged=%s",
+                trial.trial_id,
+                pipeline.pipeline_name,
+                new_fp,
+            )
+            return trial
+    
+        pipeline.logger.info(
+            "SCHEDULER REFRESH RUN  | trial=%s | pipeline=%s | force=%s | old_fp=%s | new_fp=%s",
+            trial.trial_id,
+            pipeline.pipeline_name,
+            force,
+            old_fp,
+            new_fp,
+        )
+    
         units = pipeline.enumerate_work_units(
             trial_id=trial.trial_id,
-            config_signature=pipeline.config_signature(),
+            config_signature=config_signature,
             runtime_report=runtime_report,
-            register_shared_requirements=True,
+            register_shared_requirements=(old_fp is None),
         )
         self.controller.upsert_work_units(trial, units)
+    
+        trial.scheduler_meta.setdefault(pipeline.pipeline_name, {})
+        trial.scheduler_meta[pipeline.pipeline_name]["work_unit_fingerprint"] = new_fp
+        trial.scheduler_meta[pipeline.pipeline_name]["last_refreshed_at"] = time.time()
+    
         self.controller.save_trial(trial)
         return trial
 
@@ -103,45 +148,113 @@ class WorkUnitScheduler:
         )
         return runnable[0]
 
-    def collect_candidate_jobs(self, *, trials: list[TrialRecord], pipelines: dict[str, Any]):
+    # def collect_candidate_jobs(self, *, trials: list[TrialRecord], pipelines: dict[str, Any]):
+    #     candidates = []
+    #     total_pairs = sum(
+    #         1
+    #         for trial in trials
+    #         for pipeline_name in pipelines.keys()
+    #         if pipeline_name in trial.section_configs
+    #     )
+    #     done = 0
+    
+    #     for trial in trials:
+    #         for pipeline_name, pipeline in pipelines.items():
+    #             if pipeline_name not in trial.section_configs:
+    #                 continue
+    
+    #             done += 1
+    #             pipeline.logger.info(
+    #                 "SCHEDULER SCAN | %d/%d | trial=%s | pipeline=%s",
+    #                 done, total_pairs, trial.trial_id, pipeline_name
+    #             )
+    
+    #             runtime_report = pipeline.runtime_report()
+    #             trial = self.refresh_trial_units(trial, pipeline, runtime_report=runtime_report)
+    
+    #             trial_units = list(trial.work_units.values())
+    #             runnable = [
+    #                 u for u in trial_units
+    #                 if u.get("status") == "pending"
+    #                 and u.get("runtime_eligible", True)
+    #                 and not u.get("dependencies")
+    #             ]
+    
+    #             pipeline.logger.info(
+    #                 "SCHEDULER SCAN DONE | trial=%s | pipeline=%s | runnable=%d | total_units=%d",
+    #                 trial.trial_id,
+    #                 pipeline_name,
+    #                 len(runnable),
+    #                 len(trial_units),
+    #             )
+    
+    #             for unit in runnable:
+    #                 eff = self.effective_priority(unit, trial_units)
+    #                 candidates.append(
+    #                     {
+    #                         "trial": trial,
+    #                         "pipeline": pipeline,
+    #                         "unit": unit,
+    #                         "effective_priority": eff,
+    #                         "base_priority": unit.get("priority", 100),
+    #                     }
+    #                 )
+    
+    #     candidates = sorted(
+    #         candidates,
+    #         key=lambda x: (
+    #             x["effective_priority"],
+    #             x["trial"].trial_id,
+    #             x["unit"].get("unit_id"),
+    #         ),
+    #     )
+    
+    #     if candidates:
+    #         top = candidates[0]
+    #         top_unit = top["unit"]
+    #         top["pipeline"].logger.info(
+    #             "SCHEDULER PICK | trial=%s | unit=%s | stage=%s | scope=%s | eff=%s | total_candidates=%d",
+    #             top["trial"].trial_id,
+    #             top_unit.get("unit_id"),
+    #             top_unit.get("stage_name"),
+    #             top_unit.get("scope"),
+    #             top["effective_priority"],
+    #             len(candidates),
+    #         )
+    #     else:
+    #         # use any pipeline logger if available
+    #         if pipelines:
+    #             next(iter(pipelines.values())).logger.info("SCHEDULER PICK | no runnable candidates")
+    
+    #     return candidates
+
+    def collect_candidate_jobs(self, *, trials, pipelines, force_refresh: bool = False):
         candidates = []
-        total_pairs = sum(
-            1
-            for trial in trials
-            for pipeline_name in pipelines.keys()
-            if pipeline_name in trial.section_configs
-        )
-        done = 0
     
         for trial in trials:
             for pipeline_name, pipeline in pipelines.items():
                 if pipeline_name not in trial.section_configs:
                     continue
     
-                done += 1
-                pipeline.logger.info(
-                    "SCHEDULER SCAN | %d/%d | trial=%s | pipeline=%s",
-                    done, total_pairs, trial.trial_id, pipeline_name
+                runtime_report = pipeline.runtime_report()
+                trial = self.refresh_trial_units(
+                    trial,
+                    pipeline,
+                    runtime_report=runtime_report,
+                    force=force_refresh,
                 )
     
-                runtime_report = pipeline.runtime_report()
-                trial = self.refresh_trial_units(trial, pipeline, runtime_report=runtime_report)
+                trial_units = [
+                    u for u in trial.work_units.values()
+                    if u.get("pipeline_name") == pipeline.pipeline_name
+                ]
     
-                trial_units = list(trial.work_units.values())
                 runnable = [
                     u for u in trial_units
                     if u.get("status") == "pending"
                     and u.get("runtime_eligible", True)
                     and not u.get("dependencies")
                 ]
-    
-                pipeline.logger.info(
-                    "SCHEDULER SCAN DONE | trial=%s | pipeline=%s | runnable=%d | total_units=%d",
-                    trial.trial_id,
-                    pipeline_name,
-                    len(runnable),
-                    len(trial_units),
-                )
     
                 for unit in runnable:
                     eff = self.effective_priority(unit, trial_units)
@@ -155,32 +268,13 @@ class WorkUnitScheduler:
                         }
                     )
     
-        candidates = sorted(
-            candidates,
+        candidates.sort(
             key=lambda x: (
                 x["effective_priority"],
                 x["trial"].trial_id,
                 x["unit"].get("unit_id"),
-            ),
-        )
-    
-        if candidates:
-            top = candidates[0]
-            top_unit = top["unit"]
-            top["pipeline"].logger.info(
-                "SCHEDULER PICK | trial=%s | unit=%s | stage=%s | scope=%s | eff=%s | total_candidates=%d",
-                top["trial"].trial_id,
-                top_unit.get("unit_id"),
-                top_unit.get("stage_name"),
-                top_unit.get("scope"),
-                top["effective_priority"],
-                len(candidates),
             )
-        else:
-            # use any pipeline logger if available
-            if pipelines:
-                next(iter(pipelines.values())).logger.info("SCHEDULER PICK | no runnable candidates")
-    
+        )
         return candidates
 
     def select_next_job(self, *, trials: list[TrialRecord], pipelines: dict[str, Any]):

@@ -147,6 +147,7 @@ class LabelingPipeline(BasePipeline):
             global_store.local_storage_root = cfg.output.labeling_root / "artifact_store_local"
 
         self.artifact_store = self._build_artifact_store()
+        self._enumeration_cache = {}
         self.coordination = CoordinationManager(
             self.artifact_store,
             root_prefix=self.cfg.coordination.root_prefix,
@@ -708,6 +709,31 @@ class LabelingPipeline(BasePipeline):
             ].fillna("").astype(str).to_dict(orient="records"),
         }
         return hash_payload(payload)
+
+    def _mark_site_assets_shared_valid(
+        self,
+        *,
+        site: str,
+        naip_local: Path,
+        als_meta: list[dict],
+        trial_id: str | None = None,
+    ) -> None:
+        if not self.cfg.shared_artifacts.enable_shared_artifact_registry:
+            return
+    
+        shared_sig = self.shared_signature_site_assets(site)
+        self.shared_registry.mark_available(
+            artifact_family="labeling.site_assets",
+            shared_signature=shared_sig,
+            producer_pipeline=self.pipeline_name,
+            source_trial=trial_id or getattr(self, "_active_trial_id", None),
+            metadata={
+                "site": site,
+                "naip_local": str(naip_local),
+                "als_metadata_rows": len(als_meta or []),
+            },
+            status=SharedArtifactStatus.VALID,
+        )
 
     # -------------------------------------------------------------------------
     # Paths / caches
@@ -1406,6 +1432,47 @@ class LabelingPipeline(BasePipeline):
     
         return False, "partial run not reused by policy"
 
+    def _path_state(self, path: Path) -> dict:
+        if not path.exists():
+            return {"exists": False}
+        stat = path.stat()
+        return {
+            "exists": True,
+            "size": int(stat.st_size),
+            "mtime_ns": int(stat.st_mtime_ns),
+        }
+    
+    def _latest_stage_manifest_mtime_ns(self, stage_name: str) -> int | None:
+        root = self.stage_cache_root(stage_name)
+        manifests = list(root.rglob("stage_cache_manifest.json"))
+        if not manifests:
+            return None
+        return max(int(p.stat().st_mtime_ns) for p in manifests if p.exists())
+    
+    def work_unit_refresh_fingerprint(
+        self,
+        *,
+        trial_id: str,
+        config_signature: str | None = None,
+        runtime_report=None,
+    ) -> str:
+        runtime_report = runtime_report or self.runtime_report()
+        config_signature = config_signature or self.config_signature()
+    
+        payload = {
+            "pipeline_name": self.pipeline_name,
+            "trial_id": trial_id,
+            "config_signature": config_signature,
+            "runtime_image": getattr(runtime_report, "detected_image_key", None),
+            "runtime_caps": sorted(getattr(runtime_report, "capabilities", []) or []),
+            "sprint3_manifest": self._path_state(self.sprint3_manifest_csv),
+            "standardize_manifest_mtime_ns": self._latest_stage_manifest_mtime_ns("standardize"),
+            "refine_manifest_mtime_ns": self._latest_stage_manifest_mtime_ns("refine"),
+            "transfer_manifest_mtime_ns": self._latest_stage_manifest_mtime_ns("transfer"),
+            "shared_registry_enabled": bool(self.cfg.shared_artifacts.enable_shared_artifact_registry),
+        }
+        return hash_payload(payload)
+
     def enumerate_work_units(
         self,
         *,
@@ -1416,6 +1483,24 @@ class LabelingPipeline(BasePipeline):
     ) -> list[dict]:
         config_signature = config_signature or self.config_signature()
         runtime_report = runtime_report or self.runtime_report()
+
+        enum_cache_key = (
+            trial_id,
+            config_signature,
+            getattr(runtime_report, "detected_image_key", None),
+            self.work_unit_refresh_fingerprint(
+                trial_id=trial_id,
+                config_signature=config_signature,
+                runtime_report=runtime_report,
+            ),
+        )
+        
+        if enum_cache_key in self._enumeration_cache:
+            self.logger.info(
+                "ENUM WORK UNITS CACHE HIT | trial=%s | pipeline=%s",
+                trial_id, self.pipeline_name
+            )
+            return [dict(u) for u in self._enumeration_cache[enum_cache_key]]
 
         units = []
         manifest_csv = self.sprint3_manifest_csv
@@ -1764,14 +1849,23 @@ class LabelingPipeline(BasePipeline):
 
                         deps = []
                         dep_reasons = []
+                        
+                        if not valid_cache:
+                            site_assets_shared_sig = self.shared_signature_site_assets(site_id)
+                            if not self.shared_artifact_is_valid(
+                                artifact_family="labeling.site_assets",
+                                shared_signature=site_assets_shared_sig,
+                            ):
+                                deps.append(f"site_assets:{site_id}")
+                                dep_reasons.append(f"Shared site assets missing for site={site_id}")
 
-                        site_assets_shared_sig = self.shared_signature_site_assets(site_id)
-                        if not self.shared_artifact_is_valid(
-                            artifact_family="labeling.site_assets",
-                            shared_signature=site_assets_shared_sig,
-                        ):
-                            deps.append(f"site_assets:{site_id}")
-                            dep_reasons.append(f"Shared site assets missing for site={site_id}")
+                        # site_assets_shared_sig = self.shared_signature_site_assets(site_id)
+                        # if not self.shared_artifact_is_valid(
+                        #     artifact_family="labeling.site_assets",
+                        #     shared_signature=site_assets_shared_sig,
+                        # ):
+                        #     deps.append(f"site_assets:{site_id}")
+                        #     dep_reasons.append(f"Shared site assets missing for site={site_id}")
 
                         units.append({
                             "unit_id": f"{trial_id}:{self.pipeline_name}:transfer:{site_id}:{plot_id}:{source_version}",
@@ -1821,6 +1915,7 @@ class LabelingPipeline(BasePipeline):
             enum_t1 - enum_t0,
         )
 
+        self._enumeration_cache[enum_cache_key] = [dict(u) for u in units]
         return units
 
     # -------------------------------------------------------------------------
@@ -2297,6 +2392,11 @@ class LabelingPipeline(BasePipeline):
         # ------------------------------------------------------------
         self._persist_site_metadata_manifest(site, naip_local=naip_local, als_meta=als_meta)
     
+        self._mark_site_assets_shared_valid(
+            site=site,
+            naip_local=naip_local,
+            als_meta=als_meta,
+        )
         return naip_local, als_meta
 
     # -------------------------------------------------------------------------
@@ -2921,6 +3021,26 @@ class LabelingPipeline(BasePipeline):
                 als_meta=als_meta,
                 force_rerun=self.pipeline_config.force_rerun_sprint4,
             )
+
+        if stage_name == "site_assets":
+            site_id = unit["site_id"]
+            naip_local, als_meta = self.prepare_site_assets(
+                site_id,
+                force_refresh=self.pipeline_config.force_refresh_site_assets,
+            )
+        
+            self._mark_site_assets_shared_valid(
+                site=site_id,
+                naip_local=naip_local,
+                als_meta=als_meta,
+                trial_id=trial_id,
+            )
+            return {
+                "stage_name": "site_assets",
+                "site_id": site_id,
+                "naip_local": str(naip_local),
+                "als_metadata_rows": len(als_meta or []),
+            }
 
         raise NotImplementedError(f"Unknown labeling work unit stage={stage_name}")
 
