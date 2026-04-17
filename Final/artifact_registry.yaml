@@ -119,6 +119,303 @@ files:
   coordination/shrubwise_main/labeling_trial_c3d868cf458c/labeling/refine/refine.json:
     drive_file_id: 1uQaFOYaf_iysa9_4ky0_UTSG9jhpiqXT
     local_path: coordination/shrubwise_main/labeling_trial_c3d868cf458c/labeling/refine/refine.json
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00000.npz:
+    drive_file_id: 1cpLX0VrvV3XiJ1WP0TwkSNgnm49knVRC
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00000.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00001.npz:
+    drive_file_id: 1xsMIo26KOOo5OIA3pi8wK6JHcXGD7BHT
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00001.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00002.npz:
+    drive_file_id: 16hGgzegi_SlqNf0Lnp-6BO5h797EvaIS
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00002.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00003.npz:
+    drive_file_id: 1jeTKWcQtBYHenp79BsvRzfHt-VxeLnan
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00003.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00004.npz:
+    drive_file_id: 1X2nLPUdMppKn2NhSJ6rUNOTTX7y7iqYV
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00004.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00005.npz:
+    drive_file_id: 1Zv_B2xYkod6eEkZYSVay1PSfagEYOytC
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00005.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00006.npz:
+    drive_file_id: 1vbYObyFgV2f5lkA8K5hMHIlsxwH2k2Dm
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00006.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00007.npz:
+    drive_file_id: 1EYptFPS2bPzhrY_fLs6h-FP19zDRSf7T
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00007.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00008.npz:
+    drive_file_id: 1Y2nMwGiFFgF9COZ5gK7z7KvvcLzGfgcQ
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00008.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00009.npz:
+    drive_file_id: 14_q-UmOosArotDCRci4pe1-FILD9dECO
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00009.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00010.npz:
+    drive_file_id: 1JKIf1yY5laLsU1TpEQRCDSKQZo4-C0st
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00010.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00011.npz:
+    drive_file_id: 1Q7gZU1VHj7Ec61EgaRE5hs15FcedLLnc
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00011.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00012.npz:
+    drive_file_id: 1lrE2FDHa78UiSf_EzmGPZQ8ZyFatrb8G
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00012.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00013.npz:
+    drive_file_id: 18hTh2F6J-o-FQzuCSytQKyw4o442dcL9
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00013.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00014.npz:
+    drive_file_id: 1WaPmAIxvXxt9Gfa3b2j8gL5lpfkm_d2p
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00014.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00015.npz:
+    drive_file_id: 1aHGc-2vg4Z8jZ2lLNLcxPjroslelj3dQ
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00015.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00016.npz:
+    drive_file_id: 1vU-El_ScQTZtM0C0HjgloUHM7Y53ggQx
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00016.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00017.npz:
+    drive_file_id: 1bfpRrZLXls2GRPuCj1UMsoruwXQbjWWV
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00017.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00018.npz:
+    drive_file_id: 14e0SdtQL8poVNoJ12xzwW0rRIcK3C8fv
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00018.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00019.npz:
+    drive_file_id: 1PVeGbmZT0sQ3gOoGMeBuXD3C3VoAqdLn
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00019.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00020.npz:
+    drive_file_id: 1BO4oekKYyf0AfNVBfW5fHiNhiXRZ6Uh2
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00020.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00021.npz:
+    drive_file_id: 19VnyfZCSg9LuihvkJT6_MTT4giHvCujA
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00021.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00022.npz:
+    drive_file_id: 1ncxK6cIs95M6h9uN-xLGwObKy31OhK4J
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00022.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00023.npz:
+    drive_file_id: 1_uIAOp554xd596ik6vHWmnIf_xYEN2ZV
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00023.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00024.npz:
+    drive_file_id: 1spMNyRKlUeTGGX6oG7tzxBPUFg_YH8zq
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00024.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00025.npz:
+    drive_file_id: 1PDUKOqlte_g57X4bC1AF3U9AnApACW-h
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00025.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00026.npz:
+    drive_file_id: 1aMMboEVxMBIJ5eccnvlUYH275n2hGyL2
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00026.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00027.npz:
+    drive_file_id: 1hELhcuWjjiVs0tiuwqx1OObZlIbmUAR9
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00027.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00028.npz:
+    drive_file_id: 1SBPSQSHH0ii_IJE8zCM3fw8L7wmjr2Ki
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00028.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00029.npz:
+    drive_file_id: 1LDYrdZp2iB2gQX23yPrcYKvncGdWUqmm
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00029.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00030.npz:
+    drive_file_id: 1ZM5k7cJpjnmKz4rRWea0Imogm03aPbNc
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00030.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00031.npz:
+    drive_file_id: 1AzMyt94Rb6S_CqG6-iSsIC8kdybZsn6i
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00031.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00032.npz:
+    drive_file_id: 1DaRc5heAoBHE6Ie2XMxTR5Rzt7lZCywW
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00032.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00033.npz:
+    drive_file_id: 1vOA2tPsE5uzu9pLtbEpxWbzz7I5NZTDD
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00033.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00034.npz:
+    drive_file_id: 1O4cgq5SXfN0QAzA_C878fp5IuCV0nLaP
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00034.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00035.npz:
+    drive_file_id: 1yqDYnCtcOyxefSCHRvPdB1bTHUuVe81n
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00035.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00036.npz:
+    drive_file_id: 12kaeAgqXqs6qAt1ngrQmHYgWGOH1jmMh
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00036.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00037.npz:
+    drive_file_id: 1r-zCdx0edOeSu8LtPNa9h2KApV4aFW4n
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00037.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00038.npz:
+    drive_file_id: 10ih5WmiXzK-nFnQfuVswU6XwhDJ92KFr
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00038.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00039.npz:
+    drive_file_id: 1XC76-VCxJ2Nh1dGguy53LLRSPICe2QTh
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00039.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00040.npz:
+    drive_file_id: 1cRKe56HLphGzldnwz2hst8JpPln8DGOI
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00040.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00041.npz:
+    drive_file_id: 1iNK3QgSe3WOjp8CZXWhFj-kZsovNilkp
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00041.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00042.npz:
+    drive_file_id: 12J6FNzcOg9pLhIcJ8YbHIdMcol-9eG1u
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00042.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00043.npz:
+    drive_file_id: 1RJft8v_aNlRUAgLep4eb-Q8FXQCPOj-C
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00043.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00044.npz:
+    drive_file_id: 11ZX3wW1Fe-8TbbH2PSSjURzCreyNgC9T
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00044.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00045.npz:
+    drive_file_id: 18vhy6iOG2Gsq0mDtUorFkL0X-XcRdr10
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00045.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00046.npz:
+    drive_file_id: 17XEnRoRU6CyGzBoP9UztVEAQy-c6Uwxt
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00046.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00047.npz:
+    drive_file_id: 18pROFBSFlLZiJXkWqm0Ec1duyFSp-UOh
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00047.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/site_assets/site_metadata_manifest.json:
+    drive_file_id: 1MeohlhIQeH5cM8JwJyvC1cyMlnT_yATP
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/site_assets/site_metadata_manifest.json
+  features/calaveras-big-trees/4dfeca633c8d4b58/site_assets/source_inventory.json:
+    drive_file_id: 1oNu_Y-PDQpbHKQDDitWUM2f5U5g2_F5a
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/site_assets/source_inventory.json
+  features/calaveras-big-trees/4dfeca633c8d4b58/stack/stack_registry.json:
+    drive_file_id: 1gXaS3T8i8Q31IXOmvAn-2X5No_1FGubW
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/stack/stack_registry.json
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00000.npz:
+    drive_file_id: 1a7HukP-xzj1bjVxv3jJPWSKQfevRbCbu
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00000.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00001.npz:
+    drive_file_id: 1EvDuVY1eFjpxbQaAQoybCewRul136yVG
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00001.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00002.npz:
+    drive_file_id: 1uQQrqQU-11t59CbE0ZV4TzEXGya4ZXZx
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00002.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00003.npz:
+    drive_file_id: 1tcAnn5of2XitGgEQqIiedK9DCSwp6ihK
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00003.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00004.npz:
+    drive_file_id: 1EQWvMfQlp5qJhQIlcRr4TkuKUKqBM4Ku
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00004.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00005.npz:
+    drive_file_id: 1NcLo3VO4BuaxCW-UDNbCS2IU5YMECHVH
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00005.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00006.npz:
+    drive_file_id: 1g6YzZDruiyKbzu3v-rMMov1WaZ6cMUfI
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00006.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00007.npz:
+    drive_file_id: 1Cpb_hsWBUybxHGFkyIfpU31vu4wvyVch
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00007.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00008.npz:
+    drive_file_id: 1wPRZCY0SYehGPHRoAxEtqhvMmMLmSllR
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00008.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00009.npz:
+    drive_file_id: 1HzAwJEiF-kesY3L1Cn7ssL2kw58UPirv
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00009.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00010.npz:
+    drive_file_id: 10OyD-0bgfqVXL8PoomOHxRML9KugUtcf
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00010.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00011.npz:
+    drive_file_id: 1FHg8XzsHKEzes00Mf1W_Nv8nwwmULgv1
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00011.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00012.npz:
+    drive_file_id: 1qwOBSCgM6CUO7ZrrsBCgvFgnMi_mCJ-2
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00012.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00013.npz:
+    drive_file_id: 1SR9wRxm112ydljZdHu8jj-_diTJfPMb7
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00013.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00014.npz:
+    drive_file_id: 1HTpnxhCMTzEXxVafx82yc-eFsUI8FHjo
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00014.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00015.npz:
+    drive_file_id: 1MIs4LJGfL1jzIPvGJ_CnRyyJRf4KYcv6
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00015.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00016.npz:
+    drive_file_id: 1dRiBQjrA_ifp4MBNrcZnBt8jnKNKyQOp
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00016.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00017.npz:
+    drive_file_id: 12aj35jxA9By9Q_ZDVYApp8ZSqTm6Cir6
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00017.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00018.npz:
+    drive_file_id: 1IBjEeb6IBOFPUQyiGsnHoKMYadrqn7-4
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00018.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00019.npz:
+    drive_file_id: 1PQ89zUKEktETchux64alXOrLKHyXuIuz
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00019.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00020.npz:
+    drive_file_id: 1PdujA2Vdqe15dmjyFqv4gxV8R3le-Anj
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00020.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00021.npz:
+    drive_file_id: 1mzWc4NpoHQjxETjiBSjexUwrC9T_d5Nr
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00021.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00022.npz:
+    drive_file_id: 1lSyE546ywhMutL3OqR7DDWdD6tHVi56I
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00022.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00023.npz:
+    drive_file_id: 1NIEUIIWM9yhnkSRNvFO5RhxbwG12D6IW
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00023.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00024.npz:
+    drive_file_id: 1C5Vikd-a8sfANVn_DS5uKNMNaFmnkMnQ
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00024.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00025.npz:
+    drive_file_id: 1yVQmZMgkgYoAnGADiHcbmChF6d78sskv
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00025.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00026.npz:
+    drive_file_id: 1MTQwt6hfgd229Ivw3kAqRIsUFUISyNnn
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00026.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00027.npz:
+    drive_file_id: 1QE3MhxA3fI4i8RVsFBb9XXS9Zq2o8nwZ
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00027.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00028.npz:
+    drive_file_id: 1YNaFMCCLqdrcwPvygUe8T4TICReK2d5y
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00028.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00029.npz:
+    drive_file_id: 1C_Z3fGt5_ou6MFlDu36CkR0ZlCKwmIOV
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00029.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00030.npz:
+    drive_file_id: 1j9u_kHZkPc0FBTASMgGOcM589LFqmN2e
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00030.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00031.npz:
+    drive_file_id: 1byTjkp4SDTfTP6MkYqwY0J650Z4v6v8h
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00031.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00032.npz:
+    drive_file_id: 1Brhwp1el6NISXZlaJdVyyGYL5o1Bhv25
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00032.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00033.npz:
+    drive_file_id: 1ZOs82LvlgeSeKdjWH1Ap3MfOPB8pO7ZF
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00033.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00034.npz:
+    drive_file_id: 1EENwHNe4SmKooP7ll-hxigU9IQuhfeZ_
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00034.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00035.npz:
+    drive_file_id: 1gyibCMBNNuo4JOKg1OfTU4zx-OnkPAI_
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00035.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00036.npz:
+    drive_file_id: 1t7b9IHhY_5WGAxC3v-TrSD1r1bgVDo1W
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00036.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00037.npz:
+    drive_file_id: 11ROuUD7fVjSAI9Gz8hruvLlLgozrrSAt
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00037.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00038.npz:
+    drive_file_id: 15fcy6uzjMK3BgOUndgTXS8MKbtjzxFhW
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00038.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00039.npz:
+    drive_file_id: 1BUyZnbHS1fUzj_fcUy8laB2KQh9fbyir
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00039.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00040.npz:
+    drive_file_id: 1dmMkgqbEJFlb9CAaIhqNSOAODcbe4Kpl
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00040.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00041.npz:
+    drive_file_id: 164sHKhypfHJLEkSv-1WA_20FYeV1CALP
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00041.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00042.npz:
+    drive_file_id: 1VByQTll5UzQzsbCUJkt6863ZKFrETiCv
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00042.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00043.npz:
+    drive_file_id: 1Cz4cxq1h0kgPz0s5KIsdyY6dAFkvVpHM
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00043.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00044.npz:
+    drive_file_id: 1499gE-iA3F4_PMacxRM2BrKTsqaS-rp1
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00044.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00045.npz:
+    drive_file_id: 1DEFQXE9v01jaVkim1pJ8oslGu4mSaj4L
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00045.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00046.npz:
+    drive_file_id: 1u4oTdb9qNOihWEIqe53-L1JrDoNyf0xI
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00046.npz
+  features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00047.npz:
+    drive_file_id: 1EVxgp7NZ3FTK98_lA02AuIYWVih8508u
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/3dep/terrain/chunk_00047.npz
   features/calaveras-big-trees/91fef1517fca02cc/naip/multiscale/chunk_00000.npz:
     drive_file_id: 1K86mOdSYe7uJkGpZk-MZvT9AFmAO7bHe
     local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/multiscale/chunk_00000.npz
@@ -263,6 +560,102 @@ files:
   features/calaveras-big-trees/91fef1517fca02cc/naip/multiscale/chunk_00047.npz:
     drive_file_id: 1-2uhcdDQEMXkKUMhicR2Hth4qDdGVGE4
     local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/multiscale/chunk_00047.npz
+  features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00000.npz:
+    drive_file_id: 1GE1tcWW0Wugl1O88uOyS_uPCbhCQ2Dmt
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00000.npz
+  features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00001.npz:
+    drive_file_id: 1OqpXXDUnR-3WFtIE1Gk-Kuqc8jIc5w9H
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00001.npz
+  features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00002.npz:
+    drive_file_id: 1Ye_W9BwLvCm4_mD_fKTS8m8hzPBcWQJa
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00002.npz
+  features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00003.npz:
+    drive_file_id: 1kuNH1_tbcCVriB-jYxE_s5dCFObAY3f8
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00003.npz
+  features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00004.npz:
+    drive_file_id: 1dgxavE7CCbZw_No2vedR3V0-7cpBYNeM
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00004.npz
+  features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00005.npz:
+    drive_file_id: 1xqpmiUuwD9Qx8W4i1gLGaR-Qit4nskHF
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00005.npz
+  features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00006.npz:
+    drive_file_id: 151DSdr87NVteTHc_ifOY-La8BX-mnh1D
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00006.npz
+  features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00007.npz:
+    drive_file_id: 1MElcTRHYxjKj6Sw_0Yd3L-oqP4fbArhL
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00007.npz
+  features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00008.npz:
+    drive_file_id: 1By-xYQBiBpi3N85wLvGk5PkyjLmWXPJo
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00008.npz
+  features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00009.npz:
+    drive_file_id: 1gSCEB0G-XHZ1sNkXgFQ3Jwln7C2OC3Cs
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00009.npz
+  features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00010.npz:
+    drive_file_id: 1qUb05xdCXg2WUX3WNcVPf6JsSk43m_yk
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00010.npz
+  features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00011.npz:
+    drive_file_id: 1blIpusedne_WzDuzCEgn3HOldedIJTGf
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00011.npz
+  features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00012.npz:
+    drive_file_id: 1Iv3iZu5ynKR0hCZizH4AdH-szVB0JquK
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00012.npz
+  features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00013.npz:
+    drive_file_id: 1KaHK7qG0HxBFhQu8vuj1bVuNsjbFk15X
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00013.npz
+  features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00014.npz:
+    drive_file_id: 1l_C4TQ7ly3WO8K0rCB5cZi3kPj9yqBc8
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00014.npz
+  features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00015.npz:
+    drive_file_id: 1IrMEHnwzIrCdGerCktIncqjosNJ8d8lY
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00015.npz
+  features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00016.npz:
+    drive_file_id: 1hDPzZPxfS8fxB1XBRu127C1uU2FJVbR1
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00016.npz
+  features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00017.npz:
+    drive_file_id: 1HoKCyyG5Fnpz5tXh8PPPzmz6yzVb0Kfe
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00017.npz
+  features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00018.npz:
+    drive_file_id: 1GCVpBnmcLyUXbSS_HkbmorWlPE9JYwRE
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00018.npz
+  features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00019.npz:
+    drive_file_id: 1vrGQzvIhpBTUU3WbxiwDR3Ns1BtJGI2n
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00019.npz
+  features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00020.npz:
+    drive_file_id: 18FyHhmnHtCN7oToDZfTdf9i9JFfAJPXi
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00020.npz
+  features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00021.npz:
+    drive_file_id: 1app4ZcoLOsYGDReFrx8wrFgDOEzEzh1I
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00021.npz
+  features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00022.npz:
+    drive_file_id: 14WFE1fQKHcgViMQnMawL5Q-_-8Eyrcwa
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00022.npz
+  features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00023.npz:
+    drive_file_id: 1lu_Mudl0kpCT85lCaeLolyla7aszK99n
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00023.npz
+  features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00024.npz:
+    drive_file_id: 1uTsFG0gOCTVCEMphqkD9lH7uNeTMScbN
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00024.npz
+  features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00025.npz:
+    drive_file_id: 13THIzPAbnXSnwPu1S_gLHZ7kQ_NihHrm
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00025.npz
+  features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00026.npz:
+    drive_file_id: 1sf4c2UZ3zkce5BKv3dXKtECO2Rq9p3yM
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00026.npz
+  features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00027.npz:
+    drive_file_id: 1EnHPj-mDqvrip6_F-QJBFqOxuBPzGfFU
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00027.npz
+  features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00028.npz:
+    drive_file_id: 1nRTPRmupbYDv2EQFJovT9gEFXG8I4lF0
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00028.npz
+  features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00029.npz:
+    drive_file_id: 1RDXMnQqODZYdszv8DMSSWXUHcKT7Bvf9
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00029.npz
+  features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00030.npz:
+    drive_file_id: 15J-Co97hwhWwRa3H7W0NfmKU7qr1rPRq
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00030.npz
+  features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00031.npz:
+    drive_file_id: 1ijYVgpjEx332jyfIcIXf1j2Y_w2IHntK
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00031.npz
   features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00032.npz:
     drive_file_id: 1TzWEzo402Ll5ZjQboGpglwTYXAT8C-yC
     local_path: features/calaveras-big-trees/91fef1517fca02cc/naip/raw/chunk_00032.npz
@@ -602,6 +995,150 @@ files:
   features/calaveras-big-trees/91fef1517fca02cc/objects/object_features.csv:
     drive_file_id: 1Xz0rVTsowt0nmEvuaho61tIYcMyy-Qz-
     local_path: features/calaveras-big-trees/91fef1517fca02cc/objects/object_features.csv
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00000.npz:
+    drive_file_id: 1CCIeOWQdtPvGXUss9sGPwpGOI97rSD3h
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00000.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00001.npz:
+    drive_file_id: 1W9C6N7cgQl1OXfIcL-NGECQa_QvxDfBk
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00001.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00002.npz:
+    drive_file_id: 1yJVQZtDlW-pINDXCfmjYBLlG36WDKAKh
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00002.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00003.npz:
+    drive_file_id: 1abUHGUYhA5CQ6MX6ZU_F6R5E0JIRuLJG
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00003.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00004.npz:
+    drive_file_id: 1yv8HpY7N-KxgoQxgOmPS5REzpuK0JBE_
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00004.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00005.npz:
+    drive_file_id: 1zyC4lnUzDjWHVStdWmXhoq3TEC7Sg9TF
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00005.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00006.npz:
+    drive_file_id: 1ZoxtMEU9YXDdz6_dqz7frObYQ9bSJpAh
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00006.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00007.npz:
+    drive_file_id: 1JwOWZK4k737sm5d2G8lcdkGFJbndWUI7
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00007.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00008.npz:
+    drive_file_id: 1t_h4YYcYJtVVY0ufgo4znCLsGQF4BKxr
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00008.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00009.npz:
+    drive_file_id: 1i4IwNVC3eBF1_rvoN_QrlPyILLmXf4z0
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00009.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00010.npz:
+    drive_file_id: 1_XFCurK6N1bhKr5dlRAxeozn7xuyN-3J
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00010.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00011.npz:
+    drive_file_id: 19FgpLowwijHlDjhDIxpS997hiTQVfGej
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00011.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00012.npz:
+    drive_file_id: 10pC0nXDjSYEdagj0Z0MFjSz-HY0XYygf
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00012.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00013.npz:
+    drive_file_id: 11zCifEGvxSDmwDL4UuJR4ATUgOkIbEiN
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00013.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00014.npz:
+    drive_file_id: 1OIMhcOuzSKNBiy7Vefohft4PwQBYY1NO
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00014.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00015.npz:
+    drive_file_id: 1t-VuX9XpK-ZYjgFtcmIWTxF73Nex40uh
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00015.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00016.npz:
+    drive_file_id: 1wac6zMs46tLey2fzahwHBKH0gh-Kyly5
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00016.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00017.npz:
+    drive_file_id: 1r1Lo-d-W0S4_TZs7I4DF_jYtAA_Ns80T
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00017.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00018.npz:
+    drive_file_id: 1oRJDA_BtB2v8ip8s88NNGyyHXG6i1S5x
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00018.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00019.npz:
+    drive_file_id: 1woghKJ8KIjJLrqf7wdWjEW1O1G32UjEr
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00019.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00020.npz:
+    drive_file_id: 18EVfKxix40VJGyivs9LyaSa0hMabXzeJ
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00020.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00021.npz:
+    drive_file_id: 1dRh-tuevbdWZALA3IZOzQPG5D37DDdKh
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00021.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00022.npz:
+    drive_file_id: 1HLhXsZ6B8i3TjBiPwAKes3hPjhzaf8_-
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00022.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00023.npz:
+    drive_file_id: 1fCP5C3bT6VCSic46ekpCVDvJrSBkjFV3
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00023.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00024.npz:
+    drive_file_id: 1DiHyKtgyhjggUOXHA9zBnFUF3tGYWKbv
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00024.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00025.npz:
+    drive_file_id: 1rA4Rw8HRCErjPfrqnvTqkCdZXOBDxzUl
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00025.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00026.npz:
+    drive_file_id: 1A-1xHDNAYedQTr4Lse2z6QzRhex0pehO
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00026.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00027.npz:
+    drive_file_id: 1qPdjkPPNQRhSy3xQiXNonmN8dOrKjoqH
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00027.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00028.npz:
+    drive_file_id: 1lb8axRrdU4Aq7O3gv6ylW7Galnhhys4w
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00028.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00029.npz:
+    drive_file_id: 1c8agxdcY9SusBGP25FmN8O4DypHlNTbK
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00029.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00030.npz:
+    drive_file_id: 1ZgH-DpwGWrwdfsMjzRLS_LQHzGUMJ57a
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00030.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00031.npz:
+    drive_file_id: 1QxpMQWL15MIVQ-0X3pc6YuDd6JFsSTH-
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00031.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00032.npz:
+    drive_file_id: 1Tp1fNlfuKLJo-EWq-JCk548U7SwzI-bJ
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00032.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00033.npz:
+    drive_file_id: 1NFR4E91D249Bn5_EfhlzZt29nOx9K_aq
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00033.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00034.npz:
+    drive_file_id: 1YibotkB0bTiTBHGGjMx8VcOIGeJ7NmLg
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00034.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00035.npz:
+    drive_file_id: 1y9aK-GMAvoaYitzi0LrXDTvr_3Aq-aji
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00035.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00036.npz:
+    drive_file_id: 1_e86cgqnT98eXAHZNoHPTrfEEplONO78
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00036.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00037.npz:
+    drive_file_id: 1goM6iVXo08NXXhWa3MvMFN81G-1HhQ0h
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00037.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00038.npz:
+    drive_file_id: 19YkPuN6G1rA06dc38DUaAJsOTru22YDe
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00038.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00039.npz:
+    drive_file_id: 1WpBOjs2YYARhPIGxyhj7X_my2gkNzFJL
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00039.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00040.npz:
+    drive_file_id: 1KAILIVTnjvCOsVvBtCQR_sGsBNWT16P1
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00040.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00041.npz:
+    drive_file_id: 13FxFS-UiMjFL6ZEXmQoLoT4bXfhxM5ND
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00041.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00042.npz:
+    drive_file_id: 1LcqQ1YH4MlbQOg7JAKkRmK4-IoMqPTu6
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00042.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00043.npz:
+    drive_file_id: 1omPk2p4qSaVGWHa-_adPzLvESCNCifnR
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00043.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00044.npz:
+    drive_file_id: 1tk25JlaIRvJd8R2t05XrVmgXM0XzVyuD
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00044.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00045.npz:
+    drive_file_id: 1o18RM_VApz_CTEoBQ8_GPYEYeLAKvWzz
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00045.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00046.npz:
+    drive_file_id: 1dPE01vPQiQdYOYl883DEtb-d1MO-h1TK
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00046.npz
+  features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00047.npz:
+    drive_file_id: 1M_I_R6t2cCT1fdGcvl9OU1iMvfVaLq9R
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/rap/prior/chunk_00047.npz
   features/calaveras-big-trees/91fef1517fca02cc/site_assets/site_metadata_manifest.json:
     drive_file_id: 19oNoPsysJooEny3bLRgwNJORp_LPWvol
     local_path: features/calaveras-big-trees/91fef1517fca02cc/site_assets/site_metadata_manifest.json
@@ -611,6 +1148,789 @@ files:
   features/calaveras-big-trees/91fef1517fca02cc/stack/stack_registry.json:
     drive_file_id: 1dGSOpmdulmoUpa4ZwF_GteRD33QXznez
     local_path: features/calaveras-big-trees/91fef1517fca02cc/stack/stack_registry.json
+  features/calaveras-big-trees/shared/site_assets/3dep/calaveras-big-trees_3dep_ee_10m.tif:
+    drive_file_id: 1SdGx5_IZX4hYiW98q9uG7pDQwIrKRdV7
+    local_path: features/calaveras-big-trees/shared/site_assets/3dep/calaveras-big-trees_3dep_ee_10m.tif
+  features/calaveras-big-trees/shared/site_assets/naip/calaveras_big_trees.tif:
+    drive_file_id: 1Uj6oY8g3sT0eSJSgrPrmIS1HARlvQXSV
+    local_path: features/calaveras-big-trees/shared/site_assets/naip/calaveras_big_trees.tif
+  features/calaveras-big-trees/shared/site_assets/rap/calaveras-big-trees_rap_ee_10m.tif:
+    drive_file_id: 1M9tQZrVKs7dJebD2t4HohGNWPaOAxUm-
+    local_path: features/calaveras-big-trees/shared/site_assets/rap/calaveras-big-trees_rap_ee_10m.tif
+  features/dl-bliss/4dfeca633c8d4b58/als/height_structure/chunk_00000.npz:
+    drive_file_id: 1kJSSXgfbcGONabnr_T3n-XbaQ8QuspSw
+    local_path: features/dl-bliss/4dfeca633c8d4b58/als/height_structure/chunk_00000.npz
+  features/dl-bliss/4dfeca633c8d4b58/als/height_structure/chunk_00001.npz:
+    drive_file_id: 1edXqdGsiIWQiFr4LO7dO84jctEJhjeQR
+    local_path: features/dl-bliss/4dfeca633c8d4b58/als/height_structure/chunk_00001.npz
+  features/dl-bliss/4dfeca633c8d4b58/als/height_structure/chunk_00002.npz:
+    drive_file_id: 1_pwAL-VnYAA4B0fJ1-x7TG6QFqy5mAgo
+    local_path: features/dl-bliss/4dfeca633c8d4b58/als/height_structure/chunk_00002.npz
+  features/dl-bliss/4dfeca633c8d4b58/als/height_structure/chunk_00003.npz:
+    drive_file_id: 1GuUhQrgbzuCct9fu_AtuK-bDYdjgbgEt
+    local_path: features/dl-bliss/4dfeca633c8d4b58/als/height_structure/chunk_00003.npz
+  features/dl-bliss/4dfeca633c8d4b58/als/height_structure/chunk_00004.npz:
+    drive_file_id: 1IsGWG5b3tNvrwOStr_8I98WCxIxNSXfl
+    local_path: features/dl-bliss/4dfeca633c8d4b58/als/height_structure/chunk_00004.npz
+  features/dl-bliss/4dfeca633c8d4b58/als/height_structure/chunk_00005.npz:
+    drive_file_id: 1F9poRq2knKqjnK5QZs4skz6IOTbANM0X
+    local_path: features/dl-bliss/4dfeca633c8d4b58/als/height_structure/chunk_00005.npz
+  features/dl-bliss/4dfeca633c8d4b58/als/height_structure/chunk_00006.npz:
+    drive_file_id: 1Wz51aWUu4RyCIDGSFVFv60s1x6P84uRL
+    local_path: features/dl-bliss/4dfeca633c8d4b58/als/height_structure/chunk_00006.npz
+  features/dl-bliss/4dfeca633c8d4b58/als/height_structure/chunk_00007.npz:
+    drive_file_id: 1K_z39KEN4u235wEdrfNBby2vtD0y964z
+    local_path: features/dl-bliss/4dfeca633c8d4b58/als/height_structure/chunk_00007.npz
+  features/dl-bliss/4dfeca633c8d4b58/als/height_structure/chunk_00008.npz:
+    drive_file_id: 1MAQAlDcO8pRpajc7N3UUNnEU7Df2A3mq
+    local_path: features/dl-bliss/4dfeca633c8d4b58/als/height_structure/chunk_00008.npz
+  features/dl-bliss/4dfeca633c8d4b58/site_assets/als_metadata.json:
+    drive_file_id: 1aliUzvDN1N-x9HWYpP5TR_8UY9HaG5Qe
+    local_path: features/dl-bliss/4dfeca633c8d4b58/site_assets/als_metadata.json
+  features/dl-bliss/4dfeca633c8d4b58/site_assets/site_metadata_manifest.json:
+    drive_file_id: 1pw2MXqU4IZRMMGM8EpEBXPbpmY5iMHfR
+    local_path: features/dl-bliss/4dfeca633c8d4b58/site_assets/site_metadata_manifest.json
+  features/dl-bliss/4dfeca633c8d4b58/site_assets/source_inventory.json:
+    drive_file_id: 1HfRu8XyEkmWJdNB7QnU7dvMZ3VVkx4eW
+    local_path: features/dl-bliss/4dfeca633c8d4b58/site_assets/source_inventory.json
+  features/dl-bliss/4dfeca633c8d4b58/stack/stack_registry.json:
+    drive_file_id: 1J--Knw--aFxTNnV-gpQxGcCmXiIY2iz_
+    local_path: features/dl-bliss/4dfeca633c8d4b58/stack/stack_registry.json
+  features/dl-bliss/91fef1517fca02cc/3dep/terrain/chunk_00000.npz:
+    drive_file_id: 15CyJv1GhHd1KPPOOZK0PvzkqmaETaU86
+    local_path: features/dl-bliss/91fef1517fca02cc/3dep/terrain/chunk_00000.npz
+  features/dl-bliss/91fef1517fca02cc/3dep/terrain/chunk_00001.npz:
+    drive_file_id: 1EO5DsKBYiBxpDviexuwKyCpN9poSotYm
+    local_path: features/dl-bliss/91fef1517fca02cc/3dep/terrain/chunk_00001.npz
+  features/dl-bliss/91fef1517fca02cc/3dep/terrain/chunk_00002.npz:
+    drive_file_id: 1r23yBFRIJqsqdQBzVVFsHw03hmgTWZic
+    local_path: features/dl-bliss/91fef1517fca02cc/3dep/terrain/chunk_00002.npz
+  features/dl-bliss/91fef1517fca02cc/3dep/terrain/chunk_00003.npz:
+    drive_file_id: 1oCYoGo8OeL64NiRStq2gEXLMY9YTf-Px
+    local_path: features/dl-bliss/91fef1517fca02cc/3dep/terrain/chunk_00003.npz
+  features/dl-bliss/91fef1517fca02cc/3dep/terrain/chunk_00004.npz:
+    drive_file_id: 1a5SJh8d57QY2gn5pgElstaVMfdWogEDL
+    local_path: features/dl-bliss/91fef1517fca02cc/3dep/terrain/chunk_00004.npz
+  features/dl-bliss/91fef1517fca02cc/3dep/terrain/chunk_00005.npz:
+    drive_file_id: 1H41yGS3ewkr_UXBDnheG1z4Y4NG58Kpy
+    local_path: features/dl-bliss/91fef1517fca02cc/3dep/terrain/chunk_00005.npz
+  features/dl-bliss/91fef1517fca02cc/3dep/terrain/chunk_00006.npz:
+    drive_file_id: 1x9Q30YP3j8lWvHNOWxK6tZTQL6_OhmYn
+    local_path: features/dl-bliss/91fef1517fca02cc/3dep/terrain/chunk_00006.npz
+  features/dl-bliss/91fef1517fca02cc/3dep/terrain/chunk_00007.npz:
+    drive_file_id: 1_ewCNGRswLIE_ISgZpS-0KTJbTIYIpeu
+    local_path: features/dl-bliss/91fef1517fca02cc/3dep/terrain/chunk_00007.npz
+  features/dl-bliss/91fef1517fca02cc/3dep/terrain/chunk_00008.npz:
+    drive_file_id: 1UvKByunKaidYupwCBkuPPrLzqLL_CGtg
+    local_path: features/dl-bliss/91fef1517fca02cc/3dep/terrain/chunk_00008.npz
+  features/dl-bliss/91fef1517fca02cc/rap/prior/chunk_00000.npz:
+    drive_file_id: 1mZUcSnlpStXH0m9zyLCBv0y979dXQjfo
+    local_path: features/dl-bliss/91fef1517fca02cc/rap/prior/chunk_00000.npz
+  features/dl-bliss/91fef1517fca02cc/rap/prior/chunk_00001.npz:
+    drive_file_id: 1mR4mhtCKWEFNqisOwXbQmZIpClNlJQX_
+    local_path: features/dl-bliss/91fef1517fca02cc/rap/prior/chunk_00001.npz
+  features/dl-bliss/91fef1517fca02cc/rap/prior/chunk_00002.npz:
+    drive_file_id: 1MsnDwfpOGXR1rDaPq2YvDhmbGHPSdqKb
+    local_path: features/dl-bliss/91fef1517fca02cc/rap/prior/chunk_00002.npz
+  features/dl-bliss/91fef1517fca02cc/rap/prior/chunk_00003.npz:
+    drive_file_id: 1ATToa0uFyF69eeguH6Ep_LO9gGV86rG8
+    local_path: features/dl-bliss/91fef1517fca02cc/rap/prior/chunk_00003.npz
+  features/dl-bliss/91fef1517fca02cc/rap/prior/chunk_00004.npz:
+    drive_file_id: 1O-L30q61K_-0JYw1JxBwCrz3th8znXpl
+    local_path: features/dl-bliss/91fef1517fca02cc/rap/prior/chunk_00004.npz
+  features/dl-bliss/91fef1517fca02cc/rap/prior/chunk_00005.npz:
+    drive_file_id: 10pZe-0_oiWm1AvI79ST0hfegkWJ4uXjS
+    local_path: features/dl-bliss/91fef1517fca02cc/rap/prior/chunk_00005.npz
+  features/dl-bliss/91fef1517fca02cc/rap/prior/chunk_00006.npz:
+    drive_file_id: 1QsCozNtbgkkoxcb26D_no_LyiAYjL0iJ
+    local_path: features/dl-bliss/91fef1517fca02cc/rap/prior/chunk_00006.npz
+  features/dl-bliss/91fef1517fca02cc/rap/prior/chunk_00007.npz:
+    drive_file_id: 1T6QrhmO4bWy_h5TqLjiDSZq3N3BjqPgJ
+    local_path: features/dl-bliss/91fef1517fca02cc/rap/prior/chunk_00007.npz
+  features/dl-bliss/91fef1517fca02cc/rap/prior/chunk_00008.npz:
+    drive_file_id: 1ZYRaLx1yqNUpI0Kg4J1jJEM3hd7f23ln
+    local_path: features/dl-bliss/91fef1517fca02cc/rap/prior/chunk_00008.npz
+  features/dl-bliss/91fef1517fca02cc/site_assets/site_metadata_manifest.json:
+    drive_file_id: 12MM8BhxIv2zSQuWe3oXMS5dty1xwpATE
+    local_path: features/dl-bliss/91fef1517fca02cc/site_assets/site_metadata_manifest.json
+  features/dl-bliss/91fef1517fca02cc/site_assets/source_inventory.json:
+    drive_file_id: 1QvddINxtt6mjGfjxdHw15KASIMtjEnXp
+    local_path: features/dl-bliss/91fef1517fca02cc/site_assets/source_inventory.json
+  features/dl-bliss/91fef1517fca02cc/stack/stack_registry.json:
+    drive_file_id: 1oOUNhXN8Yu_8ARt-RtFwrIl21SSCfB2y
+    local_path: features/dl-bliss/91fef1517fca02cc/stack/stack_registry.json
+  features/dl-bliss/shared/site_assets/3dep/dl-bliss_3dep_ee_10m.tif:
+    drive_file_id: 1TkaxsPUQxPNR_srmN3Jz400HmOsp0gxR
+    local_path: features/dl-bliss/shared/site_assets/3dep/dl-bliss_3dep_ee_10m.tif
+  features/dl-bliss/shared/site_assets/naip/dl_bliss.tif:
+    drive_file_id: 1VsM3QfU8bjQV6JiLwmk3upWWzuPm0tPY
+    local_path: features/dl-bliss/shared/site_assets/naip/dl_bliss.tif
+  features/dl-bliss/shared/site_assets/rap/dl-bliss_rap_ee_10m.tif:
+    drive_file_id: 1Jq_CFDr0QufPb4F25zNKYeK9FVPARwCt
+    local_path: features/dl-bliss/shared/site_assets/rap/dl-bliss_rap_ee_10m.tif
+  features/independence-lake/4dfeca633c8d4b58/site_assets/source_inventory.json:
+    drive_file_id: 1rshWn0lXP6P2VSrEu9sRiwiZo-WH5ZLj
+    local_path: features/independence-lake/4dfeca633c8d4b58/site_assets/source_inventory.json
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00000.npz:
+    drive_file_id: 1mWZTetXO8WxA85pzyAnB0Rpev6nWvtSG
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00000.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00001.npz:
+    drive_file_id: 14rWG8dNYsOUHoXMZ1wKucbZ9zGWOGvvc
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00001.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00002.npz:
+    drive_file_id: 1z2atA_-oYVegycRbGUugaIBjM91vXgWV
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00002.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00003.npz:
+    drive_file_id: 1-lwkNiKGug1xN9Hg4Vs7XU229lVYKEv4
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00003.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00004.npz:
+    drive_file_id: 1-DyQBZFr9FYJfj_D1Gc-B0ttJHzODwJs
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00004.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00005.npz:
+    drive_file_id: 1VtC7p6kojZYQaS2NEfcwlVGcVSrsZjcz
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00005.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00006.npz:
+    drive_file_id: 12hevWCJOvFwiO0zsx265DtqHJE1WRcD-
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00006.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00007.npz:
+    drive_file_id: 1VfdnVtzLRda211GdDpl0UiRAnhtxEgTm
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00007.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00008.npz:
+    drive_file_id: 1Ut8gNuXUmfegyxOQQXFS0yTLKTSjphM6
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00008.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00009.npz:
+    drive_file_id: 1QzTQrtEy7D7tZ6-DWZdwWLNcUtFjZ4sD
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00009.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00010.npz:
+    drive_file_id: 12umy3F9l7qGi89_xsdfpzd3Jjfehip0K
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00010.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00011.npz:
+    drive_file_id: 1lR0Qb7KFBQd-eeU_LkuBcj0cCbYjpRC_
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00011.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00012.npz:
+    drive_file_id: 139XDaXt_IcFSUdoTVJj3yYC6MOFH35qC
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00012.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00013.npz:
+    drive_file_id: 1itislh8Yj4_9UHUXtxVdVhHRYqnsWJkU
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00013.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00014.npz:
+    drive_file_id: 1uO-yOUUgsX0Puaiihq5DvpbGYhzpmlvJ
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00014.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00015.npz:
+    drive_file_id: 1frT4uhSETUuomcxXMxr7FcCdTB1fN1wY
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00015.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00016.npz:
+    drive_file_id: 1_wYggNABbQSVq1AyrFm7qYIZ925yYbuw
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00016.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00017.npz:
+    drive_file_id: 1-Yef4FBxLlO2dXQjo1ZwDECcbAKSUwov
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00017.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00018.npz:
+    drive_file_id: 1HANLsgNeu08_HS04t0vo97oj8z_iNsx6
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00018.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00019.npz:
+    drive_file_id: 1JJR07pbkWtOQafKg8Nm4gIuvbbPi_J4l
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00019.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00020.npz:
+    drive_file_id: 1VlEv9k_8VFCrZ2BfeWiuToDUbSNTK7D-
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00020.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00021.npz:
+    drive_file_id: 1u7nlpE7Yt4Trx22q7HjwFFRCeYJOBc-i
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00021.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00022.npz:
+    drive_file_id: 10St3aJjviKi7MEyP7CmT1zYSLiLAm4k4
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00022.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00023.npz:
+    drive_file_id: 1htariWXSu2ncUbSWuJaioV0hVYMRFl47
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00023.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00024.npz:
+    drive_file_id: 1hvSBNfZj2o-5w4wM-xrltF8xskiLTBYD
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00024.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00025.npz:
+    drive_file_id: 1a0626ypmxVsAllX_CQuU9APvdlzWg-q1
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00025.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00026.npz:
+    drive_file_id: 1iLxe4ElGtWe8wg3zmDnZWvlS4iKbK_ld
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00026.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00027.npz:
+    drive_file_id: 1KjZDVJumV-1WdGyYhI7LFt6bb8yEPQXH
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00027.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00028.npz:
+    drive_file_id: 1eJL9lmy2XS3LCTCTeQTkNxn-tx9PdZv9
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00028.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00029.npz:
+    drive_file_id: 1sOTCjktLhGtmIRxpdmTUp5pLTLRene-W
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00029.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00030.npz:
+    drive_file_id: 1D2DKfOsm7wkC6I3uUMt1mUE_-hVoMdN2
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00030.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00031.npz:
+    drive_file_id: 10yMlXPuoi3a8D9PetRYQ4B3yZsxGWAs4
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00031.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00032.npz:
+    drive_file_id: 1QBgKi_YulNNbgfzCrfcXbVZVsBwNpyYW
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00032.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00033.npz:
+    drive_file_id: 1Pxe86sM4pzpAnFaGrDiEcxENXuZ6y1RN
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00033.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00034.npz:
+    drive_file_id: 1SG0SMgy0yQyAQZEcaG4_ij8NzAovPZXS
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00034.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00035.npz:
+    drive_file_id: 1Z4WhDu4msFsq6nVzZsyUQ6BRQUBUS3m9
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00035.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00036.npz:
+    drive_file_id: 1Zmkn4NM8fSO00ZHtKCvroi9cmRG1rjN9
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00036.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00037.npz:
+    drive_file_id: 1njrcyYqw-4s7ElCHJj_MgXSiazTBD6-Z
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00037.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00038.npz:
+    drive_file_id: 10Rdy8xIWBdv8duRSnYO0pG2HaWxIa5nW
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00038.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00039.npz:
+    drive_file_id: 10NvsB21U462KIzZKwY1pGfovcO279Itf
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00039.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00040.npz:
+    drive_file_id: 1BbKD8DUO7f1hfkCqvfBUWLEvru8ortXR
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00040.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00041.npz:
+    drive_file_id: 1AXzT5JY0-fV0s8Zf_IpL2hfDmAQIiQcT
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00041.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00042.npz:
+    drive_file_id: 1omasZMJ4W3tCibDGRKKV-gVT5nRyeGxK
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00042.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00043.npz:
+    drive_file_id: 1MmnfZFomh5cvE0lYC4x-WI5ZbwCrgw-E
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00043.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00044.npz:
+    drive_file_id: 1LU6Er0MGxPRjxRnfpEU2hhGWu9758Vze
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00044.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00045.npz:
+    drive_file_id: 1RinL8MhVj4lmX_If3_TVqiihb4I3vs8P
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00045.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00046.npz:
+    drive_file_id: 14ea4dkCzHU38V-BZa0w_lyT25FwN3S_3
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00046.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00047.npz:
+    drive_file_id: 1dkKwJ3JGUKH4rygZBsw8FNVMdb7fytbU
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00047.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00048.npz:
+    drive_file_id: 1aObNPcdxTMT3JApvj0xFpK-7ec9pHRv8
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00048.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00049.npz:
+    drive_file_id: 1lhfTUvRtt7yfIR1lLviMbH0aWuZP2y3N
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00049.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00050.npz:
+    drive_file_id: 1RO3aT-pldbTfPZpeqBxHMI-8iNTV_TjC
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00050.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00051.npz:
+    drive_file_id: 1nyWWeGw5aeXndXAc_mmNDtg9XpohCF5B
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00051.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00052.npz:
+    drive_file_id: 1aHGxjH4pUO1KJOeFacXtk6ArRm0Nygbc
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00052.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00053.npz:
+    drive_file_id: 17t95j1Vs-S6LLasDhNHjJ_fT0s1FuRfY
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00053.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00054.npz:
+    drive_file_id: 1EtQibdygq4DPmUxsk8l3nRKG_woOalmF
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00054.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00055.npz:
+    drive_file_id: 1mmHPfduS5LJNBnLxvhn9qdZSU-36n9Cr
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00055.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00056.npz:
+    drive_file_id: 17UoNilPcFkxOqn1bV_cOIvzZ7981N7i3
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00056.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00057.npz:
+    drive_file_id: 1XsPm0EKgUlUgNTcXquASKXdBH92WXUwt
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00057.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00058.npz:
+    drive_file_id: 1BaNnbhpWEZ5dns0EgGp0CPgWNRvpSh7B
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00058.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00059.npz:
+    drive_file_id: 1QEwSEJxBNFQiGIZPaMRNqUM32-AUNEQY
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00059.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00060.npz:
+    drive_file_id: 1xwGqIkbWZq6aAySJbJ002WzT8NOygWKE
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00060.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00061.npz:
+    drive_file_id: 1ZnQ4qGbFtIhJkE8QYCY3HLjPhk2dnPc_
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00061.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00062.npz:
+    drive_file_id: 1l5vaCJu1Dl6KthQCEHQUVFRrGPCIvJis
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00062.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00063.npz:
+    drive_file_id: 1mGMIJy__0wHsPf6xlr6NxT1A79Uu7ZP5
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00063.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00064.npz:
+    drive_file_id: 11IkMu2tBF9QrB50fP3y58xUdiVOlrWJE
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00064.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00065.npz:
+    drive_file_id: 1O2KiN493x8et_8FajXirDt_Gn5Zfra4H
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00065.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00066.npz:
+    drive_file_id: 1sN7Xvp-xk39Bnn67JWVSXAqbIbEOZZDJ
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00066.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00067.npz:
+    drive_file_id: 1WiWd-MjrChP0ERGJwh6dQi79uvH4XwIK
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00067.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00068.npz:
+    drive_file_id: 1SdPg30t9l6Qm-aDRhj4ssVdt-kDhfTEM
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00068.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00069.npz:
+    drive_file_id: 1jlQssXZ3fv5C-fVDutQRtEfKQkIHr-Mi
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00069.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00070.npz:
+    drive_file_id: 1LXtbOxJqPM7lwwDi9rKt_cEKUkJDraU7
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00070.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00071.npz:
+    drive_file_id: 1YBzf2vI9Y_B-PUeVEQWnHv6PFX5VxcOn
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00071.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00072.npz:
+    drive_file_id: 1Tlh6YxodYJxhyPJWhK0K0GOvFCGx7Bgi
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00072.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00073.npz:
+    drive_file_id: 1UeM-uBm2LVsYXOQFZyjkkK3abt1te_J3
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00073.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00074.npz:
+    drive_file_id: 18Or5MPEisTZk2a20meAv4dRcvJkzgGf-
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00074.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00075.npz:
+    drive_file_id: 1WIDYQV_4C1YjJEQNed0yAq2YzDwlF8gw
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00075.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00076.npz:
+    drive_file_id: 1KgPYStaRKeMiX7kPLTONPfr847Se0w1Z
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00076.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00077.npz:
+    drive_file_id: 1gZg3ef_MrwJRQafhD56HJXi5mp-P6y__
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00077.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00078.npz:
+    drive_file_id: 1mU0lAej4ZjGWfSUIiiooVfSQ0y2Mz_Qm
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00078.npz
+  features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00079.npz:
+    drive_file_id: 1t3L52h8tVlVaj8sBo2QaLflZJ5QIlb9g
+    local_path: features/independence-lake/91fef1517fca02cc/3dep/terrain/chunk_00079.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00000.npz:
+    drive_file_id: 1gYikQrV6VGVwmk5lQVxaM-vtrM9MTJ2m
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00000.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00001.npz:
+    drive_file_id: 1WLHL8Ie4ET1Lhz8_k3gkn5usgRsYUsVI
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00001.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00002.npz:
+    drive_file_id: 1D72TKTaoQrPT56m_3MswK1Nbz7rRJfle
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00002.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00003.npz:
+    drive_file_id: 1M8xf0Pb6mnZprtqc4gXqioaBXUJX7KcK
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00003.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00004.npz:
+    drive_file_id: 115yyeVAtSrSF2YGJFbJlNz7kxc1Yrgbi
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00004.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00005.npz:
+    drive_file_id: 1V4msUU0SiE5UpI-HKKz-y9sThiI21QAz
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00005.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00006.npz:
+    drive_file_id: 1ENeRDWidKMNe8puOujSAopQpUG-fR2Ql
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00006.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00007.npz:
+    drive_file_id: 1hTnC8MOYhBMlyshEzQocROUPb8lJjsks
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00007.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00008.npz:
+    drive_file_id: 1u6JkJLgbDvbbquhfh2VK1Y_K6SiRJbBQ
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00008.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00009.npz:
+    drive_file_id: 1u3BNPZtRmxhuGcj-eXLurO64ZFoD_zna
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00009.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00010.npz:
+    drive_file_id: 1huN4f5cjZRep_B85VPsEhmpbXJC4dNhI
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00010.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00011.npz:
+    drive_file_id: 1mUCRbIviaTvR29Lu-ks9r7nD1UlE-Zx3
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00011.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00012.npz:
+    drive_file_id: 1zbO1GlWPhWZkN4L7ZKKHZBpP-ZHLkSgf
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00012.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00013.npz:
+    drive_file_id: 1n3WwFKq-Si7bgHnOm7s7KsrbMQuDUTsM
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00013.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00014.npz:
+    drive_file_id: 1l-hkEHq751F1iYIUp-v45xwiuvXWaVoK
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00014.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00015.npz:
+    drive_file_id: 1kd6inf8AKZf5zyarLKMQr9WzUHMSs_p9
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00015.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00016.npz:
+    drive_file_id: 1gKHGXNVdfquTrwzImsPgfno1crK6tEZ-
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00016.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00017.npz:
+    drive_file_id: 1TBrbdufEOFUmUhhTxMU7nKkMDYMVi0-O
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00017.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00018.npz:
+    drive_file_id: 1PsRmL8NUhXnoIaeOXLk4VyObgCkTcAiO
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00018.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00019.npz:
+    drive_file_id: 1fm5x97TLrie5PX-jpUyyubXU8zbBGyHI
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00019.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00020.npz:
+    drive_file_id: 1vgAZLSa8jC7RMFfFk4olqfpa4UtlhEMr
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00020.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00021.npz:
+    drive_file_id: 1lgxe1BX3Ll5o38HH7tX1yBCyKughjGNU
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00021.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00022.npz:
+    drive_file_id: 1U3PX6YpF1Onbl-BvAg5w3jHyy445eFnq
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00022.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00023.npz:
+    drive_file_id: 1NB_DYGPzcabwwelX1-LsSc-eIdWWrqFz
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00023.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00024.npz:
+    drive_file_id: 1vv8S6TwwOq8O1HZYJXVuqKe6wISxq1S6
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00024.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00025.npz:
+    drive_file_id: 1bFO1g5eyMyUrxDGRhfbIGqJDuaEZT8Z4
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00025.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00026.npz:
+    drive_file_id: 1NhM-elbhecWHSbDCizafAm2cUi8HX119
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00026.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00027.npz:
+    drive_file_id: 1QLJHeMMGWhQkDWcerFNaCER9cvkwKwIC
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00027.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00028.npz:
+    drive_file_id: 1D-IZOU-cvkPePK1XJANh5f2mRrVzSzCi
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00028.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00029.npz:
+    drive_file_id: 1T1PP6g48ZRK5Tcc9is6WzrSy66lCgGtT
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00029.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00030.npz:
+    drive_file_id: 1Z2DLrBgI2BkRYRkmQQF4tnFhRizcz8b-
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00030.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00031.npz:
+    drive_file_id: 1gaEwhyxtrjoFqYlV8Zjcnh3kIGVjDiPV
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00031.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00032.npz:
+    drive_file_id: 1wE_DhIucXQr34OWlOYYaVToxprZ__0dZ
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00032.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00033.npz:
+    drive_file_id: 1dYleu9OagESf1si08VZPCfl2dGgULlSb
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00033.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00034.npz:
+    drive_file_id: 1nP8BIY0u6QVSQeiRfYG-chBnZbdFo7ep
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00034.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00035.npz:
+    drive_file_id: 1a-T60ZJ1h6XUdy7G22-ccElCofSwzEvP
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00035.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00036.npz:
+    drive_file_id: 1s2atds6B3wlTSFHPi_5jbPlnWsrj6IeJ
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00036.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00037.npz:
+    drive_file_id: 1CbIWkMxl7rg7_YwaMEuh0pgdY3LoDl1O
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00037.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00038.npz:
+    drive_file_id: 11aiMuDPQbVSpC1-PjF8yKmi6lNI7hRMG
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00038.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00039.npz:
+    drive_file_id: 1C_AYv5VU6y5WtQAi8uKEFvYRPfpdO5q-
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00039.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00040.npz:
+    drive_file_id: 1LPpfJDMrlEa40LaNMDf8Z3mW0J7FbtPy
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00040.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00041.npz:
+    drive_file_id: 1vBKSHHf7wNh32TDUlHQ9STC0zG6PoVjH
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00041.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00042.npz:
+    drive_file_id: 154aXrc8SuTIJEGLIZ6Hsf0SuBdj9NfdL
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00042.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00043.npz:
+    drive_file_id: 1SzU1NICbERunjI-LkeR8UJBWZXTXjynw
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00043.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00044.npz:
+    drive_file_id: 1WqSeIC5QPX5JNyitaTOBrSfAYycKYdpO
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00044.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00045.npz:
+    drive_file_id: 1imsVE6Iq5HNi2cMEje9TDlWJNOH6BtZE
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00045.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00046.npz:
+    drive_file_id: 10319nAI_s5dqMqsBbqCOk4Cjxt7pkGEK
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00046.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00047.npz:
+    drive_file_id: 1gx5ZSlzA3sa9rCLX4uvAKdj9_PIwdsvM
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00047.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00048.npz:
+    drive_file_id: 1mfxVO9Aj3IajXLA6-lJQ1mUqOpMLtVq3
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00048.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00049.npz:
+    drive_file_id: 1SlpwgIJZzrmVYI7TxDDFp0UyeBIhIsVV
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00049.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00050.npz:
+    drive_file_id: 1Exv1IIR1Pk7o3yAX6oig2tbmlrOgLEx9
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00050.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00051.npz:
+    drive_file_id: 1gUt2014FIxq7TCGHALHNkhYrge1OmBdH
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00051.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00052.npz:
+    drive_file_id: 1rEdldqFWD7O_YR3mDcMcdFcECPSn7jXL
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00052.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00053.npz:
+    drive_file_id: 1A4AcNNCvGzy1Dqd7qGue-Ag3aLmUBgVC
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00053.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00054.npz:
+    drive_file_id: 1VQ65VxDHxW8fORoZvlym8lEhqxQmn58z
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00054.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00055.npz:
+    drive_file_id: 1Zr9UclW3lGePdgGm0umYhdyyGyrCXAoE
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00055.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00056.npz:
+    drive_file_id: 1emqxoBPuv_kmOou-MLwPUACkZ3G0zd0W
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00056.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00057.npz:
+    drive_file_id: 1mzKzrrj9F_K3jyflPRsAwTTxYN_55LWj
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00057.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00058.npz:
+    drive_file_id: 1YryfrJuVd6Pu26OazWGfzij0kXF2iiGD
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00058.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00059.npz:
+    drive_file_id: 1CgPODfLq0coF4UMDVdMMcftIqelKhWQ0
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00059.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00060.npz:
+    drive_file_id: 1SOUVBDPz_lUzU1mMGU4GIdCfiD7MVCjf
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00060.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00061.npz:
+    drive_file_id: 1xBwvYENm69PWIhJCdDDFmZsF9uBmJ7Zq
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00061.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00062.npz:
+    drive_file_id: 1VyvUvtglhx7fUNPPpG59XqZs5QectOaK
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00062.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00063.npz:
+    drive_file_id: 1IaqT1JdC8ia_ZB6ZOEJ0_YqUSFsqVLiC
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00063.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00064.npz:
+    drive_file_id: 1jCSwZIka08kOswvZv9LYFyyQ812oyE3q
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00064.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00065.npz:
+    drive_file_id: 1O58PqzwxwRFXNm4BYyLdPGyONv2x72NL
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00065.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00066.npz:
+    drive_file_id: 1rTiaoGIta1u8KuhOAw4YdFi1xVBMOXah
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00066.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00067.npz:
+    drive_file_id: 1Z5Q85-lqPNzrUGN5oRLM-_gcHo2D2vm0
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00067.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00068.npz:
+    drive_file_id: 1pe7i-AcRsxOf2O0UuvDbyetvqMjkDjOO
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00068.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00069.npz:
+    drive_file_id: 1JJlGzVbOEodRySP75bC2mJ6WQ1BuyOZu
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00069.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00070.npz:
+    drive_file_id: 1ljjXlKjn4GbUq4KYXxfh8TcThk5gq-Xh
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00070.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00071.npz:
+    drive_file_id: 1D7J_1SeEHEVuARxQofZgOmId9Ej_HkVB
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00071.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00072.npz:
+    drive_file_id: 1DeOmtrcTOrZvhurS1_PMhcWeD9b23exe
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00072.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00073.npz:
+    drive_file_id: 18Vb8yNPz9RVBsqnPyz6_3fhTdkMIvWG7
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00073.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00074.npz:
+    drive_file_id: 1TO_e263WBUeYSPKGv-Yc25fQ5WxEGoJC
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00074.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00075.npz:
+    drive_file_id: 1Zb3Xp2HrJmautHwxo293FtWcw-PbYffA
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00075.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00076.npz:
+    drive_file_id: 1GkJIcuQUXBdRpoV8GKiI_5ofmG9eGq4t
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00076.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00077.npz:
+    drive_file_id: 1eOqH1JU1AWrhHSnSbFWa9HKCTcTZzoK3
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00077.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00078.npz:
+    drive_file_id: 1RtFIzvXJFKuSgA-NBn0BZ3ydDGcHSppz
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00078.npz
+  features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00079.npz:
+    drive_file_id: 1W2FDSGNm3h6JGWbRZqEe0A4eSuRo_ToQ
+    local_path: features/independence-lake/91fef1517fca02cc/rap/prior/chunk_00079.npz
+  features/independence-lake/91fef1517fca02cc/site_assets/als_metadata.json:
+    drive_file_id: 1tFxikWSIKfIsEh82fQfcMZ5FWTWwYutt
+    local_path: features/independence-lake/91fef1517fca02cc/site_assets/als_metadata.json
+  features/independence-lake/91fef1517fca02cc/site_assets/site_metadata_manifest.json:
+    drive_file_id: 1GqYdTgR3O9b_psMeLYpmVSLP9xJFTpnw
+    local_path: features/independence-lake/91fef1517fca02cc/site_assets/site_metadata_manifest.json
+  features/independence-lake/91fef1517fca02cc/site_assets/source_inventory.json:
+    drive_file_id: 1H7z-OqsgDrDRsqdjuC0u7dwxRG7oR6FF
+    local_path: features/independence-lake/91fef1517fca02cc/site_assets/source_inventory.json
+  features/independence-lake/91fef1517fca02cc/stack/stack_registry.json:
+    drive_file_id: 1ALOLFDXchCRqQZRwL15Gugc3Pka03-tV
+    local_path: features/independence-lake/91fef1517fca02cc/stack/stack_registry.json
+  features/independence-lake/shared/site_assets/3dep/independence-lake_3dep_ee_10m.tif:
+    drive_file_id: 1LrQaEs8MZqAi9lVPsU79Cpp5BmQvLQwb
+    local_path: features/independence-lake/shared/site_assets/3dep/independence-lake_3dep_ee_10m.tif
+  features/independence-lake/shared/site_assets/naip/independence_lake.tif:
+    drive_file_id: 1oSB0hBB7k6qPJOjrPBRC0OM7t-5vGnCP
+    local_path: features/independence-lake/shared/site_assets/naip/independence_lake.tif
+  features/independence-lake/shared/site_assets/rap/independence-lake_rap_ee_10m.tif:
+    drive_file_id: 1jynAHx6U1BKF0Z5OmKkYy5BydXeOK8ih
+    local_path: features/independence-lake/shared/site_assets/rap/independence-lake_rap_ee_10m.tif
+  features/pacific-union-college/91fef1517fca02cc/3dep/terrain/chunk_00000.npz:
+    drive_file_id: 1LcwgFLRVP1OwMb6vUjAAjEAhq_-HmRxd
+    local_path: features/pacific-union-college/91fef1517fca02cc/3dep/terrain/chunk_00000.npz
+  features/pacific-union-college/91fef1517fca02cc/3dep/terrain/chunk_00001.npz:
+    drive_file_id: 1i4vQJbNnGBPTr5zbfyJicouV1gaw9bA3
+    local_path: features/pacific-union-college/91fef1517fca02cc/3dep/terrain/chunk_00001.npz
+  features/pacific-union-college/91fef1517fca02cc/3dep/terrain/chunk_00002.npz:
+    drive_file_id: 1qmE5jIibZvpYyFxqHp_VUQ7_m7hvVZ7R
+    local_path: features/pacific-union-college/91fef1517fca02cc/3dep/terrain/chunk_00002.npz
+  features/pacific-union-college/91fef1517fca02cc/3dep/terrain/chunk_00003.npz:
+    drive_file_id: 1R0ZyDCf9rtKneFjFRsKqmk9RTlBA_p68
+    local_path: features/pacific-union-college/91fef1517fca02cc/3dep/terrain/chunk_00003.npz
+  features/pacific-union-college/91fef1517fca02cc/3dep/terrain/chunk_00004.npz:
+    drive_file_id: 1r-gmb5H80WAdzEOGT25Aaw1kUTNRVqLL
+    local_path: features/pacific-union-college/91fef1517fca02cc/3dep/terrain/chunk_00004.npz
+  features/pacific-union-college/91fef1517fca02cc/3dep/terrain/chunk_00005.npz:
+    drive_file_id: 1LBW65jImO3riYcePqKCuGV-c9V2PMcAk
+    local_path: features/pacific-union-college/91fef1517fca02cc/3dep/terrain/chunk_00005.npz
+  features/pacific-union-college/91fef1517fca02cc/rap/prior/chunk_00000.npz:
+    drive_file_id: 1KacCWHSGBB8f45Pw41FlXWPbx_MKcwO2
+    local_path: features/pacific-union-college/91fef1517fca02cc/rap/prior/chunk_00000.npz
+  features/pacific-union-college/91fef1517fca02cc/rap/prior/chunk_00001.npz:
+    drive_file_id: 13RGOQaSpS8bpF2ESGkfdfxZFfYAMg-5x
+    local_path: features/pacific-union-college/91fef1517fca02cc/rap/prior/chunk_00001.npz
+  features/pacific-union-college/91fef1517fca02cc/rap/prior/chunk_00002.npz:
+    drive_file_id: 1FeB5oIhh-IztJRTfEeSuloEaBT5iZY6V
+    local_path: features/pacific-union-college/91fef1517fca02cc/rap/prior/chunk_00002.npz
+  features/pacific-union-college/91fef1517fca02cc/rap/prior/chunk_00003.npz:
+    drive_file_id: 1iac91XdMlQjx61I82NnO7UDgB5akie2I
+    local_path: features/pacific-union-college/91fef1517fca02cc/rap/prior/chunk_00003.npz
+  features/pacific-union-college/91fef1517fca02cc/rap/prior/chunk_00004.npz:
+    drive_file_id: 1_H6SRtWsedBds0OgNp_WOkO-l_3ZdhUu
+    local_path: features/pacific-union-college/91fef1517fca02cc/rap/prior/chunk_00004.npz
+  features/pacific-union-college/91fef1517fca02cc/rap/prior/chunk_00005.npz:
+    drive_file_id: 1jKe8aNRnvhYBuGOZ6F9yViH5hpZgDc45
+    local_path: features/pacific-union-college/91fef1517fca02cc/rap/prior/chunk_00005.npz
+  features/pacific-union-college/91fef1517fca02cc/site_assets/als_metadata.json:
+    drive_file_id: 1N5L-A-vrFC9STApUrY3CDJ2Ya1NNz6EK
+    local_path: features/pacific-union-college/91fef1517fca02cc/site_assets/als_metadata.json
+  features/pacific-union-college/91fef1517fca02cc/site_assets/site_metadata_manifest.json:
+    drive_file_id: 1lMO10VwvnnHF-dKkukDfOCVdGiE8702z
+    local_path: features/pacific-union-college/91fef1517fca02cc/site_assets/site_metadata_manifest.json
+  features/pacific-union-college/91fef1517fca02cc/site_assets/source_inventory.json:
+    drive_file_id: 1evlifdoW0LZdd6_NMm0roeCisnZBO_rZ
+    local_path: features/pacific-union-college/91fef1517fca02cc/site_assets/source_inventory.json
+  features/pacific-union-college/91fef1517fca02cc/stack/stack_registry.json:
+    drive_file_id: 1io1mRjFPfoJFieAgISuIWpTK1GsHSuiG
+    local_path: features/pacific-union-college/91fef1517fca02cc/stack/stack_registry.json
+  features/pacific-union-college/shared/site_assets/3dep/pacific-union-college_3dep_ee_10m.tif:
+    drive_file_id: 1EH_lRNsI3xKUm2ZPUbp6n49WSPrEnV0Z
+    local_path: features/pacific-union-college/shared/site_assets/3dep/pacific-union-college_3dep_ee_10m.tif
+  features/pacific-union-college/shared/site_assets/naip/pacific_union_college.tif:
+    drive_file_id: 1CBY7MvIxLDiDCnqvBgR0wivOThkeRwf2
+    local_path: features/pacific-union-college/shared/site_assets/naip/pacific_union_college.tif
+  features/pacific-union-college/shared/site_assets/rap/pacific-union-college_rap_ee_10m.tif:
+    drive_file_id: 1hiZj9NERscuXdPTz0HtvT4H_SSBrloJ4
+    local_path: features/pacific-union-college/shared/site_assets/rap/pacific-union-college_rap_ee_10m.tif
+  features/sedgwick/91fef1517fca02cc/3dep/terrain/chunk_00000.npz:
+    drive_file_id: 1legwAlpnaUJMT8o6fgAuuHNpHSAKnjjU
+    local_path: features/sedgwick/91fef1517fca02cc/3dep/terrain/chunk_00000.npz
+  features/sedgwick/91fef1517fca02cc/3dep/terrain/chunk_00001.npz:
+    drive_file_id: 1J1YKjTX2zl3myqbZ0abkI2tJL9j2RPzE
+    local_path: features/sedgwick/91fef1517fca02cc/3dep/terrain/chunk_00001.npz
+  features/sedgwick/91fef1517fca02cc/3dep/terrain/chunk_00002.npz:
+    drive_file_id: 1iohaGRcCtPnTPCZjk4JEdpLf1i1lt0Ng
+    local_path: features/sedgwick/91fef1517fca02cc/3dep/terrain/chunk_00002.npz
+  features/sedgwick/91fef1517fca02cc/3dep/terrain/chunk_00003.npz:
+    drive_file_id: 127cj0LV4ZM73TPK8Ui2keJIEu9cNIwew
+    local_path: features/sedgwick/91fef1517fca02cc/3dep/terrain/chunk_00003.npz
+  features/sedgwick/91fef1517fca02cc/3dep/terrain/chunk_00004.npz:
+    drive_file_id: 1y5UgsSWkB-UP1QEH-Cq0-3NZQuFl8Kid
+    local_path: features/sedgwick/91fef1517fca02cc/3dep/terrain/chunk_00004.npz
+  features/sedgwick/91fef1517fca02cc/3dep/terrain/chunk_00005.npz:
+    drive_file_id: 1K4RkqlrtyE6f54wx3ZIvB47R3k3O2xu5
+    local_path: features/sedgwick/91fef1517fca02cc/3dep/terrain/chunk_00005.npz
+  features/sedgwick/91fef1517fca02cc/rap/prior/chunk_00000.npz:
+    drive_file_id: 1gNBgFciIywK5Cdn84mW4DAAv2ymgoLmH
+    local_path: features/sedgwick/91fef1517fca02cc/rap/prior/chunk_00000.npz
+  features/sedgwick/91fef1517fca02cc/rap/prior/chunk_00001.npz:
+    drive_file_id: 1JDZPF8yzw6Q0LSqffc_Vy5nO8-6qHW9Q
+    local_path: features/sedgwick/91fef1517fca02cc/rap/prior/chunk_00001.npz
+  features/sedgwick/91fef1517fca02cc/rap/prior/chunk_00002.npz:
+    drive_file_id: 1wsawrOGH19aM0m2xtlQdKK14N6SvZllO
+    local_path: features/sedgwick/91fef1517fca02cc/rap/prior/chunk_00002.npz
+  features/sedgwick/91fef1517fca02cc/rap/prior/chunk_00003.npz:
+    drive_file_id: 1lznFwG2OOpgwbASoLSkp64PmS4m4CJoF
+    local_path: features/sedgwick/91fef1517fca02cc/rap/prior/chunk_00003.npz
+  features/sedgwick/91fef1517fca02cc/rap/prior/chunk_00004.npz:
+    drive_file_id: 1zFbYIp77JpM8nUwu0jHR38-_VOcPspm6
+    local_path: features/sedgwick/91fef1517fca02cc/rap/prior/chunk_00004.npz
+  features/sedgwick/91fef1517fca02cc/rap/prior/chunk_00005.npz:
+    drive_file_id: 1Us7BV4Ybvc1iIGR0H45mLZfAoKRF4swV
+    local_path: features/sedgwick/91fef1517fca02cc/rap/prior/chunk_00005.npz
+  features/sedgwick/91fef1517fca02cc/site_assets/als_metadata.json:
+    drive_file_id: 1qdgqDbafc4rxg4yKJ6PcBhHL_BUq9Ezw
+    local_path: features/sedgwick/91fef1517fca02cc/site_assets/als_metadata.json
+  features/sedgwick/91fef1517fca02cc/site_assets/site_metadata_manifest.json:
+    drive_file_id: 1Bso6IA13CLXce-Vk8Eudgn4i52M3xLda
+    local_path: features/sedgwick/91fef1517fca02cc/site_assets/site_metadata_manifest.json
+  features/sedgwick/91fef1517fca02cc/site_assets/source_inventory.json:
+    drive_file_id: 1c8MGY5JasSrtGIblQ2n1aSlZG2HROZZM
+    local_path: features/sedgwick/91fef1517fca02cc/site_assets/source_inventory.json
+  features/sedgwick/91fef1517fca02cc/stack/stack_registry.json:
+    drive_file_id: 14bwgmbNe4MBgfVXWv4I-Nosb_F5oMlgN
+    local_path: features/sedgwick/91fef1517fca02cc/stack/stack_registry.json
+  features/sedgwick/shared/site_assets/3dep/sedgwick_3dep_ee_10m.tif:
+    drive_file_id: 1AuE-1sRctAoHQb8iFpTFADu-FIC2F8Dj
+    local_path: features/sedgwick/shared/site_assets/3dep/sedgwick_3dep_ee_10m.tif
+  features/sedgwick/shared/site_assets/naip/sedgwick.tif:
+    drive_file_id: 1zBEwP0T0CBhV4rES1dDBhn3gYyx6jkQr
+    local_path: features/sedgwick/shared/site_assets/naip/sedgwick.tif
+  features/sedgwick/shared/site_assets/rap/sedgwick_rap_ee_10m.tif:
+    drive_file_id: 1X3BMdNmareNkTfMgSkVZUFEHHwnDWXcJ
+    local_path: features/sedgwick/shared/site_assets/rap/sedgwick_rap_ee_10m.tif
+  features/shaver-lake/91fef1517fca02cc/3dep/terrain/chunk_00000.npz:
+    drive_file_id: 1KFwqczo3V6EKooT4m2muDVDd4bNtV0ma
+    local_path: features/shaver-lake/91fef1517fca02cc/3dep/terrain/chunk_00000.npz
+  features/shaver-lake/91fef1517fca02cc/3dep/terrain/chunk_00001.npz:
+    drive_file_id: 1ksEbnOYS7lkgjDlkn8B0SLV2Edfs6qJ1
+    local_path: features/shaver-lake/91fef1517fca02cc/3dep/terrain/chunk_00001.npz
+  features/shaver-lake/91fef1517fca02cc/3dep/terrain/chunk_00002.npz:
+    drive_file_id: 1-zbUZkIaqa6YHP0RAx34LWwZ4efm3xLe
+    local_path: features/shaver-lake/91fef1517fca02cc/3dep/terrain/chunk_00002.npz
+  features/shaver-lake/91fef1517fca02cc/3dep/terrain/chunk_00003.npz:
+    drive_file_id: 1xIzIN-wJumzjwwWHrHd2Hsd77kJmNv0C
+    local_path: features/shaver-lake/91fef1517fca02cc/3dep/terrain/chunk_00003.npz
+  features/shaver-lake/91fef1517fca02cc/rap/prior/chunk_00000.npz:
+    drive_file_id: 1mO3DoaiQHRWjqy7EonxB8cLPA1xSz8eG
+    local_path: features/shaver-lake/91fef1517fca02cc/rap/prior/chunk_00000.npz
+  features/shaver-lake/91fef1517fca02cc/rap/prior/chunk_00001.npz:
+    drive_file_id: 1rkRYWuPtKOHri1uw1EeiH9pgvhwLBZ8-
+    local_path: features/shaver-lake/91fef1517fca02cc/rap/prior/chunk_00001.npz
+  features/shaver-lake/91fef1517fca02cc/rap/prior/chunk_00002.npz:
+    drive_file_id: 1Pn434_wGa9zcso8f5ZhtOcGz2PrWlqA0
+    local_path: features/shaver-lake/91fef1517fca02cc/rap/prior/chunk_00002.npz
+  features/shaver-lake/91fef1517fca02cc/rap/prior/chunk_00003.npz:
+    drive_file_id: 1KcltVKm7eKRA0BPFMcYSb_6EaKSXAgYa
+    local_path: features/shaver-lake/91fef1517fca02cc/rap/prior/chunk_00003.npz
+  features/shaver-lake/91fef1517fca02cc/site_assets/als_metadata.json:
+    drive_file_id: 1ynN_-I1FlTlX-e4txVoEP-p102mtFieN
+    local_path: features/shaver-lake/91fef1517fca02cc/site_assets/als_metadata.json
+  features/shaver-lake/91fef1517fca02cc/site_assets/site_metadata_manifest.json:
+    drive_file_id: 1NO2v2W4fjLEqGK68WTRFkvYZFkJJLt7m
+    local_path: features/shaver-lake/91fef1517fca02cc/site_assets/site_metadata_manifest.json
+  features/shaver-lake/91fef1517fca02cc/site_assets/source_inventory.json:
+    drive_file_id: 18Bc64Yv2sScR6M3_8jZgYYSZpuKr4WSm
+    local_path: features/shaver-lake/91fef1517fca02cc/site_assets/source_inventory.json
+  features/shaver-lake/91fef1517fca02cc/stack/stack_registry.json:
+    drive_file_id: 1f7b4KjFzd8Wu_P5e_ozBo24imLoeKaLs
+    local_path: features/shaver-lake/91fef1517fca02cc/stack/stack_registry.json
+  features/shaver-lake/shared/site_assets/3dep/shaver-lake_3dep_ee_10m.tif:
+    drive_file_id: 1QBR1jH41wdqh5IB79ALWVV0qw9iTKyVe
+    local_path: features/shaver-lake/shared/site_assets/3dep/shaver-lake_3dep_ee_10m.tif
+  features/shaver-lake/shared/site_assets/naip/shaver_lake.tif:
+    drive_file_id: 102rWcw_i7YQmcwS9yFyBNHsrryrpGMCK
+    local_path: features/shaver-lake/shared/site_assets/naip/shaver_lake.tif
+  features/shaver-lake/shared/site_assets/rap/shaver-lake_rap_ee_10m.tif:
+    drive_file_id: 1XRIvgS0I_dQzvbmCh0necY3n4XQ3WaEY
+    local_path: features/shaver-lake/shared/site_assets/rap/shaver-lake_rap_ee_10m.tif
   labeling/0bab4176c29e/run_manifest.json:
     drive_file_id: 1vCYN2KxVDo7uQCCEtC483vsugRdo6hbe
     local_path: labeling/0bab4176c29e/run_manifest.json

@@ -302,7 +302,7 @@ def shrub_counting_pipeline(
         print("="*60 + "\n")
     
     return {
-        'binary_mask': binary_mask,
+        # 'binary_mask': binary_mask,
         'ensemble_count': ensemble_count,
         'corrected_count': corrected_count,
         'final_count': final_count,

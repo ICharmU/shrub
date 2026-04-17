@@ -284,23 +284,46 @@ class DriveRegistryArtifactStore(ArtifactStore):
     def pull(self, rel_path: str, local_path: str | Path | None = None) -> Path:
         reg = self._load_registry()
         files = reg.setdefault("files", {})
-
+    
         dst = Path(local_path) if local_path is not None else (self.repo_root / rel_path)
         dst.parent.mkdir(parents=True, exist_ok=True)
-
+    
         file_id = files.get(rel_path, {}).get("drive_file_id")
-
+    
         drive, gfile = self._get_drive_and_root()[0], None
         if file_id:
             gfile = drive.CreateFile({"id": file_id})
         else:
             drive, gfile = self._lookup_remote_file(rel_path)
-
+    
         if gfile is None:
             raise FileNotFoundError(f"No remote Drive artifact for {rel_path}")
-
-        gfile.GetContentFile(str(dst))
-
+    
+        # Important: force a fresh download, do not try to resume into stale staging files
+        if dst.exists():
+            try:
+                dst.unlink()
+            except Exception:
+                pass
+    
+        tmp_dst = dst.with_suffix(dst.suffix + ".download")
+    
+        if tmp_dst.exists():
+            try:
+                tmp_dst.unlink()
+            except Exception:
+                pass
+    
+        try:
+            gfile.GetContentFile(str(tmp_dst))
+            tmp_dst.replace(dst)
+        finally:
+            if tmp_dst.exists():
+                try:
+                    tmp_dst.unlink()
+                except Exception:
+                    pass
+    
         entry = files.setdefault(rel_path, {})
         entry["local_path"] = rel_path
         entry["drive_file_id"] = gfile["id"]
@@ -376,13 +399,16 @@ class HybridArtifactStore(ArtifactStore):
             raise FileNotFoundError(f"No local artifact and no remote store for {rel_path}")
         pulled = self.remote_store.pull(rel_path, local_path=local_path)
         # mirror into local storage root too
-        self.local_store.push(pulled, rel_path=rel_path)
+        #self.local_store.push(pulled, rel_path=rel_path)
         return pulled
 
     def push(self, local_path: str | Path, rel_path: str | None = None) -> str | None:
-        local_ref = self.local_store.push(local_path, rel_path=rel_path)
-        remote_ref = self.remote_store.push(local_path, rel_path=rel_path) if self.remote_store else None
-        return remote_ref or local_ref
+        if self.remote_store is not None:
+            try:
+                return self.remote_store.push(local_path, rel_path=rel_path)
+            except Exception:
+                pass
+        return self.local_store.push(local_path, rel_path=rel_path)
 
     def delete(self, rel_path: str) -> None:
         self.local_store.delete(rel_path)

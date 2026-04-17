@@ -152,11 +152,11 @@ class SimpleCNN(nn.Module):
     """
     Simple CNN for binary classification on 32x32 RGB images.
     """
-    def __init__(self, num_classes=2):
+    def __init__(self, num_classes=2, in_channels=3):
         super(SimpleCNN, self).__init__()
         
         # Convolutional layers
-        self.conv1 = nn.Conv2d(3, 32, kernel_size=3, padding=1)
+        self.conv1 = nn.Conv2d(in_channels, 32, kernel_size=3, padding=1)
         self.relu1 = nn.ReLU()
         self.pool1 = nn.MaxPool2d(kernel_size=2, stride=2)
         
@@ -441,7 +441,7 @@ def train_unet_model(model, train_loader, eval_loader, device, epochs,
     
     print("-" * 70)
     print(f"Training complete! Final loss: {eval_losses[-1]:.6f}, Best loss: {best_loss:.6f}")
-    
+
     return train_losses, eval_losses, best_loss
 
 def evaluate_unet_predictions(model, eval_loader, device, probability_threshold=0.5):
@@ -829,7 +829,7 @@ class SegmentationDataset(Dataset):
 # FEATURE IMPORTANCE
 ####################
 
-def feature_permutation_pipeline(X, y, model_func, num_features=None, perturbation_type="logistic"):
+def feature_permutation_pipeline(X, y, model_func, num_features=None, perturbation_type="logistic", model_=None):
     """
     Compute feature importance using Captum's FeaturePermutation.
     
@@ -861,9 +861,9 @@ def feature_permutation_pipeline(X, y, model_func, num_features=None, perturbati
         # Convert test data to tensor
         X_test_tensor = torch.tensor(X_test, dtype=torch.float32)
         
-    else:  # CNN/ResNet
+    else:  # CNN
         X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.8, random_state=42)
-        model = model_resnet18(X_train, y_train)
+        model = model_(X_train, y_train)
         
         X_test_tensor = torch.tensor(X_test, dtype=torch.float32)
         y_test_tensor = torch.tensor(y_test, dtype=torch.long)
@@ -1178,58 +1178,48 @@ def extract_features_logreg(X_train, y_train, model_func, n_mrmr_features=20, pe
     
     return results_dict
 
-def create_cnn_wrapper(original_shape, selected_indices):
+def create_cnn_wrapper(model_class, model_name="CNN", **init_kwargs):
     """
-    Factory function to create SimpleCNN wrapper that uses zero-masking.
-    Keeps full image architecture but zeros out non-selected features.
+    Creates a wrapper function for CNN models that standardizes training/evaluation.
     
     Args:
-        original_shape: tuple (C, H, W) of original images
-        selected_indices: array of selected feature indices
+        model_class: PyTorch model class (e.g., SimpleCNN, UNet)
+        model_name: String name for logging
+        **init_kwargs: Arguments to pass to model_class.__init__()
+    
+    Returns:
+        wrapper_fn: Function with signature (X_train, y_train, X_test=None, y_test=None, **train_kwargs)
+                   that returns (train_metrics, test_metrics or None)
+    
+    Example:
+        cnn_fn = create_cnn_wrapper(SimpleCNN, model_name="SimpleCNN", num_classes=2)
+        train_metrics, test_metrics = cnn_fn(X_train, y_train, X_test, y_test, epochs=100)
     """
-    def model_simple_cnn_masked(X_selected, y):
-        """
-        SimpleCNN wrapper that reconstructs full images from selected features.
-        Non-selected features are set to 0 (masking).
-        X_selected: (N, n_selected_features) - values for selected pixels only
-        """
-        # Reconstruct full images with zero-masking
-        n_samples = X_selected.shape[0]
-        C, H, W = original_shape
-        X_masked = np.zeros((n_samples, C, H, W), dtype=np.float32)
+
+    
+    def wrapper_fn(X_train, y_train, X_test=None, y_test=None, 
+                   epochs=50, batch_size=32, learning_rate=1e-3, **kwargs):
         
-        # Fill in the selected features
-        X_masked_flat = X_masked.reshape(n_samples, -1)
-        X_masked_flat[:, selected_indices] = X_selected
-        X_masked = X_masked_flat.reshape(n_samples, C, H, W)
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        print(f"[{model_name}] Device: {device}, Epochs: {epochs}")
         
-        X_train, X_test, y_train, y_test = train_test_split(
-            X_masked, y, train_size=0.8, random_state=42
+        # Initialize model
+        model = model_class(**init_kwargs).to(device)
+        optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+        criterion = nn.CrossEntropyLoss()
+        
+        # Prepare train data
+        train_tensor = TensorDataset(
+            torch.FloatTensor(X_train),
+            torch.LongTensor(y_train)
         )
+        train_loader = DataLoader(train_tensor, batch_size=batch_size, shuffle=True)
         
-        X_train_tensor = torch.tensor(X_train, dtype=torch.float32)
-        X_test_tensor = torch.tensor(X_test, dtype=torch.float32)
-        y_train_tensor = torch.tensor(y_train, dtype=torch.long)
-        y_test_tensor = torch.tensor(y_test, dtype=torch.long)
-        
-        train_dataset = torch.utils.data.TensorDataset(X_train_tensor, y_train_tensor)
-        test_dataset = torch.utils.data.TensorDataset(X_test_tensor, y_test_tensor)
-        train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=16, shuffle=True)
-        test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=16, shuffle=False)
-        
-        device = 'cuda' if torch.cuda.is_available() else 'cpu'
-        
-        model = SimpleCNN(num_classes=2)
-        model = model.to(device)
-        model.train()
-        
-        criterion = torch.nn.CrossEntropyLoss()
-        optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
-        epochs = 20
-        
-        print(f"  Training SimpleCNN on {device} with {len(selected_indices)} selected features (others zeroed)...")
+        # Training loop
+        train_losses = []
         for epoch in range(epochs):
-            train_loss = 0.0
+            model.train()
+            epoch_loss = 0
             for batch_X, batch_y in train_loader:
                 batch_X, batch_y = batch_X.to(device), batch_y.to(device)
                 optimizer.zero_grad()
@@ -1237,46 +1227,42 @@ def create_cnn_wrapper(original_shape, selected_indices):
                 loss = criterion(logits, batch_y)
                 loss.backward()
                 optimizer.step()
-                train_loss += loss.item()
+                epoch_loss += loss.item()
             
-            if (epoch + 1) % 5 == 0:
-                print(f"    Epoch {epoch+1}/{epochs} - Loss: {train_loss/len(train_loader):.4f}")
+            train_losses.append(epoch_loss / len(train_loader))
+            if (epoch + 1) % max(1, epochs // 5) == 0:
+                print(f"  Epoch {epoch+1}/{epochs}, Loss: {train_losses[-1]:.4f}")
         
-        # Evaluation
+        # Evaluate on train set
         model.eval()
         with torch.no_grad():
-            train_preds = []
-            for batch_X, batch_y in torch.utils.data.DataLoader(train_dataset, batch_size=16, shuffle=False):
-                batch_X = batch_X.to(device)
-                logits = model(batch_X)
-                preds = logits.argmax(dim=1)
-                train_preds.append(preds.cpu().numpy())
-            train_preds = np.concatenate(train_preds)
-            
-            test_preds = []
-            for batch_X, batch_y in torch.utils.data.DataLoader(test_dataset, batch_size=16, shuffle=False):
-                batch_X = batch_X.to(device)
-                logits = model(batch_X)
-                preds = logits.argmax(dim=1)
-                test_preds.append(preds.cpu().numpy())
-            test_preds = np.concatenate(test_preds)
+            train_preds = model(torch.FloatTensor(X_train).to(device))
+            train_preds = torch.argmax(train_preds, dim=1).cpu().numpy()
         
         train_metrics = {
-            "overall": accuracy_score(y_train, train_preds),
-            "f1": f1_score(y_train, train_preds, average="binary", zero_division=0),
-            "recall": recall_score(y_train, train_preds, average="binary", zero_division=0),
-            "precision": precision_score(y_train, train_preds, average="binary", zero_division=0)
-        }
-        test_metrics = {
-            "overall": accuracy_score(y_test, test_preds),
-            "f1": f1_score(y_test, test_preds, average="binary", zero_division=0),
-            "recall": recall_score(y_test, test_preds, average="binary", zero_division=0),
-            "precision": precision_score(y_test, test_preds, average="binary", zero_division=0)
+            "accuracy": np.mean(train_preds == y_train),
+            "loss": train_losses[-1],
+            "epochs": epochs
         }
         
-        return train_metrics, test_metrics
+        # Evaluate on test set if provided
+        test_metrics = None
+        if X_test is not None and y_test is not None:
+            with torch.no_grad():
+                test_preds = model(torch.FloatTensor(X_test).to(device))
+                test_preds = torch.argmax(test_preds, dim=1).cpu().numpy()
+            
+            test_metrics = {
+                "accuracy": np.mean(test_preds == y_test),
+            }
+        
+        # print(f"[{model_name}] Train Accuracy: {train_metrics['accuracy']:.4f}")
+        # if test_metrics:
+        #     print(f"[{model_name}] Test Accuracy: {test_metrics['accuracy']:.4f}")
+        
+        return train_preds, test_preds, train_metrics, test_metrics
     
-    return model_simple_cnn_masked
+    return wrapper_fn
 
 
 def create_unet_wrapper(original_shape, selected_indices):

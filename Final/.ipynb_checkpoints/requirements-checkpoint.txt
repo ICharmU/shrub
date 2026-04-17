@@ -16,3 +16,4 @@ torch
 torchvision
 captum
 mrmr_selection
+opencv-python-headless
