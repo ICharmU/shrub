@@ -602,6 +602,12 @@ files:
   features/calaveras-big-trees/91fef1517fca02cc/objects/object_features.csv:
     drive_file_id: 1Xz0rVTsowt0nmEvuaho61tIYcMyy-Qz-
     local_path: features/calaveras-big-trees/91fef1517fca02cc/objects/object_features.csv
+  features/calaveras-big-trees/91fef1517fca02cc/site_assets/site_metadata_manifest.json:
+    drive_file_id: 19oNoPsysJooEny3bLRgwNJORp_LPWvol
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/site_assets/site_metadata_manifest.json
+  features/calaveras-big-trees/91fef1517fca02cc/site_assets/source_inventory.json:
+    drive_file_id: 1oIcunyFkMV8ngVGwQuQV39e3SNwG0yWc
+    local_path: features/calaveras-big-trees/91fef1517fca02cc/site_assets/source_inventory.json
   features/calaveras-big-trees/91fef1517fca02cc/stack/stack_registry.json:
     drive_file_id: 1dGSOpmdulmoUpa4ZwF_GteRD33QXznez
     local_path: features/calaveras-big-trees/91fef1517fca02cc/stack/stack_registry.json

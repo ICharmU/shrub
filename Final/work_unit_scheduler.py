@@ -75,6 +75,11 @@ class WorkUnitScheduler:
 
         return (base, -unlocked, unit.get("unit_id"))
 
+    def invalidate_trial_pipeline_refresh(self, *, trial: TrialRecord, pipeline_name: str) -> None:
+        trial.scheduler_meta.setdefault(pipeline_name, {})
+        trial.scheduler_meta[pipeline_name]["last_refreshed_at"] = 0.0
+        self.controller.save_trial(trial)
+
     def refresh_trial_units(
         self,
         trial: TrialRecord,
@@ -90,31 +95,53 @@ class WorkUnitScheduler:
             runtime_report=runtime_report,
         )
     
-        pipeline_meta = (trial.scheduler_meta or {}).get(pipeline.pipeline_name, {})
-        old_fp = pipeline_meta.get("work_unit_fingerprint")
+        trial.scheduler_meta.setdefault(pipeline.pipeline_name, {})
+        pipeline_meta = trial.scheduler_meta[pipeline.pipeline_name]
     
-        has_live_units = any(
-            u.get("status") in {"claimed", "running"}
-            for u in (trial.work_units or {}).values()
+        old_fp = pipeline_meta.get("work_unit_fingerprint")
+        last_refreshed_at = float(pipeline_meta.get("last_refreshed_at", 0.0) or 0.0)
+        now_ts = time.time()
+    
+        pipeline_units = [
+            u for u in (trial.work_units or {}).values()
             if u.get("pipeline_name") == pipeline.pipeline_name
+        ]
+        has_live_units = any(u.get("status") in {"claimed", "running"} for u in pipeline_units)
+    
+        normal_skip_window = getattr(self.coordination, "refresh_skip_window_sec", 30)
+        live_skip_window = getattr(self.coordination, "live_unit_refresh_window_sec", 10)
+    
+        age_sec = now_ts - last_refreshed_at
+        stale_window = live_skip_window if has_live_units else normal_skip_window
+        refresh_is_stale = age_sec >= stale_window
+    
+        should_skip = (
+            (not force)
+            and old_fp == new_fp
+            and bool(pipeline_units)
+            and (not refresh_is_stale)
         )
     
-        if (not force) and old_fp == new_fp and trial.work_units and not has_live_units:
+        if should_skip:
             pipeline.logger.info(
-                "SCHEDULER REFRESH SKIP | trial=%s | pipeline=%s | fingerprint_unchanged=%s",
+                "SCHEDULER REFRESH SKIP | trial=%s | pipeline=%s | fp=%s | age_sec=%.1f | has_live_units=%s",
                 trial.trial_id,
                 pipeline.pipeline_name,
                 new_fp,
+                age_sec,
+                has_live_units,
             )
             return trial
     
         pipeline.logger.info(
-            "SCHEDULER REFRESH RUN  | trial=%s | pipeline=%s | force=%s | old_fp=%s | new_fp=%s",
+            "SCHEDULER REFRESH RUN  | trial=%s | pipeline=%s | force=%s | old_fp=%s | new_fp=%s | age_sec=%.1f | has_live_units=%s",
             trial.trial_id,
             pipeline.pipeline_name,
             force,
             old_fp,
             new_fp,
+            age_sec,
+            has_live_units,
         )
     
         units = pipeline.enumerate_work_units(
@@ -125,9 +152,8 @@ class WorkUnitScheduler:
         )
         self.controller.upsert_work_units(trial, units)
     
-        trial.scheduler_meta.setdefault(pipeline.pipeline_name, {})
-        trial.scheduler_meta[pipeline.pipeline_name]["work_unit_fingerprint"] = new_fp
-        trial.scheduler_meta[pipeline.pipeline_name]["last_refreshed_at"] = time.time()
+        pipeline_meta["work_unit_fingerprint"] = new_fp
+        pipeline_meta["last_refreshed_at"] = now_ts
     
         self.controller.save_trial(trial)
         return trial
@@ -148,90 +174,54 @@ class WorkUnitScheduler:
         )
         return runnable[0]
 
-    # def collect_candidate_jobs(self, *, trials: list[TrialRecord], pipelines: dict[str, Any]):
-    #     candidates = []
-    #     total_pairs = sum(
-    #         1
-    #         for trial in trials
-    #         for pipeline_name in pipelines.keys()
-    #         if pipeline_name in trial.section_configs
-    #     )
-    #     done = 0
+    def reset_retryable_failed_units(
+        self,
+        *,
+        trial: TrialRecord,
+        pipeline,
+        max_retries: int = 3,
+    ) -> int:
+        reset_count = 0
     
-    #     for trial in trials:
-    #         for pipeline_name, pipeline in pipelines.items():
-    #             if pipeline_name not in trial.section_configs:
-    #                 continue
+        for unit_id, unit in (trial.work_units or {}).items():
+            if unit.get("pipeline_name") != pipeline.pipeline_name:
+                continue
+            if unit.get("status") != "failed":
+                continue
     
-    #             done += 1
-    #             pipeline.logger.info(
-    #                 "SCHEDULER SCAN | %d/%d | trial=%s | pipeline=%s",
-    #                 done, total_pairs, trial.trial_id, pipeline_name
-    #             )
+            retry_count = int(unit.get("retry_count", 0) or 0)
+            if retry_count >= max_retries:
+                continue
     
-    #             runtime_report = pipeline.runtime_report()
-    #             trial = self.refresh_trial_units(trial, pipeline, runtime_report=runtime_report)
+            deps = unit.get("dependencies") or []
+            runtime_eligible = bool(unit.get("runtime_eligible", True))
     
-    #             trial_units = list(trial.work_units.values())
-    #             runnable = [
-    #                 u for u in trial_units
-    #                 if u.get("status") == "pending"
-    #                 and u.get("runtime_eligible", True)
-    #                 and not u.get("dependencies")
-    #             ]
+            new_status = "pending" if (runtime_eligible and not deps) else ("blocked" if runtime_eligible else "ineligible")
     
-    #             pipeline.logger.info(
-    #                 "SCHEDULER SCAN DONE | trial=%s | pipeline=%s | runnable=%d | total_units=%d",
-    #                 trial.trial_id,
-    #                 pipeline_name,
-    #                 len(runnable),
-    #                 len(trial_units),
-    #             )
+            self.controller.update_work_unit_status(
+                trial,
+                unit_id=unit_id,
+                status=new_status,
+                note=f"Resetting failed unit for retry {retry_count + 1}/{max_retries}",
+                extra={
+                    "retry_count": retry_count + 1,
+                    "last_retry_reset_at": time.time(),
+                },
+            )
+            reset_count += 1
     
-    #             for unit in runnable:
-    #                 eff = self.effective_priority(unit, trial_units)
-    #                 candidates.append(
-    #                     {
-    #                         "trial": trial,
-    #                         "pipeline": pipeline,
-    #                         "unit": unit,
-    #                         "effective_priority": eff,
-    #                         "base_priority": unit.get("priority", 100),
-    #                     }
-    #                 )
+        if reset_count:
+            self.controller.save_trial(trial)
     
-    #     candidates = sorted(
-    #         candidates,
-    #         key=lambda x: (
-    #             x["effective_priority"],
-    #             x["trial"].trial_id,
-    #             x["unit"].get("unit_id"),
-    #         ),
-    #     )
-    
-    #     if candidates:
-    #         top = candidates[0]
-    #         top_unit = top["unit"]
-    #         top["pipeline"].logger.info(
-    #             "SCHEDULER PICK | trial=%s | unit=%s | stage=%s | scope=%s | eff=%s | total_candidates=%d",
-    #             top["trial"].trial_id,
-    #             top_unit.get("unit_id"),
-    #             top_unit.get("stage_name"),
-    #             top_unit.get("scope"),
-    #             top["effective_priority"],
-    #             len(candidates),
-    #         )
-    #     else:
-    #         # use any pipeline logger if available
-    #         if pipelines:
-    #             next(iter(pipelines.values())).logger.info("SCHEDULER PICK | no runnable candidates")
-    
-    #     return candidates
+        return reset_count
 
     def collect_candidate_jobs(self, *, trials, pipelines, force_refresh: bool = False):
         candidates = []
     
         for trial in trials:
+            if trial.status in {"success"}:
+                continue
+    
             for pipeline_name, pipeline in pipelines.items():
                 if pipeline_name not in trial.section_configs:
                     continue
@@ -242,6 +232,12 @@ class WorkUnitScheduler:
                     pipeline,
                     runtime_report=runtime_report,
                     force=force_refresh,
+                )
+
+                self.reset_retryable_failed_units(
+                    trial=trial,
+                    pipeline=pipeline,
+                    max_retries=3,
                 )
     
                 trial_units = [
@@ -356,6 +352,7 @@ class WorkUnitScheduler:
                 owner_id=owner_id,
             )
             self.controller.save_trial(trial)
+            self.invalidate_trial_pipeline_refresh(trial=trial, pipeline_name=pipeline.pipeline_name)
             return result, state
 
         except Exception as e:
@@ -374,7 +371,12 @@ class WorkUnitScheduler:
                 status="failed",
                 owner_id=owner_id,
                 note=str(e),
+                extra={
+                    "last_error": str(e),
+                    "failed_at": time.time(),
+                },
             )
+            self.invalidate_trial_pipeline_refresh(trial=trial, pipeline_name=pipeline.pipeline_name)
             self.controller.save_trial(trial)
             raise
 

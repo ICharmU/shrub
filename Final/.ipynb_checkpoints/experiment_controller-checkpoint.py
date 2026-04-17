@@ -106,8 +106,6 @@ class ExperimentController:
         statuses = [u.get("status") for u in work_units.values()]
         if statuses and all(s == "complete" for s in statuses):
             return "success"
-        if any(s == "failed" for s in statuses):
-            return "failed"
         if any(s in {"claimed", "running"} for s in statuses):
             return "running"
         if any(s == "blocked" for s in statuses):
@@ -115,6 +113,8 @@ class ExperimentController:
         if any(s in {"pending"} for s in statuses):
             return "runnable"
         if any(s == "complete" for s in statuses):
+            return "partial"
+        if any(s == "failed" for s in statuses):
             return "partial"
         return "created"
 

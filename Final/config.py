@@ -134,6 +134,9 @@ class CoordinationConfig:
     sync_registry_after_stage: bool = True
     hydrate_remote_before_compute: bool = True
 
+    refresh_skip_window_sec: int = 30
+    live_unit_refresh_window_sec: int = 10
+
 
 @dataclass
 class RuntimePolicyConfig:

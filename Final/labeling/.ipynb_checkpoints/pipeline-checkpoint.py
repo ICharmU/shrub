@@ -603,26 +603,41 @@ class LabelingPipeline(BasePipeline):
     
     def validate_hydrated_artifact(self, *, rel_path: str, local_path: Path, artifact_key: str | None = None) -> bool:
         try:
-            if artifact_key in {"binary_mask", "confidence_mask", "object_id_raster"}:
+            if artifact_key in {"binary_mask", "confidence_mask", "object_id_raster", "site_naip_raster"}:
                 with rasterio.open(local_path) as src:
                     src.read(1, window=Window(0, 0, min(16, src.width), min(16, src.height)))
                 return True
-
-            if artifact_key in {"objects_summary", "artifacts_summary", "object_table"}:
+    
+            if artifact_key in {
+                "objects_summary",
+                "artifacts_summary",
+                "object_table",
+            }:
                 pd.read_csv(local_path, nrows=5)
                 return True
-
-            if artifact_key in {"run_manifest", "site_metadata_manifest", "source_inventory", "als_metadata_json", "transform_index"}:
+    
+            if artifact_key in {
+                "run_manifest",
+                "site_metadata_manifest",
+                "source_inventory",
+                "als_metadata_json",
+                "site_als_metadata_json",
+                "transform_index",
+            }:
                 json.loads(local_path.read_text(encoding="utf-8"))
                 return True
-
+    
             if artifact_key == "qa_overlay":
                 return local_path.exists() and local_path.stat().st_size > 0
-
+    
             if artifact_key == "transform_txt":
                 return local_path.exists() and local_path.stat().st_size > 0
-
-            return super().validate_hydrated_artifact(rel_path=rel_path, local_path=local_path, artifact_key=artifact_key)
+    
+            return super().validate_hydrated_artifact(
+                rel_path=rel_path,
+                local_path=local_path,
+                artifact_key=artifact_key,
+            )
         except Exception as e:
             self.logger.warning(
                 "HYDRATE VALIDATE FAIL | rel_path=%s | artifact_key=%s | error=%s",
@@ -1459,6 +1474,21 @@ class LabelingPipeline(BasePipeline):
         runtime_report = runtime_report or self.runtime_report()
         config_signature = config_signature or self.config_signature()
     
+        shared_site_asset_states = {}
+        for site in self.cfg.sites:
+            shared_sig = self.shared_signature_site_assets(site)
+            rec = None
+            if self.cfg.shared_artifacts.enable_shared_artifact_registry:
+                rec = self.shared_registry.load(
+                    artifact_family="labeling.site_assets",
+                    shared_signature=shared_sig,
+                )
+            shared_site_asset_states[site] = {
+                "shared_signature": shared_sig,
+                "status": getattr(rec, "status", None) if rec is not None else None,
+                "updated_at": getattr(rec, "updated_at", None) if rec is not None else None,
+            }
+    
         payload = {
             "pipeline_name": self.pipeline_name,
             "trial_id": trial_id,
@@ -1470,6 +1500,7 @@ class LabelingPipeline(BasePipeline):
             "refine_manifest_mtime_ns": self._latest_stage_manifest_mtime_ns("refine"),
             "transfer_manifest_mtime_ns": self._latest_stage_manifest_mtime_ns("transfer"),
             "shared_registry_enabled": bool(self.cfg.shared_artifacts.enable_shared_artifact_registry),
+            "shared_site_asset_states": shared_site_asset_states,
         }
         return hash_payload(payload)
 
@@ -1488,13 +1519,13 @@ class LabelingPipeline(BasePipeline):
             trial_id,
             config_signature,
             getattr(runtime_report, "detected_image_key", None),
+            register_shared_requirements,
             self.work_unit_refresh_fingerprint(
                 trial_id=trial_id,
                 config_signature=config_signature,
                 runtime_report=runtime_report,
             ),
         )
-        
         if enum_cache_key in self._enumeration_cache:
             self.logger.info(
                 "ENUM WORK UNITS CACHE HIT | trial=%s | pipeline=%s",
@@ -1504,6 +1535,9 @@ class LabelingPipeline(BasePipeline):
 
         units = []
         manifest_csv = self.sprint3_manifest_csv
+
+        site_asset_unit_idx_by_site: dict[str, int] = {}
+        transfer_statuses_by_site: dict[str, list[str]] = {}
 
         enum_t0 = perf_counter()
 
@@ -1536,7 +1570,7 @@ class LabelingPipeline(BasePipeline):
                 shared_signature=site_assets_shared_sig,
             )
 
-            units.append({
+            unit = {
                 "unit_id": f"{trial_id}:{self.pipeline_name}:site_assets:{site}",
                 "trial_id": trial_id,
                 "pipeline_name": self.pipeline_name,
@@ -1555,7 +1589,9 @@ class LabelingPipeline(BasePipeline):
                 "site_id": site,
                 "shared_artifact_family": "labeling.site_assets",
                 "shared_signature": site_assets_shared_sig,
-            })
+            }
+            site_asset_unit_idx_by_site[site] = len(units)
+            units.append(unit)
 
         self.logger.info(
             "ENUM WORK UNITS | trial=%s | stage=site_assets | n_units=%d",
@@ -1867,6 +1903,16 @@ class LabelingPipeline(BasePipeline):
                         #     deps.append(f"site_assets:{site_id}")
                         #     dep_reasons.append(f"Shared site assets missing for site={site_id}")
 
+                        transfer_status = (
+                            WorkUnitStatus.COMPLETE.value if valid_cache else (
+                                WorkUnitStatus.PENDING.value if (transfer_ok and rasterize_ok and not deps) else (
+                                    WorkUnitStatus.BLOCKED.value if (transfer_ok and rasterize_ok) else WorkUnitStatus.INELIGIBLE.value
+                                )
+                            )
+                        )
+                        
+                        transfer_statuses_by_site.setdefault(site_id, []).append(transfer_status)
+
                         units.append({
                             "unit_id": f"{trial_id}:{self.pipeline_name}:transfer:{site_id}:{plot_id}:{source_version}",
                             "trial_id": trial_id,
@@ -1875,11 +1921,7 @@ class LabelingPipeline(BasePipeline):
                             "stage_name": "transfer",
                             "work_key": f"{site_id}|{plot_id}|{source_version}",
                             "scope": WorkUnitScope.PLOT.value,
-                            "status": WorkUnitStatus.COMPLETE.value if valid_cache else (
-                                WorkUnitStatus.PENDING.value if (transfer_ok and rasterize_ok and not deps) else (
-                                    WorkUnitStatus.BLOCKED.value if (transfer_ok and rasterize_ok) else WorkUnitStatus.INELIGIBLE.value
-                                )
-                            ),
+                            "status": transfer_status,
                             "dependencies": deps,
                             "dependency_reasons": dep_reasons,
                             "runtime_required_capabilities": sorted(
@@ -1905,6 +1947,28 @@ class LabelingPipeline(BasePipeline):
                         )
             except Exception:
                 pass
+
+        for site, idx in site_asset_unit_idx_by_site.items():
+            site_unit = units[idx]
+            if site_unit["status"] == WorkUnitStatus.COMPLETE.value:
+                continue
+        
+            downstream_statuses = transfer_statuses_by_site.get(site, [])
+            all_site_transfers_complete = (
+                len(downstream_statuses) > 0
+                and all(s == WorkUnitStatus.COMPLETE.value for s in downstream_statuses)
+            )
+        
+            if all_site_transfers_complete:
+                site_unit["status"] = WorkUnitStatus.COMPLETE.value
+                site_unit["notes"] = list(site_unit.get("notes", [])) + [
+                    "Marked complete because all downstream transfer units for this site are already complete."
+                ]
+                self.logger.info(
+                    "ENUM WORK UNITS | trial=%s | site_assets promoted to complete from downstream transfer completeness | site=%s",
+                    trial_id,
+                    site,
+                )
 
         enum_t1 = perf_counter()
         self.logger.info(
@@ -2268,7 +2332,7 @@ class LabelingPipeline(BasePipeline):
         # ------------------------------------------------------------
         naip_local = self._site_naip_cache_root(site) / naip_name
         naip_rel_path = self._render_rel_path(
-            "site_metadata_manifest",
+            "site_naip_raster",
             site=site,
             filename=naip_name,
             #config_signature=self._current_config_signature(),
@@ -2280,7 +2344,7 @@ class LabelingPipeline(BasePipeline):
                 artifact_key="site_naip_raster",
                 rel_path=naip_rel_path,
                 local_path=naip_local,
-                validator_key="binary_mask",
+                validator_key="site_naip_raster",
                 recompute_fn=None,
             )
             if repaired is not None and self.validate_cached_naip(repaired):
@@ -2329,7 +2393,7 @@ class LabelingPipeline(BasePipeline):
                 artifact_key="site_als_metadata_json",
                 rel_path=als_meta_rel_path,
                 local_path=als_meta_json,
-                validator_key="als_metadata_json",
+                validator_key="site_als_metadata_json",
                 recompute_fn=None,
             )
             if repaired is not None:

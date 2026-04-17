@@ -205,14 +205,15 @@ class CoordinationManager:
         owner_id = owner_id or self.default_owner_id()
         rel_path = self._rel_path(experiment_name, trial_id, pipeline_name, stage_name, f"{work_key}.json")
         existing = self.load_json(rel_path)
-
+    
         if existing is not None:
             status = existing.get("status")
             if status in {"complete"}:
                 return False, existing
             if status in {"claimed", "running"} and not self.is_stale(existing):
                 return False, existing
-
+            # failed / blocked / stale claimed-running are reclaimable
+    
         claim = WorkClaim(
             work_key=work_key,
             owner_id=owner_id,
@@ -224,3 +225,4 @@ class CoordinationManager:
         )
         self.save_json(rel_path, asdict(claim))
         return True, asdict(claim)
+        

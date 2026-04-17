@@ -44,6 +44,29 @@ class ArtifactStorePolicyConfig:
     prune_local_after_remote_push: bool = False
     verify_remote_before_prune: bool = True
 
+@dataclass
+class ArtifactRepairPolicyConfig:
+    repair_invalid_local_assets: bool = True
+    prefer_remote_hydration_for_invalid_local_assets: bool = True
+    recompute_only_if_local_and_remote_invalid: bool = True
+    revalidate_on_hydrate: bool = True
+
+
+@dataclass
+class SharedArtifactPolicyConfig:
+    enable_shared_artifact_registry: bool = True
+    registry_prefix: str = "shared_artifacts"
+    prefer_shared_artifacts_over_trial_local: bool = True
+    allow_cross_trial_reuse: bool = True
+    attach_trial_requirements_to_registry: bool = True
+
+
+@dataclass
+class GridHealthConfig:
+    enable_preflight_reports: bool = True
+    include_runtime_report: bool = True
+    include_dependency_report: bool = True
+    include_shared_artifact_report: bool = True
 
 @dataclass
 class RuntimeImageSpecConfig:
@@ -110,6 +133,9 @@ class CoordinationConfig:
     sync_registry_before_claim: bool = True
     sync_registry_after_stage: bool = True
     hydrate_remote_before_compute: bool = True
+
+    refresh_skip_window_sec: int = 30
+    live_unit_refresh_window_sec: int = 10
 
 
 @dataclass
@@ -268,6 +294,10 @@ class ProjectConfig:
     runtime_images: list[RuntimeImageSpecConfig] = field(default_factory=lambda: list(DEFAULT_RUNTIME_IMAGES))
     labeling_runtime: LabelingRuntimeConfig = field(default_factory=LabelingRuntimeConfig)
     features_runtime: FeatureRuntimeConfig = field(default_factory=FeatureRuntimeConfig)
+
+    artifact_repair: ArtifactRepairPolicyConfig = field(default_factory=ArtifactRepairPolicyConfig)
+    shared_artifacts: SharedArtifactPolicyConfig = field(default_factory=SharedArtifactPolicyConfig)
+    grid_health: GridHealthConfig = field(default_factory=GridHealthConfig) 
 
     debug: bool = False
 
