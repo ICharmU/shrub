@@ -146,6 +146,24 @@ def _dedupe_notes(notes: list[str]) -> list[str]:
         out.append(note)
     return out
 
+def _drop_notes_with_prefix(notes: list[str], prefix: str) -> list[str]:
+    prefix = str(prefix).strip()
+    return [n for n in notes if not str(n).strip().startswith(prefix)]
+
+
+def _replace_source_notes(
+    notes: list[str],
+    *,
+    clear_prefixes: tuple[str, ...],
+    new_note: str | None = None,
+) -> list[str]:
+    out = list(notes)
+    for prefix in clear_prefixes:
+        out = _drop_notes_with_prefix(out, prefix)
+    if new_note:
+        out.append(new_note)
+    return _dedupe_notes(out)
+
 def list_remote_tif_candidates(remote_dir: str) -> list[dict[str, Any]]:
     try:
         return list_files_with_suffix(remote_dir, (".tif", ".tiff"))
@@ -342,9 +360,23 @@ def enrich_existing_site_asset_bundle(
                     inventory=inventory,
                     site_assets=bundle,
                 )
+                notes = _replace_source_notes(
+                    notes,
+                    clear_prefixes=(
+                        "NAIP unavailable during manifest enrichment:",
+                        "NAIP unavailable:",
+                    ),
+                )
             except Exception as e:
                 source_assets["naip"] = None
-                notes.append(f"NAIP unavailable during manifest enrichment: {e}")
+                notes = _replace_source_notes(
+                    notes,
+                    clear_prefixes=(
+                        "NAIP unavailable during manifest enrichment:",
+                        "NAIP unavailable:",
+                    ),
+                    new_note=f"NAIP unavailable during manifest enrichment: {e}",
+                )
     
     als_meta = source_assets.get("als_metadata")
     if force_refresh or als_meta is None or (isinstance(als_meta, list) and len(als_meta) == 0):
@@ -357,9 +389,23 @@ def enrich_existing_site_asset_bundle(
                     inventory=inventory,
                     config_sig=current_fe_config_signature(),
                 )
+                notes = _replace_source_notes(
+                    notes,
+                    clear_prefixes=(
+                        "ALS metadata unavailable during manifest enrichment:",
+                        "ALS metadata unavailable:",
+                    ),
+                )
             except Exception as e:
                 source_assets["als_metadata"] = []
-                notes.append(f"ALS metadata unavailable during manifest enrichment: {e}")
+                notes = _replace_source_notes(
+                    notes,
+                    clear_prefixes=(
+                        "ALS metadata unavailable during manifest enrichment:",
+                        "ALS metadata unavailable:",
+                    ),
+                    new_note=f"ALS metadata unavailable during manifest enrichment: {e}",
+                )
     
     if force_refresh or (not validate_optional_raster_asset(source_assets.get("3dep"))):
         if prepare_3dep_asset_fn is not None:
@@ -370,9 +416,23 @@ def enrich_existing_site_asset_bundle(
                     force_refresh=force_refresh,
                     inventory=inventory,
                 )
+                notes = _replace_source_notes(
+                    notes,
+                    clear_prefixes=(
+                        "3DEP unavailable during manifest enrichment:",
+                        "3DEP unavailable:",
+                    ),
+                )
             except Exception as e:
                 source_assets["3dep"] = None
-                notes.append(f"3DEP unavailable during manifest enrichment: {e}")
+                notes = _replace_source_notes(
+                    notes,
+                    clear_prefixes=(
+                        "3DEP unavailable during manifest enrichment:",
+                        "3DEP unavailable:",
+                    ),
+                    new_note=f"3DEP unavailable during manifest enrichment: {e}",
+                )
     
     if force_refresh or (not validate_optional_raster_asset(source_assets.get("rap"))):
         if prepare_rap_asset_fn is not None:
@@ -383,15 +443,47 @@ def enrich_existing_site_asset_bundle(
                     force_refresh=force_refresh,
                     inventory=inventory,
                 )
+                notes = _replace_source_notes(
+                    notes,
+                    clear_prefixes=(
+                        "RAP unavailable during manifest enrichment:",
+                        "RAP unavailable:",
+                        "RAP cache lookup failed:",
+                    ),
+                )
             except Exception as e:
                 source_assets["rap"] = None
-                notes.append(f"RAP unavailable during manifest enrichment: {e}")
+                notes = _replace_source_notes(
+                    notes,
+                    clear_prefixes=(
+                        "RAP unavailable during manifest enrichment:",
+                        "RAP unavailable:",
+                        "RAP cache lookup failed:",
+                    ),
+                    new_note=f"RAP unavailable during manifest enrichment: {e}",
+                )
         elif find_cached_rap_asset_fn is not None:
             try:
                 source_assets["rap"] = find_cached_rap_asset_fn(site_id)
+                notes = _replace_source_notes(
+                    notes,
+                    clear_prefixes=(
+                        "RAP unavailable during manifest enrichment:",
+                        "RAP unavailable:",
+                        "RAP cache lookup failed:",
+                    ),
+                )
             except Exception as e:
                 source_assets["rap"] = None
-                notes.append(f"RAP cache lookup failed: {e}")
+                notes = _replace_source_notes(
+                    notes,
+                    clear_prefixes=(
+                        "RAP unavailable during manifest enrichment:",
+                        "RAP unavailable:",
+                        "RAP cache lookup failed:",
+                    ),
+                    new_note=f"RAP cache lookup failed: {e}",
+                )
     else:
         source_assets.setdefault("rap", None)
 

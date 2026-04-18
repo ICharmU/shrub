@@ -5,6 +5,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 import json
 from typing import Any
+import os
+import time
+from json import JSONDecodeError
 
 from Final.models import ExperimentState, PipelineRunResult
 
@@ -12,6 +15,12 @@ from Final.models import ExperimentState, PipelineRunResult
 def utc_now_iso() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
+def _atomic_write_json(path: Path, payload: dict[str, Any]) -> Path:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp_path = path.with_suffix(path.suffix + ".tmp")
+    tmp_path.write_text(json.dumps(payload, indent=2, default=str), encoding="utf-8")
+    tmp_path.replace(path)
+    return path
 
 @dataclass
 class SectionRunRecord:
@@ -66,9 +75,12 @@ class ExperimentController:
         payload = json.loads(self.state_path.read_text(encoding="utf-8"))
         return ExperimentState(**payload)
 
+    # def save_state(self, state: ExperimentState) -> Path:
+    #     self.state_path.write_text(json.dumps(asdict(state), indent=2, default=str), encoding="utf-8")
+    #     return self.state_path
+
     def save_state(self, state: ExperimentState) -> Path:
-        self.state_path.write_text(json.dumps(asdict(state), indent=2, default=str), encoding="utf-8")
-        return self.state_path
+        return _atomic_write_json(self.state_path, asdict(state))
 
     def trial_path(self, trial_id: str) -> Path:
         return self.trials_dir / f"{trial_id}.json"
@@ -85,11 +97,23 @@ class ExperimentController:
 
     def load_trial(self, trial_id: str) -> TrialRecord:
         path = self.trial_path(trial_id)
-        payload = json.loads(path.read_text(encoding="utf-8"))
-        payload["section_runs"] = {
-            k: SectionRunRecord(**v) for k, v in payload.get("section_runs", {}).items()
-        }
-        return TrialRecord(**payload)
+    
+        last_err = None
+        for attempt in range(3):
+            try:
+                text = path.read_text(encoding="utf-8")
+                if not text.strip():
+                    raise JSONDecodeError("Empty JSON file", text, 0)
+                payload = json.loads(text)
+                payload["section_runs"] = {
+                    k: SectionRunRecord(**v) for k, v in payload.get("section_runs", {}).items()
+                }
+                return TrialRecord(**payload)
+            except (JSONDecodeError, OSError) as e:
+                last_err = e
+                time.sleep(0.2)
+    
+        raise RuntimeError(f"Failed to load trial JSON for {trial_id}: {last_err}")
 
     def resolve_trial_status(self, trial: TrialRecord) -> str:
         work_units = trial.work_units or {}
@@ -122,11 +146,16 @@ class ExperimentController:
         trial.status = self.resolve_trial_status(trial)
         self.trial_resolution_summary(trial)
 
+    # def save_trial(self, trial: TrialRecord) -> Path:
+    #     path = self.trial_path(trial.trial_id)
+    #     payload = asdict(trial)
+    #     path.write_text(json.dumps(payload, indent=2, default=str), encoding="utf-8")
+    #     return path
+
     def save_trial(self, trial: TrialRecord) -> Path:
         path = self.trial_path(trial.trial_id)
         payload = asdict(trial)
-        path.write_text(json.dumps(payload, indent=2, default=str), encoding="utf-8")
-        return path
+        return _atomic_write_json(path, payload)
 
     def set_section_config(self, trial: TrialRecord, section_name: str, config_dict: dict) -> None:
         trial.section_configs[section_name] = dict(config_dict)
@@ -221,7 +250,20 @@ class ExperimentController:
     def trials_frame(self) -> list[dict]:
         rows = []
         for path in sorted(self.trials_dir.glob("*.json")):
-            trial = self.load_trial(path.stem)
+            try:
+                trial = self.load_trial(path.stem)
+            except Exception as e:
+                rows.append(
+                    {
+                        "trial_id": path.stem,
+                        "status": "corrupt_trial_file",
+                        "n_section_runs": None,
+                        "n_work_units": None,
+                        "load_error": str(e),
+                    }
+                )
+                continue
+    
             rows.append(
                 {
                     "trial_id": trial.trial_id,

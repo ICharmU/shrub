@@ -28,7 +28,13 @@ from Final.features.models import (
     SiteAssetBundle,
     SourceRasterBundle,
 )
-from Final.features.artifact_io import read_json, write_json, current_fe_config_signature, try_load_json_artifact, persist_json_artifact
+from Final.features.artifact_io import (
+    read_json,
+    write_json,
+    current_fe_config_signature,
+    try_load_json_artifact,
+    persist_json_artifact,
+)
 from Final.features.source_registry import run_source_chunked_pipeline
 from Final.features.raster_io import align_bundle_to_grid
 from Final.features.assets import site_als_cache_root, build_source_inventory
@@ -431,30 +437,39 @@ def prepare_als_tile_local_copy(
 def prepare_als_metadata(
     site_id: str,
     *,
+    artifact_store: ArtifactStore,
     force_refresh: bool = False,
     inventory: dict[str, Any] | None = None,
     config_sig: str | None = None,
 ) -> list[dict[str, Any]]:
     config_sig = config_sig or current_fe_config_signature()
 
-    # First: try local cache in site asset dir
     out_json = site_als_cache_root(site_id) / "als_metadata.json"
+
+    # 1) Prefer local cache
     if (not force_refresh) and out_json.exists():
-        LOGGER.info("Using cached ALS metadata (local site cache) | site=%s | path=%s", site_id, out_json)
+        LOGGER.info(
+            "Using cached ALS metadata (local site cache) | site=%s | path=%s",
+            site_id,
+            out_json,
+        )
         return json.loads(out_json.read_text(encoding="utf-8"))
 
-    # Second: try remote/local artifact-store-backed manifest artifact
-    payload = try_load_json_artifact(
+    # 2) Try artifact-backed cached metadata
+    payload = None if force_refresh else try_load_json_artifact(
         artifact_key="als_metadata_json",
         site_id=site_id,
+        artifact_store=artifact_store,
         config_sig=config_sig,
     )
-    if (not force_refresh) and payload is not None:
+    if payload is not None:
         LOGGER.info("Using cached ALS metadata (artifact store) | site=%s", site_id)
         rows = payload.get("rows", [])
+        out_json.parent.mkdir(parents=True, exist_ok=True)
         out_json.write_text(json.dumps(rows, indent=2), encoding="utf-8")
         return rows
 
+    # 3) Recompute from source inventory
     inventory = inventory or build_source_inventory(site_id)
     als_files = inventory.get("als", {}).get("files", [])
 
@@ -465,12 +480,16 @@ def prepare_als_metadata(
     LOGGER.info("Discovered %d ALS files | site=%s", len(als_files), site_id)
 
     tmp_dir = Path(tempfile.mkdtemp(prefix=f"als_meta_{site_id}_"))
-    rows = []
+    rows: list[dict[str, Any]] = []
 
     try:
         for entry in als_files:
             local_file = tmp_dir / entry["name"]
-            LOGGER.info("Downloading ALS for metadata | site=%s | file=%s", site_id, entry["name"])
+            LOGGER.info(
+                "Downloading ALS for metadata | site=%s | file=%s",
+                site_id,
+                entry["name"],
+            )
             download_file(entry["url"], local_file)
 
             meta = extract_als_metadata(local_file)
@@ -478,19 +497,24 @@ def prepare_als_metadata(
             meta["name"] = entry.get("name")
             meta["url"] = entry.get("url")
             meta["href"] = entry.get("href")
-            meta["download_url"] = entry.get("download_url") or entry.get("url") or entry.get("href")
+            meta["download_url"] = (
+                entry.get("download_url") or entry.get("url") or entry.get("href")
+            )
             rows.append(meta)
 
             local_file.unlink(missing_ok=True)
+
     finally:
         shutil.rmtree(tmp_dir, ignore_errors=True)
 
+    out_json.parent.mkdir(parents=True, exist_ok=True)
     out_json.write_text(json.dumps(rows, indent=2), encoding="utf-8")
 
     persist_json_artifact(
         {"site_id": site_id, "rows": rows},
         artifact_key="als_metadata_json",
         site_id=site_id,
+        artifact_store=artifact_store,
         config_sig=config_sig,
     )
 

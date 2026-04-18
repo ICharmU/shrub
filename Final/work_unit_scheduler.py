@@ -14,6 +14,27 @@ class WorkUnitScheduler:
         self.controller = controller
         self.coordination = coordination
 
+    def _pipelines_for_trial(self, *, trial: TrialRecord, pipelines) -> dict[str, Any]:
+        """
+        Supports either:
+          1) flat mapping: {"features": pipeline_obj}
+          2) per-trial mapping: {trial_id: {"features": pipeline_obj_for_trial}}
+        """
+        if not pipelines:
+            return {}
+    
+        # Per-trial mapping
+        if trial.trial_id in pipelines and isinstance(pipelines[trial.trial_id], dict):
+            return pipelines[trial.trial_id]
+    
+        # Flat mapping
+        return pipelines
+    
+    
+    def _pipeline_for_trial_and_name(self, *, trial: TrialRecord, pipelines, pipeline_name: str):
+        per_trial = self._pipelines_for_trial(trial=trial, pipelines=pipelines)
+        return per_trial.get(pipeline_name)
+
     def scheduler_snapshot_rows(self, *, trials: list[TrialRecord]):
         rows = []
         for trial in trials:
@@ -222,7 +243,11 @@ class WorkUnitScheduler:
             if trial.status in {"success"}:
                 continue
     
-            for pipeline_name, pipeline in pipelines.items():
+            trial_pipelines = self._pipelines_for_trial(trial=trial, pipelines=pipelines)
+            if not trial_pipelines:
+                continue
+    
+            for pipeline_name, pipeline in trial_pipelines.items():
                 if pipeline_name not in trial.section_configs:
                     continue
     
@@ -233,7 +258,7 @@ class WorkUnitScheduler:
                     runtime_report=runtime_report,
                     force=force_refresh,
                 )
-
+    
                 self.reset_retryable_failed_units(
                     trial=trial,
                     pipeline=pipeline,
@@ -384,38 +409,38 @@ class WorkUnitScheduler:
         self,
         *,
         trials: list[TrialRecord],
-        pipelines: dict[str, Any],
+        pipelines,
         state,
         max_idle_polls: int = 20,
         idle_sleep_sec: float = 15.0,
         progress_callback=None,
     ):
         idle_polls = 0
-
+    
         while True:
             next_job = self.select_next_job(trials=trials, pipelines=pipelines)
-
+    
             if next_job is None:
                 idle_polls += 1
                 if progress_callback is not None:
                     progress_callback(trials=trials, pipelines=pipelines, active_job=None)
-
+    
                 if idle_polls >= max_idle_polls:
                     break
-
+    
                 time.sleep(idle_sleep_sec)
                 continue
-
+    
             idle_polls = 0
             trial, pipeline, unit = next_job
-
+    
             claimed, _ = self.claim_unit(trial=trial, pipeline=pipeline, unit=unit)
             if not claimed:
                 continue
-
+    
             if progress_callback is not None:
                 progress_callback(trials=trials, pipelines=pipelines, active_job=(trial, pipeline, unit))
-
+    
             self.run_claimed_job(trial=trial, pipeline=pipeline, unit=unit, state=state)
-
+    
         return trials, state
