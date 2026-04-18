@@ -52,7 +52,11 @@ from Final.features.object_aggregation import (
     build_and_persist_object_feature_table,
     modeling_stack_layer_selection,
 )
-
+from Final.features.assets import find_cached_rap_asset, find_cached_3dep_asset
+from Final.features.source_naip import prepare_naip_asset
+from Final.features.source_als import prepare_als_metadata
+from Final.features.source_3dep import prepare_3dep_asset
+from Final.features.source_rap import prepare_rap_asset
 
 @dataclass
 class FeaturePipelineConfig:
@@ -110,6 +114,14 @@ class FeaturePipelineOps:
     build_canonical_grid_for_site: Callable[..., Any]
     build_chunk_manifest: Callable[..., Any]
     ensure_source_ready: Callable[..., dict[str, Any]]
+
+    prepare_naip_asset: Callable[..., Any]
+    prepare_als_metadata: Callable[..., Any]
+    prepare_3dep_asset: Callable[..., Any]
+    prepare_rap_asset: Callable[..., Any]
+
+    find_cached_rap_asset: Callable[..., Any]
+    find_cached_3dep_asset: Callable[..., Any]
 
     run_naip_chunked_pipeline: Callable[..., Any]
     run_als_chunked_pipeline: Callable[..., Any]
@@ -1043,7 +1055,11 @@ class FeaturePipeline(BasePipeline):
         # family_chunk
         for site in self.cfg.sites:
             try:
-                site_assets = self.ops.prepare_site_assets(site, artifact_store=self.artifact_store, force_refresh=False)
+                #site_assets = self.ops.prepare_site_assets(site, artifact_store=self.artifact_store, force_refresh=False)
+                site_assets = self.prepare_site_assets_for_pipeline(
+                    site_id,
+                    force_refresh=False,
+                )
                 grid = self.ops.build_canonical_grid_for_site(site, artifact_store=self.artifact_store, assets=site_assets, force_refresh=False)
                 manifest = self.ops.build_chunk_manifest(grid, artifact_store=self.artifact_store, force_refresh=False)
                 chunk_records = list(getattr(manifest, "records", []) or [])
@@ -1210,6 +1226,23 @@ class FeaturePipeline(BasePipeline):
         self._enumeration_cache[enum_cache_key] = [dict(u) for u in units]
         return units
 
+    def prepare_site_assets_for_pipeline(
+        self,
+        site_id: str,
+        *,
+        force_refresh: bool = False,
+    ):
+        return self.ops.prepare_site_assets(
+            site_id,
+            artifact_store=self.artifact_store,
+            force_refresh=force_refresh,
+            prepare_naip_asset_fn=self.ops.prepare_naip_asset,
+            prepare_als_metadata_fn=self.ops.prepare_als_metadata,
+            prepare_3dep_asset_fn=self.ops.prepare_3dep_asset,
+            prepare_rap_asset_fn=self.ops.prepare_rap_asset,
+            find_cached_rap_asset_fn=self.ops.find_cached_rap_asset,
+        )
+
     # -------------------------------------------------------------------------
     # Work-unit execution
     # -------------------------------------------------------------------------
@@ -1237,9 +1270,13 @@ class FeaturePipeline(BasePipeline):
             return {"stage_name": "site_assets", "site_id": site_id}
 
         if stage_name == "canonical_grid":
-            site_assets = self.ops.prepare_site_assets(
+            # site_assets = self.ops.prepare_site_assets(
+            #     site_id,
+            #     artifact_store=self.artifact_store,
+            #     force_refresh=False,
+            # )
+            site_assets = self.prepare_site_assets_for_pipeline(
                 site_id,
-                artifact_store=self.artifact_store,
                 force_refresh=False,
             )
             grid = self.ops.build_canonical_grid_for_site(
@@ -1263,7 +1300,11 @@ class FeaturePipeline(BasePipeline):
             return {"stage_name": "canonical_grid", "site_id": site_id}
 
         if stage_name == "chunk_manifest":
-            site_assets = self.ops.prepare_site_assets(site_id, artifact_store=self.artifact_store, force_refresh=False)
+            # site_assets = self.ops.prepare_site_assets(site_id, artifact_store=self.artifact_store, force_refresh=False)
+            site_assets = self.prepare_site_assets_for_pipeline(
+                site_id,
+                force_refresh=False,
+            )
             grid = self.ops.build_canonical_grid_for_site(site_id, artifact_store=self.artifact_store, assets=site_assets, force_refresh=False)
             manifest = self.ops.build_chunk_manifest(
                 grid,
@@ -1285,7 +1326,11 @@ class FeaturePipeline(BasePipeline):
 
         if stage_name == "source_ready":
             source_name = unit["source_version"]
-            site_assets = self.ops.prepare_site_assets(site_id, artifact_store=self.artifact_store, force_refresh=False)
+            # site_assets = self.ops.prepare_site_assets(site_id, artifact_store=self.artifact_store, force_refresh=False)
+            site_assets = self.prepare_site_assets_for_pipeline(
+                site_id,
+                force_refresh=False,
+            )
             grid = self.ops.build_canonical_grid_for_site(site_id, artifact_store=self.artifact_store, assets=site_assets, force_refresh=False)
             record = self.ops.ensure_source_ready(
                 site_id=site_id,
@@ -1307,7 +1352,11 @@ class FeaturePipeline(BasePipeline):
             source_name = unit["source_version"]
             family_name = unit["family_name"]
 
-            site_assets = self.ops.prepare_site_assets(site_id, artifact_store=self.artifact_store, force_refresh=False)
+            # site_assets = self.ops.prepare_site_assets(site_id, artifact_store=self.artifact_store, force_refresh=False)
+            site_assets = self.prepare_site_assets_for_pipeline(
+                site_id,
+                force_refresh=False,
+            )
             grid = self.ops.build_canonical_grid_for_site(site_id, artifact_store=self.artifact_store, assets=site_assets, force_refresh=False)
             chunk_manifest = self.ops.build_chunk_manifest(grid, artifact_store=self.artifact_store, force_refresh=False)
 
@@ -1603,11 +1652,21 @@ def build_feature_pipeline_ops():
         prepare_site_assets=prepare_site_assets,
         build_canonical_grid_for_site=build_canonical_grid_for_site,
         build_chunk_manifest=build_chunk_manifest,
+
+        prepare_naip_asset=prepare_naip_asset,
+        prepare_als_metadata=prepare_als_metadata,
+        prepare_3dep_asset=prepare_3dep_asset,
+        prepare_rap_asset=prepare_rap_asset,
+    
+        find_cached_rap_asset=find_cached_rap_asset,
+        find_cached_3dep_asset=find_cached_3dep_asset,
+        
         ensure_source_ready=ensure_source_ready,
         run_naip_chunked_pipeline=run_naip_chunked_pipeline,
         run_als_chunked_pipeline=run_als_chunked_pipeline,
         run_3dep_chunked_pipeline=run_3dep_chunked_pipeline,
         run_rap_chunked_pipeline=run_rap_chunked_pipeline,
+        
         label_objects_for_site=label_objects_for_site,
         build_and_persist_object_feature_table=build_and_persist_object_feature_table,
         clear_artifact_staging_dir=getattr(

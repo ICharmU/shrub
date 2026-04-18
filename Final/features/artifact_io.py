@@ -328,14 +328,19 @@ def try_load_json_artifact(
                 pass
 
     if remote_artifact_exists(rel_path, artifact_store=artifact_store):
-        pulled = artifact_store.pull(rel_path, local_path=local_path)
-        try:
-            return read_json(pulled)
-        finally:
-            if isinstance(artifact_store, HybridArtifactStore):
+        last_err = None
+    
+        for _ in range(2):
+            pulled = artifact_store.pull(rel_path, local_path=local_path)
+            try:
+                return read_json(pulled)
+            except Exception as e:
+                last_err = e
                 try:
                     Path(pulled).unlink()
                 except Exception:
                     pass
+    
+        raise RuntimeError(f"Failed to load valid JSON artifact after retry | rel_path={rel_path} | err={last_err}")
 
     return None

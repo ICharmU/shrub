@@ -23,7 +23,7 @@ from Final.features.artifact_io import (
     try_load_json_artifact,
 )
 from Final.features.artifact_io import render_artifact_rel_path
-from Final.features.raster_io import validate_optional_raster_asset
+from Final.features.raster_io import validate_optional_raster_asset, validate_cached_raster
 
 
 cfg = default_config()
@@ -33,7 +33,8 @@ LOGGER = get_logger("features.assets")
 PrepareNAIPFn = Callable[..., Path | None]
 PrepareALSMetadataFn = Callable[..., list[dict[str, Any]]]
 Prepare3DEPFn = Callable[..., Path | None]
-FindCachedRasterFn = Callable[[str], Path | None]
+PrepareRAPFn = Callable[..., Path | None]
+FindCachedRasterFn = Callable[..., Path | None]
 
 
 def site_asset_cache_root(site_id: str) -> Path:
@@ -320,10 +321,12 @@ def enrich_existing_site_asset_bundle(
     *,
     site_id: str,
     inventory: dict[str, Any],
+    artifact_store: ArtifactStore,
     force_refresh: bool = False,
     prepare_naip_asset_fn: PrepareNAIPFn | None = None,
     prepare_als_metadata_fn: PrepareALSMetadataFn | None = None,
     prepare_3dep_asset_fn: Prepare3DEPFn | None = None,
+    prepare_rap_asset_fn: PrepareRAPFn | None = None,
     find_cached_rap_asset_fn: FindCachedRasterFn | None = None,
 ) -> SiteAssetBundle:
     source_assets = dict(bundle.source_assets or {})
@@ -334,43 +337,61 @@ def enrich_existing_site_asset_bundle(
             try:
                 source_assets["naip"] = prepare_naip_asset_fn(
                     site_id,
+                    artifact_store=artifact_store,
                     force_refresh=force_refresh,
                     inventory=inventory,
+                    site_assets=bundle,
                 )
             except Exception as e:
+                source_assets["naip"] = None
                 notes.append(f"NAIP unavailable during manifest enrichment: {e}")
-
+    
     als_meta = source_assets.get("als_metadata")
     if force_refresh or als_meta is None or (isinstance(als_meta, list) and len(als_meta) == 0):
         if prepare_als_metadata_fn is not None:
             try:
                 source_assets["als_metadata"] = prepare_als_metadata_fn(
                     site_id,
+                    artifact_store=artifact_store,
                     force_refresh=force_refresh,
                     inventory=inventory,
                     config_sig=current_fe_config_signature(),
                 )
             except Exception as e:
+                source_assets["als_metadata"] = []
                 notes.append(f"ALS metadata unavailable during manifest enrichment: {e}")
-
+    
     if force_refresh or (not validate_optional_raster_asset(source_assets.get("3dep"))):
         if prepare_3dep_asset_fn is not None:
             try:
                 source_assets["3dep"] = prepare_3dep_asset_fn(
                     site_id,
+                    artifact_store=artifact_store,
                     force_refresh=force_refresh,
                     inventory=inventory,
                 )
             except Exception as e:
-                notes.append(f"3DEP unavailable: {e}")
-
-    if find_cached_rap_asset_fn is not None:
-        try:
-            rap_asset = find_cached_rap_asset_fn(site_id)
-            source_assets["rap"] = rap_asset
-        except Exception as e:
-            notes.append(f"RAP cache lookup failed: {e}")
-            source_assets.setdefault("rap", None)
+                source_assets["3dep"] = None
+                notes.append(f"3DEP unavailable during manifest enrichment: {e}")
+    
+    if force_refresh or (not validate_optional_raster_asset(source_assets.get("rap"))):
+        if prepare_rap_asset_fn is not None:
+            try:
+                source_assets["rap"] = prepare_rap_asset_fn(
+                    site_id,
+                    artifact_store=artifact_store,
+                    force_refresh=force_refresh,
+                    inventory=inventory,
+                )
+            except Exception as e:
+                source_assets["rap"] = None
+                notes.append(f"RAP unavailable during manifest enrichment: {e}")
+        elif find_cached_rap_asset_fn is not None:
+            try:
+                source_assets["rap"] = find_cached_rap_asset_fn(site_id)
+            except Exception as e:
+                source_assets["rap"] = None
+                notes.append(f"RAP cache lookup failed: {e}")
     else:
         source_assets.setdefault("rap", None)
 
@@ -390,6 +411,7 @@ def prepare_site_assets(
     prepare_naip_asset_fn: PrepareNAIPFn | None = None,
     prepare_als_metadata_fn: PrepareALSMetadataFn | None = None,
     prepare_3dep_asset_fn: Prepare3DEPFn | None = None,
+    prepare_rap_asset_fn: PrepareRAPFn | None = None,
     find_cached_rap_asset_fn: FindCachedRasterFn | None = None,
 ) -> SiteAssetBundle:
     config_sig = current_fe_config_signature()
@@ -427,6 +449,8 @@ def prepare_site_assets(
             prepare_als_metadata_fn=prepare_als_metadata_fn,
             prepare_3dep_asset_fn=prepare_3dep_asset_fn,
             find_cached_rap_asset_fn=find_cached_rap_asset_fn,
+            artifact_store=artifact_store,
+            prepare_rap_asset_fn=prepare_rap_asset_fn,
         )
 
         old_payload = site_asset_bundle_payload(existing)
@@ -460,34 +484,52 @@ def prepare_site_assets(
         try:
             bundle.source_assets["naip"] = prepare_naip_asset_fn(
                 site_id,
+                artifact_store=artifact_store,
                 force_refresh=force_refresh,
                 inventory=inventory,
+                site_assets=bundle,
             )
         except Exception as e:
+            bundle.source_assets["naip"] = None
             bundle.notes.append(f"NAIP unavailable: {e}")
-
+    
     if prepare_als_metadata_fn is not None:
         try:
             bundle.source_assets["als_metadata"] = prepare_als_metadata_fn(
                 site_id,
+                artifact_store=artifact_store,
                 force_refresh=force_refresh,
                 inventory=inventory,
                 config_sig=config_sig,
             )
         except Exception as e:
+            bundle.source_assets["als_metadata"] = []
             bundle.notes.append(f"ALS metadata unavailable: {e}")
-
+    
     if prepare_3dep_asset_fn is not None:
         try:
             bundle.source_assets["3dep"] = prepare_3dep_asset_fn(
                 site_id,
+                artifact_store=artifact_store,
                 force_refresh=force_refresh,
                 inventory=inventory,
             )
         except Exception as e:
+            bundle.source_assets["3dep"] = None
             bundle.notes.append(f"3DEP unavailable: {e}")
-
-    if find_cached_rap_asset_fn is not None:
+    
+    if prepare_rap_asset_fn is not None:
+        try:
+            bundle.source_assets["rap"] = prepare_rap_asset_fn(
+                site_id,
+                artifact_store=artifact_store,
+                force_refresh=force_refresh,
+                inventory=inventory,
+            )
+        except Exception as e:
+            bundle.source_assets["rap"] = None
+            bundle.notes.append(f"RAP unavailable: {e}")
+    elif find_cached_rap_asset_fn is not None:
         try:
             bundle.source_assets["rap"] = find_cached_rap_asset_fn(site_id)
         except Exception as e:

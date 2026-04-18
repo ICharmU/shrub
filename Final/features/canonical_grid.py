@@ -20,7 +20,11 @@ from Final.features.artifact_io import (
 from Final.features.assets import site_3dep_cache_root, site_naip_cache_root, site_rap_cache_root
 from Final.features.config import fe_cfg
 from Final.features.models import CanonicalGrid, SiteAssetBundle
-from Final.features.raster_io import infer_naip_band_names, read_raster_bundle
+from Final.features.raster_io import (
+    infer_naip_band_names,
+    read_raster_bundle,
+    validate_cached_raster,
+)
 
 LOGGER = get_logger("features.canonical_grid")
 
@@ -66,12 +70,50 @@ def resolve_site_asset_for_read(
             "Rehydrating pruned site asset | site=%s | key=%s | rel_path=%s",
             site_id, artifact_key, rel_path,
         )
-        return artifact_store.pull(rel_path, local_path=local_path)
+        return _pull_with_validation(
+            artifact_store=artifact_store,
+            rel_path=rel_path,
+            local_path=local_path,
+            validator=validate_cached_raster,
+            max_attempts=2,
+        )
 
     raise FileNotFoundError(
         f"Site asset missing locally and not found remotely | site={site_id} | key={artifact_key} | path={p}"
     )
 
+def _pull_with_validation(
+    *,
+    artifact_store: ArtifactStore,
+    rel_path: str,
+    local_path: Path,
+    validator,
+    max_attempts: int = 2,
+) -> Path:
+    last_err = None
+    for attempt in range(1, max_attempts + 1):
+        try:
+            if local_path.exists():
+                try:
+                    local_path.unlink()
+                except Exception:
+                    pass
+
+            pulled = artifact_store.pull(rel_path, local_path=local_path)
+
+            if validator(pulled):
+                return Path(pulled)
+
+            try:
+                Path(pulled).unlink(missing_ok=True)
+            except Exception:
+                pass
+
+            last_err = RuntimeError(f"Hydrated artifact failed validation: {rel_path}")
+        except Exception as e:
+            last_err = e
+
+    raise RuntimeError(f"Failed to hydrate valid artifact after {max_attempts} attempts | rel_path={rel_path} | err={last_err}")
 
 def build_canonical_grid_for_site(
     site_id: str,

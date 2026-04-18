@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any
 import json
 import shutil
-
+import time
 import yaml
 
 try:
@@ -300,29 +300,31 @@ class DriveRegistryArtifactStore(ArtifactStore):
             raise FileNotFoundError(f"No remote Drive artifact for {rel_path}")
     
         # Important: force a fresh download, do not try to resume into stale staging files
-        if dst.exists():
-            try:
-                dst.unlink()
-            except Exception:
-                pass
+        # if dst.exists():
+        #     try:
+        #         dst.unlink()
+        #     except Exception:
+        #         pass
     
-        tmp_dst = dst.with_suffix(dst.suffix + ".download")
+        # tmp_dst = dst.with_suffix(dst.suffix + ".download")
     
-        if tmp_dst.exists():
-            try:
-                tmp_dst.unlink()
-            except Exception:
-                pass
+        # if tmp_dst.exists():
+        #     try:
+        #         tmp_dst.unlink()
+        #     except Exception:
+        #         pass
     
-        try:
-            gfile.GetContentFile(str(tmp_dst))
-            tmp_dst.replace(dst)
-        finally:
-            if tmp_dst.exists():
-                try:
-                    tmp_dst.unlink()
-                except Exception:
-                    pass
+        # try:
+        #     gfile.GetContentFile(str(tmp_dst))
+        #     tmp_dst.replace(dst)
+        # finally:
+        #     if tmp_dst.exists():
+        #         try:
+        #             tmp_dst.unlink()
+        #         except Exception:
+        #             pass
+
+        self._download_to_path(gfile, dst, max_attempts=3, sleep_sec=1.0)
     
         entry = files.setdefault(rel_path, {})
         entry["local_path"] = rel_path
@@ -378,6 +380,40 @@ class DriveRegistryArtifactStore(ArtifactStore):
             del files[rel_path]
             self._save_registry()
 
+    def _download_to_path(self, gfile, dst: Path, *, max_attempts: int = 3, sleep_sec: float = 1.0) -> Path:
+        last_err = None
+    
+        for attempt in range(1, max_attempts + 1):
+            tmp_dst = dst.with_suffix(dst.suffix + f".download.{attempt}")
+    
+            try:
+                if dst.exists():
+                    try:
+                        dst.unlink()
+                    except Exception:
+                        pass
+    
+                if tmp_dst.exists():
+                    try:
+                        tmp_dst.unlink()
+                    except Exception:
+                        pass
+    
+                gfile.GetContentFile(str(tmp_dst))
+                tmp_dst.replace(dst)
+                return dst
+    
+            except Exception as e:
+                last_err = e
+                try:
+                    tmp_dst.unlink(missing_ok=True)
+                except Exception:
+                    pass
+    
+                if attempt < max_attempts:
+                    time.sleep(sleep_sec)
+    
+        raise last_err
 
 # -----------------------------------------------------------------------------
 # Hybrid wrapper
@@ -395,11 +431,17 @@ class HybridArtifactStore(ArtifactStore):
     def pull(self, rel_path: str, local_path: str | Path | None = None) -> Path:
         if self.local_store.exists(rel_path):
             return self.local_store.pull(rel_path, local_path=local_path)
+    
         if self.remote_store is None:
             raise FileNotFoundError(f"No local artifact and no remote store for {rel_path}")
+    
         pulled = self.remote_store.pull(rel_path, local_path=local_path)
-        # mirror into local storage root too
-        #self.local_store.push(pulled, rel_path=rel_path)
+    
+        # try:
+        #     self.local_store.push(pulled, rel_path=rel_path)
+        # except Exception:
+        #     pass
+    
         return pulled
 
     def push(self, local_path: str | Path, rel_path: str | None = None) -> str | None:

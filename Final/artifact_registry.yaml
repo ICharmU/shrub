@@ -3446,6 +3446,30 @@ files:
   labeling/shaver-lake/88fb2c6936cb/transforms/transform_index.json:
     drive_file_id: 1yY516wYzcXPGLT_VEny5yYiKz5OZq92s
     local_path: labeling/shaver-lake/88fb2c6936cb/transforms/transform_index.json
+  shared_artifacts/features.canonical_grid/331005be20008029.json:
+    drive_file_id: 1gfaYdFRZcArFF68CgGMAohafTrZ-1yi0
+    local_path: shared_artifacts/features.canonical_grid/331005be20008029.json
+  shared_artifacts/features.canonical_grid/9d452105baaad201.json:
+    drive_file_id: 1n0GV4A3p4ZfSr5LiMgdLDUdlp4D420bO
+    local_path: shared_artifacts/features.canonical_grid/9d452105baaad201.json
+  shared_artifacts/features.site_assets/0ac279b943ba0839.json:
+    drive_file_id: 1xjscz412NKvkSu8qJoFI7dLDIAc6_6RS
+    local_path: shared_artifacts/features.site_assets/0ac279b943ba0839.json
+  shared_artifacts/features.site_assets/61712dcb3097077b.json:
+    drive_file_id: 1aEgYfHhYrWNz4HwPP_uWYUiElOKCemu0
+    local_path: shared_artifacts/features.site_assets/61712dcb3097077b.json
+  shared_artifacts/features.site_assets/9ea2fb6c27b8aaa1.json:
+    drive_file_id: 1EKb221FfxU3-4GC-uP9VjxrbqbXr-uO_
+    local_path: shared_artifacts/features.site_assets/9ea2fb6c27b8aaa1.json
+  shared_artifacts/features.site_assets/a18c49b9e22909be.json:
+    drive_file_id: 1f2QJSiutCvo5ZMVHeIbxLwr9N4YcsYPj
+    local_path: shared_artifacts/features.site_assets/a18c49b9e22909be.json
+  shared_artifacts/features.site_assets/cf4a75752a6cb15b.json:
+    drive_file_id: 1mNVL52T0AZNoM6f2hZ1aqpkBFIKJdL0R
+    local_path: shared_artifacts/features.site_assets/cf4a75752a6cb15b.json
+  shared_artifacts/features.site_assets/e03b899b6aedcce5.json:
+    drive_file_id: 1sbgNR_fLo6XKFQGtNqtbMJHx-HblRVQa
+    local_path: shared_artifacts/features.site_assets/e03b899b6aedcce5.json
   shared_artifacts/labeling.refine.outputs/9d7af616e8f82084.json:
     drive_file_id: 17oe192X_x6Q9WiMBluo1Yqa_NSrZQ4HK
     local_path: shared_artifacts/labeling.refine.outputs/9d7af616e8f82084.json
