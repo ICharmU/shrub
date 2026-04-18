@@ -609,6 +609,34 @@ class FeaturePipeline(BasePipeline):
     def family_chunk_priority(self, source_name: str, family_name: str, chunk_idx: int) -> int:
         return self.source_stage_priority(source_name) * 1000 + chunk_idx
 
+    def stage_is_eligible(self, stage_name: str, runtime_report=None) -> tuple[bool, dict]:
+        runtime_report = runtime_report or self.runtime_report()
+        elig = self.stage_runtime_eligibility(stage_name, runtime_report=runtime_report)
+        all_ok = all(
+            info.status == ExecutionEligibilityStatus.ELIGIBLE
+            for info in elig.values()
+        )
+        return all_ok, elig
+    
+    
+    def stage_block_reason(self, stage_name: str, runtime_report=None) -> str:
+        ok, elig = self.stage_is_eligible(stage_name, runtime_report=runtime_report)
+        if ok:
+            return ""
+    
+        msgs = []
+        for module_key, info in elig.items():
+            if info.status != ExecutionEligibilityStatus.ELIGIBLE:
+                missing = getattr(info, "missing_capabilities", None) or []
+                reason = getattr(info, "reason", "") or ""
+                if missing:
+                    msgs.append(f"{module_key}: missing={missing}")
+                elif reason:
+                    msgs.append(f"{module_key}: {reason}")
+                else:
+                    msgs.append(f"{module_key}: ineligible")
+        return "; ".join(msgs)
+
     # -------------------------------------------------------------------------
     # Shared artifact helpers
     # -------------------------------------------------------------------------
