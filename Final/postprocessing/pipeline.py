@@ -39,18 +39,18 @@ def extract_shrub_features(binary_mask):
         Dictionary with keys: height, width, area, aspect_ratio
     """
     # Get bounding box and basic stats
-    h, w = binary_mask.shape
+    _, h, w = binary_mask.shape
     height = h
     width = w
     area = np.sum(binary_mask)
     
     # Calculate aspect ratio (safeguard against w=0)
-    aspect_ratio = height / width if width > 0 else 1.0
+    aspect_ratio = height / width if width > 0 else 0
     
     return {
         'height': height,
         'width': width,
-        'area': area,
+        # 'area': area,
         'aspect_ratio': aspect_ratio
     }
 
@@ -193,8 +193,7 @@ def ensemble_predict_shrub_count(binary_mask, verbose=False):
     return ensemble_count
 
 def shrub_counting_pipeline(
-    probabilities,
-    prob_threshold=0.5,
+    binary_mask,
     apply_correction=True,
     model=None,
     scaler=None,
@@ -237,18 +236,18 @@ def shrub_counting_pipeline(
         - method_used: 'ensemble_only' or 'ensemble+correction'
     """
     
-    if verbose:
-        print("\n" + "="*60)
-        print("SHRUB COUNTING PIPELINE")
-        print("="*60)
+    # if verbose:
+    #     print("\n" + "="*60)
+    #     print("SHRUB COUNTING PIPELINE")
+    #     print("="*60)
     
-    # Stage 1: Probabilities → Predictions
-    if verbose:
-        print("\n[Stage 1] Converting probabilities to binary predictions...")
-    binary_mask = probabilities_to_predictions(probabilities, threshold=prob_threshold)
-    if verbose:
-        print(f"  ✓ Binary mask shape: {binary_mask.shape}")
-        print(f"  ✓ Positive pixels: {np.sum(binary_mask)}")
+    # # Stage 1: Probabilities → Predictions
+    # if verbose:
+    #     print("\n[Stage 1] Converting probabilities to binary predictions...")
+    # binary_mask = probabilities_to_predictions(probabilities, threshold=prob_threshold)
+    # if verbose:
+    #     print(f"  ✓ Binary mask shape: {binary_mask.shape}")
+    #     print(f"  ✓ Positive pixels: {np.sum(binary_mask)}")
     
     # Stage 2: Extract features
     if verbose:
@@ -257,7 +256,7 @@ def shrub_counting_pipeline(
     if verbose:
         print(f"  ✓ Height: {shrub_features['height']}")
         print(f"  ✓ Width: {shrub_features['width']}")
-        print(f"  ✓ Area: {shrub_features['area']}")
+        # print(f"  ✓ Area: {shrub_features['area']}")
         print(f"  ✓ Aspect Ratio: {shrub_features['aspect_ratio']:.3f}")
     
     # Stage 3: Ensemble counting

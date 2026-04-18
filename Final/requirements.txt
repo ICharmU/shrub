@@ -11,9 +11,8 @@ rasterio
 scikit-image
 PyWavelets
 scipy
-opencv-python
+opencv-python-headless
 torch
 torchvision
 captum
 mrmr_selection
-opencv-python-headless

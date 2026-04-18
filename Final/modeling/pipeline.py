@@ -18,182 +18,89 @@ from mrmr import mrmr_classif, mrmr_regression
 ####################
 # BASELINES
 ####################
-
-# LOG REG
-def train_log_reg(X_train, y_train):
-    """
-    log reg assumes flattened inputs
-    """
-    model = LogisticRegression(max_iter=250)
-    model.fit(X_train, y_train)
-
-    return model
-
-def log_reg_predict(model, X_test):
-    """Get predictions from logistic regression model."""
-    preds = model.predict(X_test)
-    return np.round(preds)
-        
-def log_reg_accuracy(model, X_test, y_test, is_binary=True):
-    """
-    Binary log-reg
-    """
-    preds = model.predict(X_test)
-    preds = np.round(preds) 
-
-    metrics = dict()
-    metrics["overall"] = accuracy_score(y_test, preds)
-    
-    average = "binary" if is_binary else "weighted"
-    metrics["f1"] = f1_score(y_test, preds, average=average)
-    metrics["recall"] = recall_score(y_test, preds, average=average)
-    metrics["precision"] = precision_score(y_test, preds, average=average)
-
-    return metrics
-
-# RESNET 18 (not tuned/not intended for image segmentation)
-def build_resnet18_classifier(num_classes=2):
-    """
-    Build ResNet18 classifier with replaced output head.
-    Loads pretrained ResNet18 and freezes all weights except the final layer.
-    """
-    model = resnet18(pretrained=True)
-    
-    for param in model.parameters():
-        param.requires_grad = False
-    
-    num_features = model.fc.in_features
-    model.fc = nn.Linear(num_features, num_classes)
-    
-    for param in model.fc.parameters():
-        param.requires_grad = True
-    
-    return model
-
-def model_resnet18(X, y):
-    """
-    Train and evaluate ResNet18 model following baseline workflow.
-    Only trains the output layer while keeping backbone frozen.
-    """
-    X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.8, random_state=42)
-    
-    X_train_tensor = torch.tensor(X_train, dtype=torch.float32)
-    X_test_tensor = torch.tensor(X_test, dtype=torch.float32)
-    y_train_tensor = torch.tensor(y_train, dtype=torch.long)
-    y_test_tensor = torch.tensor(y_test, dtype=torch.long)
-    
-    train_dataset = TensorDataset(X_train_tensor, y_train_tensor)
-    test_dataset = TensorDataset(X_test_tensor, y_test_tensor)
-    train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
-    test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False)
-    
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    model = build_resnet18_classifier(num_classes=2)
-    model = model.to(device)
-    model.train()
-    
-    # Training - only optimize the output layer
-    criterion = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=1e-3)
-    epochs = 100
-    
-    print(f"Training on {device}...")
-    for epoch in range(epochs):
-        train_loss = 0.0
-        for batch_X, batch_y in train_loader:
-            batch_X, batch_y = batch_X.to(device), batch_y.to(device)
-            optimizer.zero_grad()
-            logits = model(batch_X)
-            loss = criterion(logits, batch_y)
-            loss.backward()
-            optimizer.step()
-            train_loss += loss.item()
-        
-        if (epoch + 1) % 10 == 0:
-            print(f"Epoch {epoch+1}/{epochs} - Loss: {train_loss/len(train_loader):.4f}")
-    
-    # Evaluation
-    model.eval()
-    with torch.no_grad():
-        train_preds = []
-        for batch_X, batch_y in train_loader:
-            batch_X = batch_X.to(device)
-            logits = model(batch_X)
-            preds = logits.argmax(dim=1)
-            train_preds.append(preds.cpu().numpy())
-        train_preds = np.concatenate(train_preds)
-        
-        test_preds = []
-        for batch_X, batch_y in test_loader:
-            batch_X = batch_X.to(device)
-            logits = model(batch_X)
-            preds = logits.argmax(dim=1)
-            test_preds.append(preds.cpu().numpy())
-        test_preds = np.concatenate(test_preds)
-    
-    train_metrics = {
-        "overall": accuracy_score(y_train, train_preds),
-        "f1": f1_score(y_train, train_preds, average="binary"),
-        "recall": recall_score(y_train, train_preds, average="binary"),
-        "precision": precision_score(y_train, train_preds, average="binary")
-    }
-    test_metrics = {
-        "overall": accuracy_score(y_test, test_preds),
-        "f1": f1_score(y_test, test_preds, average="binary"),
-        "recall": recall_score(y_test, test_preds, average="binary"),
-        "precision": precision_score(y_test, test_preds, average="binary")
-    }
-    
-    print(f"Train metrics:\n{train_metrics}")
-    print(f"Test metrics:\n{test_metrics}")
-
-# SIMPLE CNN
 class SimpleCNN(nn.Module):
     """
-    Simple CNN for binary classification on 32x32 RGB images.
+    Simple CNN supporting both image-level and per-pixel (segmentation) tasks.
+    
+    Args:
+        in_channels: Number of input channels (default: 3)
+        num_classes: Number of output classes (default: 2)
+        output_type: 'image' for image-level classification or 'pixel' for per-pixel segmentation (default: 'image')
     """
-    def __init__(self, num_classes=2, in_channels=3):
+    def __init__(self, in_channels=3, num_classes=2, output_type='pixel'):
         super(SimpleCNN, self).__init__()
+        self.output_type = output_type
+        self.num_classes = num_classes
         
-        # Convolutional layers
-        self.conv1 = nn.Conv2d(in_channels, 32, kernel_size=3, padding=1)
-        self.relu1 = nn.ReLU()
-        self.pool1 = nn.MaxPool2d(kernel_size=2, stride=2)
-        
-        self.conv2 = nn.Conv2d(32, 64, kernel_size=3, padding=1)
-        self.relu2 = nn.ReLU()
-        self.pool2 = nn.MaxPool2d(kernel_size=2, stride=2)
-        
-        self.conv3 = nn.Conv2d(64, 128, kernel_size=3, padding=1)
-        self.relu3 = nn.ReLU()
-        self.pool3 = nn.MaxPool2d(kernel_size=2, stride=2)
-        
-        self.flatten = nn.Flatten()
-        self.fc1 = nn.Linear(128 * 4 * 4, 128)
-        self.relu_fc = nn.ReLU()
-        self.dropout = nn.Dropout(0.5)
-        self.fc2 = nn.Linear(128, num_classes)
+        if output_type == 'pixel':
+            # Per-pixel segmentation: preserve spatial dimensions
+            self.conv1 = nn.Conv2d(in_channels, 32, kernel_size=3, padding=1)
+            self.relu1 = nn.ReLU()
+            
+            self.conv2 = nn.Conv2d(32, 64, kernel_size=3, padding=1)
+            self.relu2 = nn.ReLU()
+            
+            self.conv3 = nn.Conv2d(64, 128, kernel_size=3, padding=1)
+            self.relu3 = nn.ReLU()
+            
+            # Output layer: produce per-pixel predictions
+            self.conv_out = nn.Conv2d(128, num_classes, kernel_size=1)
+        else:
+            # Image-level classification: downsample spatially
+            self.conv1 = nn.Conv2d(in_channels, 32, kernel_size=3, padding=1)
+            self.relu1 = nn.ReLU()
+            self.pool1 = nn.MaxPool2d(kernel_size=2, stride=2)
+            
+            self.conv2 = nn.Conv2d(32, 64, kernel_size=3, padding=1)
+            self.relu2 = nn.ReLU()
+            self.pool2 = nn.MaxPool2d(kernel_size=2, stride=2)
+            
+            self.conv3 = nn.Conv2d(64, 128, kernel_size=3, padding=1)
+            self.relu3 = nn.ReLU()
+            self.pool3 = nn.MaxPool2d(kernel_size=2, stride=2)
+            
+            self.flatten = nn.Flatten()
+            self.fc1 = nn.Linear(128 * 4 * 4, 128)
+            self.relu_fc = nn.ReLU()
+            self.dropout = nn.Dropout(0.5)
+            self.fc2 = nn.Linear(128, num_classes)
     
     def forward(self, x):
-        x = self.conv1(x)
-        x = self.relu1(x)
-        x = self.pool1(x)
-        
-        x = self.conv2(x)
-        x = self.relu2(x)
-        x = self.pool2(x)
-        
-        x = self.conv3(x)
-        x = self.relu3(x)
-        x = self.pool3(x)
-        
-        x = self.flatten(x)
-        x = self.fc1(x)
-        x = self.relu_fc(x)
-        x = self.dropout(x)
-        x = self.fc2(x)
-        
-        return x
+        if self.output_type == 'pixel':
+            # Per-pixel path: no pooling, preserve spatial dimensions
+            x = self.conv1(x)
+            x = self.relu1(x)
+            
+            x = self.conv2(x)
+            x = self.relu2(x)
+            
+            x = self.conv3(x)
+            x = self.relu3(x)
+            
+            # Output: (batch, num_classes, H, W)
+            x = self.conv_out(x)
+            return x
+        else:
+            # Image-level path: downsample and flatten
+            x = self.conv1(x)
+            x = self.relu1(x)
+            x = self.pool1(x)
+            
+            x = self.conv2(x)
+            x = self.relu2(x)
+            x = self.pool2(x)
+            
+            x = self.conv3(x)
+            x = self.relu3(x)
+            x = self.pool3(x)
+            
+            x = self.flatten(x)
+            x = self.fc1(x)
+            x = self.relu_fc(x)
+            x = self.dropout(x)
+            x = self.fc2(x)
+            
+            return x
 
 def model_simple_cnn(X, y):
     """
@@ -829,7 +736,7 @@ class SegmentationDataset(Dataset):
 # FEATURE IMPORTANCE
 ####################
 
-def feature_permutation_pipeline(X, y, model_func, num_features=None, perturbation_type="logistic", model_=None):
+def feature_permutation_pipeline(X, y, model_func, num_features=None, perturbation_type="logistic", model_=None, verbose=True):
     """
     Compute feature importance using Captum's FeaturePermutation.
     
@@ -886,7 +793,7 @@ def feature_permutation_pipeline(X, y, model_func, num_features=None, perturbati
     
     # Compute attributions
     print("Computing feature permutation importance...")
-    attributions = feature_perm.attribute(X_test_tensor, perturbations_per_eval=1, show_progress=True)
+    attributions = feature_perm.attribute(X_test_tensor, perturbations_per_eval=1, show_progress=verbose)
     
     # Flatten and average attributions across samples
     attr_flat = attributions.numpy().reshape(attributions.shape[0], -1)
@@ -1040,42 +947,65 @@ def combine_feature_importance_methods(perm_df, mrmr_features, dataset_name="Dat
     
     return consensus_df
 
-def extract_features_logreg(X_train, y_train, model_func, n_mrmr_features=20, perturbation_type="logistic"):
+def extract_features_logreg(X_train, y_train, n_mrmr_features=20, is_binary=True):
     """
-    Complete feature extraction and model training pipeline.
+    Feature extraction pipeline that zeros out unused weights instead of slicing features.
+    
+    Each pixel (with all its channels) is treated as a feature.
+    For shape (batch, channels, H, W): each pixel produces channels features
+    Total features = channels * H * W
     
     This function performs:
     1. Feature Permutation analysis using Captum
     2. MRMR feature selection
     3. Consensus feature combination (union of non-zero importance + top 10% MRMR)
-    4. Model training on selected features
+    4. Model training on ALL features
+    5. Zero out coefficients for non-selected features
     
     Args:
-        X_train: Training feature matrix (n_samples, n_features)
+        X_train: Training feature matrix (batch, channels, H, W) or (n_samples, n_features)
         y_train: Training labels (n_samples,)
-        model_func: Model training function (e.g., model_logistic_regression)
         n_mrmr_features: Number of features to select via MRMR (default: 20)
-        perturbation_type: "logistic" or "cnn" (default: "logistic")
+        is_binary: Whether this is binary classification (default: True)
     
     Returns:
         results_dict: Dictionary containing:
-            - 'model': Trained model on selected features
-            - 'selected_features': List of selected feature names
-            - 'selected_indices': List of selected feature indices
+            - 'model': Trained logistic regression model (with non-selected weights zeroed)
+            - 'selected_feature_indices': Indices of selected features
             - 'n_original_features': Original number of features
             - 'n_selected_features': Number of selected features
             - 'reduction_percentage': Feature reduction as percentage
-            - 'permutation_features': Features with non-zero permutation importance
-            - 'mrmr_features': Features selected by MRMR
+            - 'train_metrics': Training metrics on all data
             - 'consensus_df': DataFrame with consensus feature details
+            - 'X_shape': Original input shape for reference
     """
     
     print("=" * 80)
-    print("FEATURE EXTRACTION AND MODEL TRAINING PIPELINE")
+    print("FEATURE EXTRACTION WITH WEIGHT ZEROING")
     print("=" * 80)
     
-    n_original_features = X_train.shape[1]
-    print(f"\nStarting with {n_original_features} features")
+    # Store original shape
+    X_shape = X_train.shape
+    
+    # Flatten: (batch, channels, H, W) -> (batch, channels*H*W)
+    # Each pixel (across all channels) is a feature
+    if len(X_train.shape) == 4:
+        batch_size = X_train.shape[0]
+        X_train_flat = X_train.reshape(batch_size, -1)
+        print(f"\nFlattened input from {X_shape} to {X_train_flat.shape}")
+        print(f"  - Each pixel = {X_shape[1]} features (one per channel)")
+        print(f"  - Total pixels = {X_shape[2]} x {X_shape[3]} = {X_shape[2]*X_shape[3]}")
+        print(f"  - Total features = {X_shape[2]*X_shape[3]} pixels × {X_shape[1]} channels")
+    else:
+        X_train_flat = X_train.copy()
+    
+    n_original_features = X_train_flat.shape[1]
+    print(f"Working with {n_original_features} features")
+    
+    # Cap n_mrmr_features to not exceed number of features
+    n_mrmr_features_actual = min(n_mrmr_features, n_original_features)
+    if n_mrmr_features_actual < n_mrmr_features:
+        print(f"⚠ Capped MRMR selection from {n_mrmr_features} to {n_mrmr_features_actual} (limited by feature count)")
     
     # ========================================================================
     # STEP 1: FEATURE PERMUTATION
@@ -1085,10 +1015,10 @@ def extract_features_logreg(X_train, y_train, model_func, n_mrmr_features=20, pe
     print("-" * 80)
     
     perm_features, _ = feature_permutation_pipeline(
-        X_train, y_train,
-        model_func,
+        X_train_flat, y_train,
+        model_func=None,
         num_features=None,  # Get all with non-zero importance
-        perturbation_type=perturbation_type
+        perturbation_type="logistic"
     )
     
     n_perm_features = len(perm_features)
@@ -1102,8 +1032,8 @@ def extract_features_logreg(X_train, y_train, model_func, n_mrmr_features=20, pe
     print("-" * 80)
     
     mrmr_features, _ = mrmr_pipeline(
-        X_train, y_train,
-        num_features=n_mrmr_features,
+        X_train_flat, y_train,
+        num_features=n_mrmr_features_actual,
         task_type="classif"
     )
     
@@ -1122,32 +1052,61 @@ def extract_features_logreg(X_train, y_train, model_func, n_mrmr_features=20, pe
         dataset_name="Training Data"
     )
     
+    # Handle case where no consensus features found
+    if len(consensus_features) == 0:
+        print("\n⚠ WARNING: No consensus features selected!")
+        print("  Falling back to all features with non-zero importance...")
+        if len(perm_features) > 0:
+            consensus_features = perm_features.copy()
+        else:
+            print("  No features with non-zero importance either. Using all features.")
+            consensus_features = perm_features  # Will be empty, but we'll handle below
+    
     n_selected_features = len(consensus_features)
     reduction_pct = (1 - n_selected_features / n_original_features) * 100
     
     print(f"✓ Consensus selected {n_selected_features} features ({reduction_pct:.2f}% reduction)")
     
     # ========================================================================
-    # STEP 4: MODEL TRAINING
+    # STEP 4: TRAIN MODEL ON ALL FEATURES
     # ========================================================================
     print("\n" + "-" * 80)
-    print("STEP 4: Training Model on Selected Features")
+    print("STEP 4: Training Logistic Regression on ALL Features")
     print("-" * 80)
     
-    # Get feature indices
-    selected_feature_names = consensus_features['feature'].tolist()
-    selected_indices = [int(f.split('_')[1]) for f in selected_feature_names]
+    model = train_log_reg(X_train_flat, y_train)
+    train_metrics = log_reg_accuracy(model, X_train_flat, y_train, is_binary=is_binary)
     
-    # Select features
-    X_train_selected = X_train[:, selected_indices]
-    
-    # Train model
-    print(f"Training model on {n_selected_features} selected features...")
-    train_metrics, test_metrics = model_func(X_train_selected, y_train)
-    
-    print(f"✓ Model trained successfully")
+    print(f"✓ Model trained on all {n_original_features} features")
     print(f"  - Train accuracy: {train_metrics['overall']:.4f}")
-    print(f"  - Test accuracy: {test_metrics['overall']:.4f}")
+    
+    # ========================================================================
+    # STEP 5: ZERO OUT NON-SELECTED FEATURE WEIGHTS
+    # ========================================================================
+    print("\n" + "-" * 80)
+    print("STEP 5: Zeroing Out Non-Selected Feature Weights")
+    print("-" * 80)
+    
+    if len(consensus_features) > 0:
+        # Get selected feature indices
+        selected_feature_names = consensus_features['feature'].tolist()
+        selected_indices = np.array([int(f.split('_')[1]) for f in selected_feature_names])
+        
+        # Create mask for non-selected features
+        all_indices = np.arange(n_original_features)
+        non_selected_mask = ~np.isin(all_indices, selected_indices)
+        non_selected_indices = np.where(non_selected_mask)[0]
+        
+        # Zero out coefficients for non-selected features
+        if hasattr(model, 'coef_'):
+            model.coef_[:, non_selected_indices] = 0
+            print(f"✓ Zeroed out coefficients for {len(non_selected_indices)} non-selected features")
+        else:
+            print("⚠ Warning: Model does not have coef_ attribute")
+    else:
+        print("⚠ No features selected for zeroing (using all features)")
+        selected_indices = np.arange(n_original_features)
+        non_selected_indices = np.array([])
     
     # ========================================================================
     # RESULTS SUMMARY
@@ -1156,24 +1115,27 @@ def extract_features_logreg(X_train, y_train, model_func, n_mrmr_features=20, pe
     print("PIPELINE COMPLETE")
     print("=" * 80)
     print(f"\nSummary:")
+    print(f"  - Original shape: {X_shape}")
     print(f"  - Original features: {n_original_features}")
     print(f"  - Selected features: {n_selected_features}")
     print(f"  - Reduction: {reduction_pct:.2f}%")
-    print(f"  - Test accuracy: {test_metrics['overall']:.4f}")
+    print(f"  - Train accuracy: {train_metrics['overall']:.4f}")
+    print(f"  - Non-zero weights: {n_selected_features}")
+    print(f"  - Zeroed weights: {len(non_selected_indices)}")
     
     # Return results
     results_dict = {
-        'model': model_func,  # Return function since model_func returns metrics, not model
-        'selected_features': selected_feature_names,
-        'selected_indices': selected_indices,
+        'model': model,  # Modified model with zeroed weights
+        'selected_feature_indices': selected_indices.tolist(),
+        'non_selected_feature_indices': non_selected_indices.tolist(),
         'n_original_features': n_original_features,
         'n_selected_features': n_selected_features,
         'reduction_percentage': reduction_pct,
+        'train_metrics': train_metrics,
+        'consensus_df': consensus_features,
+        'X_shape': X_shape,
         'permutation_features': perm_features['feature'].tolist(),
         'mrmr_features': mrmr_features,
-        'consensus_df': consensus_features,
-        'test_metrics': test_metrics,
-        'train_metrics': train_metrics
     }
     
     return results_dict
@@ -1263,6 +1225,162 @@ def create_cnn_wrapper(model_class, model_name="CNN", **init_kwargs):
         return train_preds, test_preds, train_metrics, test_metrics
     
     return wrapper_fn
+
+def extract_features_cnn(X_train, y_train, X_test, y_test, in_channels=4, num_classes=2, epochs=10):
+    """
+    Train CNN for per-pixel binary predictions with feature importance.
+    
+    Args:
+        X_train: Training features (batch, channels, H, W)
+        y_train: Training labels (batch, H, W) - per-pixel binary labels
+        X_test: Test features (batch, channels, H, W)
+        y_test: Test labels (batch, H, W)
+        in_channels: Number of input channels (default: 4)
+        num_classes: Number of classes (default: 2)
+        epochs: Number of training epochs (default: 10)
+    
+    Returns:
+        results_dict: Dictionary containing:
+            - 'model': Trained CNN model
+            - 'train_preds': Training predictions (batch, H, W)
+            - 'test_preds': Test predictions (batch, H, W)
+            - 'train_accuracy': Per-pixel training accuracy
+            - 'test_accuracy': Per-pixel test accuracy
+            - 'train_metrics': Training metrics dict
+            - 'test_metrics': Test metrics dict
+    """
+    
+    print("=" * 80)
+    print("CNN PER-PIXEL FEATURE EXTRACTION AND TRAINING")
+    print("=" * 80)
+    
+    # ========================================================================
+    # STEP 1: INITIALIZE MODEL AND DEVICE
+    # ========================================================================
+    print("\n" + "-" * 80)
+    print("STEP 1: Initializing Model")
+    print("-" * 80)
+    
+    X_shape = X_train.shape
+    y_shape = y_train.shape
+    batch_size, channels, height, width = X_shape
+    n_pixels = height * width
+    
+    print(f"Input shape: {X_shape}")
+    print(f"Target shape: {y_shape}")
+    print(f"  - Spatial dimensions: {height} × {width}")
+    print(f"  - Channels: {channels}")
+    print(f"  - Pixels (features per sample): {n_pixels}")
+    
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    model = SimpleCNN(in_channels=channels, num_classes=num_classes, output_type='pixel')
+    model.to(device)
+    
+    print(f"✓ Model initialized on device: {device}")
+    
+    # ========================================================================
+    # STEP 2: PREPARE DATA
+    # ========================================================================
+    print("\n" + "-" * 80)
+    print("STEP 2: Preparing Data")
+    print("-" * 80)
+    
+    X_train_t = torch.from_numpy(X_train).float().to(device)
+    y_train_t = torch.from_numpy(y_train).long().to(device)
+    X_test_t = torch.from_numpy(X_test).float().to(device)
+    y_test_t = torch.from_numpy(y_test).long().to(device)
+    
+    print(f"✓ Training data: {X_train_t.shape}, {y_train_t.shape}")
+    print(f"✓ Test data: {X_test_t.shape}, {y_test_t.shape}")
+    
+    # ========================================================================
+    # STEP 3: TRAIN MODEL
+    # ========================================================================
+    print("\n" + "-" * 80)
+    print("STEP 3: Training CNN")
+    print("-" * 80)
+    
+    criterion = nn.CrossEntropyLoss()
+    optimizer = optim.Adam(model.parameters(), lr=1e-3)
+    
+    for epoch in range(epochs):
+        model.train()
+        optimizer.zero_grad()
+        logits = model(X_train_t)  # (batch, num_classes, H, W)
+        loss = criterion(logits, y_train_t)  # y shape: (batch, H, W)
+        loss.backward()
+        optimizer.step()
+        
+        if (epoch + 1) % max(1, epochs // 5) == 0:
+            print(f"  Epoch {epoch + 1}/{epochs}, Loss: {loss.item():.4f}")
+    
+    print(f"✓ Training complete")
+    
+    # ========================================================================
+    # STEP 4: EVALUATE ON TRAINING DATA
+    # ========================================================================
+    print("\n" + "-" * 80)
+    print("STEP 4: Evaluating on Training Data")
+    print("-" * 80)
+    
+    model.eval()
+    with torch.no_grad():
+        train_logits = model(X_train_t)  # (batch, num_classes, H, W)
+        train_preds = torch.argmax(train_logits, dim=1).cpu().numpy()  # (batch, H, W)
+    
+    train_accuracy = np.mean(train_preds == y_train)
+    train_metrics = {
+        'accuracy': float(train_accuracy),
+        'shape': train_preds.shape
+    }
+    
+    print(f"✓ Train accuracy: {train_accuracy:.4f}")
+    print(f"✓ Prediction shape: {train_preds.shape}")
+    
+    # ========================================================================
+    # STEP 5: EVALUATE ON TEST DATA
+    # ========================================================================
+    print("\n" + "-" * 80)
+    print("STEP 5: Evaluating on Test Data")
+    print("-" * 80)
+    
+    with torch.no_grad():
+        test_logits = model(X_test_t)  # (batch, num_classes, H, W)
+        test_preds = torch.argmax(test_logits, dim=1).cpu().numpy()  # (batch, H, W)
+    
+    test_accuracy = np.mean(test_preds == y_test)
+    test_metrics = {
+        'accuracy': float(test_accuracy),
+        'shape': test_preds.shape
+    }
+    
+    print(f"✓ Test accuracy: {test_accuracy:.4f}")
+    print(f"✓ Prediction shape: {test_preds.shape}")
+    
+    # ========================================================================
+    # RESULTS SUMMARY
+    # ========================================================================
+    print("\n" + "=" * 80)
+    print("PIPELINE COMPLETE")
+    print("=" * 80)
+    print(f"\nSummary:")
+    print(f"  - Input shape: {X_shape}")
+    print(f"  - Spatial dimensions: {height} × {width}")
+    print(f"  - Train accuracy: {train_accuracy:.4f}")
+    print(f"  - Test accuracy: {test_accuracy:.4f}")
+    print(f"  - Output shape: {test_preds.shape}")
+    
+    results_dict = {
+        'model': model,
+        'train_preds': train_preds,
+        'test_preds': test_preds,
+        'train_accuracy': train_accuracy,
+        'test_accuracy': test_accuracy,
+        'train_metrics': train_metrics,
+        'test_metrics': test_metrics,
+    }
+    
+    return results_dict
 
 
 def create_unet_wrapper(original_shape, selected_indices):
@@ -1369,3 +1487,222 @@ def create_unet_wrapper(original_shape, selected_indices):
         return train_metrics, test_metrics
     
     return model_unet_masked
+
+def extract_features_unet(X_train, y_train, X_test, y_test, in_channels=3, out_channels=1, 
+                         epochs=20, init_features=32):
+    """
+    Train UNet for per-pixel segmentation with feature importance extraction.
+    
+    Args:
+        X_train: Training features (batch, channels, H, W)
+        y_train: Training labels (batch, H, W) or (batch, 1, H, W) - per-pixel binary labels
+        X_test: Test features (batch, channels, H, W)
+        y_test: Test labels (batch, H, W) or (batch, 1, H, W)
+        in_channels: Number of input channels (default: 3)
+        out_channels: Number of output channels (default: 1 for binary segmentation)
+        epochs: Number of training epochs (default: 20)
+        init_features: Initial feature maps in UNet (default: 32)
+    
+    Returns:
+        results_dict: Dictionary containing:
+            - 'model': Trained UNet model
+            - 'train_preds': Training predictions (batch, H, W) or (batch, 1, H, W)
+            - 'test_preds': Test predictions (batch, H, W) or (batch, 1, H, W)
+            - 'train_accuracy': Per-pixel training accuracy
+            - 'test_accuracy': Per-pixel test accuracy
+            - 'train_metrics': Training metrics dict
+            - 'test_metrics': Test metrics dict
+            - 'train_losses': Loss values per epoch
+            - 'test_losses': Loss values per epoch
+    """
+    
+    print("=" * 80)
+    print("UNET PER-PIXEL SEGMENTATION WITH FEATURE EXTRACTION")
+    print("=" * 80)
+    
+    # ========================================================================
+    # STEP 1: INITIALIZE MODEL AND DEVICE
+    # ========================================================================
+    print("\n" + "-" * 80)
+    print("STEP 1: Initializing UNet Model")
+    print("-" * 80)
+    
+    X_shape = X_train.shape
+    batch_size, channels, height, width = X_shape
+    n_pixels = height * width
+    
+    # Handle y_train shape: if (batch, 1, H, W), squeeze to (batch, H, W)
+    if len(y_train.shape) == 4 and y_train.shape[1] == 1:
+        y_train_2d = y_train.squeeze(1)  # (batch, H, W)
+        y_test_2d = y_test.squeeze(1)
+    else:
+        y_train_2d = y_train
+        y_test_2d = y_test
+    
+    print(f"Input shape: {X_shape}")
+    print(f"Target shape: {y_train_2d.shape}")
+    print(f"  - Spatial dimensions: {height} × {width}")
+    print(f"  - Input channels: {channels}")
+    print(f"  - Output channels: {out_channels}")
+    print(f"  - Pixels (features per sample): {n_pixels}")
+    
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    model = UNet(in_channels=channels, out_channels=out_channels, init_features=init_features)
+    model.to(device)
+    
+    print(f"✓ UNet model initialized on device: {device}")
+    
+    # ========================================================================
+    # STEP 2: PREPARE DATA
+    # ========================================================================
+    print("\n" + "-" * 80)
+    print("STEP 2: Preparing Data and DataLoaders")
+    print("-" * 80)
+    
+    X_train_t = torch.from_numpy(X_train).float().to(device)
+    y_train_t = torch.from_numpy(y_train_2d).float().to(device).unsqueeze(1)  # Add channel dim for BCE
+    X_test_t = torch.from_numpy(X_test).float().to(device)
+    y_test_t = torch.from_numpy(y_test_2d).float().to(device).unsqueeze(1)
+    
+    # Create datasets and loaders
+    from torch.utils.data import TensorDataset, DataLoader
+    train_dataset = TensorDataset(X_train_t, y_train_t)
+    test_dataset = TensorDataset(X_test_t, y_test_t)
+    
+    batch_size_loader = min(32, len(X_train_t))
+    train_loader = DataLoader(train_dataset, batch_size=batch_size_loader, shuffle=True)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size_loader, shuffle=False)
+    
+    print(f"✓ Training data: {X_train_t.shape}, {y_train_t.shape}")
+    print(f"✓ Test data: {X_test_t.shape}, {y_test_t.shape}")
+    print(f"✓ Batch size: {batch_size_loader}")
+    
+    # ========================================================================
+    # STEP 3: SETUP TRAINING
+    # ========================================================================
+    print("\n" + "-" * 80)
+    print("STEP 3: Setting Up Loss, Optimizer, and Scheduler")
+    print("-" * 80)
+    
+    criterion = nn.BCEWithLogitsLoss()  # For binary segmentation
+    optimizer = optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-5)
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=5)
+    
+    print(f"✓ Loss function: BCEWithLogitsLoss")
+    print(f"✓ Optimizer: Adam (lr=1e-3)")
+    print(f"✓ Scheduler: ReduceLROnPlateau")
+    
+    # ========================================================================
+    # STEP 4: TRAIN MODEL
+    # ========================================================================
+    print("\n" + "-" * 80)
+    print("STEP 4: Training UNet")
+    print("-" * 80)
+    
+    train_losses = []
+    test_losses = []
+    
+    for epoch in range(epochs):
+        # Training phase
+        model.train()
+        train_loss = 0.0
+        for batch_X, batch_y in train_loader:
+            optimizer.zero_grad()
+            logits = model(batch_X)  # (batch, out_channels, H, W)
+            loss = criterion(logits, batch_y)
+            loss.backward()
+            optimizer.step()
+            train_loss += loss.item()
+        
+        train_loss /= len(train_loader)
+        train_losses.append(train_loss)
+        
+        # Evaluation phase
+        model.eval()
+        test_loss = 0.0
+        with torch.no_grad():
+            for batch_X, batch_y in test_loader:
+                logits = model(batch_X)
+                loss = criterion(logits, batch_y)
+                test_loss += loss.item()
+        
+        test_loss /= len(test_loader)
+        test_losses.append(test_loss)
+        scheduler.step(test_loss)
+        
+        if (epoch + 1) % max(1, epochs // 5) == 0:
+            print(f"  Epoch {epoch + 1}/{epochs}, Train Loss: {train_loss:.4f}, Test Loss: {test_loss:.4f}")
+    
+    print(f"✓ Training complete")
+    
+    # ========================================================================
+    # STEP 5: EVALUATE ON TRAINING DATA
+    # ========================================================================
+    print("\n" + "-" * 80)
+    print("STEP 5: Evaluating on Training Data")
+    print("-" * 80)
+    
+    model.eval()
+    with torch.no_grad():
+        train_logits = model(X_train_t)  # (batch, out_channels, H, W)
+        train_probs = torch.sigmoid(train_logits).squeeze(1)  # (batch, H, W)
+        train_preds = (train_probs >= 0.5).long().cpu().numpy()  # (batch, H, W)
+    
+    train_accuracy = np.mean(train_preds == y_train_2d)
+    train_metrics = {
+        'accuracy': float(train_accuracy),
+        'shape': train_preds.shape
+    }
+    
+    print(f"✓ Train accuracy: {train_accuracy:.4f}")
+    print(f"✓ Prediction shape: {train_preds.shape}")
+    
+    # ========================================================================
+    # STEP 6: EVALUATE ON TEST DATA
+    # ========================================================================
+    print("\n" + "-" * 80)
+    print("STEP 6: Evaluating on Test Data")
+    print("-" * 80)
+    
+    with torch.no_grad():
+        test_logits = model(X_test_t)  # (batch, out_channels, H, W)
+        test_probs = torch.sigmoid(test_logits).squeeze(1)  # (batch, H, W)
+        test_preds = (test_probs >= 0.5).long().cpu().numpy()  # (batch, H, W)
+    
+    test_accuracy = np.mean(test_preds == y_test_2d)
+    test_metrics = {
+        'accuracy': float(test_accuracy),
+        'shape': test_preds.shape
+    }
+    
+    print(f"✓ Test accuracy: {test_accuracy:.4f}")
+    print(f"✓ Prediction shape: {test_preds.shape}")
+    
+    # ========================================================================
+    # RESULTS SUMMARY
+    # ========================================================================
+    print("\n" + "=" * 80)
+    print("PIPELINE COMPLETE")
+    print("=" * 80)
+    print(f"\nSummary:")
+    print(f"  - Input shape: {X_shape}")
+    print(f"  - Spatial dimensions: {height} × {width}")
+    print(f"  - Final train loss: {train_losses[-1]:.4f}")
+    print(f"  - Final test loss: {test_losses[-1]:.4f}")
+    print(f"  - Train accuracy: {train_accuracy:.4f}")
+    print(f"  - Test accuracy: {test_accuracy:.4f}")
+    print(f"  - Output shape: {test_preds.shape}")
+    
+    results_dict = {
+        'model': model,
+        'train_preds': train_preds,
+        'test_preds': test_preds,
+        'train_accuracy': train_accuracy,
+        'test_accuracy': test_accuracy,
+        'train_metrics': train_metrics,
+        'test_metrics': test_metrics,
+        # 'train_losses': train_losses,
+        # 'test_losses': test_losses,
+    }
+    
+    return results_dict
