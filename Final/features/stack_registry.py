@@ -5,14 +5,15 @@ from typing import Iterable
 
 import pandas as pd
 
-from Final.shared_utils import get_logger
 from Final.artifact_store import ArtifactStore
-from Final.features.models import RasterLayerRecord, RasterStackRegistry
+from Final.shared_utils import get_logger
+
 from Final.features.artifact_io import (
     current_fe_config_signature,
     persist_json_artifact,
     try_load_json_artifact,
 )
+from Final.features.models import RasterLayerRecord, RasterStackRegistry
 
 LOGGER = get_logger("features.stack_registry")
 
@@ -52,7 +53,7 @@ def extend_layer_records(
 
 
 def deduplicate_stack_registry(registry: RasterStackRegistry) -> RasterStackRegistry:
-    seen: set[tuple[str, str, str, str]] = set()
+    seen: set[tuple[str, str, str, str, str | None]] = set()
     deduped: list[RasterLayerRecord] = []
 
     for row in registry.layers:
@@ -60,7 +61,8 @@ def deduplicate_stack_registry(registry: RasterStackRegistry) -> RasterStackRegi
             row.source_name,
             row.family_name,
             row.layer_name,
-            row.chunk_id,
+            row.chunk_id or "",
+            row.rel_path,
         )
         if key in seen:
             continue
@@ -129,7 +131,7 @@ def load_or_init_stack_registry(
             site_id,
             len(existing.layers),
         )
-        return existing
+        return deduplicate_stack_registry(existing)
 
     return init_stack_registry(
         site_id,

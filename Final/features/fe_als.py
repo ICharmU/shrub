@@ -562,3 +562,77 @@ def plot_als(input_path):
     )
 
     fig.show()
+
+def rasterize_als_feature_dict_from_xyz(
+    x: np.ndarray,
+    y: np.ndarray,
+    z: np.ndarray,
+    *,
+    resolution: float = 1.0,
+    tall_canopy_threshold_m: float = 5.0,
+    local_relief_window_px: int = 5,
+    knn_k: int = 30,
+) -> tuple[dict[str, np.ndarray], tuple[float, float, float, float]]:
+    x = np.asarray(x, dtype=np.float64)
+    y = np.asarray(y, dtype=np.float64)
+    z = np.asarray(z, dtype=np.float32)
+
+    valid = np.isfinite(x) & np.isfinite(y) & np.isfinite(z)
+    x, y, z = x[valid], y[valid], z[valid]
+
+    if x.size == 0:
+        raise ValueError("No valid ALS points after filtering")
+
+    x_min, x_max = float(np.min(x)), float(np.max(x))
+    y_min, y_max = float(np.min(y)), float(np.max(y))
+
+    cols = max(1, int(np.ceil((x_max - x_min) / resolution)))
+    rows = max(1, int(np.ceil((y_max - y_min) / resolution)))
+
+    x_edges = np.linspace(x_min, x_max, cols + 1)
+    y_edges = np.linspace(y_min, y_max, rows + 1)
+
+    chm_grid, _, _, _ = binned_statistic_2d(x, y, z, statistic="max", bins=[x_edges, y_edges])
+    mean_grid, _, _, _ = binned_statistic_2d(x, y, z, statistic="mean", bins=[x_edges, y_edges])
+    count_grid, _, _, _ = binned_statistic_2d(x, y, z, statistic="count", bins=[x_edges, y_edges])
+    std_grid, _, _, _ = binned_statistic_2d(x, y, z, statistic="std", bins=[x_edges, y_edges])
+
+    chm_grid = np.rot90(chm_grid).astype(np.float32)
+    mean_grid = np.rot90(mean_grid).astype(np.float32)
+    count_grid = np.rot90(count_grid).astype(np.float32)
+    std_grid = np.rot90(std_grid).astype(np.float32)
+
+    safe_chm = np.nan_to_num(chm_grid, nan=0.0).astype(np.float32)
+    dist_to_canopy = calculate_distance_to_tall_canopy(
+        safe_chm,
+        resolution=resolution,
+        height_threshold=tall_canopy_threshold_m,
+    ).astype(np.float32)
+    local_relief = calculate_local_relief(
+        safe_chm,
+        window_size_pixels=local_relief_window_px,
+    ).astype(np.float32)
+
+    arrays = {
+        "als_chm_max": chm_grid,
+        "als_height_mean": mean_grid,
+        "als_point_count": count_grid,
+        "als_height_std": std_grid,
+        "als_distance_to_tall_canopy": dist_to_canopy,
+        "als_local_relief": local_relief,
+    }
+
+    if x.size >= max(knn_k + 1, 32):
+        points = np.column_stack([x, y, z]).astype(np.float32)
+        knn_variance, knn_roughness, knn_heterogeneity, knn_maxima_density = calculate_knn_node_metrics(points, k=knn_k)
+
+        for name, values in [
+            ("als_knn_variance", knn_variance),
+            ("als_knn_roughness", knn_roughness),
+            ("als_knn_heterogeneity", knn_heterogeneity),
+            ("als_knn_maxima_density", knn_maxima_density),
+        ]:
+            grid, _, _, _ = binned_statistic_2d(x, y, values, statistic="mean", bins=[x_edges, y_edges])
+            arrays[name] = np.rot90(grid).astype(np.float32)
+
+    return arrays, (x_min, y_min, x_max, y_max)

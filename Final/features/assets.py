@@ -103,9 +103,57 @@ def _dedupe_notes(notes: list[str]) -> list[str]:
         out.append(note)
     return out
 
+def list_remote_tif_candidates(remote_dir: str) -> list[dict[str, Any]]:
+    try:
+        return list_files_with_suffix(remote_dir, (".tif", ".tiff"))
+    except Exception as e:
+        LOGGER.warning("Failed tif listing for remote_dir=%s | err=%s", remote_dir, e)
+        return []
+
+
+def score_3dep_candidate(entry: dict[str, Any], *, naip_name: str) -> tuple[int, int, str]:
+    name = str(entry.get("name", "")).lower()
+    score = 0
+
+    if name == str(naip_name).lower():
+        score -= 1000
+
+    for kw in ["3dep", "dem", "elev", "elevation", "terrain", "dtm"]:
+        if kw in name:
+            score += 50
+
+    for kw in ["dsm", "usgs", "slope"]:
+        if kw in name:
+            score += 20
+
+    if "naip" in name:
+        score -= 50
+    if any(kw in name for kw in ("rgb", "nir", "ortho")):
+        score -= 40
+
+    return (score, -len(name), name)
+
+
+def infer_3dep_entry_from_candidates(
+    tif_candidates: list[dict[str, Any]],
+    *,
+    naip_name: str,
+) -> dict[str, Any] | None:
+    if not tif_candidates:
+        return None
+
+    ranked = sorted(
+        tif_candidates,
+        key=lambda x: score_3dep_candidate(x, naip_name=naip_name),
+        reverse=True,
+    )
+    best = ranked[0]
+    best_score = score_3dep_candidate(best, naip_name=naip_name)[0]
+    return best if best_score >= 0 else None
 
 def build_source_inventory(site_id: str) -> dict[str, Any]:
     site_base = site_to_remote_base(cfg, site_id)
+    product_dir = f"{site_base}/{cfg.data.naip_3dep_dir}"
     naip_name = site_to_tif_name(site_id)
 
     inventory = {
@@ -113,14 +161,21 @@ def build_source_inventory(site_id: str) -> dict[str, Any]:
         "site_base": site_base,
         "naip": {
             "expected_name": naip_name,
-            "remote_url": f"{site_base}/{cfg.data.naip_3dep_dir}/{naip_name}",
+            "remote_url": f"{product_dir}/{naip_name}",
         },
         "als": {
             "remote_url": f"{site_base}/{cfg.data.als_dir}",
             "files": [],
         },
-        "3dep": {"remote_url": None},
-        "rap": {"remote_url": None},
+        "3dep": {
+            "remote_dir": product_dir,
+            "remote_url": None,
+            "expected_name": None,
+            "candidates": [],
+        },
+        "rap": {
+            "remote_url": None,
+        },
     }
 
     try:
@@ -131,6 +186,24 @@ def build_source_inventory(site_id: str) -> dict[str, Any]:
         inventory["als"]["files"] = als_files
     except Exception as e:
         inventory["als"]["error"] = str(e)
+
+    try:
+        tif_candidates = list_remote_tif_candidates(product_dir)
+        inventory["3dep"]["candidates"] = tif_candidates
+
+        chosen = infer_3dep_entry_from_candidates(
+            tif_candidates,
+            naip_name=naip_name,
+        )
+        if chosen is not None:
+            inventory["3dep"]["expected_name"] = chosen["name"]
+            inventory["3dep"]["remote_url"] = chosen.get("url") or chosen.get("href")
+        else:
+            inventory["3dep"]["warning"] = (
+                "No convincing 3DEP tif candidate found in NAIP_3DEP product directory."
+            )
+    except Exception as e:
+        inventory["3dep"]["error"] = str(e)
 
     return inventory
 

@@ -1093,3 +1093,198 @@ class FeaturePipeline(BasePipeline):
                 "Phase 1 + Phase 2A implementation: shared FE stages only.",
             ],
         )
+    
+
+def run_multisource_fe_notebook_pipeline(
+    site_id: str,
+    *,
+    include_naip: bool = True,
+    include_3dep: bool = False,
+    include_rap: bool = False,
+    include_als: bool = False,
+    rebuild_registry: bool = True,
+    force_refresh_assets: bool | None = None,
+    force_refresh_features: bool | None = None,
+    force_refresh_source: bool = False,
+) -> dict[str, Any]:
+    force_refresh_assets = fe_cfg.force_refresh_assets if force_refresh_assets is None else force_refresh_assets
+    force_refresh_features = fe_cfg.force_refresh_features if force_refresh_features is None else force_refresh_features
+
+    site_assets = prepare_site_assets(site_id, force_refresh=force_refresh_assets)
+
+    canonical_grid = build_canonical_grid_for_site(
+        site_id,
+        assets=site_assets,
+        force_refresh=force_refresh_features,
+    )
+
+    chunk_manifest = build_chunk_manifest(
+        canonical_grid,
+        force_refresh=fe_cfg.force_rebuild_chunk_manifest,
+    )
+
+    # Canonical space is now cached; local NAIP can be pruned aggressively.
+    naip_asset = site_assets.source_assets.get("naip")
+    if naip_asset is not None:
+        maybe_prune_local_site_naip_after_grid_build(site_id, naip_asset)
+
+    registry = (
+        RasterStackRegistry(
+            site_id=site_id,
+            config_signature=fe_config_signature(),
+            layers=[],
+        )
+        if rebuild_registry
+        else load_or_init_stack_registry(site_id, fe_config_signature())
+    )
+
+    source_results: dict[str, dict[str, Any]] = {}
+    executed_sources: list[str] = []
+
+    def _run_source(source_name: str, fn):
+        nonlocal registry
+        LOGGER.info("=" * 80)
+        LOGGER.info("RUN MULTISOURCE FE | site=%s | source=%s", site_id, source_name)
+
+        try:
+            registry = fn(registry)
+            source_results[source_name] = {
+                "status": "success",
+                "n_layers_after": len(registry.layers),
+                "notes": [],
+            }
+            executed_sources.append(source_name)
+        except Exception as e:
+            LOGGER.warning(
+                "RUN MULTISOURCE FE SOURCE FAILED | site=%s | source=%s | err=%s",
+                site_id, source_name, e
+            )
+            source_results[source_name] = {
+                "status": "failed",
+                "n_layers_after": len(registry.layers),
+                "notes": [str(e)],
+            }
+        finally:
+            try:
+                clear_artifact_staging_dir()
+            except Exception as e:
+                LOGGER.warning(
+                    "Failed clearing artifact staging after multisource source run | site=%s | source=%s | err=%s",
+                    site_id, source_name, e
+                )
+
+    if include_naip:
+        _run_source(
+            "naip",
+            lambda reg: run_naip_chunked_pipeline(
+                site_id,
+                assets=site_assets,
+                grid=canonical_grid,
+                chunk_manifest=chunk_manifest,
+                rebuild_registry=False,
+                #registry=reg,
+            )
+        )
+
+    if include_3dep:
+        _run_source(
+            "3dep",
+            lambda reg: run_3dep_chunked_pipeline(
+                site_id,
+                site_assets=site_assets,
+                canonical_grid=canonical_grid,
+                chunk_manifest=chunk_manifest,
+                registry=reg,
+                force_refresh_source=force_refresh_source,
+            )
+        )
+
+    if include_rap:
+        _run_source(
+            "rap",
+            lambda reg: run_rap_chunked_pipeline(
+                site_id,
+                site_assets=site_assets,
+                canonical_grid=canonical_grid,
+                chunk_manifest=chunk_manifest,
+                registry=reg,
+                force_refresh_source=force_refresh_source,
+            )
+        )
+
+    if include_als:
+        _run_source(
+            "als",
+            lambda reg: run_als_chunked_pipeline(
+                site_id,
+                site_assets=site_assets,
+                canonical_grid=canonical_grid,
+                chunk_manifest=chunk_manifest,
+                registry=reg,
+            )
+        )
+
+    registry = deduplicate_stack_registry(registry)
+    stack_rec = save_stack_registry(registry)
+
+    return {
+        "site_id": site_id,
+        "executed_sources": executed_sources,
+        "source_results": source_results,
+        "site_assets": site_assets,
+        "canonical_grid": canonical_grid,
+        "chunk_manifest": chunk_manifest,
+        "stack_registry": registry,
+        "stack_registry_artifact": stack_rec,
+    }
+
+def run_multisource_fe_all_sites(
+    *,
+    include_naip: bool = True,
+    include_3dep: bool = True,
+    include_rap: bool = True,
+    include_als: bool = True,
+    rebuild_registry: bool = True,
+    force_refresh_assets: bool | None = None,
+    force_refresh_features: bool | None = None,
+    force_refresh_source: bool = False,
+) -> dict[str, Any]:
+    out: dict[str, Any] = {}
+
+    for site_id in fe_cfg.sites:
+        LOGGER.info("=" * 100)
+        LOGGER.info("RUN MULTISOURCE FE ALL SITES | site=%s", site_id)
+
+        try:
+            run_payload = run_multisource_fe_notebook_pipeline(
+                site_id,
+                include_naip=include_naip,
+                include_3dep=include_3dep,
+                include_rap=include_rap,
+                include_als=include_als,
+                rebuild_registry=rebuild_registry,
+                force_refresh_assets=force_refresh_assets,
+                force_refresh_features=force_refresh_features,
+                force_refresh_source=force_refresh_source,
+            )
+            out[site_id] = {
+                "status": "success",
+                **run_payload,
+            }
+        except Exception as e:
+            LOGGER.warning("RUN MULTISOURCE FE ALL SITES FAILED | site=%s | err=%s", site_id, e)
+            out[site_id] = {
+                "status": "failed",
+                "site_id": site_id,
+                "executed_sources": [],
+                "source_results": {},
+                "stack_registry": None,
+                "notes": [str(e)],
+            }
+        finally:
+            try:
+                clear_artifact_staging_dir()
+            except Exception:
+                pass
+
+    return out

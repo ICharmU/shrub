@@ -1,11 +1,23 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from pathlib import Path
+from enum import Enum
 from typing import Any
 
-from rasterio.transform import Affine
 from rasterio.enums import Resampling
+from rasterio.transform import Affine
+
+
+class RuntimeTier(str, Enum):
+    CHEAP = "cheap"
+    MODERATE = "moderate"
+    EXPENSIVE = "expensive"
+
+
+class RepresentationTarget(str, Enum):
+    RASTER = "raster"
+    OBJECT = "object"
+    BOTH = "both"
 
 
 @dataclass
@@ -94,6 +106,11 @@ class SourceRasterBundle:
     nodata: float | int | None
     metadata: dict[str, Any] = field(default_factory=dict)
 
+    @property
+    def shape(self) -> tuple[int, int]:
+        first = next(iter(self.arrays.values()))
+        return tuple(first.shape)
+
 
 @dataclass
 class SourceIngestRecord:
@@ -113,27 +130,44 @@ class SourceReadyRecord:
     notes: list[str] = field(default_factory=list)
 
 
+@dataclass(frozen=True)
+class FeatureFamilySpec:
+    key: str
+    source_name: str
+    runtime_tier: RuntimeTier
+    required_halo_px: int
+    representation_target: RepresentationTarget
+    outputs_dense_layers: bool = True
+    outputs_object_fields: bool = False
+    notes: str = ""
+
+
 @dataclass
-class RasterStackLayer:
+class RasterLayerRecord:
     site_id: str
-    config_signature: str
     source_name: str
     family_name: str
     layer_name: str
+    chunk_id: str | None = None
     rel_path: str | None = None
     local_path: str | None = None
     remote_ref: str | None = None
     storage_tier: str | None = None
+    chunked: bool = True
     dtype: str = "float32"
-    chunk_id: str | None = None
+    shape: tuple[int, int] | None = None
     notes: list[str] = field(default_factory=list)
+
+
+# Compatibility alias for any old imports still using RasterStackLayer
+RasterStackLayer = RasterLayerRecord
 
 
 @dataclass
 class RasterStackRegistry:
     site_id: str
     config_signature: str
-    layers: list[RasterStackLayer] = field(default_factory=list)
+    layers: list[RasterLayerRecord] = field(default_factory=list)
 
-    def add_layer(self, layer: RasterStackLayer) -> None:
+    def add_layer(self, layer: RasterLayerRecord) -> None:
         self.layers.append(layer)

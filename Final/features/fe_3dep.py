@@ -122,3 +122,61 @@ def extract_all_terrain_features(elevation_image: ee.Image) -> ee.Image:
     # use bands to extract feature info.
     return bands, terrain_feature_family
 
+def build_terrain_feature_dict_from_array(
+    elevation: np.ndarray,
+    *,
+    pixel_size_m: float,
+    ruggedness_kernel_radius: int = 3,
+    tpi_radius_meters: float = 150.0,
+    hillshade_azimuth: float = 270.0,
+    hillshade_zenith: float = 45.0,
+    blur_fn=None,
+) -> dict[str, np.ndarray]:
+    """
+    NumPy version of the same terrain family defined above for EE:
+    elevation, slope, aspect, northness, eastness, curvature, ruggedness, tpi, hillshade exposure.
+    """
+    if blur_fn is None:
+        raise ValueError("build_terrain_feature_dict_from_array requires blur_fn")
+
+    elev = np.asarray(elevation, dtype=np.float32)
+    elev = np.where(np.isfinite(elev), elev, 0.0).astype(np.float32)
+
+    gy, gx = np.gradient(elev)
+    slope = np.sqrt(gx**2 + gy**2).astype(np.float32)
+
+    aspect = np.arctan2(gy, gx).astype(np.float32)
+    northness = np.cos(aspect).astype(np.float32)
+    eastness = np.sin(aspect).astype(np.float32)
+
+    gyy, _ = np.gradient(gy)
+    _, gxx = np.gradient(gx)
+    curvature = (gxx + gyy).astype(np.float32)
+
+    ruggedness_window = max(3, 2 * ruggedness_kernel_radius + 1)
+    local_mean = blur_fn(elev, neighborhood_size=ruggedness_window).astype(np.float32)
+    local_mean_sq = blur_fn(elev**2, neighborhood_size=ruggedness_window).astype(np.float32)
+    ruggedness = np.sqrt(np.maximum(local_mean_sq - local_mean**2, 0.0)).astype(np.float32)
+
+    tpi_window = max(5, int(round(tpi_radius_meters / max(pixel_size_m, 1e-6))))
+    tpi_mean = blur_fn(elev, neighborhood_size=tpi_window).astype(np.float32)
+    tpi = (elev - tpi_mean).astype(np.float32)
+
+    az = math.radians(hillshade_azimuth)
+    zen = math.radians(hillshade_zenith)
+    hillshade = (
+        np.cos(zen) * np.cos(slope) +
+        np.sin(zen) * np.sin(slope) * np.cos(az - aspect)
+    ).astype(np.float32)
+
+    return {
+        "terrain_elevation": elev,
+        "terrain_slope": slope,
+        "terrain_aspect": aspect,
+        "terrain_northness": northness,
+        "terrain_eastness": eastness,
+        "terrain_curvature": curvature,
+        "terrain_ruggedness": ruggedness,
+        "terrain_tpi": tpi,
+        "terrain_hillshade_exposure": hillshade,
+    }

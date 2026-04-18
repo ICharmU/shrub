@@ -1,136 +1,126 @@
 from __future__ import annotations
 
+import hashlib
+import json
 from pathlib import Path
-from typing import Any, Callable
 
-from pyproj import CRS
 import numpy as np
-from rasterio.transform import Affine, array_bounds
-from rasterio.warp import transform_bounds
+from rasterio.crs import CRS
+from rasterio.transform import Affine
 
 from Final.artifact_store import ArtifactStore
-from Final.shared_utils import get_logger
-from Final.pipeline_caching import hash_payload
+from Final.shared_utils import ensure_dir, get_logger
 
+from Final.features.artifact_io import (
+    read_json,
+    remote_artifact_exists,
+    render_artifact_rel_path,
+    write_json,
+)
+from Final.features.assets import site_3dep_cache_root, site_naip_cache_root, site_rap_cache_root
 from Final.features.config import fe_cfg
 from Final.features.models import CanonicalGrid, SiteAssetBundle
-from Final.features.artifact_io import (
-    current_fe_config_signature,
-    try_load_json_artifact,
-    persist_json_artifact,
-)
-from Final.features.raster_io import (
-    infer_naip_band_names,
-    read_raster_bundle,
-    validate_optional_raster_asset,
-)
-
+from Final.features.raster_io import infer_naip_band_names, read_raster_bundle
 
 LOGGER = get_logger("features.canonical_grid")
 
-PrepareNAIPFn = Callable[..., Path | None]
-PrepareSiteAssetsFn = Callable[..., SiteAssetBundle]
+
+def _stable_sig(payload: dict) -> str:
+    blob = json.dumps(payload, sort_keys=True, default=str).encode("utf-8")
+    return hashlib.sha256(blob).hexdigest()[:16]
 
 
-def canonical_grid_data_signature(site_id: str, naip_ref: str | None) -> str:
-    return hash_payload(
-        {
-            "site_id": site_id,
-            "naip_ref": naip_ref,
-            "canonical_grid_source": fe_cfg.canonical_grid_source,
-        }
-    )
+def canonical_grid_cache_dir(site_id: str, data_signature: str, config_signature: str) -> Path:
+    return ensure_dir(fe_cfg.cache_root / "canonical_grid" / site_id / data_signature / config_signature)
 
 
-def canonical_grid_config_signature() -> str:
-    return hash_payload(
-        {
-            "canonical_grid_source": fe_cfg.canonical_grid_source,
-            "version": fe_cfg.version,
-        }
-    )
-
-
-def resolve_canonical_grid_naip_path(
+def resolve_site_asset_for_read(
     site_id: str,
     *,
-    assets: SiteAssetBundle,
-    prepare_naip_asset_fn: PrepareNAIPFn | None = None,
-    force_refresh: bool = False,
+    artifact_store: ArtifactStore,
+    asset_path: str | Path | None,
+    artifact_key: str,
+    filename: str | None = None,
 ) -> Path:
-    naip_path = assets.source_assets.get("naip")
+    if asset_path is None:
+        raise ValueError(f"No asset path registered for site={site_id} and artifact_key={artifact_key}")
 
-    if validate_optional_raster_asset(naip_path):
-        return Path(naip_path)
+    p = Path(asset_path)
+    if p.exists():
+        return p
 
-    if prepare_naip_asset_fn is None:
-        raise ValueError(
-            f"NAIP asset for site={site_id} is missing or invalid, and no prepare_naip_asset_fn was supplied."
+    if artifact_key == "site_naip_raster":
+        rel_path = render_artifact_rel_path("site_naip_raster", site_id=site_id, filename=filename or p.name)
+        local_path = site_naip_cache_root(site_id) / (filename or p.name)
+    elif artifact_key == "site_3dep_raster":
+        rel_path = render_artifact_rel_path("site_3dep_raster", site_id=site_id, filename=filename or p.name)
+        local_path = site_3dep_cache_root(site_id) / (filename or p.name)
+    elif artifact_key == "site_rap_raster":
+        rel_path = render_artifact_rel_path("site_rap_raster", site_id=site_id, filename=filename or p.name)
+        local_path = site_rap_cache_root(site_id) / (filename or p.name)
+    else:
+        raise ValueError(f"Unsupported artifact_key for site-asset rehydration: {artifact_key}")
+
+    if remote_artifact_exists(rel_path, artifact_store=artifact_store):
+        LOGGER.info(
+            "Rehydrating pruned site asset | site=%s | key=%s | rel_path=%s",
+            site_id, artifact_key, rel_path,
         )
+        return artifact_store.pull(rel_path, local_path=local_path)
 
-    repaired = prepare_naip_asset_fn(
-        site_id,
-        force_refresh=force_refresh,
-        inventory=assets.source_assets.get("source_inventory"),
-        site_assets=assets,
-        canonical_grid=None,
+    raise FileNotFoundError(
+        f"Site asset missing locally and not found remotely | site={site_id} | key={artifact_key} | path={p}"
     )
-
-    if not validate_optional_raster_asset(repaired):
-        raise ValueError(f"NAIP asset repair failed for site={site_id}: {repaired}")
-
-    return Path(repaired)
 
 
 def build_canonical_grid_for_site(
     site_id: str,
     *,
     artifact_store: ArtifactStore,
-    assets: SiteAssetBundle | None = None,
+    assets: SiteAssetBundle,
     force_refresh: bool = False,
-    prepare_site_assets_fn: PrepareSiteAssetsFn | None = None,
-    prepare_naip_asset_fn: PrepareNAIPFn | None = None,
 ) -> CanonicalGrid:
-    if fe_cfg.canonical_grid_source != "naip":
-        raise NotImplementedError(
-            f"Only canonical_grid_source='naip' is currently supported, got {fe_cfg.canonical_grid_source!r}"
-        )
+    naip_asset = assets.source_assets.get("naip")
+    if naip_asset is None:
+        raise ValueError(f"No NAIP asset available for site={site_id}; cannot build canonical grid.")
 
-    if assets is None:
-        if prepare_site_assets_fn is None:
-            raise ValueError("assets is None and no prepare_site_assets_fn was supplied.")
-        assets = prepare_site_assets_fn(site_id, force_refresh=force_refresh)
-
-    naip_ref = str(assets.source_assets.get("naip"))
-    data_sig = canonical_grid_data_signature(site_id, naip_ref)
-    config_sig = canonical_grid_config_signature()
-
-    payload = None if force_refresh else try_load_json_artifact(
-        artifact_key="canonical_grid",
-        site_id=site_id,
-        artifact_store=artifact_store,
-        config_sig=current_fe_config_signature(),
-    )
-
-    if payload is not None:
-        if payload.get("data_signature") == data_sig and payload.get("config_signature") == config_sig:
-            LOGGER.info("Using cached canonical grid | site=%s", site_id)
-            return CanonicalGrid(
-                site_id=payload["site_id"],
-                width=payload["width"],
-                height=payload["height"],
-                transform=Affine(*payload["transform"]),
-                crs=CRS.from_user_input(payload["crs"]),
-                source_name=payload["source_name"],
-                nodata=payload["nodata"],
-            )
-
-    naip_path = resolve_canonical_grid_naip_path(
+    naip_path = resolve_site_asset_for_read(
         site_id,
-        assets=assets,
-        prepare_naip_asset_fn=prepare_naip_asset_fn,
-        force_refresh=force_refresh,
+        artifact_store=artifact_store,
+        asset_path=naip_asset,
+        artifact_key="site_naip_raster",
+        filename=Path(naip_asset).name if naip_asset is not None else None,
     )
+
+    data_sig = _stable_sig(
+        {
+            "site_id": site_id,
+            "naip_filename": naip_path.name,
+            "canonical_grid_source": fe_cfg.canonical_grid_source,
+        }
+    )
+    config_sig = _stable_sig(
+        {
+            "canonical_grid_source": fe_cfg.canonical_grid_source,
+            "version": fe_cfg.version,
+        }
+    )
+
+    cache_dir = canonical_grid_cache_dir(site_id, data_sig, config_sig)
+    grid_json = cache_dir / "canonical_grid.json"
+
+    if (not force_refresh) and grid_json.exists():
+        payload = read_json(grid_json)
+        LOGGER.info("Using cached canonical grid | site=%s", site_id)
+        return CanonicalGrid(
+            site_id=payload["site_id"],
+            width=payload["width"],
+            height=payload["height"],
+            transform=Affine(*payload["transform"]),
+            crs=CRS.from_user_input(payload["crs"]),
+            source_name=payload["source_name"],
+            nodata=payload["nodata"],
+        )
 
     bundle = read_raster_bundle(
         naip_path,
@@ -150,7 +140,8 @@ def build_canonical_grid_for_site(
         nodata=np.nan,
     )
 
-    persist_json_artifact(
+    write_json(
+        grid_json,
         {
             "site_id": grid.site_id,
             "width": grid.width,
@@ -159,13 +150,7 @@ def build_canonical_grid_for_site(
             "crs": str(grid.crs),
             "source_name": grid.source_name,
             "nodata": grid.nodata,
-            "data_signature": data_sig,
-            "config_signature": config_sig,
         },
-        artifact_key="canonical_grid",
-        site_id=site_id,
-        artifact_store=artifact_store,
-        config_sig=current_fe_config_signature(),
     )
 
     LOGGER.info(
@@ -176,54 +161,3 @@ def build_canonical_grid_for_site(
         grid.pixel_size,
     )
     return grid
-
-
-def canonical_grid_bounds_native(grid: CanonicalGrid) -> tuple[float, float, float, float]:
-    left, bottom, right, top = array_bounds(
-        grid.height,
-        grid.width,
-        grid.transform,
-    )
-    return float(left), float(bottom), float(right), float(top)
-
-
-def canonical_grid_bounds_wgs84(grid: CanonicalGrid) -> tuple[float, float, float, float]:
-    src_crs = CRS.from_user_input(grid.crs)
-    left, bottom, right, top = canonical_grid_bounds_native(grid)
-
-    if str(src_crs).upper() == "EPSG:4326":
-        out = (left, bottom, right, top)
-    else:
-        out = transform_bounds(
-            src_crs,
-            "EPSG:4326",
-            left,
-            bottom,
-            right,
-            top,
-            densify_pts=21,
-        )
-
-    out = tuple(float(x) for x in out)
-
-    west, south, east, north = out
-    west = max(-180.0, min(180.0, west))
-    east = max(-180.0, min(180.0, east))
-    south = max(-90.0, min(90.0, south))
-    north = max(-90.0, min(90.0, north))
-
-    if not (west < east and south < north):
-        raise ValueError(f"Invalid WGS84 bounds after transform: {(west, south, east, north)}")
-
-    return west, south, east, north
-
-
-def canonical_grid_bbox_region_coords(grid: CanonicalGrid) -> list[list[float]]:
-    west, south, east, north = canonical_grid_bounds_wgs84(grid)
-    return [
-        [west, south],
-        [east, south],
-        [east, north],
-        [west, north],
-        [west, south],
-    ]

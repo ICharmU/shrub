@@ -5,11 +5,12 @@ from typing import Any
 
 import numpy as np
 import rasterio
+from rasterio.enums import Resampling
 from rasterio.warp import reproject
 from rasterio.windows import Window
-from rasterio.enums import Resampling
 
-from Final.features.models import CanonicalGrid, SourceRasterBundle
+from Final.features.models import CanonicalGrid, ChunkRecord, SourceRasterBundle
+from Final.features.chunking import expanded_chunk_bounds
 
 
 def validate_cached_raster(path: str | Path) -> bool:
@@ -19,9 +20,26 @@ def validate_cached_raster(path: str | Path) -> bool:
 
     try:
         with rasterio.open(path) as src:
-            h = max(1, min(16, src.height))
-            w = max(1, min(16, src.width))
-            src.read([1], window=Window(0, 0, w, h))
+            if src.count < 1 or src.width <= 0 or src.height <= 0:
+                return False
+
+            windows = [
+                Window(0, 0, min(32, src.width), min(32, src.height)),
+                Window(
+                    max(0, src.width // 2 - min(16, src.width // 2)),
+                    max(0, src.height // 2 - min(16, src.height // 2)),
+                    min(32, src.width),
+                    min(32, src.height),
+                ),
+                Window(
+                    max(0, src.width - min(32, src.width)),
+                    max(0, src.height - min(32, src.height)),
+                    min(32, src.width),
+                    min(32, src.height),
+                ),
+            ]
+            for w in windows:
+                src.read([1], window=w)
         return True
     except Exception:
         return False
@@ -144,26 +162,37 @@ def align_bundle_to_grid(
 
 def slice_chunk_from_arrays(
     arrays: dict[str, np.ndarray],
+    record: ChunkRecord,
     *,
-    row_start: int,
-    row_end: int,
-    col_start: int,
-    col_end: int,
-) -> dict[str, np.ndarray]:
+    full_height: int,
+    full_width: int,
+    halo_px: int | None = None,
+) -> tuple[dict[str, np.ndarray], dict[str, int]]:
+    bounds = expanded_chunk_bounds(
+        record,
+        height=full_height,
+        width=full_width,
+        halo_px=halo_px,
+    )
     out = {}
     for name, arr in arrays.items():
-        out[name] = arr[row_start:row_end, col_start:col_end]
-    return out
+        out[name] = arr[
+            bounds["row_start"]:bounds["row_end"],
+            bounds["col_start"]:bounds["col_end"],
+        ]
+    return out, bounds
 
 
 def crop_chunk_interior(
     expanded_arrays: dict[str, np.ndarray],
-    *,
-    row0: int,
-    row1: int,
-    col0: int,
-    col1: int,
+    record: ChunkRecord,
+    expanded_bounds: dict[str, int],
 ) -> dict[str, np.ndarray]:
+    row0 = record.row_start - expanded_bounds["row_start"]
+    row1 = row0 + record.height
+    col0 = record.col_start - expanded_bounds["col_start"]
+    col1 = col0 + record.width
+
     cropped = {}
     for name, arr in expanded_arrays.items():
         cropped[name] = arr[row0:row1, col0:col1]

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -9,15 +10,20 @@ import numpy as np
 
 from Final.artifact_store import (
     ArtifactStore,
-    LocalArtifactStore,
-    HybridArtifactStore,
     DriveRegistryArtifactStore,
+    HybridArtifactStore,
+    LocalArtifactStore,
 )
 from Final.models import ArtifactSpec, StorageTier
 from Final.shared_utils import ensure_dir
 
-from Final.features.config import fe_cfg
 from Final.features.artifact_specs import FE_ARTIFACT_SPECS
+from Final.features.config import fe_cfg
+
+
+def _stable_hexdigest(payload: dict[str, Any], n: int = 16) -> str:
+    blob = json.dumps(payload, sort_keys=True, default=str).encode("utf-8")
+    return hashlib.sha256(blob).hexdigest()[:n]
 
 
 def current_fe_config_signature() -> str:
@@ -33,7 +39,7 @@ def current_fe_config_signature() -> str:
         "chunking": fe_cfg.chunking.__dict__,
         "object_agg": fe_cfg.object_agg.__dict__,
     }
-    return str(abs(hash(json.dumps(payload, sort_keys=True, default=str))))[:16]
+    return _stable_hexdigest(payload)
 
 
 def artifact_spec_for_key(artifact_key: str) -> ArtifactSpec:
@@ -138,11 +144,15 @@ def push_artifact_if_needed(
         and isinstance(artifact_store, (HybridArtifactStore, DriveRegistryArtifactStore))
     )
 
-    if should_push_remote:
+    if not should_push_remote:
+        rec.notes.append("Remote push skipped by policy or store type.")
+        return rec
+
+    try:
         rec.remote_ref = artifact_store.push(local_path, rel_path=rel_path)
         rec.exists_remote = True
-    else:
-        rec.notes.append("Remote push skipped by policy or store type.")
+    except Exception as e:
+        rec.notes.append(f"Remote push failed: {e}")
 
     return rec
 
@@ -162,6 +172,10 @@ def prune_local_artifact_if_allowed(
 
     if not spec.prune_local_after_push:
         rec.notes.append("Artifact spec does not allow local prune.")
+        return rec
+
+    if not rec.exists_remote:
+        rec.notes.append("Remote artifact not confirmed; skipping prune.")
         return rec
 
     if fe_cfg.persistence.verify_remote_before_prune:
@@ -200,8 +214,17 @@ def persist_json_artifact(
     local_path = local_artifact_abs_path(rel_path, artifact_store=artifact_store)
     write_json(local_path, payload)
 
-    rec = push_artifact_if_needed(local_path, artifact_key=artifact_key, rel_path=rel_path, artifact_store=artifact_store)
-    return prune_local_artifact_if_allowed(rec, local_path=local_path, artifact_store=artifact_store)
+    rec = push_artifact_if_needed(
+        local_path,
+        artifact_key=artifact_key,
+        rel_path=rel_path,
+        artifact_store=artifact_store,
+    )
+    return prune_local_artifact_if_allowed(
+        rec,
+        local_path=local_path,
+        artifact_store=artifact_store,
+    )
 
 
 def persist_npz_artifact(
@@ -227,8 +250,17 @@ def persist_npz_artifact(
     local_path.parent.mkdir(parents=True, exist_ok=True)
     np.savez_compressed(local_path, **arrays)
 
-    rec = push_artifact_if_needed(local_path, artifact_key=artifact_key, rel_path=rel_path, artifact_store=artifact_store)
-    return prune_local_artifact_if_allowed(rec, local_path=local_path, artifact_store=artifact_store)
+    rec = push_artifact_if_needed(
+        local_path,
+        artifact_key=artifact_key,
+        rel_path=rel_path,
+        artifact_store=artifact_store,
+    )
+    return prune_local_artifact_if_allowed(
+        rec,
+        local_path=local_path,
+        artifact_store=artifact_store,
+    )
 
 
 def persist_existing_file_artifact(
@@ -253,8 +285,17 @@ def persist_existing_file_artifact(
         chunk_id=chunk_id,
         filename=filename or local_path.name,
     )
-    rec = push_artifact_if_needed(local_path, artifact_key=artifact_key, rel_path=rel_path, artifact_store=artifact_store)
-    return prune_local_artifact_if_allowed(rec, local_path=local_path, artifact_store=artifact_store)
+    rec = push_artifact_if_needed(
+        local_path,
+        artifact_key=artifact_key,
+        rel_path=rel_path,
+        artifact_store=artifact_store,
+    )
+    return prune_local_artifact_if_allowed(
+        rec,
+        local_path=local_path,
+        artifact_store=artifact_store,
+    )
 
 
 def try_load_json_artifact(
@@ -278,18 +319,23 @@ def try_load_json_artifact(
     local_path = local_artifact_abs_path(rel_path, artifact_store=artifact_store)
 
     if local_path.exists():
-        return read_json(local_path)
-
-    if remote_artifact_exists(rel_path, artifact_store=artifact_store):
-        pulled = artifact_store.pull(rel_path, local_path=local_path)
-        payload = read_json(pulled)
-
-        if isinstance(artifact_store, HybridArtifactStore) and local_path.exists():
+        try:
+            return read_json(local_path)
+        except Exception:
             try:
                 local_path.unlink()
             except Exception:
                 pass
 
-        return payload
+    if remote_artifact_exists(rel_path, artifact_store=artifact_store):
+        pulled = artifact_store.pull(rel_path, local_path=local_path)
+        try:
+            return read_json(pulled)
+        finally:
+            if isinstance(artifact_store, HybridArtifactStore):
+                try:
+                    Path(pulled).unlink()
+                except Exception:
+                    pass
 
     return None
