@@ -277,14 +277,14 @@ class FeatureRuntimeConfig:
     storage: PipelineStorageConfig = field(default_factory=PipelineStorageConfig)
     storage_policy: ArtifactStorePolicyConfig = field(default_factory=ArtifactStorePolicyConfig)
 
-    require_capability_site_assets: tuple[str, ...] = ("runtime:features",)
-    require_capability_canonical_grid: tuple[str, ...] = ("runtime:features",)
-    require_capability_chunk_manifest: tuple[str, ...] = ("runtime:features",)
-    require_capability_source_ready: tuple[str, ...] = ("runtime:features",)
-    require_capability_family_chunk: tuple[str, ...] = ("runtime:features",)
-    require_capability_stack_finalize: tuple[str, ...] = ("runtime:features",)
-    require_capability_object_aggregation: tuple[str, ...] = ("runtime:features",)
-    require_capability_representation_export: tuple[str, ...] = ("runtime:features",)
+    require_capability_site_assets: tuple[str, ...] = ("runtime:python",)
+    require_capability_canonical_grid: tuple[str, ...] = ("runtime:python", "runtime:rasterio")
+    require_capability_chunk_manifest: tuple[str, ...] = ("runtime:python",)
+    require_capability_source_ready: tuple[str, ...] = ("runtime:python",)
+    require_capability_family_chunk: tuple[str, ...] = ("runtime:python",)
+    require_capability_stack_finalize: tuple[str, ...] = ("runtime:python",)
+    require_capability_object_aggregation: tuple[str, ...] = ("runtime:python",)
+    require_capability_representation_export: tuple[str, ...] = ("runtime:python", "runtime:rasterio")
 
     resume_partial_runs: bool = True
     reuse_successful_runs: bool = True
