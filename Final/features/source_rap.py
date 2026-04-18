@@ -40,7 +40,6 @@ from Final.features.ee_utils import (
     export_ee_image_to_geotiff,
 )
 from Final.features.source_specs import SOURCE_SPECS
-from Final.features.fe_2d import get_uniform_blur
 from Final.features.fe_rap import build_rap_prior_feature_dict
 
 LOGGER = get_logger("features.source_rap")
@@ -239,7 +238,7 @@ def make_rap_prior_compute_fn(
             shrub_band_name="SHR",
             context_radius_meters=context_radius_meters,
             approx_native_resolution_m=approx_native_resolution_m,
-            blur_fn=get_uniform_blur,
+            include_raw_competitors=False,
         )
     return _compute
 

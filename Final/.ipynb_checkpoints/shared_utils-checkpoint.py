@@ -113,3 +113,9 @@ def first_present(columns: Iterable[str], available: Iterable[str]) -> str | Non
         if c.lower() in lower:
             return lower[c.lower()]
     return None
+
+def ensure_dir(path: str | Path) -> Path:
+    path = Path(path)
+    path.mkdir(parents=True, exist_ok=True)
+    return path
+

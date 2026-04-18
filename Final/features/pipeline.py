@@ -7,7 +7,7 @@ from time import perf_counter
 import numpy as np
 import hashlib
 import rasterio
-from rasterio import Window
+from rasterio.windows import Window
 import pandas as pd
 
 from Final.pipeline_base import BasePipeline

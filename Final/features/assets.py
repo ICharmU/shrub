@@ -22,6 +22,7 @@ from Final.features.artifact_io import (
     persist_json_artifact,
     try_load_json_artifact,
 )
+from Final.features.artifact_io import render_artifact_rel_path
 from Final.features.raster_io import validate_optional_raster_asset
 
 
@@ -54,6 +55,21 @@ def site_3dep_cache_root(site_id: str) -> Path:
 def site_rap_cache_root(site_id: str) -> Path:
     return ensure_dir(site_asset_cache_root(site_id) / "rap")
 
+def site_3dep_rel_path(site_id: str, filename: str | None = None) -> str:
+    filename = filename or f"{site_id}_3dep_ee_10m.tif"
+    return render_artifact_rel_path(
+        "site_3dep_raster",
+        site_id=site_id,
+        filename=filename,
+    )
+
+def site_rap_rel_path(site_id: str, filename: str | None = None) -> str:
+    filename = filename or f"{site_id}_rap_ee_10m.tif"
+    return render_artifact_rel_path(
+        "site_rap_raster",
+        site_id=site_id,
+        filename=filename,
+    )
 
 def serialize_site_asset_bundle(bundle: SiteAssetBundle) -> dict[str, Any]:
     payload = {
@@ -89,6 +105,32 @@ def site_asset_bundle_payload(bundle: SiteAssetBundle | None) -> dict[str, Any] 
         return None
     return serialize_site_asset_bundle(bundle)
 
+def find_cached_3dep_asset(site_id: str) -> Path | None:
+    dep_cache_dir = site_3dep_cache_root(site_id)
+
+    # Prefer the new EE-exported naming convention first
+    preferred = sorted(dep_cache_dir.glob("*_3dep_ee_10m.tif"))
+    fallback = sorted(dep_cache_dir.glob("*.tif"))
+
+    candidates = preferred + [p for p in fallback if p not in preferred]
+
+    for p in candidates:
+        if validate_cached_raster(p):
+            return p
+        else:
+            try:
+                LOGGER.warning("Removing invalid cached 3DEP candidate | site=%s | path=%s", site_id, p)
+                p.unlink(missing_ok=True)
+            except Exception as e:
+                LOGGER.warning("Failed to remove invalid cached 3DEP candidate | path=%s | err=%s", p, e)
+
+    return None
+
+def find_cached_rap_asset(site_id: str) -> Path | None:
+    rap_cache_dir = site_rap_cache_root(site_id)
+    tif_candidates = sorted(rap_cache_dir.glob("*.tif"))
+    valid_candidates = [p for p in tif_candidates if validate_cached_raster(p)]
+    return valid_candidates[0] if valid_candidates else None
 
 def _dedupe_notes(notes: list[str]) -> list[str]:
     out: list[str] = []

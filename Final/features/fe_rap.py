@@ -3,6 +3,11 @@ import os
 from pathlib import Path
 import requests
 
+from typing import Any
+import numpy as np
+
+from Final.features.fe_2d import get_uniform_blur
+
 def get_surrounding_shrub_fraction(shrub_band: ee.Image, radius_meters: int = 500) -> ee.Image:
     """
     Calculates the broad neighborhood shrub fraction.
@@ -104,3 +109,68 @@ def save_as_tif(vegetation_feature_family, export_region, out_fname):
 
 # export_region = ee.Geometry.Rectangle([-105.6, 40.35, -105.55, 40.4])
 # save_as_tif(veg_features, export_region, Path("Final") / "features" / "processed" / "coarse_vegetation_features.tif")
+
+def build_rap_prior_feature_dict(
+    arrays: dict[str, np.ndarray],
+    *,
+    shrub_band_name: str = "SHR",
+    context_radius_meters: float = 500.0,
+    approx_native_resolution_m: float = 10.0,
+    include_raw_competitors: bool = False,
+) -> dict[str, np.ndarray]:
+    """
+    Build RAP prior/context features from already-materialized RAP raster bands.
+
+    Expected inputs:
+        arrays: dict of 2D float arrays, typically RAP fractional cover bands
+                such as SHR, TRE, PFG, AFG.
+
+    Returns:
+        dict[str, np.ndarray] with:
+            - rap_local_shrub_presence
+            - rap_shrub_fraction_prior
+            - rap_<band>_prior for competitor/context bands
+            - optionally rap_local_<band> if include_raw_competitors=True
+    """
+    if not arrays:
+        raise ValueError("build_rap_prior_feature_dict received empty arrays.")
+
+    if shrub_band_name in arrays:
+        shrub_name = shrub_band_name
+    else:
+        shrub_name = next(iter(arrays.keys()))
+
+    def _clean(arr: np.ndarray) -> np.ndarray:
+        out = np.asarray(arr, dtype=np.float32).copy()
+        out[~np.isfinite(out)] = 0.0
+        return out
+
+    shrub = _clean(arrays[shrub_name])
+
+    window = max(5, int(round(float(context_radius_meters) / max(float(approx_native_resolution_m), 1e-6))))
+    # keep neighborhood sizes odd/symmetric
+    if window % 2 == 0:
+        window += 1
+
+    out: dict[str, np.ndarray] = {}
+    out["rap_local_shrub_presence"] = shrub.astype(np.float32)
+    out["rap_shrub_fraction_prior"] = get_uniform_blur(
+        shrub,
+        neighborhood_size=window,
+    ).astype(np.float32)
+
+    for name, arr in arrays.items():
+        if name == shrub_name:
+            continue
+
+        arr_clean = _clean(arr)
+
+        if include_raw_competitors:
+            out[f"rap_local_{name.lower()}"] = arr_clean.astype(np.float32)
+
+        out[f"rap_{name.lower()}_prior"] = get_uniform_blur(
+            arr_clean,
+            neighborhood_size=window,
+        ).astype(np.float32)
+
+    return out
