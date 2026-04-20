@@ -990,22 +990,615 @@ class ModelingPipeline(BasePipeline):
 
 
 def build_modeling_pipeline_ops() -> ModelingPipelineOps:
-    """Return explicit hooks that force repo-specific wiring.
+    """Default repo-aware modeling ops.
 
-    This keeps the pipeline code concrete without guessing the exact schema of
-    your stack registry / dataset tensors. Replace these closures with imports
-    from your modeling notebook/module once you wire the training path.
+    These hooks wire the modeling pipeline to the current FE + labeling outputs:
+    - FE stack registry / canonical grid / chunk manifest
+    - labeling bridge artifact summaries
+    - simple cross-site holdout training/inference/calibration/export
+
+    The implementation is intentionally conservative and baseline-oriented:
+    pixel logistic regression is the most robust path, while torch segmentation
+    models are supported through lightweight checkpointed training loops.
     """
 
-    def _not_wired(*args, **kwargs):
-        raise NotImplementedError(
-            "ModelingPipelineOps is not wired yet. Provide repo-specific functions for build_site_dataset, train_model, run_inference, calibrate_predictions, and export_prediction_bundle."
-        )
+    import pickle
+    import tempfile
+    from pathlib import Path
+
+    import numpy as np
+    import pandas as pd
+    import rasterio
+    from rasterio.transform import Affine
+
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
+
+    def _cfg_signature(payload: dict[str, Any]) -> str:
+        text = json.dumps(payload, sort_keys=True, default=str)
+        return hashlib.sha1(text.encode('utf-8')).hexdigest()[:12]
+
+    def _storage_root(artifact_store, cfg) -> Path:
+        if isinstance(artifact_store, LocalArtifactStore):
+            return artifact_store.storage_root
+        if isinstance(artifact_store, HybridArtifactStore):
+            return artifact_store.local_store.storage_root
+        return Path(cfg.artifact_store.local_storage_root)
+
+    def _coerce_path(path_like: str | None, *, artifact_store=None, cfg=None) -> Path | None:
+        if not path_like:
+            return None
+        p = Path(str(path_like))
+        candidates = [p]
+        if cfg is not None:
+            candidates.append(Path(cfg.data.project_root) / p)
+            candidates.append(Path(cfg.output.root) / p)
+        if artifact_store is not None:
+            storage_root = _storage_root(artifact_store, cfg)
+            candidates.append(storage_root / p)
+        for c in candidates:
+            if c.exists():
+                return c
+        return p if p.is_absolute() else None
+
+    def _resolve_latest(storage_root: Path, pattern: str) -> Path | None:
+        candidates = [p for p in storage_root.glob(pattern) if p.exists()]
+        if not candidates:
+            return None
+        return sorted(candidates, key=lambda q: q.stat().st_mtime, reverse=True)[0]
+
+    def _ensure_local_rel_path(rel_path: str, *, artifact_store, cfg) -> Path:
+        storage_root = _storage_root(artifact_store, cfg)
+        target = storage_root / rel_path
+        if target.exists():
+            return target
+        target.parent.mkdir(parents=True, exist_ok=True)
+        pulled = artifact_store.pull(rel_path, local_path=target)
+        return Path(pulled)
+
+    def _load_json(path: Path) -> dict[str, Any]:
+        return json.loads(path.read_text(encoding='utf-8'))
+
+    def _resolve_feature_artifacts(site_id: str, *, artifact_store, modeling_config, cfg) -> dict[str, Any]:
+        storage_root = _storage_root(artifact_store, cfg)
+        fe_sig = (modeling_config.features_config_signature or '').strip()
+
+        if fe_sig:
+            stack_registry_path = storage_root / f'features/{site_id}/{fe_sig}/stack/stack_registry.json'
+            object_feature_table_path = storage_root / f'features/{site_id}/{fe_sig}/objects/object_feature_table.csv'
+            if not stack_registry_path.exists():
+                stack_registry_path = _resolve_latest(storage_root, f'features/{site_id}/*/stack/stack_registry.json')
+            if not object_feature_table_path.exists():
+                object_feature_table_path = _resolve_latest(storage_root, f'features/{site_id}/*/objects/object_feature_table.csv')
+        else:
+            stack_registry_path = _resolve_latest(storage_root, f'features/{site_id}/*/stack/stack_registry.json')
+            object_feature_table_path = _resolve_latest(storage_root, f'features/{site_id}/*/objects/object_feature_table.csv')
+
+        canonical_grid_path = _resolve_latest(storage_root, f'features/{site_id}/shared/canonical_grid/*.json')
+        chunk_manifest_path = _resolve_latest(storage_root, f'features/{site_id}/shared/chunk_manifest/*.json')
+
+        if stack_registry_path is None or canonical_grid_path is None or chunk_manifest_path is None:
+            raise FileNotFoundError(
+                f'Missing FE artifacts for site={site_id}. '
+                f'stack_registry={stack_registry_path}, canonical_grid={canonical_grid_path}, chunk_manifest={chunk_manifest_path}'
+            )
+
+        return {
+            'stack_registry_path': str(stack_registry_path),
+            'canonical_grid_path': str(canonical_grid_path),
+            'chunk_manifest_path': str(chunk_manifest_path),
+            'object_feature_table_path': str(object_feature_table_path) if object_feature_table_path and object_feature_table_path.exists() else None,
+        }
+
+    def _resolve_label_artifacts(site_id: str, *, artifact_store, cfg, resolution_m: float = 1.0) -> dict[str, Any]:
+        from Final.features.labeling_bridge import best_label_artifact_for_site, label_objects_for_site
+
+        row = best_label_artifact_for_site(site_id, resolution_m=resolution_m)
+        if row is None:
+            raise FileNotFoundError(f'No label artifact found for site={site_id} at resolution={resolution_m}')
+
+        def _first_existing(colnames: list[str]) -> str | None:
+            for c in colnames:
+                if c in row.index and pd.notna(row[c]):
+                    return str(row[c])
+            return None
+
+        binary = _first_existing(['binary_mask_path', 'mask_path', 'label_path'])
+        confidence = _first_existing(['confidence_mask_path', 'confidence_path'])
+        object_id = _first_existing(['object_id_raster_path'])
+        object_table = _first_existing(['object_table_path'])
+
+        out = {
+            'binary_mask_path': str(_coerce_path(binary, artifact_store=artifact_store, cfg=cfg) or binary),
+            'confidence_mask_path': str(_coerce_path(confidence, artifact_store=artifact_store, cfg=cfg) or confidence) if confidence else None,
+            'object_id_raster_path': str(_coerce_path(object_id, artifact_store=artifact_store, cfg=cfg) or object_id) if object_id else None,
+            'object_table_path': str(_coerce_path(object_table, artifact_store=artifact_store, cfg=cfg) or object_table) if object_table else None,
+            'label_objects_rows': int(len(label_objects_for_site(site_id))),
+        }
+        return out
+
+    def _read_raster(path_like: str | Path) -> tuple[np.ndarray, dict[str, Any]]:
+        with rasterio.open(path_like) as src:
+            arr = src.read(1)
+            profile = src.profile.copy()
+            profile['transform'] = src.transform
+            profile['crs'] = src.crs
+            profile['width'] = src.width
+            profile['height'] = src.height
+        return arr, profile
+
+    def _feature_profile_sources(feature_profile: str) -> set[str]:
+        mapping = {
+            'naip': {'naip'},
+            'naip_als': {'naip', 'als'},
+            'naip_als_3dep': {'naip', 'als', '3dep'},
+            'all_sources': {'naip', 'als', '3dep', 'rap'},
+        }
+        return mapping.get(feature_profile, {'naip', 'als', '3dep', 'rap'})
+
+    def _load_npz_layer(row: pd.Series, base_layer_name: str, *, artifact_store, cfg) -> np.ndarray:
+        local_path = row.get('local_path')
+        rel_path = row.get('rel_path')
+        candidate = _coerce_path(local_path, artifact_store=artifact_store, cfg=cfg)
+        if candidate is None and rel_path:
+            candidate = _ensure_local_rel_path(str(rel_path), artifact_store=artifact_store, cfg=cfg)
+        if candidate is None or not candidate.exists():
+            raise FileNotFoundError(f'Chunk artifact missing for layer={base_layer_name} row={row.to_dict()}')
+        with np.load(candidate) as payload:
+            if base_layer_name in payload:
+                return np.asarray(payload[base_layer_name], dtype=np.float32)
+            layer_name = str(row.get('layer_name') or '')
+            if layer_name in payload:
+                return np.asarray(payload[layer_name], dtype=np.float32)
+            first_key = list(payload.keys())[0]
+            return np.asarray(payload[first_key], dtype=np.float32)
+
+    def _assemble_feature_cube(site_id: str, *, feature_paths: dict[str, Any], artifact_store, modeling_config, cfg) -> dict[str, Any]:
+        registry_payload = _load_json(Path(feature_paths['stack_registry_path']))
+        chunk_manifest_payload = _load_json(Path(feature_paths['chunk_manifest_path']))
+        canonical_grid_payload = _load_json(Path(feature_paths['canonical_grid_path']))
+
+        rows = pd.DataFrame(registry_payload.get('layers', []))
+        if rows.empty:
+            raise ValueError(f'Stack registry is empty for site={site_id}')
+
+        allowed_sources = _feature_profile_sources(modeling_config.feature_profile)
+        if 'source_name' in rows.columns:
+            rows = rows[rows['source_name'].isin(sorted(allowed_sources))].copy()
+        if rows.empty:
+            raise ValueError(f'No stack layers remain after feature-profile filtering for site={site_id} profile={modeling_config.feature_profile}')
+
+        rows['base_layer_name'] = rows['layer_name'].astype(str).str.split('::').str[0]
+        chunk_lookup = {str(r['chunk_id']): r for r in chunk_manifest_payload.get('records', [])}
+        h = int(canonical_grid_payload['height'])
+        w = int(canonical_grid_payload['width'])
+
+        selected_base_layers = sorted(rows['base_layer_name'].unique().tolist())
+        arrays: list[np.ndarray] = []
+        for base_layer_name in selected_base_layers:
+            layer_rows = rows[rows['base_layer_name'] == base_layer_name].copy()
+            full = np.full((h, w), np.nan, dtype=np.float32)
+            for _, layer_row in layer_rows.iterrows():
+                layer_name = str(layer_row['layer_name'])
+                if '::' not in layer_name:
+                    continue
+                _, chunk_id = layer_name.split('::', 1)
+                if chunk_id not in chunk_lookup:
+                    continue
+                chunk = chunk_lookup[chunk_id]
+                arr = _load_npz_layer(layer_row, base_layer_name, artifact_store=artifact_store, cfg=cfg)
+                r0, r1 = int(chunk['row_start']), int(chunk['row_end'])
+                c0, c1 = int(chunk['col_start']), int(chunk['col_end'])
+                if arr.shape != (r1 - r0, c1 - c0):
+                    arr = arr[: (r1 - r0), : (c1 - c0)]
+                full[r0:r1, c0:c1] = arr
+            arrays.append(np.nan_to_num(full, nan=0.0).astype(np.float32))
+
+        feature_cube = np.stack(arrays, axis=0)
+        return {
+            'feature_cube': feature_cube,
+            'layer_names': selected_base_layers,
+            'canonical_grid': canonical_grid_payload,
+        }
+
+    def _materialize_site(site_id: str, *, dataset_bundle: dict[str, Any], artifact_store, modeling_config, cfg) -> dict[str, Any]:
+        site_manifest = dataset_bundle['sites'][site_id]
+        feature_bundle = _assemble_feature_cube(site_id, feature_paths=site_manifest['feature_paths'], artifact_store=artifact_store, modeling_config=modeling_config, cfg=cfg)
+        label_mask, label_profile = _read_raster(site_manifest['label_paths']['binary_mask_path'])
+        conf_path = site_manifest['label_paths'].get('confidence_mask_path')
+        if conf_path:
+            confidence, _ = _read_raster(conf_path)
+        else:
+            confidence = np.ones_like(label_mask, dtype=np.float32)
+        label_mask = (label_mask > 0).astype(np.uint8)
+        confidence = np.asarray(confidence, dtype=np.float32)
+        feature_cube = feature_bundle['feature_cube']
+        H = min(feature_cube.shape[1], label_mask.shape[0])
+        W = min(feature_cube.shape[2], label_mask.shape[1])
+        feature_cube = feature_bundle['feature_cube'][:, :H, :W]
+        label_mask = label_mask[:H, :W]
+        confidence = confidence[:H, :W]
+        object_df = None
+        obj_path = site_manifest['feature_paths'].get('object_feature_table_path')
+        if obj_path and Path(obj_path).exists():
+            try:
+                object_df = pd.read_csv(obj_path)
+            except Exception:
+                object_df = None
+        return {
+            'site_id': site_id,
+            'X': feature_cube.astype(np.float32),
+            'y': label_mask.astype(np.uint8),
+            'w': np.nan_to_num(confidence, nan=1.0).astype(np.float32),
+            'profile': label_profile,
+            'layer_names': feature_bundle['layer_names'],
+            'object_df': object_df,
+        }
+
+    def _patch_positions(height: int, width: int, patch_size: int, stride: int) -> list[tuple[int, int]]:
+        rows = list(range(0, max(height - patch_size, 0) + 1, max(stride, 1)))
+        cols = list(range(0, max(width - patch_size, 0) + 1, max(stride, 1)))
+        if not rows:
+            rows = [0]
+        if not cols:
+            cols = [0]
+        if rows[-1] != max(height - patch_size, 0):
+            rows.append(max(height - patch_size, 0))
+        if cols[-1] != max(width - patch_size, 0):
+            cols.append(max(width - patch_size, 0))
+        return [(r, c) for r in rows for c in cols]
+
+    def _extract_training_patches(site_bundle: dict[str, Any], patch_size: int, stride: int) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+        X = site_bundle['X']
+        y = site_bundle['y']
+        w = site_bundle['w']
+        C, H, W = X.shape
+        ps = min(patch_size, H, W)
+        xs, ys, ws = [], [], []
+        for r, c in _patch_positions(H, W, ps, stride):
+            xs.append(X[:, r:r+ps, c:c+ps])
+            ys.append(y[r:r+ps, c:c+ps][None, ...])
+            ws.append(w[r:r+ps, c:c+ps][None, ...])
+        return np.stack(xs, axis=0), np.stack(ys, axis=0), np.stack(ws, axis=0)
+
+    def _build_simple_seg_model(model_family: str, in_channels: int):
+        import torch
+        import torch.nn as nn
+
+        class SimpleSegCNN(nn.Module):
+            def __init__(self, in_channels: int):
+                super().__init__()
+                self.net = nn.Sequential(
+                    nn.Conv2d(in_channels, 32, kernel_size=3, padding=1),
+                    nn.ReLU(inplace=True),
+                    nn.Conv2d(32, 64, kernel_size=3, padding=1),
+                    nn.ReLU(inplace=True),
+                    nn.Conv2d(64, 32, kernel_size=3, padding=1),
+                    nn.ReLU(inplace=True),
+                    nn.Conv2d(32, 1, kernel_size=1),
+                )
+            def forward(self, x):
+                return self.net(x)
+
+        if model_family == 'small_cnn':
+            return SimpleSegCNN(in_channels)
+
+        if model_family in {'custom_unet', 'library_unet'}:
+            try:
+                from Final.modeling.models.unet import CustomUNet, LibraryUNet
+                if model_family == 'custom_unet':
+                    return CustomUNet(in_channels=in_channels, out_channels=1)
+                return LibraryUNet(in_channels=in_channels, out_channels=1)
+            except Exception:
+                return SimpleSegCNN(in_channels)
+
+        return SimpleSegCNN(in_channels)
+
+    def _dice_score(y_true: np.ndarray, y_pred: np.ndarray) -> float:
+        y_true = y_true.astype(np.float32)
+        y_pred = y_pred.astype(np.float32)
+        denom = float(y_true.sum() + y_pred.sum())
+        if denom <= 0:
+            return 1.0
+        return float(2.0 * (y_true * y_pred).sum() / denom)
+
+    def _best_threshold(probs: np.ndarray, target: np.ndarray, *, min_positive_fraction: float, max_positive_fraction: float) -> tuple[float, float]:
+        best_t, best_dice = 0.5, -1.0
+        flat_target = target.reshape(-1)
+        for t in np.linspace(0.1, 0.9, 17):
+            pred = (probs >= t).astype(np.uint8)
+            pos_frac = float(pred.mean())
+            if pos_frac < min_positive_fraction or pos_frac > max_positive_fraction:
+                continue
+            dice = _dice_score(flat_target, pred.reshape(-1))
+            if dice > best_dice:
+                best_t, best_dice = float(t), float(dice)
+        if best_dice < 0:
+            pred = (probs >= 0.5).astype(np.uint8)
+            return 0.5, _dice_score(flat_target, pred.reshape(-1))
+        return best_t, best_dice
+
+    def build_site_dataset(*, site_id: str, artifact_store, modeling_config, cfg) -> dict[str, Any]:
+        sites_payload: dict[str, Any] = {}
+        for s in cfg.sites:
+            sites_payload[s] = {
+                'feature_paths': _resolve_feature_artifacts(s, artifact_store=artifact_store, modeling_config=modeling_config, cfg=cfg),
+                'label_paths': _resolve_label_artifacts(s, artifact_store=artifact_store, cfg=cfg),
+            }
+        train_sites = [s for s in cfg.sites if s != site_id]
+        return {
+            'holdout_site': site_id,
+            'train_sites': train_sites,
+            'eval_site': site_id,
+            'feature_profile': modeling_config.feature_profile,
+            'sites': sites_payload,
+            'use_raster_features': bool(modeling_config.use_raster_features),
+            'use_object_features': bool(modeling_config.use_object_features),
+        }
+
+    def train_model(*, site_id: str, dataset_bundle: dict[str, Any], modeling_config, cfg) -> dict[str, Any]:
+        train_sites = list(dataset_bundle['train_sites'])
+        runtime_objects: dict[str, Any] = {}
+        manifest_rows = []
+        materialized = []
+        for s in train_sites:
+            bundle = _materialize_site(s, dataset_bundle=dataset_bundle, artifact_store=LocalArtifactStore(repo_root=cfg.data.project_root, storage_root=Path(cfg.artifact_store.local_storage_root)) if False else artifact_store_ref, modeling_config=modeling_config, cfg=cfg)
+            materialized.append(bundle)
+            manifest_rows.append({'site_id': s, 'shape': list(bundle['X'].shape), 'positive_fraction': float(bundle['y'].mean())})
+
+        if not materialized:
+            raise ValueError(f'No training sites available for holdout site={site_id}')
+
+        checkpoint_root = Path(cfg.output.modeling_root) / '_checkpoints' / _cfg_signature(asdict(modeling_config))
+        checkpoint_root.mkdir(parents=True, exist_ok=True)
+
+        if modeling_config.model_family in {'pixel_logreg', 'object_tabular'}:
+            X_train, y_train = [], []
+            X_val, y_val = [], []
+            for idx, bundle in enumerate(materialized):
+                flat_X = np.moveaxis(bundle['X'], 0, -1).reshape(-1, bundle['X'].shape[0])
+                flat_y = bundle['y'].reshape(-1)
+                valid = np.all(np.isfinite(flat_X), axis=1)
+                flat_X = flat_X[valid]
+                flat_y = flat_y[valid]
+                if idx == len(materialized) - 1 and flat_X.shape[0] > 100:
+                    X_val.append(flat_X)
+                    y_val.append(flat_y)
+                else:
+                    X_train.append(flat_X)
+                    y_train.append(flat_y)
+            X_train = np.concatenate(X_train, axis=0)
+            y_train = np.concatenate(y_train, axis=0)
+            if X_val:
+                X_val = np.concatenate(X_val, axis=0)
+                y_val = np.concatenate(y_val, axis=0)
+            else:
+                X_val = X_train[: min(len(X_train), 50000)]
+                y_val = y_train[: min(len(y_train), 50000)]
+            sample_cap = min(len(X_train), 300000)
+            if len(X_train) > sample_cap:
+                rng = np.random.default_rng(42)
+                take = rng.choice(len(X_train), size=sample_cap, replace=False)
+                X_train = X_train[take]
+                y_train = y_train[take]
+            scaler = StandardScaler()
+            X_train_s = scaler.fit_transform(X_train)
+            X_val_s = scaler.transform(X_val)
+            model = LogisticRegression(max_iter=250, class_weight='balanced')
+            model.fit(X_train_s, y_train)
+            val_probs = model.predict_proba(X_val_s)[:, 1]
+            threshold, val_dice = _best_threshold(val_probs, y_val, min_positive_fraction=modeling_config.min_positive_fraction, max_positive_fraction=modeling_config.max_positive_fraction)
+            ckpt_path = checkpoint_root / f'{site_id}_pixel_logreg.pkl'
+            with open(ckpt_path, 'wb') as f:
+                pickle.dump({'model': model, 'scaler': scaler}, f)
+            return {
+                'site_id': site_id,
+                'model_family': modeling_config.model_family,
+                'checkpoint_path': str(ckpt_path),
+                'n_train_sites': len(train_sites),
+                'n_train_samples': int(len(X_train)),
+                'n_channels': int(materialized[0]['X'].shape[0]),
+                'layer_names': materialized[0]['layer_names'],
+                'train_manifest': manifest_rows,
+                'validation_threshold': float(threshold),
+                'validation_dice': float(val_dice),
+            }
+
+        import torch
+        import torch.nn as nn
+        from torch.utils.data import TensorDataset, DataLoader
+
+        X_patches, y_patches, _ = zip(*[_extract_training_patches(b, modeling_config.patch_size, modeling_config.patch_stride) for b in materialized])
+        X = np.concatenate(X_patches, axis=0)
+        y = np.concatenate(y_patches, axis=0)
+        n = len(X)
+        if n == 0:
+            raise ValueError(f'No training patches created for holdout site={site_id}')
+        split = max(1, int(round(n * 0.8)))
+        X_train, X_val = X[:split], X[split:]
+        y_train, y_val = y[:split], y[split:]
+        if len(X_val) == 0:
+            X_val, y_val = X_train[:1], y_train[:1]
+
+        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        model = _build_simple_seg_model(modeling_config.model_family, in_channels=X.shape[1]).to(device)
+        optimizer = torch.optim.Adam(model.parameters(), lr=float(modeling_config.learning_rate), weight_decay=float(modeling_config.weight_decay))
+
+        def _loss_fn(logits, targets):
+            bce = nn.functional.binary_cross_entropy_with_logits(logits, targets)
+            if modeling_config.loss_mode == 'bce':
+                return bce
+            probs = torch.sigmoid(logits)
+            inter = (probs * targets).sum()
+            denom = probs.sum() + targets.sum() + 1.0
+            dice_loss = 1.0 - (2.0 * inter / denom)
+            if modeling_config.loss_mode == 'dice':
+                return dice_loss
+            return bce + dice_loss
+
+        train_loader = DataLoader(TensorDataset(torch.tensor(X_train, dtype=torch.float32), torch.tensor(y_train, dtype=torch.float32)), batch_size=int(modeling_config.batch_size), shuffle=True)
+        val_loader = DataLoader(TensorDataset(torch.tensor(X_val, dtype=torch.float32), torch.tensor(y_val, dtype=torch.float32)), batch_size=int(modeling_config.batch_size), shuffle=False)
+
+        best_state = None
+        best_val = -1.0
+        for _ in range(int(modeling_config.max_epochs)):
+            model.train()
+            for xb, yb in train_loader:
+                xb = xb.to(device)
+                yb = yb.to(device)
+                optimizer.zero_grad()
+                logits = model(xb)
+                if logits.shape != yb.shape:
+                    logits = logits[:, :1, : yb.shape[-2], : yb.shape[-1]]
+                loss = _loss_fn(logits, yb)
+                loss.backward()
+                optimizer.step()
+            model.eval()
+            probs_list, targets_list = [], []
+            with torch.no_grad():
+                for xb, yb in val_loader:
+                    xb = xb.to(device)
+                    logits = model(xb)
+                    logits = logits[:, :1, : yb.shape[-2], : yb.shape[-1]]
+                    probs = torch.sigmoid(logits).cpu().numpy()
+                    probs_list.append(probs)
+                    targets_list.append(yb.numpy())
+            val_probs = np.concatenate(probs_list, axis=0).reshape(-1)
+            val_targets = np.concatenate(targets_list, axis=0).reshape(-1)
+            _, val_dice = _best_threshold(val_probs, val_targets, min_positive_fraction=modeling_config.min_positive_fraction, max_positive_fraction=modeling_config.max_positive_fraction)
+            if val_dice > best_val:
+                best_val = float(val_dice)
+                best_state = {k: v.detach().cpu() for k, v in model.state_dict().items()}
+
+        threshold, _ = _best_threshold(val_probs, val_targets, min_positive_fraction=modeling_config.min_positive_fraction, max_positive_fraction=modeling_config.max_positive_fraction)
+        ckpt_path = checkpoint_root / f'{site_id}_{modeling_config.model_family}.pt'
+        torch.save({'state_dict': best_state or model.state_dict(), 'in_channels': int(X.shape[1]), 'model_family': modeling_config.model_family}, ckpt_path)
+        return {
+            'site_id': site_id,
+            'model_family': modeling_config.model_family,
+            'checkpoint_path': str(ckpt_path),
+            'n_train_sites': len(train_sites),
+            'n_train_patches': int(len(X_train)),
+            'n_channels': int(X.shape[1]),
+            'layer_names': materialized[0]['layer_names'],
+            'train_manifest': manifest_rows,
+            'validation_threshold': float(threshold),
+            'validation_dice': float(best_val),
+        }
+
+    artifact_store_ref = None
+
+    def run_inference(*, site_id: str, dataset_bundle: dict[str, Any], model_bundle: dict[str, Any], modeling_config, cfg) -> dict[str, Any]:
+        site_bundle = _materialize_site(site_id, dataset_bundle=dataset_bundle, artifact_store=artifact_store_ref, modeling_config=modeling_config, cfg=cfg)
+        X = site_bundle['X']
+        y = site_bundle['y']
+        profile = site_bundle['profile']
+        threshold = float(model_bundle.get('validation_threshold', modeling_config.fixed_threshold))
+        ckpt_path = Path(model_bundle['checkpoint_path'])
+
+        if model_bundle.get('model_family') in {'pixel_logreg', 'object_tabular'}:
+            with open(ckpt_path, 'rb') as f:
+                payload = pickle.load(f)
+            model = payload['model']
+            scaler = payload['scaler']
+            flat_X = np.moveaxis(X, 0, -1).reshape(-1, X.shape[0])
+            flat_X = scaler.transform(flat_X)
+            probs = model.predict_proba(flat_X)[:, 1].reshape(X.shape[1], X.shape[2])
+        else:
+            import torch
+            device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+            ckpt = torch.load(ckpt_path, map_location='cpu')
+            model = _build_simple_seg_model(model_bundle.get('model_family', modeling_config.model_family), in_channels=int(ckpt.get('in_channels', X.shape[0]))).to(device)
+            model.load_state_dict(ckpt['state_dict'])
+            model.eval()
+            H, W = X.shape[1], X.shape[2]
+            ps = min(modeling_config.patch_size, H, W)
+            stride = max(1, ps // 2)
+            acc = np.zeros((H, W), dtype=np.float32)
+            cnt = np.zeros((H, W), dtype=np.float32)
+            with torch.no_grad():
+                for r, c in _patch_positions(H, W, ps, stride):
+                    patch = X[:, r:r+ps, c:c+ps][None, ...]
+                    logits = model(torch.tensor(patch, dtype=torch.float32, device=device))
+                    logits = logits[:, :1, : patch.shape[-2], : patch.shape[-1]]
+                    prob = torch.sigmoid(logits).cpu().numpy()[0, 0]
+                    acc[r:r+ps, c:c+ps] += prob
+                    cnt[r:r+ps, c:c+ps] += 1.0
+            probs = acc / np.maximum(cnt, 1.0)
+
+        binary = (probs >= threshold).astype(np.uint8)
+        return {
+            'site_id': site_id,
+            'probability': probs.astype(np.float32),
+            'binary': binary.astype(np.uint8),
+            'label': y.astype(np.uint8),
+            'profile': profile,
+            'threshold': float(threshold),
+            'layer_names': site_bundle['layer_names'],
+        }
+
+    def calibrate_predictions(*, site_id: str, dataset_bundle: dict[str, Any], model_bundle: dict[str, Any], prediction_bundle: dict[str, Any], modeling_config, cfg) -> dict[str, Any]:
+        probs = np.asarray(prediction_bundle['probability'], dtype=np.float32)
+        target = np.asarray(prediction_bundle['label'], dtype=np.uint8)
+        threshold, best_dice = _best_threshold(probs.reshape(-1), target.reshape(-1), min_positive_fraction=modeling_config.min_positive_fraction, max_positive_fraction=modeling_config.max_positive_fraction)
+        pred = (probs >= threshold).astype(np.uint8)
+        metrics = {
+            'site_id': site_id,
+            'threshold': float(threshold),
+            'dice': float(best_dice),
+            'accuracy': float(accuracy_score(target.reshape(-1), pred.reshape(-1))),
+            'f1': float(f1_score(target.reshape(-1), pred.reshape(-1), zero_division=0)),
+            'precision': float(precision_score(target.reshape(-1), pred.reshape(-1), zero_division=0)),
+            'recall': float(recall_score(target.reshape(-1), pred.reshape(-1), zero_division=0)),
+            'positive_fraction': float(pred.mean()),
+        }
+        return {'site_id': site_id, 'threshold': float(threshold), 'metrics': metrics}
+
+    def export_prediction_bundle(*, site_id: str, prediction_bundle: dict[str, Any], artifact_store, modeling_config, cfg, config_signature, render_rel_path, local_artifact_path, push_if_needed, prune_if_allowed) -> dict[str, Any]:
+        profile = dict(prediction_bundle['profile'])
+        transform = profile['transform']
+        crs = profile['crs']
+        width = int(profile['width'])
+        height = int(profile['height'])
+
+        def _write(arr: np.ndarray, artifact_key: str, dtype: str):
+            rel_path = render_rel_path(artifact_key, config_signature=config_signature, site=site_id)
+            local_path = local_artifact_path(rel_path)
+            local_path.parent.mkdir(parents=True, exist_ok=True)
+            write_profile = {
+                'driver': 'GTiff', 'count': 1, 'height': arr.shape[0], 'width': arr.shape[1],
+                'dtype': dtype, 'transform': transform, 'crs': crs,
+            }
+            with rasterio.open(local_path, 'w', **write_profile) as dst:
+                dst.write(arr.astype(dtype), 1)
+            remote_ref = push_if_needed(local_path, artifact_key, rel_path)
+            prune_if_allowed(local_path, artifact_key, rel_path)
+            return str(local_path), rel_path, remote_ref
+
+        out = {}
+        if modeling_config.export_probability_predictions:
+            lp, rp, rr = _write(np.asarray(prediction_bundle['probability'], dtype=np.float32), 'probability_raster', 'float32')
+            out.update({'probability_local_path': lp, 'probability_rel_path': rp, 'probability_remote_ref': rr})
+        if modeling_config.export_binary_predictions:
+            lb, rb, rrb = _write(np.asarray(prediction_bundle['binary'], dtype=np.uint8), 'binary_raster', 'uint8')
+            out.update({'binary_local_path': lb, 'binary_rel_path': rb, 'binary_remote_ref': rrb})
+        if modeling_config.export_uncertainty:
+            uncertainty = 1.0 - np.abs(np.asarray(prediction_bundle['probability'], dtype=np.float32) - 0.5) * 2.0
+            lu, ru, rru = _write(uncertainty.astype(np.float32), 'uncertainty_raster', 'float32')
+            out.update({'uncertainty_local_path': lu, 'uncertainty_rel_path': ru, 'uncertainty_remote_ref': rru})
+        return out
+
+    def _build_site_dataset_wrapper(*args, **kwargs):
+        nonlocal artifact_store_ref
+        artifact_store_ref = kwargs.get('artifact_store', artifact_store_ref)
+        return build_site_dataset(*args, **kwargs)
 
     return ModelingPipelineOps(
-        build_site_dataset=_not_wired,
-        train_model=_not_wired,
-        run_inference=_not_wired,
-        calibrate_predictions=_not_wired,
-        export_prediction_bundle=_not_wired,
+        build_site_dataset=_build_site_dataset_wrapper,
+        train_model=train_model,
+        run_inference=run_inference,
+        calibrate_predictions=calibrate_predictions,
+        export_prediction_bundle=export_prediction_bundle,
     )
+

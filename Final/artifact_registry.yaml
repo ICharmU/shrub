@@ -2,6 +2,36 @@ files:
   coordination/shrubwise_main/features_trial_18fff109175b/features/stack_finalize/calaveras-big-trees.json:
     drive_file_id: 1-fGYVuzXeh4bs2WO4BlAuLZxf4qaxMYO
     local_path: coordination/shrubwise_main/features_trial_18fff109175b/features/stack_finalize/calaveras-big-trees.json
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00000.npz:
+    drive_file_id: 1cpLX0VrvV3XiJ1WP0TwkSNgnm49knVRC
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00000.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00001.npz:
+    drive_file_id: 1xsMIo26KOOo5OIA3pi8wK6JHcXGD7BHT
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00001.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00002.npz:
+    drive_file_id: 16hGgzegi_SlqNf0Lnp-6BO5h797EvaIS
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00002.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00003.npz:
+    drive_file_id: 1jeTKWcQtBYHenp79BsvRzfHt-VxeLnan
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00003.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00004.npz:
+    drive_file_id: 1X2nLPUdMppKn2NhSJ6rUNOTTX7y7iqYV
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00004.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00005.npz:
+    drive_file_id: 1Zv_B2xYkod6eEkZYSVay1PSfagEYOytC
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00005.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00006.npz:
+    drive_file_id: 1vbYObyFgV2f5lkA8K5hMHIlsxwH2k2Dm
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00006.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00007.npz:
+    drive_file_id: 1EYptFPS2bPzhrY_fLs6h-FP19zDRSf7T
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00007.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00008.npz:
+    drive_file_id: 1Y2nMwGiFFgF9COZ5gK7z7KvvcLzGfgcQ
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00008.npz
+  features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00009.npz:
+    drive_file_id: 14_q-UmOosArotDCRci4pe1-FILD9dECO
+    local_path: features/calaveras-big-trees/4dfeca633c8d4b58/als/height_structure/chunk_00009.npz
   shared_artifacts/features.canonical_grid/331005be20008029.json:
     drive_file_id: 1gfaYdFRZcArFF68CgGMAohafTrZ-1yi0
     local_path: shared_artifacts/features.canonical_grid/331005be20008029.json

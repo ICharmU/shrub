@@ -669,6 +669,198 @@ class PostprocessingPipeline(BasePipeline):
 
 
 def build_postprocessing_pipeline_ops() -> PostprocessingPipelineOps:
-    def _not_wired(*args, **kwargs):
-        raise NotImplementedError("PostprocessingPipelineOps.load_site_prediction_bundle must be wired to your modeling outputs.")
-    return PostprocessingPipelineOps(load_site_prediction_bundle=_not_wired)
+    """Default repo-aware postprocessing ops.
+
+    Loads modeling probability rasters plus a compact FE raster bundle so
+    predicted shrub objects can be enriched using aligned feature layers without
+    leaking label-derived object tables into postprocessing.
+    """
+
+    from pathlib import Path
+    import tempfile
+    import numpy as np
+    import pandas as pd
+    import rasterio
+
+    def _storage_root(artifact_store, cfg) -> Path:
+        if isinstance(artifact_store, LocalArtifactStore):
+            return artifact_store.storage_root
+        if isinstance(artifact_store, HybridArtifactStore):
+            return artifact_store.local_store.storage_root
+        return Path(cfg.artifact_store.local_storage_root)
+
+    def _resolve_latest(storage_root: Path, pattern: str) -> Path | None:
+        candidates = [p for p in storage_root.glob(pattern) if p.exists()]
+        if not candidates:
+            return None
+        return sorted(candidates, key=lambda q: q.stat().st_mtime, reverse=True)[0]
+
+    def _ensure_local_rel(rel_path: str, *, artifact_store, cfg) -> Path:
+        root = _storage_root(artifact_store, cfg)
+        target = root / rel_path
+        if target.exists():
+            return target
+        target.parent.mkdir(parents=True, exist_ok=True)
+        return Path(artifact_store.pull(rel_path, local_path=target))
+
+    def _load_json(path: Path) -> dict[str, Any]:
+        return json.loads(path.read_text(encoding='utf-8'))
+
+    def _resolve_feature_artifacts(site_id: str, *, artifact_store, postprocessing_config, cfg) -> dict[str, Any]:
+        storage_root = _storage_root(artifact_store, cfg)
+        fe_sig = (postprocessing_config.features_config_signature or '').strip()
+        if fe_sig:
+            stack_registry_path = storage_root / f'features/{site_id}/{fe_sig}/stack/stack_registry.json'
+            if not stack_registry_path.exists():
+                stack_registry_path = _resolve_latest(storage_root, f'features/{site_id}/*/stack/stack_registry.json')
+        else:
+            stack_registry_path = _resolve_latest(storage_root, f'features/{site_id}/*/stack/stack_registry.json')
+        canonical_grid_path = _resolve_latest(storage_root, f'features/{site_id}/shared/canonical_grid/*.json')
+        chunk_manifest_path = _resolve_latest(storage_root, f'features/{site_id}/shared/chunk_manifest/*.json')
+        if stack_registry_path is None or canonical_grid_path is None or chunk_manifest_path is None:
+            raise FileNotFoundError(f'Missing FE artifacts for postprocessing site={site_id}')
+        return {
+            'stack_registry_path': str(stack_registry_path),
+            'canonical_grid_path': str(canonical_grid_path),
+            'chunk_manifest_path': str(chunk_manifest_path),
+        }
+
+    def _compact_layer_names(rows: pd.DataFrame) -> list[str]:
+        rows = rows.copy()
+        rows['base_layer_name'] = rows['layer_name'].astype(str).str.split('::').str[0]
+        candidates = rows['base_layer_name'].unique().tolist()
+        preferred_patterns = [
+            'naip_idx_ndvi', 'naip_idx_vari', 'naip_raw_red', 'naip_raw_green', 'naip_raw_blue', 'naip_raw_nir',
+            'als_chm_max', 'als_height_mean', 'als_chm_gradmag', 'als_chm_localstd_5',
+            'slope', 'elevation', 'northness', 'ruggedness',
+            'shr', 'rap', 'prior',
+        ]
+        selected = []
+        lower_map = {c.lower(): c for c in candidates}
+        for pat in preferred_patterns:
+            for lc, orig in lower_map.items():
+                if pat in lc and orig not in selected:
+                    selected.append(orig)
+                    break
+        if not selected:
+            selected = sorted(candidates)[:12]
+        return selected[:12]
+
+    def _load_npz_layer(row: pd.Series, base_layer_name: str, *, artifact_store, cfg) -> np.ndarray:
+        p = None
+        if pd.notna(row.get('local_path')):
+            lp = Path(str(row['local_path']))
+            if lp.exists():
+                p = lp
+        if p is None and pd.notna(row.get('rel_path')):
+            p = _ensure_local_rel(str(row['rel_path']), artifact_store=artifact_store, cfg=cfg)
+        if p is None or not p.exists():
+            raise FileNotFoundError(f'Could not load chunk npz for base_layer={base_layer_name}')
+        with np.load(p) as payload:
+            if base_layer_name in payload:
+                return np.asarray(payload[base_layer_name], dtype=np.float32)
+            first = list(payload.keys())[0]
+            return np.asarray(payload[first], dtype=np.float32)
+
+    def _assemble_selected_layers(site_id: str, *, feature_paths: dict[str, Any], artifact_store, cfg) -> dict[str, np.ndarray]:
+        registry = _load_json(Path(feature_paths['stack_registry_path']))
+        chunk_manifest = _load_json(Path(feature_paths['chunk_manifest_path']))
+        canonical = _load_json(Path(feature_paths['canonical_grid_path']))
+        rows = pd.DataFrame(registry.get('layers', []))
+        if rows.empty:
+            return {}
+        rows['base_layer_name'] = rows['layer_name'].astype(str).str.split('::').str[0]
+        selected = _compact_layer_names(rows)
+        chunk_lookup = {str(r['chunk_id']): r for r in chunk_manifest.get('records', [])}
+        h = int(canonical['height'])
+        w = int(canonical['width'])
+        out: dict[str, np.ndarray] = {}
+        for base in selected:
+            subset = rows[rows['base_layer_name'] == base].copy()
+            full = np.full((h, w), np.nan, dtype=np.float32)
+            for _, row in subset.iterrows():
+                layer_name = str(row['layer_name'])
+                if '::' not in layer_name:
+                    continue
+                _, chunk_id = layer_name.split('::', 1)
+                if chunk_id not in chunk_lookup:
+                    continue
+                rec = chunk_lookup[chunk_id]
+                arr = _load_npz_layer(row, base, artifact_store=artifact_store, cfg=cfg)
+                r0, r1 = int(rec['row_start']), int(rec['row_end'])
+                c0, c1 = int(rec['col_start']), int(rec['col_end'])
+                full[r0:r1, c0:c1] = arr[:(r1-r0), :(c1-c0)]
+            out[base] = np.nan_to_num(full, nan=0.0).astype(np.float32)
+        return out
+
+    def load_site_prediction_bundle(*, site_id: str, artifact_store, postprocessing_config, cfg) -> dict[str, Any]:
+        storage_root = _storage_root(artifact_store, cfg)
+        model_sig = (postprocessing_config.modeling_config_signature or '').strip()
+        if model_sig:
+            prob_path = storage_root / f'modeling/{model_sig}/predictions/{site_id}/probability.tif'
+            cal_path = storage_root / f'modeling/{model_sig}/calibration/{site_id}.json'
+        else:
+            prob_path = _resolve_latest(storage_root, f'modeling/*/predictions/{site_id}/probability.tif')
+            cal_path = _resolve_latest(storage_root, f'modeling/*/calibration/{site_id}.json')
+        if prob_path is None or not prob_path.exists():
+            raise FileNotFoundError(f'No modeling probability raster found for site={site_id}')
+        with rasterio.open(prob_path) as src:
+            probability = src.read(1).astype(np.float32)
+            profile = src.profile.copy()
+            profile['transform'] = src.transform
+            profile['crs'] = src.crs
+            profile['width'] = src.width
+            profile['height'] = src.height
+        calibration = None
+        if cal_path is not None and Path(cal_path).exists():
+            calibration = _load_json(Path(cal_path))
+        return {'site_id': site_id, 'probability': probability, 'profile': profile, 'calibration': calibration}
+
+    def load_site_feature_bundle(*, site_id: str, artifact_store, postprocessing_config, cfg) -> dict[str, Any]:
+        feature_paths = _resolve_feature_artifacts(site_id, artifact_store=artifact_store, postprocessing_config=postprocessing_config, cfg=cfg)
+        layers = _assemble_selected_layers(site_id, feature_paths=feature_paths, artifact_store=artifact_store, cfg=cfg)
+        return {'site_id': site_id, 'layers': layers, 'feature_paths': feature_paths}
+
+    def enrich_object_table(*, site_id: str, objects_df: pd.DataFrame, feature_bundle: dict[str, Any], probability: np.ndarray, binary_mask: np.ndarray, labels: np.ndarray, postprocessing_config, cfg) -> pd.DataFrame:
+        if objects_df.empty or not feature_bundle or not feature_bundle.get('layers'):
+            return objects_df
+        out = objects_df.copy()
+        layers = feature_bundle['layers']
+        for layer_name, arr in layers.items():
+            mean_vals = []
+            max_vals = []
+            for _, row in out.iterrows():
+                r0, r1 = int(row['bbox_min_row']), int(row['bbox_max_row'])
+                c0, c1 = int(row['bbox_min_col']), int(row['bbox_max_col'])
+                patch = arr[r0:r1, c0:c1]
+                if patch.size == 0:
+                    mean_vals.append(np.nan)
+                    max_vals.append(np.nan)
+                else:
+                    mean_vals.append(float(np.nanmean(patch)))
+                    max_vals.append(float(np.nanmax(patch)))
+            safe = ''.join(ch if ch.isalnum() or ch == '_' else '_' for ch in layer_name.lower())[:50]
+            out[f'feat_mean_{safe}'] = mean_vals
+            out[f'feat_max_{safe}'] = max_vals
+        return out
+
+    def filter_object_table(*, site_id: str, objects_df: pd.DataFrame, probability: np.ndarray, binary_mask: np.ndarray, labels: np.ndarray, postprocessing_config, cfg) -> pd.DataFrame:
+        if objects_df.empty:
+            return objects_df
+        keep = np.ones(len(objects_df), dtype=bool)
+        keep &= objects_df['pixel_area'].between(postprocessing_config.object_filter_min_area, postprocessing_config.object_filter_max_area).to_numpy()
+        keep &= (objects_df['mean_probability'] >= float(postprocessing_config.object_filter_min_confidence)).to_numpy()
+        # Mild shrub-like geometry heuristics only when columns exist.
+        if 'eccentricity' in objects_df.columns:
+            keep &= (objects_df['eccentricity'].fillna(0.0) <= 0.995).to_numpy()
+        if 'solidity' in objects_df.columns:
+            keep &= (objects_df['solidity'].fillna(1.0) >= 0.05).to_numpy()
+        return objects_df.loc[keep].reset_index(drop=True)
+
+    return PostprocessingPipelineOps(
+        load_site_prediction_bundle=load_site_prediction_bundle,
+        load_site_feature_bundle=load_site_feature_bundle,
+        enrich_object_table=enrich_object_table,
+        filter_object_table=filter_object_table,
+    )
+

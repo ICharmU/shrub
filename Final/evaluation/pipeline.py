@@ -519,6 +519,123 @@ class EvaluationPipeline(BasePipeline):
 
 
 def build_evaluation_pipeline_ops() -> EvaluationPipelineOps:
-    def _not_wired(*args, **kwargs):
-        raise NotImplementedError("EvaluationPipelineOps must be wired to your labeling/postprocessing outputs.")
-    return EvaluationPipelineOps(load_label_bundle=_not_wired, load_prediction_bundle=_not_wired)
+    """Default repo-aware evaluation ops.
+
+    Labels come from the labeling bridge. Predictions prefer postprocessing
+    outputs when a postprocessing config signature is supplied, and otherwise
+    fall back to modeling binary/probability outputs.
+    """
+
+    from pathlib import Path
+    import numpy as np
+    import pandas as pd
+    import rasterio
+
+    def _storage_root(artifact_store, cfg) -> Path:
+        if isinstance(artifact_store, LocalArtifactStore):
+            return artifact_store.storage_root
+        if isinstance(artifact_store, HybridArtifactStore):
+            return artifact_store.local_store.storage_root
+        return Path(cfg.artifact_store.local_storage_root)
+
+    def _resolve_latest(storage_root: Path, pattern: str) -> Path | None:
+        candidates = [p for p in storage_root.glob(pattern) if p.exists()]
+        if not candidates:
+            return None
+        return sorted(candidates, key=lambda q: q.stat().st_mtime, reverse=True)[0]
+
+    def _load_json(path: Path) -> dict[str, Any]:
+        return json.loads(path.read_text(encoding='utf-8'))
+
+    def _read_raster(path_like: str | Path) -> tuple[np.ndarray, dict[str, Any]]:
+        with rasterio.open(path_like) as src:
+            arr = src.read(1)
+            profile = src.profile.copy()
+            profile['transform'] = src.transform
+            profile['crs'] = src.crs
+            profile['width'] = src.width
+            profile['height'] = src.height
+        return arr, profile
+
+    def _summary_from_mask_and_objects(site_id: str, mask: np.ndarray, objects_df: pd.DataFrame | None) -> dict[str, Any]:
+        objects_df = objects_df if objects_df is not None else pd.DataFrame()
+        n_objects = int(len(objects_df)) if not objects_df.empty else int((mask > 0).sum() > 0)
+        total_pixels = int(mask.size)
+        positive_pixels = int((mask > 0).sum())
+        area_col = 'pixel_area' if 'pixel_area' in objects_df.columns else None
+        return {
+            'site_id': site_id,
+            'cover_fraction': float(positive_pixels / max(total_pixels, 1)),
+            'count_density_per_10k_px': float(n_objects / max(total_pixels, 1) * 10000.0),
+            'mean_object_area_px': float(objects_df[area_col].mean()) if (area_col and not objects_df.empty) else 0.0,
+            'median_object_area_px': float(objects_df[area_col].median()) if (area_col and not objects_df.empty) else 0.0,
+        }
+
+    def load_label_bundle(*, site_id: str, artifact_store, evaluation_config, cfg) -> dict[str, Any]:
+        from Final.features.labeling_bridge import best_label_artifact_for_site, label_objects_for_site
+        row = best_label_artifact_for_site(site_id, resolution_m=1.0)
+        if row is None:
+            raise FileNotFoundError(f'No labeling artifact found for site={site_id}')
+        mask_path = None
+        for col in ['binary_mask_path', 'mask_path', 'label_path']:
+            if col in row.index and pd.notna(row[col]):
+                mask_path = Path(str(row[col]))
+                break
+        if mask_path is None or not mask_path.exists():
+            raise FileNotFoundError(f'Label mask path missing or unreadable for site={site_id}: {mask_path}')
+        mask, profile = _read_raster(mask_path)
+        mask = (mask > 0).astype(np.uint8)
+        objects_df = label_objects_for_site(site_id)
+        return {'site_id': site_id, 'mask': mask, 'profile': profile, 'objects_df': objects_df}
+
+    def load_prediction_bundle(*, site_id: str, artifact_store, evaluation_config, cfg) -> dict[str, Any]:
+        storage_root = _storage_root(artifact_store, cfg)
+        post_sig = (evaluation_config.postprocessing_config_signature or '').strip()
+        if post_sig:
+            bin_path = storage_root / f'postprocessing/{post_sig}/{site_id}/binary.tif'
+            obj_path = storage_root / f'postprocessing/{post_sig}/{site_id}/predicted_objects.csv'
+            if not bin_path.exists():
+                bin_path = _resolve_latest(storage_root, f'postprocessing/*/{site_id}/binary.tif')
+            if obj_path is None or not obj_path.exists():
+                obj_path = _resolve_latest(storage_root, f'postprocessing/*/{site_id}/predicted_objects.csv')
+        else:
+            bin_path = _resolve_latest(storage_root, f'postprocessing/*/{site_id}/binary.tif')
+            obj_path = _resolve_latest(storage_root, f'postprocessing/*/{site_id}/predicted_objects.csv')
+        if bin_path is not None and bin_path.exists():
+            mask, profile = _read_raster(bin_path)
+            objects_df = pd.read_csv(obj_path) if obj_path is not None and obj_path.exists() else pd.DataFrame()
+            return {'site_id': site_id, 'mask': (mask > 0).astype(np.uint8), 'profile': profile, 'objects_df': objects_df}
+
+        # Fallback to modeling outputs.
+        prob_path = _resolve_latest(storage_root, f'modeling/*/predictions/{site_id}/probability.tif')
+        if prob_path is None or not prob_path.exists():
+            raise FileNotFoundError(f'No postprocessing/modeling prediction bundle found for site={site_id}')
+        probs, profile = _read_raster(prob_path)
+        mask = (probs >= 0.5).astype(np.uint8)
+        return {'site_id': site_id, 'mask': mask, 'profile': profile, 'objects_df': pd.DataFrame()}
+
+    def load_site_summary_bundle(*, site_id: str, artifact_store, evaluation_config, cfg) -> dict[str, Any]:
+        label_bundle = load_label_bundle(site_id=site_id, artifact_store=artifact_store, evaluation_config=evaluation_config, cfg=cfg)
+        pred_bundle = load_prediction_bundle(site_id=site_id, artifact_store=artifact_store, evaluation_config=evaluation_config, cfg=cfg)
+        storage_root = _storage_root(artifact_store, cfg)
+        post_sig = (evaluation_config.postprocessing_config_signature or '').strip()
+        pred_summary = None
+        if post_sig:
+            sp = storage_root / f'postprocessing/{post_sig}/{site_id}/site_summary.json'
+            if sp.exists():
+                pred_summary = _load_json(sp)
+        if pred_summary is None:
+            sp = _resolve_latest(storage_root, f'postprocessing/*/{site_id}/site_summary.json')
+            if sp is not None and sp.exists():
+                pred_summary = _load_json(sp)
+        if pred_summary is None:
+            pred_summary = _summary_from_mask_and_objects(site_id, pred_bundle['mask'], pred_bundle.get('objects_df'))
+        label_summary = _summary_from_mask_and_objects(site_id, label_bundle['mask'], label_bundle.get('objects_df'))
+        return {'label_summary': label_summary, 'pred_summary': pred_summary}
+
+    return EvaluationPipelineOps(
+        load_label_bundle=load_label_bundle,
+        load_prediction_bundle=load_prediction_bundle,
+        load_site_summary_bundle=load_site_summary_bundle,
+    )
+
