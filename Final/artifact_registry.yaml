@@ -1,0 +1,166 @@
+files:
+  coordination/shrubwise_main/features_trial_18fff109175b/features/stack_finalize/calaveras-big-trees.json:
+    drive_file_id: 1-fGYVuzXeh4bs2WO4BlAuLZxf4qaxMYO
+    local_path: coordination/shrubwise_main/features_trial_18fff109175b/features/stack_finalize/calaveras-big-trees.json
+  shared_artifacts/features.canonical_grid/331005be20008029.json:
+    drive_file_id: 1gfaYdFRZcArFF68CgGMAohafTrZ-1yi0
+    local_path: shared_artifacts/features.canonical_grid/331005be20008029.json
+  shared_artifacts/features.canonical_grid/36a6d4de3e933bb6.json:
+    drive_file_id: 1BaRkooB0_cZQUFCVJNw7XgMvaW3ms6Yv
+    local_path: shared_artifacts/features.canonical_grid/36a6d4de3e933bb6.json
+  shared_artifacts/features.canonical_grid/63ca4135cbe84d03.json:
+    drive_file_id: 1aXVq5ArnyAQ3hlRqiOFNpoVXD6fr9HE4
+    local_path: shared_artifacts/features.canonical_grid/63ca4135cbe84d03.json
+  shared_artifacts/features.canonical_grid/8be83b5c7561578c.json:
+    drive_file_id: 1H_H_19qE8OjVS3ZFDvIsd4s95kr4v-zz
+    local_path: shared_artifacts/features.canonical_grid/8be83b5c7561578c.json
+  shared_artifacts/features.canonical_grid/9d452105baaad201.json:
+    drive_file_id: 1n0GV4A3p4ZfSr5LiMgdLDUdlp4D420bO
+    local_path: shared_artifacts/features.canonical_grid/9d452105baaad201.json
+  shared_artifacts/features.canonical_grid/cae53557711c44e6.json:
+    drive_file_id: 1vWDJuDEnZf20CCBJqmzMC1b9rWpMYdCn
+    local_path: shared_artifacts/features.canonical_grid/cae53557711c44e6.json
+  shared_artifacts/features.chunk_manifest/62e0705ea98bf620.json:
+    drive_file_id: 19mUYaCSPg_iZDWv9s29DkZNpsRJvJOJ-
+    local_path: shared_artifacts/features.chunk_manifest/62e0705ea98bf620.json
+  shared_artifacts/features.chunk_manifest/7be1fdf34d4be0f8.json:
+    drive_file_id: 1hMi7BJOS1g2QMpr4dxyFUNn1kA11b0jd
+    local_path: shared_artifacts/features.chunk_manifest/7be1fdf34d4be0f8.json
+  shared_artifacts/features.chunk_manifest/c380b207a7cd6ad5.json:
+    drive_file_id: 1hqmSPM7XWXQbAipEMrLJCTJH8tVIUgbC
+    local_path: shared_artifacts/features.chunk_manifest/c380b207a7cd6ad5.json
+  shared_artifacts/features.chunk_manifest/c423d5b4387e979c.json:
+    drive_file_id: 1IykGr-5yO9sc-Vkl7YrYOKZLByn4yPDW
+    local_path: shared_artifacts/features.chunk_manifest/c423d5b4387e979c.json
+  shared_artifacts/features.chunk_manifest/c6964c01bb16f0bf.json:
+    drive_file_id: 1m2klIMJwOYYaha1mRxm17gaNXtU3Q4Fe
+    local_path: shared_artifacts/features.chunk_manifest/c6964c01bb16f0bf.json
+  shared_artifacts/features.chunk_manifest/d3ae89c32e0f8ec7.json:
+    drive_file_id: 1fuUzvDNscb9IkXG4bsdRmCrixRWK4oYS
+    local_path: shared_artifacts/features.chunk_manifest/d3ae89c32e0f8ec7.json
+  shared_artifacts/features.object_aggregation/37cb41c08709514a.json:
+    drive_file_id: 1m2M08GdF54MH6p34AbiF5U9It-oO3iCA
+    local_path: shared_artifacts/features.object_aggregation/37cb41c08709514a.json
+  shared_artifacts/features.object_aggregation/4dc86d844630e267.json:
+    drive_file_id: 1l4CtLfEvB2tI3MXCXGYLZJCJoTm8Xd9N
+    local_path: shared_artifacts/features.object_aggregation/4dc86d844630e267.json
+  shared_artifacts/features.object_aggregation/781ba0604dc5b254.json:
+    drive_file_id: 1_rUcGZxjYH9RIWRXQ0VB-Qgv2mjCzCc2
+    local_path: shared_artifacts/features.object_aggregation/781ba0604dc5b254.json
+  shared_artifacts/features.object_aggregation/82a55657e4072f0a.json:
+    drive_file_id: 1w6cMKVO2pehSfD4tDyRQ5LK4YebH_8CC
+    local_path: shared_artifacts/features.object_aggregation/82a55657e4072f0a.json
+  shared_artifacts/features.object_aggregation/e450b312409c07a0.json:
+    drive_file_id: 1n4wohc24o7T-IkQsAyMLdh7yvJZ3_JVI
+    local_path: shared_artifacts/features.object_aggregation/e450b312409c07a0.json
+  shared_artifacts/features.object_aggregation/f2beb758cee811d0.json:
+    drive_file_id: 1vFPNbBApPEq9emlTbxIQPV8Zu8almA7a
+    local_path: shared_artifacts/features.object_aggregation/f2beb758cee811d0.json
+  shared_artifacts/features.site_assets/0ac279b943ba0839.json:
+    drive_file_id: 1xjscz412NKvkSu8qJoFI7dLDIAc6_6RS
+    local_path: shared_artifacts/features.site_assets/0ac279b943ba0839.json
+  shared_artifacts/features.site_assets/61712dcb3097077b.json:
+    drive_file_id: 1aEgYfHhYrWNz4HwPP_uWYUiElOKCemu0
+    local_path: shared_artifacts/features.site_assets/61712dcb3097077b.json
+  shared_artifacts/features.site_assets/9ea2fb6c27b8aaa1.json:
+    drive_file_id: 1EKb221FfxU3-4GC-uP9VjxrbqbXr-uO_
+    local_path: shared_artifacts/features.site_assets/9ea2fb6c27b8aaa1.json
+  shared_artifacts/features.site_assets/a18c49b9e22909be.json:
+    drive_file_id: 1f2QJSiutCvo5ZMVHeIbxLwr9N4YcsYPj
+    local_path: shared_artifacts/features.site_assets/a18c49b9e22909be.json
+  shared_artifacts/features.site_assets/cf4a75752a6cb15b.json:
+    drive_file_id: 1mNVL52T0AZNoM6f2hZ1aqpkBFIKJdL0R
+    local_path: shared_artifacts/features.site_assets/cf4a75752a6cb15b.json
+  shared_artifacts/features.site_assets/e03b899b6aedcce5.json:
+    drive_file_id: 1sbgNR_fLo6XKFQGtNqtbMJHx-HblRVQa
+    local_path: shared_artifacts/features.site_assets/e03b899b6aedcce5.json
+  shared_artifacts/features.source_ready.3dep/20276b1c1b403d20.json:
+    drive_file_id: 1_6XYkOdE6JiBx4yZPr-cITKcfQeNMN9l
+    local_path: shared_artifacts/features.source_ready.3dep/20276b1c1b403d20.json
+  shared_artifacts/features.source_ready.3dep/5d250ec9f4a530d5.json:
+    drive_file_id: 1zvwOEohomsB5GBrTuvvZYLfBZoPqa3Z_
+    local_path: shared_artifacts/features.source_ready.3dep/5d250ec9f4a530d5.json
+  shared_artifacts/features.source_ready.3dep/ac7ed097f6a5b04c.json:
+    drive_file_id: 1LPPo72eaiKOwJwqSvWUzh2lU2-ysf0aj
+    local_path: shared_artifacts/features.source_ready.3dep/ac7ed097f6a5b04c.json
+  shared_artifacts/features.source_ready.3dep/b9ebd7d3dc1a02a3.json:
+    drive_file_id: 1A3wYbBh88aCCwvzfHPdwCHve11Wx765v
+    local_path: shared_artifacts/features.source_ready.3dep/b9ebd7d3dc1a02a3.json
+  shared_artifacts/features.source_ready.3dep/c2cefdc06c54eca3.json:
+    drive_file_id: 1LDJApFuYjwwotrej6YHt5q3N7YJfrUkZ
+    local_path: shared_artifacts/features.source_ready.3dep/c2cefdc06c54eca3.json
+  shared_artifacts/features.source_ready.3dep/e2b442cc0dd7e816.json:
+    drive_file_id: 1xJKADn8h-FvnInqQ5VUu88aO2QYU0fF9
+    local_path: shared_artifacts/features.source_ready.3dep/e2b442cc0dd7e816.json
+  shared_artifacts/features.source_ready.als/596392270ad1d629.json:
+    drive_file_id: 1gTLlDY6n_rc4vaHa5RTQjx7-WrpfOiFn
+    local_path: shared_artifacts/features.source_ready.als/596392270ad1d629.json
+  shared_artifacts/features.source_ready.als/70f6df981f4c3bc6.json:
+    drive_file_id: 13uiFC4ngh1CtKJwD6-zXbV8DG95QC2mz
+    local_path: shared_artifacts/features.source_ready.als/70f6df981f4c3bc6.json
+  shared_artifacts/features.source_ready.als/7e46ef03a2c7c767.json:
+    drive_file_id: 1dwCpad1N9Cq8Pr9aVXa2g1sOBvndQdTS
+    local_path: shared_artifacts/features.source_ready.als/7e46ef03a2c7c767.json
+  shared_artifacts/features.source_ready.als/9e9eb736f426817b.json:
+    drive_file_id: 1W9N6ujSYTPOBR0g35sXVnuAyhjjygLTl
+    local_path: shared_artifacts/features.source_ready.als/9e9eb736f426817b.json
+  shared_artifacts/features.source_ready.als/d2fba3e8c1129066.json:
+    drive_file_id: 1mPiJCA2te5oMpTe9I_zAhNlhziY3xOyX
+    local_path: shared_artifacts/features.source_ready.als/d2fba3e8c1129066.json
+  shared_artifacts/features.source_ready.als/e79d3aef2eda5f34.json:
+    drive_file_id: 1qOFZb5JSvuziG0Y7ee6H5lmf43H9Xaaq
+    local_path: shared_artifacts/features.source_ready.als/e79d3aef2eda5f34.json
+  shared_artifacts/features.source_ready.naip/18227006edbf8a13.json:
+    drive_file_id: 1nh1m34-M0IH6myqdV9-d6qJ6kH6mplOh
+    local_path: shared_artifacts/features.source_ready.naip/18227006edbf8a13.json
+  shared_artifacts/features.source_ready.naip/31b1856fedb6c67c.json:
+    drive_file_id: 1rry8MvyM4O9pw52nwiEYeXiUU6ebIVIt
+    local_path: shared_artifacts/features.source_ready.naip/31b1856fedb6c67c.json
+  shared_artifacts/features.source_ready.naip/3cf15eacad6a3cce.json:
+    drive_file_id: 1aYhyajy3Wh1fnden1RTVez1K5tDlCw5X
+    local_path: shared_artifacts/features.source_ready.naip/3cf15eacad6a3cce.json
+  shared_artifacts/features.source_ready.naip/66122999e0d0e8c2.json:
+    drive_file_id: 1zPSLI5P2xT_uB1IDGmjxUCaLWavJIcwT
+    local_path: shared_artifacts/features.source_ready.naip/66122999e0d0e8c2.json
+  shared_artifacts/features.source_ready.naip/6f896a6b304e2603.json:
+    drive_file_id: 1AG5hrSgnKu_ycjJenyLs_U60S9sRCYfH
+    local_path: shared_artifacts/features.source_ready.naip/6f896a6b304e2603.json
+  shared_artifacts/features.source_ready.naip/94623bd74402d09e.json:
+    drive_file_id: 1T3YnCg_ppwMb8dHICPxlfCtfzjaZG0mN
+    local_path: shared_artifacts/features.source_ready.naip/94623bd74402d09e.json
+  shared_artifacts/features.source_ready.rap/72bfc415a01db6c0.json:
+    drive_file_id: 1OFLCYs-RxJB8MrImNCbB81mooXfDjAze
+    local_path: shared_artifacts/features.source_ready.rap/72bfc415a01db6c0.json
+  shared_artifacts/features.source_ready.rap/7f2db7493a3163da.json:
+    drive_file_id: 1rOw6ax5kb2F_s_1tpP_8wirKs8ZXFBqN
+    local_path: shared_artifacts/features.source_ready.rap/7f2db7493a3163da.json
+  shared_artifacts/features.source_ready.rap/83e0a63c6fbf039f.json:
+    drive_file_id: 16DTagQDmdiBYzq9dZrNh5Z_Hwmw3d1qW
+    local_path: shared_artifacts/features.source_ready.rap/83e0a63c6fbf039f.json
+  shared_artifacts/features.source_ready.rap/96a45971ad118561.json:
+    drive_file_id: 1P4yGvtnnkvdtI5UQ_LqwyApAgr7eTWfA
+    local_path: shared_artifacts/features.source_ready.rap/96a45971ad118561.json
+  shared_artifacts/features.source_ready.rap/de99ea4d0a0e8080.json:
+    drive_file_id: 1rKT6X7BDB_1nJPgfS1CLAkhC8_jAh20j
+    local_path: shared_artifacts/features.source_ready.rap/de99ea4d0a0e8080.json
+  shared_artifacts/features.source_ready.rap/fbba1f1f2b32b2b7.json:
+    drive_file_id: 1sakeEHSYeeQ-g3reQpFv2n9fea60Z_dp
+    local_path: shared_artifacts/features.source_ready.rap/fbba1f1f2b32b2b7.json
+  shared_artifacts/features.stack_finalize/1e3ad864d6f3a2f1.json:
+    drive_file_id: 1dHnRXdbkSdvVo5_WMDv1cwtmR3-KYC-R
+    local_path: shared_artifacts/features.stack_finalize/1e3ad864d6f3a2f1.json
+  shared_artifacts/features.stack_finalize/2b15d949a7e7e0cf.json:
+    drive_file_id: 19FpEjXpEJeb7IWg2LFJLMnOgjeEx2lQO
+    local_path: shared_artifacts/features.stack_finalize/2b15d949a7e7e0cf.json
+  shared_artifacts/features.stack_finalize/2fef77a963705c83.json:
+    drive_file_id: 1Tnvji-2Asq9vlbPbQYS-yMM7BtGBxIyq
+    local_path: shared_artifacts/features.stack_finalize/2fef77a963705c83.json
+  shared_artifacts/features.stack_finalize/875749b397c8ee1b.json:
+    drive_file_id: 1IPO4nRxH7Tj5tMe_yiNtSTmZJ__hsuWk
+    local_path: shared_artifacts/features.stack_finalize/875749b397c8ee1b.json
+  shared_artifacts/features.stack_finalize/9af648b48f4a42b4.json:
+    drive_file_id: 1YYHpyJjO3VxXDOnZMJeJ26T1l0G_NkG2
+    local_path: shared_artifacts/features.stack_finalize/9af648b48f4a42b4.json
+  shared_artifacts/features.stack_finalize/dda81eefb112ba94.json:
+    drive_file_id: 1pxViDV1fusE5zCGcX0rLXpeW9OgDn4LR
+    local_path: shared_artifacts/features.stack_finalize/dda81eefb112ba94.json
