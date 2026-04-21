@@ -16,3 +16,15 @@ torch
 torchvision
 captum
 mrmr_selection
+
+earthengine-api
+geemap
+folium
+pillow
+laspy
+dash>=2.14.0 # old dash version is missing module
+pdal
+python-pdal
+pyproj
+lazrs
+open3d

@@ -18,3 +18,4 @@ pdal
 python-pdal
 pyproj
 lazrs
+open3d
