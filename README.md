@@ -31,3 +31,6 @@ Execute sections in order but to just see it all in action you can skip straight
 
 ## Flowchart
 For a high level overview of the components contained in `/Final` see our [Lucid Chart](https://lucid.app/lucidchart/32a2e4fe-7cf1-4b10-921b-789723bfd876/edit?invitationId=inv_f4a3a702-681c-4030-95ef-ffcd3ce97884&page=0_0)
+
+## Materials
+All requested materials are under `/Materials`
