@@ -1570,84 +1570,83 @@ class FeaturePipeline(BasePipeline):
                 "Full FE pipeline execution through family chunks, stack finalization, and optional object aggregation.",
             ],
         )
-    
+
+from Final.features.assets import prepare_site_assets
+from Final.features.canonical_grid import build_canonical_grid_for_site
+from Final.features.chunking import build_chunk_manifest
+from Final.features.source_naip import run_naip_chunked_pipeline, prepare_naip_asset
+from Final.features.source_als import run_als_chunked_pipeline
+from Final.features.source_3dep import run_3dep_chunked_pipeline, prepare_3dep_asset
+from Final.features.source_rap import run_rap_chunked_pipeline, prepare_rap_asset
+from Final.features.object_aggregation import build_and_persist_object_feature_table
+from Final.features.labeling_bridge import label_objects_for_site
+from Final.features.assets import find_cached_rap_asset
+from Final.features.source_3dep import build_3dep_source_inventory_record
+from Final.features.source_rap import build_rap_source_inventory_record
+from Final.features.source_als import validate_als_tile_inventory
+
+def ensure_source_ready(
+    *,
+    site_id: str,
+    source_name: str,
+    artifact_store,
+    site_assets,
+    canonical_grid,
+    force_refresh: bool = False,
+) -> dict[str, Any]:
+    if source_name == "naip":
+        path = prepare_naip_asset(
+            site_id,
+            artifact_store=artifact_store,
+            force_refresh=force_refresh,
+            inventory=site_assets.source_assets.get("source_inventory"),
+            canonical_grid=canonical_grid,
+            site_assets=site_assets,
+        )
+        return {"source_name": "naip", "status": "ready", "asset_path": str(path)}
+
+    if source_name == "3dep":
+        path = prepare_3dep_asset(
+            site_id,
+            artifact_store=artifact_store,
+            canonical_grid=canonical_grid,
+            force_refresh=force_refresh,
+            inventory=site_assets.source_assets.get("source_inventory"),
+        )
+        rec = build_3dep_source_inventory_record(
+            site_id,
+            artifact_store=artifact_store,
+            site_assets=site_assets,
+        )
+        return {"source_name": "3dep", "status": "ready", "asset_path": str(path), "inventory_status": rec.status}
+
+    if source_name == "rap":
+        path = prepare_rap_asset(
+            site_id,
+            artifact_store=artifact_store,
+            canonical_grid=canonical_grid,
+            force_refresh=force_refresh,
+            inventory=site_assets.source_assets.get("source_inventory"),
+        )
+        rec = build_rap_source_inventory_record(
+            site_id,
+            artifact_store=artifact_store,
+            site_assets=site_assets,
+        )
+        return {"source_name": "rap", "status": "ready", "asset_path": str(path), "inventory_status": rec.status}
+
+    if source_name == "als":
+        tiles_df = validate_als_tile_inventory(
+            site_assets.source_assets.get("als_metadata_df", None)
+            if False else
+            __import__("Final.features.source_als", fromlist=["select_intersecting_als_tiles"]).select_intersecting_als_tiles(site_assets, canonical_grid),
+            site_id=site_id,
+        )
+        return {"source_name": "als", "status": "ready", "n_tiles": int(len(tiles_df))}
+
+    raise KeyError(f"Unsupported source_name={source_name}")
 
 def build_feature_pipeline_ops():
-    from Final.features.assets import prepare_site_assets
-    from Final.features.canonical_grid import build_canonical_grid_for_site
-    from Final.features.chunking import build_chunk_manifest
-    from Final.features.source_naip import run_naip_chunked_pipeline, prepare_naip_asset
-    from Final.features.source_als import run_als_chunked_pipeline
-    from Final.features.source_3dep import run_3dep_chunked_pipeline, prepare_3dep_asset
-    from Final.features.source_rap import run_rap_chunked_pipeline, prepare_rap_asset
-    from Final.features.object_aggregation import build_and_persist_object_feature_table
-    from Final.features.labeling_bridge import label_objects_for_site
-    from Final.features.assets import find_cached_rap_asset
-    from Final.features.source_3dep import build_3dep_source_inventory_record
-    from Final.features.source_rap import build_rap_source_inventory_record
-    from Final.features.source_als import validate_als_tile_inventory
-
-    def ensure_source_ready(
-        *,
-        site_id: str,
-        source_name: str,
-        artifact_store,
-        site_assets,
-        canonical_grid,
-        force_refresh: bool = False,
-    ) -> dict[str, Any]:
-        if source_name == "naip":
-            path = prepare_naip_asset(
-                site_id,
-                artifact_store=artifact_store,
-                force_refresh=force_refresh,
-                inventory=site_assets.source_assets.get("source_inventory"),
-                canonical_grid=canonical_grid,
-                site_assets=site_assets,
-            )
-            return {"source_name": "naip", "status": "ready", "asset_path": str(path)}
-
-        if source_name == "3dep":
-            path = prepare_3dep_asset(
-                site_id,
-                artifact_store=artifact_store,
-                canonical_grid=canonical_grid,
-                force_refresh=force_refresh,
-                inventory=site_assets.source_assets.get("source_inventory"),
-            )
-            rec = build_3dep_source_inventory_record(
-                site_id,
-                artifact_store=artifact_store,
-                site_assets=site_assets,
-            )
-            return {"source_name": "3dep", "status": "ready", "asset_path": str(path), "inventory_status": rec.status}
-
-        if source_name == "rap":
-            path = prepare_rap_asset(
-                site_id,
-                artifact_store=artifact_store,
-                canonical_grid=canonical_grid,
-                force_refresh=force_refresh,
-                inventory=site_assets.source_assets.get("source_inventory"),
-            )
-            rec = build_rap_source_inventory_record(
-                site_id,
-                artifact_store=artifact_store,
-                site_assets=site_assets,
-            )
-            return {"source_name": "rap", "status": "ready", "asset_path": str(path), "inventory_status": rec.status}
-
-        if source_name == "als":
-            tiles_df = validate_als_tile_inventory(
-                site_assets.source_assets.get("als_metadata_df", None)
-                if False else
-                __import__("Final.features.source_als", fromlist=["select_intersecting_als_tiles"]).select_intersecting_als_tiles(site_assets, canonical_grid),
-                site_id=site_id,
-            )
-            return {"source_name": "als", "status": "ready", "n_tiles": int(len(tiles_df))}
-
-        raise KeyError(f"Unsupported source_name={source_name}")
-
     return FeaturePipelineOps(
         prepare_site_assets=prepare_site_assets,
         build_canonical_grid_for_site=build_canonical_grid_for_site,

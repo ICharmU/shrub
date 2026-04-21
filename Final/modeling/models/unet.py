@@ -4,7 +4,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, f1_score, recall_score, precision_score, jaccard_score
 import torch.nn as nn
-from Final.modeling.setup_helper import train_epoch, eval_epoch
+from Final.modeling.helpers import train_epoch, eval_epoch
 
 class CustomUNet(nn.Module):
     """
