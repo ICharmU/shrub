@@ -12,7 +12,7 @@ conda create --name shrub_env python=3.10
 conda activate shrub_env
 
 # Navigate to this directory
-cd final_submission
+cd shrub
 
 # Install dependencies
 pip install -r requirements.txt
@@ -21,24 +21,18 @@ pip install -r requirements.txt
 ### 2. Run the Notebook
 
 ```bash
-jupyter notebook submission_runner\ copy\ 2.ipynb
+jupyter notebook main.ipynb
 ```
 
-Execute cells in order:
-1. **Cell 1**: Install pip requirements
-2. **Cell 2**: Clone repo and setup Python paths
-3. **Cell 3**: Import core modules and initialize
-4. **Cell 4**: Configure pipeline (choose site and parameters)
-5. **Cell 5**: Load pipeline ops builder
-6. **Cell 6**: Run Modeling Pipeline
-7. **Cell 7**: Run Postprocessing Pipeline
-8. **Cell 8**: Run Evaluation Pipeline
-9. **Cell 9**: Display results summary
-10. **Cell 10** (optional): Visualize predictions
+Crucial:
+The data is expensive to fetch and generate so you can execute the sections in order, or copy over provided gdrive credentials which are onyl valid for this remote artifacts folder linked here: https://drive.google.com/drive/folders/1F9AtiUfx_z48tQIkNbDpzZUpH6R5uoCN?usp=drive_link
+
+Execute sections in order but to just see it all in action you can skip straight to the final large modeling/postprocessing section provided the data exists locally.
 
 ## Pipeline Overview
 
 ### 1. Modeling Pipeline
+
 - **Input**: Feature rasters (NAIP, ALS, 3DEP) for a single site
 - **Output**: Probability predictions (`probability_raster.tif`)
 - **Config**:
@@ -47,8 +41,9 @@ Execute cells in order:
   - `fold_strategy`: `leave_one_site_out` (site-aware cross-validation)
 
 ### 2. Postprocessing Pipeline
+
 - **Input**: Probability predictions
-- **Output**: 
+- **Output**:
   - `binary_raster.tif` — Binary shrub/background mask
   - `object_id_raster.tif` — Instance-labeled raster
   - `predicted_objects.csv` — Detected shrub objects with properties (area, centroid, etc.)
@@ -59,6 +54,7 @@ Execute cells in order:
   - `split_mode`: `connected_components` | `watershed`
 
 ### 3. Evaluation Pipeline
+
 - **Input**: Predictions + Label masks (if available)
 - **Output**:
   - `site_metrics.json` — Per-site metrics:
@@ -142,26 +138,31 @@ Default `cfg.output.root` is in `Final/artifacts/`.
 ## Metric Explanations
 
 ### Raster Score (35% weight)
+
 - **Dice**: `2 * intersection / (label_pixels + pred_pixels)` — Overlap ratio
 - **IoU**: `intersection / union` — Jaccard index
 - **Formula**: `(Dice + IoU) / 2`
 
 ### Object Score (30% weight)
+
 - **Object F1**: Precision and recall from greedy IoU-based matching (IoU ≥ 0.2)
 - **Count Agreement**: `1 - |label_count - pred_count| / label_count`
 - **Formula**: `(F1 + Count_Agreement) / 2`
 
 ### Multi-Res Score (15% weight)
+
 - **Process**: Downsample to 2m, 5m, 10m resolutions and compute IoU
 - **Formula**: `mean(IoU@2m, IoU@5m, IoU@10m)`
 - **Purpose**: Tests if model generalizes to coarser scales
 
 ### Site Summary Score (20% weight)
+
 - **Metrics**: Agreement on cover_fraction, count_density, mean_object_area, median_object_area
 - **Formula**: `mean(1 - |label_val - pred_val| / max(|label_val|, 1.0))` per metric
 - **Purpose**: Tests if aggregate statistics are realistic
 
 ### Composite Score
+
 ```
 composite = (
     0.35 * raster_score +
@@ -172,6 +173,7 @@ composite = (
 ```
 
 **Interpretation**:
+
 - **0.0–0.3**: Poor (unacceptable)
 - **0.3–0.5**: Weak generalization
 - **0.5–0.7**: Moderate quality
@@ -181,6 +183,7 @@ composite = (
 ## Dependencies
 
 See `requirements.txt` for full list. Key packages:
+
 - **ML**: torch, torchvision, scikit-learn, captum
 - **Geospatial**: rasterio, scikit-image, scipy
 - **I/O**: pandas, numpy, gdown (for Google Drive downloads)
@@ -189,19 +192,24 @@ See `requirements.txt` for full list. Key packages:
 ## Troubleshooting
 
 ### Conda environment not found
+
 ```bash
 conda env list
 conda activate shrub_env  # or your env name
 ```
 
 ### Module not found errors
+
 Ensure you're running in the right conda environment:
+
 ```bash
 which python  # Should show .../shrub_env/...
 ```
 
 ### GPU not detected
+
 Models will fall back to CPU automatically. To use GPU:
+
 - Install CUDA: https://developer.nvidia.com/cuda-downloads
 - Reinstall PyTorch with CUDA support:
   ```bash
@@ -209,15 +217,17 @@ Models will fall back to CPU automatically. To use GPU:
   ```
 
 ### Out of memory
+
 Reduce `batch_size` in Cell 4:
+
 ```python
 modeling_cfg.batch_size = 32  # or 16
 ```
 
 ### Metrics not showing
+
 Evaluation metrics will be None if label data isn't available for the test site. This is expected in standalone prediction mode.
 
 ## Contact
 
 For issues or questions, refer to the main project repository: https://github.com/ICharmU/shrub
-
