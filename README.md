@@ -8,7 +8,7 @@ This directory contains a reproducible Jupyter notebook that executes the comple
 
 ```bash
 # Create conda environment
-conda create --name shrub_env python=3.10
+conda create --name shrub_env python
 conda activate shrub_env
 
 # Navigate to this directory
